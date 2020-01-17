@@ -1,0 +1,118 @@
+@function color($color-name) {
+  @return map-get($colors, $color-name)
+}
+
+$colors: (
+  black: #192d35, 
+  green: #009b72, 
+  darkgreen: #007556, 
+  fontblack: #2c3038,
+  inputblack: #555a64,  
+);
+
+* {
+  box-sizing: border-box;
+}
+    
+html, body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: 'Nunito', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  display: inline;
+  color: white;
+}
+
+ul {
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+// HEADERS
+
+h1 {
+  font-size: calc(1.5rem + 4vw);
+  letter-spacing: -.02em;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+label, 
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+form {
+  width: 100%;
+}
+
+input,
+textarea {
+  border: 1px solid #eaedf2;
+  padding: .5rem;
+  border-radius: .2rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: color(inputblack);
+  display: block;
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  outline: none;
+}
+
+input::placeholder, 
+textarea::placeholder {
+  color: rgba(85,90,100,.5);
+  opacity: 1;
+}
+
+.button--primary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  background-color: color(green);
+  font-weight: 700;
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  border: 2px solid color(green);
+  border-radius: 100px;
+  padding: .5rem 1.5rem;
+  transition: all 0.3s;
+  margin: 0;
+}
+
+.button--primary:hover,
+.button--primary:focus,
+.button--primary:active {
+  background-color: color(darkgreen);
+  border-color: color(darkgreen);
+}
+
+.t-center {
+  text-align: center;
+}
+
+.logo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  z-index: 1000;
+  color: white;
+}

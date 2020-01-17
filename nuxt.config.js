@@ -5,7 +5,7 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Piti',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -23,6 +23,10 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/styles/fonts.css',
+    '~/assets/styles/general.scss',
+    '~/assets/styles/colors.scss',
+    '~/assets/styles/layout.scss',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -40,6 +44,8 @@ export default {
   modules: [
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
+    '@nuxtjs/style-resources',
+
   ],
   apollo: {  
     clientConfigs: {
@@ -47,6 +53,11 @@ export default {
         httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://powerful-taiga-81942.herokuapp.com/graphql'
       }
     }
+  },
+  styleResources: {
+    scss: [
+      '~/assets/styles/general.scss',
+    ]
   },
   /*
   ** Build configuration
