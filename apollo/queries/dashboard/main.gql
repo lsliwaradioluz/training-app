@@ -1,0 +1,17 @@
+query($username: String) {
+  users(where:{
+    username: $username
+  }) {
+    id
+    username
+    fullname
+    image {
+      url
+    }
+    workouts(limit: 1, sort: "scheduled:asc" ) {
+      id
+      scheduled
+      ready
+    }
+  }
+}

@@ -1,0 +1,78 @@
+query($id: ID!) {
+  workout(id: $id) {
+    id
+    scheduled
+    user {
+      username
+      email
+    }
+    warmup {
+      ...on ComponentBlockCombo {
+        id
+        units {
+          id
+          exercise {
+            name
+            id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    strength {
+      ...on ComponentBlockCombo {
+        id
+        units {
+          id
+          exercise {
+            name
+            id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    cardio {
+      ...on ComponentBlockCombo {
+        id
+        units {
+          id
+          exercise {
+            name
+            id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    mobility {
+      ...on ComponentBlockCombo {
+        id
+        units {
+          id
+          exercise {
+            name
+            id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+  }
+}

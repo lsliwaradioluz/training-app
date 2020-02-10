@@ -1,0 +1,105 @@
+button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  display: block;
+  color: inherit;
+}
+
+.button--primary {
+  cursor: pointer;
+  display: flex;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  background-color: color(green);
+  font-weight: 700;
+  color: color(lightblack);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  border: 2px solid color(green);
+  border-radius: 25px;
+  padding: .5rem 1.5rem;
+  transition: all 0.3s;
+  margin: 0;
+}
+
+.button--square {
+  width: 49%;
+  border-radius: 5px;
+}
+
+.button--primary:hover,
+.button--primary:focus,
+.button--primary:active {
+  background-color: color(darkgreen);
+  border-color: color(darkgreen);
+}
+
+.button--inactive, 
+.button--primary:disabled {
+  background-color: color(gray);
+  border-color: color(gray);
+}
+
+.button--inactive:hover,
+.button--inactive:focus,
+.button--inactive:active {
+  background-color: color(gray);
+  border-color: color(gray);
+}
+
+.logo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  z-index: 1000;
+  color: white;
+}
+
+.tab {
+  background-color: color(lightblack);
+  padding: 1rem;
+  margin-bottom: .5rem;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px 2px rgba(31, 41, 70, 0.329);
+
+  h3:first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.avatar {
+  height: 50px;
+  width: 50px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.inactive {
+  position: relative;
+  opacity: 0.3;
+}
+
+.inactive::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.invisible--input {
+  background-color: transparent;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}

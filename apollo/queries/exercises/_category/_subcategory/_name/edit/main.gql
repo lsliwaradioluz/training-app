@@ -1,0 +1,21 @@
+query($name: String) {
+  exercises(where: {
+    name: $name
+  }) {
+    id
+    name
+    positioning
+    technique
+    subcategory {
+      name
+    }
+    images {
+      id
+      url
+    }
+  },
+  subcategories {
+    name 
+    id
+  } 
+}

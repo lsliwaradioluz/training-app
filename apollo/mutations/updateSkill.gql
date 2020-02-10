@@ -1,0 +1,10 @@
+mutation($input: updateSkillInput) {
+  updateSkill(input: $input) {
+    skill {
+      id
+      user {
+        username
+      }
+    }
+  }
+}

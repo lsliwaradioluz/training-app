@@ -1,0 +1,16 @@
+query($category: String) {
+  categories(where:{
+    name: $category
+  }) {
+    id
+    name
+    subcategories {
+      id
+      name
+      exercises(limit: 3) {
+        name
+        id
+      }
+    }
+  }
+}

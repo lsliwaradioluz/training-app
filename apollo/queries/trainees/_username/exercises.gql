@@ -1,0 +1,11 @@
+query {
+  exercises {
+    name
+    _id
+    subcategory {
+      category {
+        name
+      }
+    }
+  }
+}

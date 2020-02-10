@@ -1,0 +1,11 @@
+query {
+  categories {
+    id
+    name
+    subcategories {
+      id
+      name
+    }
+  }
+
+}

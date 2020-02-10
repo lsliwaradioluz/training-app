@@ -1,3 +1,4 @@
+import webpack from 'webpack'
 
 export default {
   mode: 'universal',
@@ -19,19 +20,33 @@ export default {
   ** Customize the progress-bar color
   */
   loading: { color: '#fff' },
+  layoutTransition: {
+    name: 'page'
+  },
+  env: {
+    endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337' : 'http://powerful-taiga-81942.herokuapp.com'
+  },
   /*
   ** Global CSS
   */
   css: [
     '~/assets/styles/fonts.css',
     '~/assets/styles/general.scss',
+    '~/assets/styles/elements.scss',
     '~/assets/styles/colors.scss',
     '~/assets/styles/layout.scss',
+    '~/assets/styles/animations.scss',
+    '~/assets/icons/primary/flaticon.css',
+    '~/assets/icons/final/flaticon.css',
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/filters',
+    '~/plugins/components',
+    '~/plugins/mixins',
+    '~/plugins/axios',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -50,13 +65,15 @@ export default {
   apollo: {  
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://powerful-taiga-81942.herokuapp.com/graphql'
+        httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://powerful-taiga-81942.herokuapp.com/graphql',
       }
     }
   },
   styleResources: {
     scss: [
       '~/assets/styles/general.scss',
+      '~/assets/styles/elements.scss',
+      '~/assets/styles/animations.scss',
     ]
   },
   /*
@@ -66,6 +83,11 @@ export default {
     /*
     ** You can extend webpack config here
     */
+   plugins: [
+    new webpack.ProvidePlugin({
+      '_': 'lodash'
+    })
+    ],
     extend (config, ctx) {
     }
   }

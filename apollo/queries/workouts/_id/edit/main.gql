@@ -1,0 +1,127 @@
+query($id: ID!) {
+  workout(id: $id) {
+    id
+    scheduled
+    afterBlockRest
+    singleExerciseRest
+    pairedExerciseRest
+    warmupRest
+    user {
+      id
+      fullname
+      skill {
+        id
+        units {
+          ...on ComponentBlockUnit {
+            id
+            sets
+            reps
+            distance
+            time
+            remarks
+            exercise {
+              name
+              id
+              _id
+              subcategory {
+                _id
+                id
+                name
+                category {
+                  _id
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    } 
+    warmup {
+      ...on ComponentBlockCombo {
+        name
+        units {
+          id
+          exercise {
+            name
+            _id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    skillwork {
+      ...on ComponentBlockCombo {
+        name
+        units {
+          id
+          exercise {
+            name
+            _id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    strength {
+      ...on ComponentBlockCombo {
+        name
+        units {
+          id
+          exercise {
+            name
+            _id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    cardio {
+      ...on ComponentBlockCombo {
+        name
+        units {
+          id
+          exercise {
+            name
+            _id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+    mobility {
+      ...on ComponentBlockCombo {
+        name
+        units {
+          id
+          exercise {
+            name
+            _id
+          }
+          sets
+          reps
+          time
+          distance
+          remarks
+        }
+      }
+    }
+  }
+}

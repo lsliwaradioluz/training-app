@@ -1,0 +1,54 @@
+.page-enter-active {
+  animation: slide 0.2s;
+}
+
+.page-leave-active {
+  // animation: zoom 0.2s reverse;
+}
+
+.flip-enter-active {
+  animation: flip 0.2s reverse;
+  overflow: hidden;
+} 
+
+.flip-leave-active {
+  animation: flip 0.2s;
+  overflow: hidden;
+  position: relative; 
+}
+
+.flip-leave-active::after {
+  content: "";
+  position: absolute; 
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+@keyframes flip {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

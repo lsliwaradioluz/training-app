@@ -1,0 +1,7 @@
+mutation($input: createWorkoutInput) {
+  createWorkout(input: $input) {
+    workout {
+      id
+    }
+  }
+}

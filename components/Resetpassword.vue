@@ -1,8 +1,12 @@
 <template>
-  <div class="resetpassword main">
-    <input v-model="password" type="password">
-    <input v-model="repeatedPassword" type="password">
-    <button @click="resetPassword">Resetuj hasło</button>
+  <div class="resetpassword main row a-center j-center">
+    <div class="resetpassword__form column a-start j-center">
+      <h5>Formularz zmiany hasła</h5>
+      <p>Podaj nowe hasło. Upewnij się, że podałeś dobre, wpisując dwa razy.</p>
+      <input v-model="password" type="password" placeholder="Nowe hasło">
+      <input v-model="repeatedPassword" type="password" placeholder="Powtórz hasło">
+      <button class="button--primary" @click="resetPassword">Resetuj hasło</button>
+    </div>
   </div>
 </template>
 
@@ -13,7 +17,8 @@ export default {
   data() {
     return {
       password: '', 
-      repeatedPassword: ''
+      repeatedPassword: '', 
+      showMessage: false
     }
   }, 
   methods: {

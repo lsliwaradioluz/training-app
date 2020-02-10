@@ -1,0 +1,34 @@
+query($username: String) {
+  users( where: { username: $username } ) {
+    id
+    username
+    skill {
+      id
+      units {
+        ...on ComponentBlockUnit {
+          id
+          sets
+          reps
+          distance
+          time
+          remarks
+          exercise {
+            name
+            id
+            _id
+            subcategory {
+              _id
+              id
+              name
+              category {
+                _id
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

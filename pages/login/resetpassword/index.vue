@@ -6,7 +6,9 @@
 
 <script>
 import Resetpassword from '~/components/Resetpassword'
+
 export default {
+  layout: 'login',
   components: {
     Resetpassword
   }

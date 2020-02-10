@@ -1,0 +1,14 @@
+query($name: String) {
+  exercises(where: {
+    name: $name
+  }) {
+    id
+    name
+    positioning
+    technique
+    images {
+      id
+      url
+    }
+  }
+}

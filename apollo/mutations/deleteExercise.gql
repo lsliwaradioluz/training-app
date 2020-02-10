@@ -1,0 +1,8 @@
+mutation($input: deleteExerciseInput) {
+  deleteExercise(input: $input) {
+    exercise {
+      id
+      name
+    }
+  }
+}

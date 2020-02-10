@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="default b-black" :class="{ loading: loading }">
     <Navigation />
     <nuxt />
   </div>
@@ -8,13 +8,18 @@
 <script>
 import Navigation from '~/components/Navigation'
 
+
 export default {
   components: {
     Navigation
+  }, 
+  computed: {
+    loading() {
+      return this.$store.state.main.loading;
+    }
   }
 }
 </script>
 
 <style>
-
 </style>

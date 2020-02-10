@@ -1,0 +1,32 @@
+<template>
+  <div class="workouts main">
+    <div v-if="workouts.length > 0">
+      <Workout v-for="workout in workouts" :key="workout.id" :workout="workout">
+        <template v-slot:date>{{ workout.scheduled | reverseDate }}</template>
+        <template v-slot:day>{{ getWeekDay(workout.scheduled) | dayName }}</template>
+      </Workout>
+    </div>
+    <p class="t-center" v-else>
+      Brak treningów do wyświetlenia
+    </p>
+  </div>
+</template>
+
+<script>
+import mainQuery from '~/apollo/queries/workouts/main.gql';
+export default {
+  asyncData(context) {
+    let client = context.app.apolloProvider.defaultClient;
+    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
+      .then(({ data }) => {
+        return {
+          workouts: data.users[0].workouts
+        }
+      });
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>

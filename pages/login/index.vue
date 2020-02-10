@@ -1,16 +1,16 @@
 <template>
   <div>
-    <Signin />
+    <Login />
   </div>
 </template>
 
 <script>
-import Signin from '~/components/Signin'
+import Login from '~/components/Login'
 
 export default {
   layout: 'login',
   components: {
-    Signin, 
+    Login, 
   }
 }
 </script>

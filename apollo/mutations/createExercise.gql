@@ -1,0 +1,8 @@
+mutation($input: createExerciseInput) {
+  createExercise(input: $input) {
+    exercise {
+      id
+      name
+    }
+  }
+}

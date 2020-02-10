@@ -1,0 +1,7 @@
+mutation uploadPhoto($files: [Upload]!) {
+    multipleUpload(files: $files) {
+      name
+      url
+      id
+    }
+  }

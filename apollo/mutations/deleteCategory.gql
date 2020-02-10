@@ -1,0 +1,8 @@
+mutation($input: deleteCategoryInput) {
+  deleteCategory(input: $input) {
+    category {
+      id
+      name
+    }
+  }
+}

@@ -1,24 +1,53 @@
+// Kolory tła
+
 .b-black {
-  background-color: color(black);
+  background-color: color(black) !important;
+}
+
+.b-lightblack {
+  background-color: color(lightblack) !important;
+}
+
+.b-gray {
+  background-color: color(gray) !important;
 }
 
 .b-green {
-  background-color: color(green);
+  background-color: color(green) !important;
 }
 
+.b-darkgreen {
+  background-color: color(darkgreen) !important;
+}
+
+.b-white {
+  background-color: white !important;
+}
+
+// Kolory tekstu
+
 .t-black {
-  color: color(fontblack);
+  color: color(fontblack) !important;
+}
+
+.t-lightblack {
+  color: color(lightblack) !important;
+}
+
+.t-gray {
+  color: color(gray) !important;
 }
 
 .t-white {
-  color: white;
+  color: white !important;
 }
 
 .t-green {
-  color: color(green);
+  color: color(green) !important;
 }
 
 .t-darkgreen {
-  color: color(darkgreen);
+  color: color(darkgreen) !important;
 }
+
 
