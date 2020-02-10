@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import createUser from '~/apollo/mutations/createuser.gql';
+  import createUser from '~/apollo/mutations/createUser.gql';
   import updateUser from '~/apollo/mutations/updateUser.gql';
   import createSkill from '~/apollo/mutations/createSkill.gql';
   import UserEditor from '~/components/UserEditor';
