@@ -19,7 +19,7 @@ export default {
 
   .login {
     height: 100vh;
-    // background-image: url('~assets/images/endless-constellation.svg');
+    background-image: url('~assets/images/Endless-Constellation.svg');
     
     div:first-child {
       height: 100vh;
