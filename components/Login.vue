@@ -1,6 +1,6 @@
 <template>
-  <div class="signin main t-white column j-center a-center">
-    <h1 class="t-left">Trenuj świadomie</h1>
+  <div class="signin main t-white column j-center a-start">
+    <h1>Trenuj świadomie</h1>
     <p class="mb0">Realizuj swój plan z cyfrowym trenerem personalnym. Daj się poprowadzić ćwiczenie po ćwiczeniu.</p>
     <form class="column a-start j-center p10">
       <input class="mb05" id="username" v-model="identifier" type="text" placeholder="Email" autocomplete="on">
