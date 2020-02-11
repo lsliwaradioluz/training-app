@@ -2,7 +2,7 @@
   <div class="category tab p11 column">
     <!-- main view  -->
     <div class="row j-between a-stretch" v-if="input == null && id != null">
-      <nuxt-link class="pr1" :to="removeWhitespace(name)" tag="div" append>
+      <nuxt-link class="category__link pr1" :to="removeWhitespace(name)" tag="div" append>
         <h3 class="m00">{{ name }}</h3>
         <div v-if="subfields.length > 0">
           <span class="category__description" v-for="subfield in subfields" :key="subfield.id">{{ subfield.name }}. </span>
@@ -60,6 +60,10 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .category__link {
+    flex-basis: 100%;
+  }
 
   .category__description {
     font-size: 0.7rem;

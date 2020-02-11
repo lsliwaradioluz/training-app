@@ -5,6 +5,7 @@ query {
     subcategory {
       id
       category {
+        id
         name
       }
     }

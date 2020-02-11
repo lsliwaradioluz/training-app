@@ -1,7 +1,7 @@
 <template>
   <div class="exercisetab tab p11 column">
     <div class="row j-between a-stretch">
-      <nuxt-link class="pr1" :to="removeWhitespace(exercise.name)" tag="div" append>
+      <nuxt-link class="exercisetab__link pr1" :to="removeWhitespace(exercise.name)" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
         <p class="exercisetab__description m00">Poziom {{ index + 1 }}</p>
       </nuxt-link>
@@ -47,6 +47,10 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .exercisetab__link {
+    flex-basis: 100%;
+  }
 
   .exercisetab__description {
     font-size: 0.7rem;
