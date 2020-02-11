@@ -1,5 +1,5 @@
 <template>
-  <div class="login b-black">
+  <div class="login">
     <Logo />
     <Nuxt />
   </div>
@@ -19,6 +19,7 @@ export default {
 
   .login {
     height: 100vh;
+    background-image: url('~assets/images/endless-constellation.svg');
     
     div:first-child {
       height: 100vh;
