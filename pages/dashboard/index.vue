@@ -4,9 +4,12 @@
     <Head>
       <template>Najbliższy trening</template>
     </Head>
-    <template v-if="user.workouts.length > 0">
-      <Workout :workout="user.workouts[0]" />
-    </template>
+    <div>
+      <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
+      <p class="tab p11" v-else>
+        Brak zaplanowanych treningów
+      </p>
+    </div>
   </div>  
 </template>
 

@@ -3,6 +3,7 @@ query {
     name
     _id
     subcategory {
+      id
       category {
         name
       }

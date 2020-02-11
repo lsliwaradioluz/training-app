@@ -213,7 +213,7 @@
           });
           this.skills.splice(index, 1, skillToSave);
         } else {
-          this.skills.splice(index, 1);
+          this.skills.push(skillToSave);
         }
         
         this.uploadExercise();
