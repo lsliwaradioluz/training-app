@@ -20,6 +20,6 @@ export const mutations = {
 
 export const getters = {  
   user: state => {
-    return state.user && state.user
+    return state.user
   }
 }

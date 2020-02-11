@@ -3,7 +3,6 @@ import cookieparser from 'cookieparser'
 export const actions = {  
   nuxtServerInit({ commit }, { req }) {
     let user = null;
-    console.log('Nuxt server init');
 
     if (req && req.headers && req.headers.cookie) {
       const parsed = cookieparser.parse(req.headers.cookie);

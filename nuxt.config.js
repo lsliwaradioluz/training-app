@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
@@ -47,6 +47,7 @@ export default {
     '~/plugins/components',
     '~/plugins/mixins',
     '~/plugins/axios',
+    '~/plugins/auth',
   ],
   /*
   ** Nuxt.js dev-modules
