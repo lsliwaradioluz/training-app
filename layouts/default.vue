@@ -10,6 +10,7 @@ import Navigation from '~/components/Navigation'
 
 
 export default {
+  middleware: 'redirect',
   components: {
     Navigation
   }, 

@@ -8,6 +8,7 @@
 <script>
 import Logo from '~/components/Logo.vue'
 export default {
+  middleware: 'redirect',
   transition: 'fade',
   components: {
     Logo
