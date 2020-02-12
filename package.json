@@ -20,7 +20,8 @@
     "lodash.flattendeep": "^4.4.0",
     "lodash.omit": "^4.5.0",
     "lodash.zip": "^4.2.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "redirect-ssl": "^1.4.1"
   },
   "devDependencies": {
     "node-sass": "^4.13.0",

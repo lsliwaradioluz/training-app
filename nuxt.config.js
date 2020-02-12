@@ -49,6 +49,9 @@ export default {
     '~/plugins/axios',
     '~/plugins/auth',
   ],
+  serverMiddleware: [
+    'redirect-ssl'
+  ],
   /*
   ** Nuxt.js dev-modules
   */
