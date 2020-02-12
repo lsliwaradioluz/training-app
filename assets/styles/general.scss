@@ -44,7 +44,6 @@ ul li {
   list-style: none;
   padding-left: 0.3rem;
   border-left: 1px solid color(gray);
-  font-size: 0.9rem;
 }
 
 ol {
@@ -89,13 +88,7 @@ p {
   margin-bottom: 1rem;
   font-weight: 600;
   line-height: 1.5;
-  font-size: 0.9rem;
 }
-
-// span {
-//   font-weight: 600;
-//   font-size: 0.9rem;
-// }
 
 form {
   width: 100%;
@@ -142,6 +135,10 @@ input:-webkit-autofill:active  {
 
 .t-left {
   text-align: left;
+}
+
+.t-small {
+  font-size: 0.7rem;
 }
 
 .loading::after {

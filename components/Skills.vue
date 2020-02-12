@@ -1,5 +1,11 @@
 <template>
   <div class="skills">
+    <Head v-if="editor">
+      <div class="row j-between">
+        <h3 class="m00">Umiejętności</h3>
+        <i class="flaticon-plus" @click="createSkill"></i>
+      </div>
+    </Head>
   <!-- SKILL CARDS  --> 
     <transition name="flip" mode="out-in">
       <Carousel 
@@ -11,7 +17,6 @@
           <!-- nagłówek  -->
           <div class="row j-between">
             <h3 class="mt0 mb1 t-green">{{ key }}</h3>
-            <i class="flaticon-plus t-green" @click="createSkill()" v-if="editor"></i>
           </div>
           <!-- ćwiczenia  -->
           <ul class="mb05" v-for="unit in skill" :key="unit.id">

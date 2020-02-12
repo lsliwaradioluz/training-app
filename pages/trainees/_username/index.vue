@@ -1,25 +1,13 @@
 <template>
   <div class="trainee main">
     <UserPanel :user="user" />
-    <Head>
-      <div class="row j-between">
-        <h3 class="m00">Umiejętności</h3>
-      </div>
-    </Head>
-    <Skills :skillset="user.skill" v-if="user.skill" editor/>
-    <p class="tab p11" v-else>
-      Brak umiejętności do wyświetlenia
-    </p>
+    <Skills :skillset="user.skill" v-if="user.skill" ref="skills" editor/>
     <Head>
       <div class="row j-between a-center">
         <h3 class="m00">Treningi</h3>
         <div>
-          <nuxt-link to="workouts" tag="span" append>
-            <i class="flaticon-list t-black" v-if="user.workouts.length > 0"></i>
-          </nuxt-link>
-          <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="span">
-            <i class="flaticon-plus t-black"></i>
-          </nuxt-link>
+          <!-- <nuxt-link to="workouts" tag="i" class="flaticon-list" v-if="user.workouts.length > 0" append></nuxt-link> -->
+          <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
         </div>
       </div>
     </Head>

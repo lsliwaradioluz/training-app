@@ -6,7 +6,7 @@
       <i class="flaticon-menu" @click="toggleNav"></i>
     </span>
     <div class="navigation__panel b-lightblack" ref="panel">
-      <Trainee :user="$store.state.auth.user" style="box-shadow: none;" />
+      <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
       <!-- {{ $store.state.auth.user }} -->
       <div class="navigation__links column tab p11 pt0">
         <nuxt-link to="/dashboard" @click.native="toggleNav">

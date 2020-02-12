@@ -6,7 +6,7 @@
         <nuxt-link to="new" tag="i" class="flaticon-plus" append></nuxt-link>
       </div>
     </Head>
-    <Trainee v-for="user in users" :key="user.id" :user="user" edit />
+    <UserTab v-for="user in users" :key="user.id" :user="user" edit />
   </div>
 </template>
 

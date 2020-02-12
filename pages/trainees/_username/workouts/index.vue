@@ -1,12 +1,9 @@
 <template>
   <div class="trainee-workouts main">
-    <UserPanel :user="user" />
     <Head>
       <div class="row j-between">
-        <h3 class="m00">Treningi</h3>
-        <nuxt-link to="new" tag="span" append>
-          <i class="flaticon-plus t-black"></i>
-        </nuxt-link>
+        <h3 class="m00">Treningi {{ user.username }}</h3>
+        <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
       </div>
     </Head>
     <div v-if="user.workouts.length > 0">

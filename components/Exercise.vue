@@ -36,7 +36,6 @@
           multiple>
       </div>  
     </Head>
-    <!---->
     <div class="exercise__images mb05" v-if="edit && uploadedFiles.length > 0">
       <div class="tab p11 column j-center t-green">
         <p class="mb05" v-if="uploadedFiles.length > 0">Wybrano plików: {{ uploadedFiles.length }}</p>
@@ -46,7 +45,6 @@
         </p>
       </div>
     </div>
-    <!---->
     <Carousel 
       v-if="existingImages.length > 0"
       :pagination="false" 

@@ -1,13 +1,13 @@
 <template>
-  <div class="category tab p11 column">
+  <div class="category tab column">
     <!-- main view  -->
     <div class="row j-between a-stretch" v-if="input == null && id != null">
       <nuxt-link class="category__link pr1" :to="removeWhitespace(name)" tag="div" append>
         <h3 class="m00">{{ name }}</h3>
         <div v-if="subfields.length > 0">
-          <span class="category__description" v-for="subfield in subfields" :key="subfield.id">{{ subfield.name }}. </span>
+          <span class="t-small" v-for="subfield in subfields" :key="subfield.id">{{ subfield.name }}. </span>
         </div>
-        <span class="category__description" v-else>Na razie brak subkategorii</span>
+        <span class="t-small" v-else>Na razie brak subkategorii</span>
       </nuxt-link>
       <div class="row a-center">
         <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
@@ -23,7 +23,7 @@
       </h3>
     </div>
     <!-- buttons  -->
-    <div class="category__panel mt05 pt1 t-green" v-if="showButtonsPanel">
+    <div class="category__panel mt05 pt1 t-green t-small" v-if="showButtonsPanel">
       <div class="row" v-if="input == null && id != null">
         <button @click="$emit('delete', id)">Usuń</button>
         <button @click="editHeader">Edytuj</button>
@@ -65,13 +65,8 @@
     flex-basis: 100%;
   }
 
-  .category__description {
-    font-size: 0.7rem;
-  }
-
   .category__panel {
     border-top: 1px solid color(gray);
-    font-size: 0.7rem;
 
     button {
       flex-basis: 50%;
