@@ -44,6 +44,7 @@
         if (!this.user) {
           input = {
             data: {
+              user: this.$store.state.auth.user.id,
               username: this.username,
               fullname: this.fullname,
               email: this.email,
