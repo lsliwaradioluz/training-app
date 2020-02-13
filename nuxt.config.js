@@ -62,11 +62,10 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/pwa',
-
   ],
   pwa: {
     meta: {
-      ogTitle: 'Piti',
+      ogSiteName: 'Piti',
       theme_color: '#222E50'
     }
   },
