@@ -68,7 +68,9 @@ export default {
 
   ],
   pwa: {
-    
+    meta: {
+      name: "Piti",
+    }
   },
   apollo: {  
     clientConfigs: {
