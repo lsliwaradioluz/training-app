@@ -70,6 +70,9 @@ export default {
   pwa: {
     meta: {
       name: "Piti",
+      color: "#B0FE76", 
+      ogSiteName: "Piti", 
+      ogTitle: "Piti"
     }
   },
   apollo: {  
