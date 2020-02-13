@@ -65,9 +65,11 @@ export default {
   ],
   pwa: {
     meta: {
-      ogSiteName: 'Piti',
       theme_color: '#222E50'
-    }
+    }, 
+    manifest: {
+      name: "Piti",
+    },
   },
   apollo: {  
     clientConfigs: {
