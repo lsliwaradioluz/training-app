@@ -9,7 +9,7 @@ export default {
     title: 'Piti',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=4' },
+      { viewport: 'width=device-width, initial-scale=2' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }, 
       { name: 'mobile-web-app-capable', content: 'mobile-web-app-capable' }
     ],
