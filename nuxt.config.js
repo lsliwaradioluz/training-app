@@ -49,9 +49,6 @@ export default {
     '~/plugins/axios',
     '~/plugins/auth',
   ],
-  // serverMiddleware: [
-  //   'redirect-ssl'
-  // ],
   /*
   ** Nuxt.js dev-modules
   */
@@ -69,10 +66,8 @@ export default {
   ],
   pwa: {
     meta: {
-      name: "Piti",
-      color: "#B0FE76", 
-      ogSiteName: "Piti", 
-      ogTitle: "Piti"
+      name: 'Piti',
+      theme_color: '#B0FE76'
     }
   },
   apollo: {  
