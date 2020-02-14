@@ -65,10 +65,15 @@ export default {
   ],
   pwa: {
     meta: {
-      theme_color: '#222E50'
+      theme_color: '#222E50', 
+      name: 'Piti', 
+      ogSiteName: 'Piti', 
+      ogTitle: 'Piti'
     }, 
     manifest: {
-      name: "Piti",
+      name: 'Piti',
+      short_name: 'Piti',
+      background_color:'#222E50'
     },
   },
   apollo: {  
