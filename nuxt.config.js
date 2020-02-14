@@ -69,7 +69,7 @@ export default {
       name: 'Piti'
     }, 
     manifest: {
-      name: '',
+      name: 'Piti',
       short_name: 'Piti',
       background_color:'#B0FE76'
     },
