@@ -43,7 +43,27 @@
         </div>
       </div>
     </Carousel>
-    <Skills :skillset="user.skill" v-if="currentSection" @pick-exercise="buildBlock($event)" />
+    <div v-if="currentSection">
+      <div class="pl1 pr1 column a-center t-green t-small mb05" v-if="!edit">
+        <button type="button" class="t-gray t-small" @click="showSkillset = !showSkillset">
+          Dotknij tutaj, by zmienić okno
+          <span v-if="!showSkillset">(Ostatni trening)</span>
+          <span v-else>(Umiejętności)</span>
+        </button>
+      </div>
+      <p class="t-gray t-small t-center mb05" v-if="edit">Wybierz ćwiczenia z panelu umiejętności</p>
+      <transition name="fade" mode="out-in">
+        <Skills v-if="showSkillset" :skillset="user.skill" @pick-exercise="buildBlock($event)" />
+        <Carousel v-else :pagination="false">
+          <Routine 
+            v-for="(section, key) in sections" 
+            :key="key" 
+            :section="section" 
+            :section-name="key"
+            @copy-section="pushSection($event)" />
+        </Carousel>
+      </transition>
+    </div>
   <!-- ODPOCZYNEK  -->
     <Head class="pt05 pb05 b-black">Odpoczynek</Head>
     <div class="tab p11">
@@ -68,10 +88,12 @@
 import Skills from '~/components/Skills.vue';
 import createWorkout from '~/apollo/mutations/createWorkout.gql';
 import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
+import Routine from '~/components/Routine';
 
 export default {
   components: {
     Skills,
+    Routine
   },
   props: {
     specificData: {
@@ -82,7 +104,10 @@ export default {
     }
   },
   data() {
-    return this.specificData
+    return {
+      ...this.specificData, 
+      showSkillset: true
+    }
   },
   computed: {
     dateAndTime() {
@@ -94,7 +119,17 @@ export default {
       } else {
         return false;
       }
-    }
+    }, 
+    sections() {
+      let sections = {};
+      const workouts = this.user.workouts[0];
+      for (let key in workouts) {
+        if (Array.isArray(workouts[key]) && workouts[key].length > 0) {
+          sections[key] = workouts[key];
+        }
+      }
+      return sections;
+    },
   },
   methods: {
     openSectionEdit(section) {
@@ -111,11 +146,15 @@ export default {
         const newBlock = {
           __typename: "ComponentBlockCombo",
           name: "Blok", 
-          units: []
+          units: [ 
+            unit 
+          ]
         }
-        newBlock.units.push(unit);
         this.workout[this.currentSection].push(newBlock);
       }
+    },
+    pushSection(section) {
+      this.workout[this.currentSection].push(...section);
     },
     deleteExercise(block, index) {
       this.workout[this.currentSection][block].units.splice(index, 1);

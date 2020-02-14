@@ -2,20 +2,28 @@
   <div class="workout main">
     <!-- Nagłówek -->
     <WorkoutPanel :workout-scheduled="workout.scheduled" :user="workout.user" />
+    <!-- Rozpiska  -->
     <Head class="mt0 pt05 pb05">Rozpiska</Head>
     <Carousel :pagination="false">
       <Routine v-for="(section, key) in sections" :key="key" :section="section" :section-name="key" />
     </Carousel>
+    <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>
     <div class="workout__rest tab p11">
-      <div class="row pt05 pb05">
-        <p class="t-green m00">Między pojedynczymi ćwiczeniami</p>
-        <span class="row j-center a-center m00">{{ workout.singleExerciseRest }} sekund</span>
-      </div>
-      <div class="row pt05 pb05">
-        <p class="t-green m00">Między ćwiczeniami w bloku</p>
-        <span class="row j-center a-center m00">{{ workout.pairedExerciseRest }} sekund</span>
-      </div>
+      <ul>
+        <div class="mb05">
+          <h3 class="m00 t-green">{{ workout.singleExerciseRest }}"</h3>
+          <li class="m00 t-small">Pojedyncze ćwiczenie</li>
+        </div>
+        <div class="mb05">
+          <h3 class="m00 t-green">{{ workout.pairedExerciseRest }}"</h3>
+          <li class="m00 t-small">Ćwiczenie w ramach bloku</li>
+        </div>
+        <div>
+          <h3 class="m00 t-green">{{ workout.afterBlockRest }}"</h3>
+          <li class="m00 t-small">Między blokami</li>
+        </div>
+      </ul>
     </div>
   </div>
 </template>
@@ -52,19 +60,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .workout__rest {
-    
-    p {
-      flex-basis: 75%;
-      border-right: 1px solid color(inputgray);
-      padding: 0.5rem 0.5rem 0.5rem 0;
-    }
-
-    span {
-      flex-basis: 25%;
-      padding: 0.5rem 0 0.5rem 0.5rem;
-    }
-  }
-</style>

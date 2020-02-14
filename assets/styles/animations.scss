@@ -26,6 +26,14 @@
   width: 100%;
 }
 
+.fade-enter-active {
+  animation: fade 0.2s;
+}
+
+.fade-leave-active {
+  animation: fade 0.2s reverse;
+}
+
 @keyframes flip {
   from {
     opacity: 1;

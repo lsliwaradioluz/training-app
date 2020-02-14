@@ -9,6 +9,9 @@ query($id: ID!) {
     user {
       id
       fullname
+      image {
+        url
+      }
     } 
     warmup {
       ...on ComponentBlockCombo {

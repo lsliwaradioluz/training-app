@@ -17,7 +17,7 @@
     <div v-else>
       <h3 class="m00">
         <input class="invisible--input" type="text" v-model="input" ref="categoryNameInput" spellcheck="false">
-        <p class="category__description m00">
+        <p class="category__description m00 t-small">
           Edytuj nazwę
         </p>
       </h3>
