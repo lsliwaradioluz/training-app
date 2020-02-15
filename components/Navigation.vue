@@ -48,7 +48,12 @@ export default {
       return this.$store.getters['auth/user']
     }, 
     header() {
-      return this.$route.name.split('-')[0];
+      if (this.$route.name) {
+        return this.$route.name.split('-')[0];
+      } else {
+        return '';
+      }
+      
     }
   }, 
   methods: {

@@ -4,7 +4,7 @@ export default (context) => {
     return context.redirect('/dashboard');
   }
 
-  if (context.store.state.auth.user == null) {
+  if (context.store.state.auth.user == null && !context.route.path.includes('login')) {
     return context.redirect('/login');
   }
 }

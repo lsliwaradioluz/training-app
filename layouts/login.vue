@@ -1,22 +1,22 @@
 <template>
-  <div class="login b-black">
-    <Logo />
+  <div class="login b-black column j-center main">
+    <h4 class="logo t-center m00">Piti</h4>
     <Nuxt />
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 export default {
   middleware: 'redirect',
   transition: 'fade',
-  components: {
-    Logo
-  }
 }
 </script>
 
 <style lang="scss">
+
+  .logo {
+    font-size: 3rem;
+  }
 
   .login {
     height: 100vh;
