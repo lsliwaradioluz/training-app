@@ -1,11 +1,18 @@
 <template>
   <div class="keyboard">
     <div class="keyboard__keys row j-between">
-      <div class="keyboard__key t-center b-lightblack pt05 pb05" v-for="key in keys" :key="key" @click="$emit('key-pressed', key)">{{ key }}</div>    
-      <div 
-        class="keyboard__key t-center b-lightblack pt05 pb05" 
+      <button 
+        class="t-center b-lightblack pt05 pb05" 
+        type="button"
+        v-for="key in keys" :key="key" 
+        @click="$emit('key-pressed', key)">{{ key }}</button>    
+      <button 
+        class="t-center b-lightblack pt05 pb05" 
+        type="button"
         @touchstart="$emit('reveal-password')"
-        @touchend="$emit('hide-password')">Pokaż</div>
+        @touchend="$emit('hide-password')">
+        <i class="flaticon-eye"></i>
+      </button>
     </div>
   </div>
 </template>
@@ -24,11 +31,18 @@
 
   .keyboard__keys {
     flex-wrap: wrap;
+
+    button {
+      flex-basis: calc(100%/3 - 3px);
+      margin-bottom: 5px;
+      border-radius: 5px;
+      font-size: 1rem;
+      position: relative;
+    }
+
+    button:active {
+      opacity: 0.8;
+    }
   }
 
-  .keyboard__key {
-    flex-basis: calc(100%/3 - 3px);
-    margin-bottom: 5px;
-    border-radius: 5px;
-  }
 </style>

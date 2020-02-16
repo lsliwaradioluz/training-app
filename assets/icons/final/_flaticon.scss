@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 08/02/2020 21:42
+    Creation date: 16/02/2020 12:52
     */
 
     @font-face {
@@ -54,8 +54,9 @@
 .flaticon-arrow:before { content: "\f10e"; }
 .flaticon-power-button:before { content: "\f10f"; }
 .flaticon-chevron:before { content: "\f110"; }
-.flaticon-information:before { content: "\f111"; }
-.flaticon-vertical-dots:before { content: "\f112"; }
+.flaticon-vertical-dots:before { content: "\f111"; }
+.flaticon-information:before { content: "\f112"; }
+.flaticon-eye:before { content: "\f113"; }
     
     $font-Flaticon-menu: "\f100";
     $font-Flaticon-up-arrow: "\f101";
@@ -74,5 +75,6 @@
     $font-Flaticon-arrow: "\f10e";
     $font-Flaticon-power-button: "\f10f";
     $font-Flaticon-chevron: "\f110";
-    $font-Flaticon-information: "\f111";
-    $font-Flaticon-vertical-dots: "\f112";
+    $font-Flaticon-vertical-dots: "\f111";
+    $font-Flaticon-information: "\f112";
+    $font-Flaticon-eye: "\f113";

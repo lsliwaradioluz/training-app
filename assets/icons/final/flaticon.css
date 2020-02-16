@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 08/02/2020 21:42
+  	Creation date: 16/02/2020 12:52
   	*/
 
 @font-face {
@@ -22,7 +22,6 @@
   }
 }
 
-[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
 [class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
   font-family: Flaticon;
   font-size: 20px;
@@ -48,5 +47,6 @@
 .flaticon-arrow:before { content: "\f10e"; }
 .flaticon-power-button:before { content: "\f10f"; }
 .flaticon-chevron:before { content: "\f110"; }
-.flaticon-information:before { content: "\f111"; }
-.flaticon-vertical-dots:before { content: "\f112"; }
+.flaticon-vertical-dots:before { content: "\f111"; }
+.flaticon-information:before { content: "\f112"; }
+.flaticon-eye:before { content: "\f113"; }
