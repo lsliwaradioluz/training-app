@@ -48,7 +48,7 @@
               username: this.username,
               fullname: this.fullname,
               email: this.email,
-              password: this.username,
+              password: 123456,
               confirmed: true, 
               role: "5e1dbf7bc114b11970959399",
               admin: false,

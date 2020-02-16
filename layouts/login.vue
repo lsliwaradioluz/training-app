@@ -1,5 +1,5 @@
 <template>
-  <div class="login b-black column j-center main">
+  <div class="login main b-black column j-center">
     <h4 class="logo t-center m00">Piti</h4>
     <Nuxt />
   </div>
@@ -20,10 +20,9 @@ export default {
 
   .login {
     height: 100vh;
-    
-    div:first-child {
-      height: 100vh;
-      color: white;
-    }
+  }
+
+  .button--primary {
+    border-radius: 5px;
   }
 </style>
