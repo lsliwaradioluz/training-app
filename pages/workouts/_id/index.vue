@@ -5,7 +5,12 @@
     <!-- Rozpiska  -->
     <Head class="mt0 pt05 pb05">Rozpiska</Head>
     <Carousel :pagination="false">
-      <Routine v-for="(section, key) in sections" :key="key" :section="section" :section-name="key" />
+      <Routine 
+        v-for="(section, key) in sections" 
+        :key="key" 
+        :section="section" 
+        :section-name="key"
+        showExerciseLink />
     </Carousel>
     <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>

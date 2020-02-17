@@ -2,7 +2,7 @@ query($id: ID!) {
   users(where:{
     id: $id
   }) {
-    workouts(sort: "scheduled:asc") {
+    workouts(sort: "scheduled:desc") {
       id
       scheduled
       ready

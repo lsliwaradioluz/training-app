@@ -28,6 +28,7 @@
   font-size: 20px;
   font-style: normal;
   color: inherit;
+  font-weight: 300;
 }
 
 .flaticon-menu:before { content: "\f100"; }

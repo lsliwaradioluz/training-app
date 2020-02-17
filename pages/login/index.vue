@@ -1,24 +1,23 @@
 <template>
   <div class="signin t-white column j-center">
-    <form class="column j-center" v-if="!username">
+    <form class="column j-center" v-if="!username" @submit.prevent>
       <p class="m00 mb1 t-center t-small">Podaj nazwę użytkownika:</p>
       <input 
         class="mb05 t-center" 
         v-model="identifier" 
         type="text"
-        autocomplete="on"
-        autofocus
+        autocomplete="off"
         spellcheck="false">
       <button class="button--primary mt05" @click="confirmUser" type="button">Dalej</button>
       <p class="signin__error t-red mb0 mt05 t-small t-center">{{ error }}</p>
     </form>
-    <form class="column j-center" v-else>
+    <form class="column j-center" @submit.prevent v-else>
       <p class="m00 t-center t-small">Podaj hasło użytkownika {{ username }}:</p>
       <input 
         class="invisible--input t-center t-small mb05" 
         v-model="password" 
-        :type="revealPassword ? 'text' : 'password'" 
-        autocomplete="on"
+        :type="revealPassword ? 'text' : 'password'"
+        autocomplete="off"
         disabled>
       <Keyboard 
         @key-pressed="insertCode($event)"
@@ -26,8 +25,10 @@
         @hide-password="revealPassword = false" />
       <p class="signin__error t-red m00 t-small t-center">{{ error }}</p>
       <button class="button--primary m10" @click.prevent="signIn" type="button">Zaloguj się</button>
-      <button class="t-center t-small mb05" type="button" @click="changeUser">Nie jesteś {{ username }}?</button>
-      <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link>
+      <div class="column a-center">
+        <button class="t-center t-small mb05" type="button" @click="changeUser">Nie jesteś {{ username }}?</button>
+        <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link>
+      </div>
     </form>      
   </div>
 </template>
@@ -71,7 +72,7 @@ export default {
     },
     verifyUser() {
       const user = this.users.find(user => {
-        return user.username == this.identifier;
+        return user.username.toLowerCase() == this.identifier.toLowerCase();
       });
 
       if (user) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="editworkout">
+  <div class="editworkout main">
     <WorkoutEditor :specific-data="$data" edit />
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.route.params.id } })
+    return client.query({ query: mainQuery, variables: { id: context.route.params.id, scheduled: context.route.query.scheduled } })
       .then(({ data }) => {
         const date = new Date(data.workout.scheduled);
         let hours = date.getHours();

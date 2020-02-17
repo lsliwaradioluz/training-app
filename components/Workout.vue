@@ -21,7 +21,7 @@
     <!-- buttons  -->
     <div class="workout__panel row mt05 pt1 t-green t-small" v-if="showButtonsPanel">
       <button @click="deleteWorkout">Usuń</button>
-      <nuxt-link :to="`/workouts/${workout.id}/edit`" tag="button" type="button">Edytuj</nuxt-link>
+      <nuxt-link :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }" tag="button" type="button">Edytuj</nuxt-link>
     </div>
   </div>
 </template>

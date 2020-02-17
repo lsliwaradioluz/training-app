@@ -1,5 +1,5 @@
 <template>
-  <div class="workouteditor main">
+  <div class="workouteditor">
   <!-- DATA I GODZINA  -->
     <Head class="pt05 pb05">Data i godzina</Head>
     <div class="row mb05">
@@ -18,7 +18,7 @@
         </Head>
         <div class="workouteditor__blocks tab p11">
           <p class="m00" v-if="section.length == 0">Na razie brak ćwiczeń</p>
-          <div v-for="(block, blockindex) in section" :key="block.id" :class="{ 'inactive': currentBlock != null && currentBlock != blockindex }">
+          <div v-for="(block, blockindex) in section" :key="blockindex" :class="{ 'inactive': currentBlock != null && currentBlock != blockindex }">
             <h4 class="mt0 mb05 row j-between t-green" v-if="block.units.length > 1 || currentBlock == blockindex">
               <span>{{ block.name }}</span>
               <i class="flaticon-next small" @click="currentBlock = blockindex" v-if="currentSection && currentBlock != blockindex"></i>
@@ -29,7 +29,7 @@
                 {{ unit.exercise.name }}
                 <span>
                   <i class="flaticon-next small" @click="currentBlock = blockindex" v-if="currentSection && block.units.length == 1 && currentBlock != blockindex"></i>
-                  <i class="flaticon-close small" @click="deleteExercise(blockindex, unitindex)" v-if="currentSection"></i>
+                  <i class="flaticon-close small" @click="deleteUnit(blockindex, unitindex)" v-if="currentSection"></i>
                 </span>
               </p>
               <li>
@@ -43,24 +43,34 @@
         </div>
       </div>
     </Carousel>
+  <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
     <div v-if="currentSection">
-      <div class="pl1 pr1 column a-center t-green t-small mb05" v-if="!edit">
-        <button type="button" class="t-gray t-small" @click="showSkillset = !showSkillset">
+      <div class="pl1 pr1 column t-gray t-small mb05">
+        <button class="t-small" type="button" @click="showSkillset = !showSkillset">
           Dotknij tutaj, by zmienić okno
           <span v-if="!showSkillset">(Ostatni trening)</span>
           <span v-else>(Umiejętności)</span>
         </button>
+        <div class="mt05 row j-between" v-if="!showSkillset">
+          <button 
+            type="button"
+            class="t-small"
+            :class="{ 't-green': index == currentWorkout }"
+            v-for="(date, index) in previousWorkoutsDates" 
+            :key="index"
+            @click="currentWorkout = index">{{ date | reverseDate }}</button>
+        </div>
       </div>
-      <p class="t-gray t-small t-center mb05" v-if="edit">Wybierz ćwiczenia z panelu umiejętności</p>
       <transition name="fade" mode="out-in">
-        <Skills v-if="showSkillset" :skillset="user.skill" @pick-exercise="buildBlock($event)" />
-        <Carousel v-else :pagination="false">
+        <Skills :skillset="user.skill" @copy-unit="copyUnit($event)" v-if="showSkillset" />
+        <Carousel :pagination="false" v-else>
           <Routine 
-            v-for="(section, key) in sections" 
+            v-for="(section, key) in previousWorkoutsSections" 
             :key="key" 
             :section="section" 
             :section-name="key"
-            @copy-section="pushSection($event)" />
+            @copy-section="copySection($event)"
+            @copy-block="copyBlock($event)" />
         </Carousel>
       </transition>
     </div>
@@ -105,8 +115,10 @@ export default {
   },
   data() {
     return {
+      client: this.$apollo.getClient(),
       ...this.specificData, 
-      showSkillset: true
+      showSkillset: true, 
+      currentWorkout: 0,
     }
   },
   computed: {
@@ -119,16 +131,23 @@ export default {
       } else {
         return false;
       }
-    }, 
-    sections() {
-      let sections = {};
-      const workouts = this.user.workouts[0];
+    },
+    previousWorkoutsDates() {
+      let previousWorkoutsDates = [];
+      this.user.workouts.forEach(cur => {
+        previousWorkoutsDates.push(cur.scheduled);
+      });
+      return previousWorkoutsDates;
+    },
+    previousWorkoutsSections() {
+      let previousWorkoutsSections = {};
+      const workouts = this.user.workouts[this.currentWorkout];
       for (let key in workouts) {
         if (Array.isArray(workouts[key]) && workouts[key].length > 0) {
-          sections[key] = workouts[key];
+          previousWorkoutsSections[key] = workouts[key];
         }
       }
-      return sections;
+      return previousWorkoutsSections;
     },
   },
   methods: {
@@ -139,7 +158,7 @@ export default {
       this.currentSection = null;
       this.currentBlock = null;
     },
-    buildBlock(unit) {
+    copyUnit(unit) {
       if (this.currentBlock != null) {
         this.workout[this.currentSection][this.currentBlock].units.push(unit);
       } else {
@@ -153,16 +172,21 @@ export default {
         this.workout[this.currentSection].push(newBlock);
       }
     },
-    pushSection(section) {
-      this.workout[this.currentSection].push(...section);
+    copySection(section) {
+      const sectionClone = JSON.parse(JSON.stringify(section));
+      this.workout[this.currentSection].push(...sectionClone);
     },
-    deleteExercise(block, index) {
+    copyBlock(block) {
+      const blockClone = JSON.parse(JSON.stringify(block));
+      this.workout[this.currentSection].push(blockClone);
+    },
+    deleteUnit(block, index) {
       this.workout[this.currentSection][block].units.splice(index, 1);
       if (this.workout[this.currentSection][block].units.length == 0) this.workout[this.currentSection].splice(block, 1);
     },
     uploadWorkout() {
+      console.log('uploading workout...');
       let input;
-      const client = this.$apollo.getClient();
       
       if (this.edit == true) {
         input = {
@@ -188,7 +212,7 @@ export default {
         }
       }
 
-      client.mutate({ mutation: this.edit ? updateWorkout : createWorkout, variables: { input: input }  })
+      this.client.mutate({ mutation: this.edit ? updateWorkout : createWorkout, variables: { input: input }  })
         .then(res => {
           this.$router.go(-1);
         })  

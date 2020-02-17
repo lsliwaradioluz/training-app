@@ -30,11 +30,12 @@ query($username: String) {
         }
       }
     }
-    workouts(limit: 1, sort: "scheduled:asc") {
+    workouts(limit: 3, sort: "scheduled:desc") {
       id
       scheduled
       warmup {
         ...on ComponentBlockCombo {
+          id
           name
           units {
             id
@@ -52,6 +53,7 @@ query($username: String) {
       }
       skillwork {
         ...on ComponentBlockCombo {
+          id
           name
           units {
             id
@@ -69,6 +71,7 @@ query($username: String) {
       }
       strength {
         ...on ComponentBlockCombo {
+          id
           name
           units {
             id
@@ -86,6 +89,7 @@ query($username: String) {
       }
       cardio {
         ...on ComponentBlockCombo {
+          id
           name
           units {
             id
@@ -103,6 +107,7 @@ query($username: String) {
       }
       mobility {
         ...on ComponentBlockCombo {
+          id
           name
           units {
             id

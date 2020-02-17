@@ -23,7 +23,7 @@
             <p class="mb0 row j-between">
               <span>{{ unit.exercise.name }}</span>
               <i class="flaticon-adjust small" @click="editSkill(unit)" v-if="editor"></i>
-              <i class="flaticon-plus skills__pick small" @click="$emit('pick-exercise', unit )" v-else></i>
+              <i class="flaticon-plus skills__pick small" @click="$emit('copy-unit', unit )" v-else></i>
             </p>
             <li>
               <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span>

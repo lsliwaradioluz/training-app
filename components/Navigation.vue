@@ -7,14 +7,13 @@
     </span>
     <div class="navigation__panel b-lightblack" ref="panel">
       <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
-      <!-- {{ $store.state.auth.user }} -->
       <div class="navigation__links column tab p11 pt0">
         <nuxt-link to="/dashboard" @click.native="toggleNav">
           <i class="flaticon-user mr05"></i>
           Pulpit
           <i class="flaticon-chevron"></i>
         </nuxt-link>
-        <nuxt-link to="/exercises" @click.native="toggleNav">
+        <nuxt-link to="/exercises" @click.native="toggleNav" v-if="user.admin">
           <i class="flaticon-gymnastics mr05"></i>
           Ćwiczenia
           <i class="flaticon-chevron"></i>
@@ -24,7 +23,7 @@
           Treningi
           <i class="flaticon-chevron"></i>
         </nuxt-link>
-        <nuxt-link to="/trainees" @click.native="toggleNav">
+        <nuxt-link to="/trainees" @click.native="toggleNav" v-if="user.admin">
           <i class="flaticon-group mr05"></i>
           Podopieczni
           <i class="flaticon-chevron"></i>

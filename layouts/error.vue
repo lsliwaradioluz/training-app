@@ -5,11 +5,7 @@
       <p class="m00">Kod błędu:</p>
       <p class="m00">{{ error.statusCode }}: {{ error.message }}</p>
     </div>
-    <div class="pt05 pb1">
-      <p class="m00">Ścieżka:</p>
-      <p class="m00">{{ $route.path }}</p>
-    </div>
-    <nuxt-link to="/dashboard" tag="button" type="button" class="button--primary">Powrót do strony głównej</nuxt-link>
+    <button type="button" class="button--primary" @click="$router.go(-1)">Wróć</button>
   </div>
 </template>
 

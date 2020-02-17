@@ -21,6 +21,14 @@ query($id: ID!) {
           exercise {
             name
             _id
+            subcategory {
+              _id
+              name
+              category {
+                _id
+                name
+              }
+            }
           }
           sets
           reps
@@ -38,6 +46,14 @@ query($id: ID!) {
           exercise {
             name
             _id
+            subcategory {
+              _id
+              name
+              category {
+                _id
+                name
+              }
+            }
           }
           sets
           reps
@@ -54,7 +70,15 @@ query($id: ID!) {
           id
           exercise {
             name
-            id
+            _id
+            subcategory {
+              _id
+              name
+              category {
+                _id
+                name
+              }
+            }
           }
           sets
           reps
@@ -71,7 +95,15 @@ query($id: ID!) {
           id
           exercise {
             name
-            id
+            _id
+            subcategory {
+              _id
+              name
+              category {
+                _id
+                name
+              }
+            }
           }
           sets
           reps
@@ -88,7 +120,15 @@ query($id: ID!) {
           id
           exercise {
             name
-            id
+            _id
+            subcategory {
+              _id
+              name
+              category {
+                _id
+                name
+              }
+            }
           }
           sets
           reps

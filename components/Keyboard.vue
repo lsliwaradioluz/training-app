@@ -2,7 +2,7 @@
   <div class="keyboard">
     <div class="keyboard__keys row j-between">
       <button 
-        class="t-center b-lightblack pt05 pb05" 
+        class="t-center b-lightblack pt1 pb1" 
         type="button"
         v-for="key in keys" :key="key" 
         @click="$emit('key-pressed', key)">{{ key }}</button>    

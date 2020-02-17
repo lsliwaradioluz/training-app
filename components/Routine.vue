@@ -7,14 +7,16 @@
     <div v-for="block in section" :key="block.id">
       <p class="mt0 mb05 row j-between" v-if="block.units.length > 1">
         <span>{{ block.name }}</span>
+        <i class="flaticon-plus small" @click="$emit('copy-block', block)"></i>
       </p>
       <ul class="mb05" :class="{ pl05:  block.units.length > 1}" v-for="(unit, unitindex) in block.units" :key="unitindex">
         <p class="mb0 row j-between">
-          {{ unit.exercise.name }}
-          <!-- <nuxt-link
+          <span>{{ unit.exercise.name }}</span>
+          <nuxt-link
+            v-if="showExerciseLink"
             :to="`/exercises/${unit.exercise.subcategory.category.name}/${unit.exercise.subcategory.name}/${unit.exercise.name}`" 
             tag="i"
-            class="flaticon-information small"></nuxt-link> -->
+            class="flaticon-information small"></nuxt-link>
           </p>
         <li>
           <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span>
@@ -30,10 +32,17 @@
 <script>
 
 export default {
-  props: ['section', 'section-name']
+  props: {
+    section: {
+      type: Array,
+    }, 
+    sectionName: {
+      type: String,
+    }, 
+    showExerciseLink: {
+      type: Boolean, 
+      default: () => false,
+    }
+  },
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
