@@ -69,6 +69,7 @@
             :key="key" 
             :section="section" 
             :section-name="key"
+            edit
             @copy-section="copySection($event)"
             @copy-block="copyBlock($event)" />
         </Carousel>

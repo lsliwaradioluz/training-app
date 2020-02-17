@@ -27,7 +27,7 @@
       <button class="button--primary m10" @click.prevent="signIn" type="button">Zaloguj się</button>
       <div class="column a-center">
         <button class="t-center t-small mb05" type="button" @click="changeUser">Nie jesteś {{ username }}?</button>
-        <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link>
+        <!-- <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link> -->
       </div>
     </form>      
   </div>
@@ -86,6 +86,7 @@ export default {
     changeUser() {
       this.setUsername(null);
       this.identifier = '';
+      this.error = '';
     },
     insertCode(digit) {
       if (digit == 'C') {

@@ -9,8 +9,7 @@
         v-for="(section, key) in sections" 
         :key="key" 
         :section="section" 
-        :section-name="key"
-        showExerciseLink />
+        :section-name="key"/>
     </Carousel>
     <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>
