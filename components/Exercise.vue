@@ -174,20 +174,24 @@
           });
       },
       createSaveChanges() {
-        if (this.uploadedFiles.length > 0) {
-          this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
-            .then(res => {
-              let IDs = []
-              res.data.multipleUpload.forEach(cur => {
-                IDs.push(cur.id);
-              });
+        this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
+          .then(res => {
+            console.log(res);
+          });
+        // if (this.uploadedFiles.length > 0) {
+        //   this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
+        //     .then(res => {
+        //       let IDs = []
+        //       res.data.multipleUpload.forEach(cur => {
+        //         IDs.push(cur.id);
+        //       });
               
-              this.input.images = IDs;
-              this.createExercise();
-            });
-        } else {
-          this.createExercise();
-        }
+        //       this.input.images = IDs;
+        //       this.createExercise();
+        //     });
+        // } else {
+        //   this.createExercise();
+        // }
       },
       updateSaveChanges() {
         this.input.images = [];
