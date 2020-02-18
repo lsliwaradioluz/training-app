@@ -111,7 +111,11 @@
     },
     data() {
       return {
-        client: this.$apollo.getClient(),
+        client: this.$apollo.getClient({
+          fetchOptions: {
+            mode: 'no-cors'
+          }
+        }),
         showSubcategoriesList: false,
         subcategoryName: this.$route.params.subcategory,
         existingImages: this.exercise.images,
