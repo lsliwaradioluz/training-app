@@ -18,7 +18,7 @@ $colors: (
   box-sizing: border-box;
 }
     
-html, body {
+body {
   margin: 0;
   overflow-x: hidden;
   font-family: 'Nunito', sans-serif;
@@ -88,7 +88,7 @@ p {
   margin-bottom: 1rem;
   font-weight: 600;
   line-height: 1.5;
-  font-size: 0.9rem;
+  font-size: 14.4px;
 }
 
 form {
