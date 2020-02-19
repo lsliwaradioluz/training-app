@@ -4,6 +4,10 @@ query($name: String) {
   }) {
     id
     name
+    subcategory {
+      name
+      id
+    }
     positioning
     technique
     images {

@@ -29,7 +29,7 @@
         <button @click="editHeader">Edytuj</button>
       </div>
       <div class="row" v-else>
-        <button type="button" @click="id ? $emit('edit-category', { id: id, name: input }) : $emit('upload', input)">Zapisz</button>
+        <button type="button" @click="id ? $emit('edit', { id: id, name: input }) : $emit('upload', input)">Zapisz</button>
         <button type="button" @click="id ? input = null : $emit('abort-upload')">Wróć</button>
       </div>
     </div>

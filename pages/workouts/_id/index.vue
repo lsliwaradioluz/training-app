@@ -1,8 +1,8 @@
 <template>
   <div class="workout main">
-    <!-- Nagłówek -->
+  <!-- Nagłówek -->
     <WorkoutPanel :workout-scheduled="workout.scheduled" :user="workout.user" />
-    <!-- Rozpiska  -->
+  <!-- Rozpiska  -->
     <Head class="mt0 pt05 pb05">Rozpiska</Head>
     <Carousel :pagination="false">
       <Routine 
@@ -11,23 +11,12 @@
         :section="section" 
         :section-name="key"/>
     </Carousel>
-    <!-- Przerwy  -->
+  <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>
     <div class="workout__rest tab p11">
-      <ul>
-        <div class="mb05">
-          <h3 class="m00 t-green">{{ workout.singleExerciseRest }}"</h3>
-          <li class="m00 t-small">Pojedyncze ćwiczenie</li>
-        </div>
-        <div class="mb05">
-          <h3 class="m00 t-green">{{ workout.pairedExerciseRest }}"</h3>
-          <li class="m00 t-small">Ćwiczenie w ramach bloku</li>
-        </div>
-        <div>
-          <h3 class="m00 t-green">{{ workout.afterBlockRest }}"</h3>
-          <li class="m00 t-small">Między blokami</li>
-        </div>
-      </ul>
+      <p class="m00">
+        Wykonując ćwiczenia pojedynczo, odpoczywaj przez <span class="t-green">{{ workout.singleExerciseRest }} sekund</span> między seriami. Jeżeli przeplatasz ćwiczenia w ramach bloku, odpoczywaj przez <span class="t-green">{{ workout.pairedExerciseRest }} sekund</span>.
+      </p>
     </div>
   </div>
 </template>

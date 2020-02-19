@@ -1,18 +1,27 @@
 <template>
   <div class="exercise">
     <Head>
-      <span v-if="!edit">{{ exercise.name }}</span>
+      <div class="row j-between" v-if="!edit">
+        <span>{{ exercise.name }}</span>
+        <nuxt-link 
+          class="flaticon-adjust" 
+          tag="i" 
+          to="edit" 
+          v-if="$store.state.auth.user.admin" 
+          append/>
+      </div>
       <span v-else>Nazwa ćwiczenia</span>
     </Head>
     <div class="tab" v-if="edit">
       <input class="invisible--input" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
     </div>
+    <!-- SUBKATEGORIA  -->
     <div v-if="edit">
       <Head>Subkategoria</Head>
       <div class="tab">
         <p class="row j-between m00">
           <span>{{ subcategoryName }}</span>
-          <span @click="showSubcategoriesList = !showSubcategoriesList" :class="{ rotated: showSubcategoriesList }">▼</span>
+          <span class="t-small" @click="showSubcategoriesList = !showSubcategoriesList" :class="{ rotated: showSubcategoriesList }">▼</span>
         </p>
         <ul v-if="showSubcategoriesList">
           <li 
@@ -23,7 +32,7 @@
         </ul>
       </div>
     </div>
-    <!--  -->
+    <!-- ZDJĘCIA  -->
     <Head v-if="edit">
       <div class="row j-between">
         <h3 class="m00">Zdjęcia</h3> 
@@ -37,7 +46,6 @@
         </form>
       </div>  
     </Head>
-    <!--  -->
     <div class="exercise__images mb05" v-if="edit && uploadedFiles.length > 0">
       <div class="tab p11 column j-center t-green">
         <p class="mb05" v-if="uploadedFiles.length > 0">Wybrano plików: {{ uploadedFiles.length }}</p>
@@ -56,32 +64,34 @@
       <div
         v-for="(image, index) in existingImages"
         :key="image.id"
-        class="exercise__image tab p00"
-        :style="{ backgroundImage: `url('${image.url}')` }">
+        class="exercise__image mb05">
+        <img :src="image.url" :alt="`foto${index}`">
         <div class="row j-end a-start" v-if="edit">
           <i class="flaticon-close mr1 mt05" @click="deleteExistingImage(index)"></i>
         </div>
       </div>
     </Carousel>
-    <div>
-      <Head>Pozycja</Head>
+  <!-- OPIS POZYCJI  -->
+    <div v-if="exercise.positioning || edit">
+      <Head>Wykonanie</Head>
       <div class="tab">
-        <div v-if="exercise.positioning && !edit">
+        <div v-if="!edit">
           <p class="mb05" v-for="(p, index) in positioning" :key="index">{{ index + 1 }}. {{ p }}</p>
         </div>
-        <textarea class="invisible--input" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.positioning" v-else rows="5" spellcheck="false"></textarea>
+        <textarea class="invisible--input" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.positioning" rows="5" spellcheck="false" v-else></textarea>
       </div>
     </div>
-    <div>
+  <!-- OPIS TECHNIKI -->
+    <div v-if="exercise.technique || edit">
       <Head>Uwagi</Head>
       <div class="tab">
-        <div v-if="exercise.technique && !edit">
+        <div v-if="!edit">
           <p class="m00">{{ exercise.technique }}</p>
         </div>
         <textarea class="invisible--input" placeholder="Uzupełnij opis ćwiczenia" v-model="input.technique" v-else rows="5" spellcheck="false"></textarea>
       </div>
     </div>
-    <!-- buttony zapisz odrzuć  -->
+  <!-- BUTTONY ZAPISZ ODRZUĆ  -->
     <div class="row j-between mt1" v-if="edit">
       <button class="button--primary button--square" type="button" @click="createSaveChanges" v-if="exercise.id == null">Zapisz</button>
       <button class="button--primary button--square" type="button" @click="updateSaveChanges" v-else>Zapisz</button>
@@ -124,7 +134,7 @@
           name: this.exercise.name,
           positioning: this.exercise.positioning, 
           technique: this.exercise.technique, 
-          subcategory: this.$route.query.subcategoryId,
+          subcategory: this.$route.query.subcategoryId ? this.$route.query.subcategoryId : this.exercise.subcategory.id,
         }
       }
     },
@@ -234,7 +244,7 @@
             });
           })
         } else {
-          this.createExercise();
+          this.updateExercise();
         }
         
         // if (this.uploadedFiles.length > 0) {
@@ -267,20 +277,22 @@
   }
 
   .exercise__image {
-    height: 40vh;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
     position: relative;
+
+    img {
+      border-radius: 5px;
+      width: 100%;
+    }
 
     div {
       position: absolute;
       top: 0;
-      left: 0;
-      height: 100%;
+      right: 0;
       width: 100%;
-      background-color: rgba(0, 0, 0, 0.363);
+      height: 100%;
     }
+
+   
   }
 
   .rotated {
