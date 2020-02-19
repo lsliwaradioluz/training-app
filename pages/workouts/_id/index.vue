@@ -13,7 +13,7 @@
     </Carousel>
   <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>
-    <p class="workout__rest tab p11 m00">
+    <p class="tab p11 m00">
       Wykonując ćwiczenia pojedynczo, odpoczywaj przez <span class="t-green">{{ workout.singleExerciseRest }} sekund</span> między seriami. Jeżeli przeplatasz ćwiczenia w ramach bloku, odpoczywaj przez <span class="t-green">{{ workout.pairedExerciseRest }} sekund</span>.
     </p>
   </div>
