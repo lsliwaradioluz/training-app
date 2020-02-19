@@ -218,18 +218,36 @@
         this.existingImages.forEach(cur => {
           this.input.images.push(cur.id);
         });
-        
-        if (this.uploadedFiles.length > 0) {
-          this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
-            .then(res => {
-              res.data.multipleUpload.forEach(cur => {
+
+        if (this.$refs.input.files.length > 0) {
+          const formData = new FormData(this.$refs.form);
+          fetch(this.endpoint, {
+            method: 'POST', 
+            body: formData
+          })
+          .then(res => {
+            res.json().then(data => {
+              data.forEach(cur => {
                 this.input.images.push(cur.id);
               });
               this.updateExercise();
             });
+          })
         } else {
-          this.updateExercise();
+          this.createExercise();
         }
+        
+        // if (this.uploadedFiles.length > 0) {
+        //   this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
+        //     .then(res => {
+        //       res.data.multipleUpload.forEach(cur => {
+        //         this.input.images.push(cur.id);
+        //       });
+        //       this.updateExercise();
+        //     });
+        // } else {
+        //   this.updateExercise();
+        // }
       },
       pickSubcategory(subcategory) {
         this.input.subcategory = subcategory.id;
