@@ -23,19 +23,21 @@
         </ul>
       </div>
     </div>
+    <!--  -->
     <Head v-if="edit">
       <div class="row j-between">
         <h3 class="m00">Zdjęcia</h3> 
         <i class="flaticon-plus" @click="launchFileUpload" v-if="edit"></i>
-        <input 
-          type="file" 
-          accept="image/*" 
-          @change="onFilesUpload" 
-          ref="fileInput" 
-          v-show="false" 
-          multiple>
+        <form ref="form" v-show="false">
+          <input
+            ref="input"
+            name="files"
+            type="file"
+            multiple>
+        </form>
       </div>  
     </Head>
+    <!--  -->
     <div class="exercise__images mb05" v-if="edit && uploadedFiles.length > 0">
       <div class="tab p11 column j-center t-green">
         <p class="mb05" v-if="uploadedFiles.length > 0">Wybrano plików: {{ uploadedFiles.length }}</p>
@@ -111,11 +113,8 @@
     },
     data() {
       return {
-        client: this.$apollo.getClient({
-          fetchOptions: {
-            mode: 'no-cors'
-          }
-        }),
+        client: this.$apollo.getClient(),
+        endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
         showSubcategoriesList: false,
         subcategoryName: this.$route.params.subcategory,
         existingImages: this.exercise.images,
@@ -143,7 +142,7 @@
     }, 
     methods: {
       launchFileUpload() {
-        this.$refs.fileInput.click();
+        this.$refs.input.click();
       },
       onFilesUpload({ target }) {
         this.uploadedFiles.push(...target.files);
@@ -178,20 +177,41 @@
           });
       },
       createSaveChanges() {
-        if (this.uploadedFiles.length > 0) {
-          this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
-            .then(res => {
+        if (this.$refs.input.files.length > 0) {
+          const formData = new FormData(this.$refs.form);
+          fetch(this.endpoint, {
+            method: 'POST', 
+            body: formData
+          })
+          .then(res => {
+            res.json().then(data => {
               let IDs = []
-              res.data.multipleUpload.forEach(cur => {
+              data.forEach(cur => {
                 IDs.push(cur.id);
               });
               
               this.input.images = IDs;
               this.createExercise();
             });
+          })
         } else {
           this.createExercise();
         }
+
+      //   if (this.uploadedFiles.length > 0) {
+      //     this.client.mutate({ mutation: uploadPhoto, variables: { files: this.uploadedFiles } })
+      //       .then(res => {
+      //         let IDs = []
+      //         res.data.multipleUpload.forEach(cur => {
+      //           IDs.push(cur.id);
+      //         });
+              
+      //         this.input.images = IDs;
+      //         this.createExercise();
+      //       });
+      //   } else {
+      //     this.createExercise();
+      //   }
       },
       updateSaveChanges() {
         this.input.images = [];
