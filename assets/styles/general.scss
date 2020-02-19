@@ -16,7 +16,12 @@ $colors: (
 
 * {
   box-sizing: border-box;
+  max-height: 1000000px;
 }
+
+// html * {
+//   max-height: 1000000px;
+// }
     
 body {
   margin: 0;
@@ -88,7 +93,7 @@ p {
   margin-bottom: 1rem;
   font-weight: 600;
   line-height: 1.5;
-  font-size: 14.4px;
+  font-size: 0.9rem;
 }
 
 form {
@@ -103,7 +108,7 @@ select {
   border-radius: 5px;
   font-family: inherit;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   background-color: color(inputgray);
   color: white;
