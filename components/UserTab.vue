@@ -41,7 +41,7 @@
     },
     computed: {
       backgroundImage() {
-        return this.user.image ? this.user.image.url : 'https://res.cloudinary.com/drsgb4wld/image/upload/v1579693365/u8xvypx32t6zphrfrbvl.svg';
+        return this.user.image ? this.user.image.url : require('assets/images/user.svg');
       }
     },
     methods: {

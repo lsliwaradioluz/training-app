@@ -1,10 +1,7 @@
 <template>
   <div class="workouts main">
     <div v-if="workouts.length > 0">
-      <Workout v-for="workout in workouts" :key="workout.id" :workout="workout">
-        <template v-slot:date>{{ workout.scheduled | reverseDate }}</template>
-        <template v-slot:day>{{ getWeekDay(workout.scheduled) | dayName }}</template>
-      </Workout>
+      <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>
     </div>
     <p class="t-center" v-else>
       Brak treningów do wyświetlenia
@@ -26,7 +23,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

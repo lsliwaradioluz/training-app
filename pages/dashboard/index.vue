@@ -5,7 +5,7 @@
       <template>Najbliższy trening</template>
     </Head>
     <div>
-      <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
+      <Workout :workout="user.workouts[0]" v-if="isWorkoutScheduled" />
       <p class="tab p11" v-else>
         Brak zaplanowanych treningów
       </p>
@@ -25,6 +25,12 @@ export default {
         }
       });
   },
+  computed: {
+    isWorkoutScheduled() {
+      const today = new Date().toISOString();
+      return this.user.workouts[0].scheduled > today ? true : false;
+    }
+  }
 }
 </script>
 

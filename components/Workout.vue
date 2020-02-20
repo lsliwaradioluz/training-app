@@ -3,11 +3,13 @@
     <!-- main view -->
     <div class="row j-between a-stretch">
       <nuxt-link class="workout__link" tag="div" :to="`/workouts/${this.workout.id}`">
-        <h3 class="m00">{{ workout.scheduled | reverseDate }}</h3>
-        <p class="m00 t-small">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
+        <div v-if="workout.scheduled">
+          <h3 class="m00">{{ workout.scheduled | reverseDate }}</h3>
+          <p class="m00 t-small">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
+        </div>
       </nuxt-link>
       <div v-if="!$route.path.includes('trainees')">
-        <nuxt-link 
+        <nuxt-link
           class="button--primary"
           :class="{ 'button--inactive': !workout.ready }"
           :to="`/workouts/${this.workout.id}`" 

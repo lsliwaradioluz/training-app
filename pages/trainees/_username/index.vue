@@ -2,21 +2,24 @@
   <div class="trainee main">
     <UserPanel :user="user" />
     <Skills :skillset="user.skill" v-if="user.skill" ref="skills" editor/>
-    <Head>
-      <div class="row j-between a-center">
-        <h3 class="m00">Treningi</h3>
-        <div>
-          <!-- <nuxt-link to="workouts" tag="i" class="flaticon-list" v-if="user.workouts.length > 0" append></nuxt-link> -->
-          <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
+  <!-- TRENINGI  -->
+    <div>
+      <Head>
+        <div class="row j-between a-center">
+          <h3 class="m00">Treningi</h3>
+          <div>
+            <!-- <nuxt-link to="workouts" tag="i" class="flaticon-list" v-if="user.workouts.length > 0" append></nuxt-link> -->
+            <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
+          </div>
         </div>
-      </div>
-    </Head>
-    <Carousel v-if="user.workouts.length > 0" :pagination="false">
-      <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
-    </Carousel>
-    <p class="tab p11" v-else>
-      Brak treningów do wyświetlenia
-    </p>
+      </Head>
+      <Carousel v-if="user.workouts.length > 0" :pagination="false">
+        <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
+      </Carousel>
+      <p class="tab p11" v-else>
+        Brak treningów do wyświetlenia
+      </p>
+    </div>
   </div>
 </template>
 
