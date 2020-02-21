@@ -21,8 +21,4 @@ export default {
   .login {
     height: 100vh;
   }
-
-  .button--primary {
-    border-radius: 5px;
-  }
 </style>

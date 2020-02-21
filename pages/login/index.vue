@@ -8,7 +8,7 @@
         type="text"
         autocomplete="off"
         spellcheck="false">
-      <button class="button--primary mt05" @click="confirmUser" type="button">Dalej</button>
+      <button class="button--primary square mt05" @click="confirmUser" type="button">Dalej</button>
       <p class="signin__error t-red mb0 mt05 t-small t-center">{{ error }}</p>
     </form>
     <form class="column j-center" @submit.prevent v-else>
@@ -24,7 +24,7 @@
         @reveal-password="revealPassword = true" 
         @hide-password="revealPassword = false" />
       <p class="signin__error t-red m00 t-small t-center">{{ error }}</p>
-      <button class="button--primary m10" @click.prevent="signIn" type="button">Zaloguj się</button>
+      <button class="button--primary square m10" @click.prevent="signIn" type="button">Zaloguj się</button>
       <div class="column a-center">
         <button class="t-center t-small mb05" type="button" @click="changeUser">Nie jesteś {{ username }}?</button>
         <!-- <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link> -->
