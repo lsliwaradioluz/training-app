@@ -8,7 +8,7 @@
         <div class="row j-between a-center">
           <h3 class="m00">Treningi</h3>
           <div>
-            <nuxt-link class="flaticon-list" to="workouts" tag="i" v-if="user.workouts.length > 0" append></nuxt-link>
+            <nuxt-link class="flaticon-list" to="workouts" tag="i" append></nuxt-link>
             <nuxt-link
               class="flaticon-plus" 
               :to="{ path: '/workouts/new', query: { username: user.username } }" 

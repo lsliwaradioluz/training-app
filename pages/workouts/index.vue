@@ -1,10 +1,10 @@
 <template>
   <div class="workouts main">
-    <div v-if="workouts.length > 0">
+    <div>
       <Workout :workout="homework" v-if="homework"></Workout>
       <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>
     </div>
-    <p class="t-center" v-else>
+    <p class="t-center" v-if="workouts.length == 0 && !homework">
       Brak treningów do wyświetlenia
     </p>
   </div>

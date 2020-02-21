@@ -7,8 +7,8 @@
       </div>
     </Head>
     <div>
-      <Workout :workout="user.homeworks[0]" v-if="user.homeworks.length > 0"></Workout>
-      <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout"></Workout>
+      <Workout :workout="user.homeworks[0]" v-if="user.homeworks.length > 0" />
+      <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
     </div>
     <p class="t-center" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
       Brak treningów do wyświetlenia

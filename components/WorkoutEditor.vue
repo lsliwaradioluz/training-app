@@ -84,19 +84,19 @@
       </transition>
     </div>
   <!-- ODPOCZYNEK  -->
-  <div>
-    <Head class="pt05 pb05 b-black">Odpoczynek</Head>
-    <div class="tab p11">
-      <div class="row j-between">
-        <div class="workout-editor__rest column a-center j-center" v-for="(restInterval, key) in restIntervals" :key="key">
-          <p>{{ key | englishToPolish }}</p>
-          <p @click="restIntervals[key] += 5"><i class="flaticon-up-arrow"></i></p>
-          <p>{{ restInterval }}s</p>
-          <p class="mb0" @click="restIntervals[key] -= 5"><i class="flaticon-down-arrow"></i></p>
+    <div>
+      <Head class="pt05 pb05 b-black">Odpoczynek</Head>
+      <div class="tab p11">
+        <div class="row j-between">
+          <div class="workout-editor__rest column a-center j-center" v-for="(restInterval, key) in restIntervals" :key="key">
+            <p>{{ key | englishToPolish }}</p>
+            <p @click="restIntervals[key] += 5"><i class="flaticon-up-arrow"></i></p>
+            <p>{{ restInterval }}s</p>
+            <p class="mb0" @click="restIntervals[key] -= 5"><i class="flaticon-down-arrow"></i></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
     <div class="workout-editor__buttons tab p00 row j-between t-green">
       <button class="p11" type="button" @click.once="uploadWorkout">Zapisz</button>
