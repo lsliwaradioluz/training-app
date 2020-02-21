@@ -22,9 +22,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 
-  .button--primary {
-    border-radius: 25px;
-  }
 </style>
