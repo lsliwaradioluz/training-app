@@ -24,7 +24,6 @@
       <Head class="mt0 pt05 pb05">
         <div class="row j-between">
           <span>Wiadomość dla trenera</span>
-          <i class="flaticon-list" @click="editFeedback = !editFeedback" v-if="feedbackEditable"></i>
         </div>   
       </Head>
       <div class="tab">
@@ -71,9 +70,6 @@
         }
         return sections;
       },
-      feedbackEditable() {
-        return this.$store.state.auth.user.fullname == this.workout.user.fullname ? true : false;
-      }
     }, 
     methods: {
       sendFeedback() {

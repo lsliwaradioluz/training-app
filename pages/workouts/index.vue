@@ -1,7 +1,7 @@
 <template>
   <div class="workouts main">
     <div v-if="workouts.length > 0">
-      <Workout :workout="homework"></Workout>
+      <Workout :workout="homework" v-if="homework"></Workout>
       <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>
     </div>
     <p class="t-center" v-else>
