@@ -7,7 +7,7 @@
     <div>
       <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
       <p class="tab p11" v-else>
-        Brak zaplanowanych treningów
+        Brak zaplanowanych treningów.
       </p>
     </div>
   </div>  
