@@ -3,6 +3,7 @@ query($id: ID!) {
     id
     scheduled
     sticky
+    feedback
     afterBlockRest
     singleExerciseRest
     pairedExerciseRest

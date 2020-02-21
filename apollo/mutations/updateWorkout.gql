@@ -2,6 +2,7 @@ mutation($input: updateWorkoutInput) {
   updateWorkout(input: $input) {
     workout {
       id
+      feedback
     }
   }
 }

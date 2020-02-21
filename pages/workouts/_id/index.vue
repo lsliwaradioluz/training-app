@@ -13,44 +13,82 @@
     </Carousel>
   <!-- Przerwy  -->
     <Head class="mt0 pt05 pb05">Odpoczynek</Head>
-    <p class="tab p11 m00" v-if="!workout.sticky">
+    <p class="tab p11" v-if="!workout.sticky">
       Wykonując ćwiczenia pojedynczo, odpoczywaj przez <span class="t-green">{{ workout.singleExerciseRest }} sekund</span> między seriami. Jeżeli przeplatasz ćwiczenia w ramach bloku, odpoczywaj przez <span class="t-green">{{ workout.pairedExerciseRest }} sekund</span>.
     </p>
-    <p class="tab p11 m00" v-else>
+    <p class="tab p11" v-else>
       Odpoczywaj tyle, ile potrzebujesz, starając się wykonywać ćwiczenie jedno po drugim z minimalną przerwą.
     </p>
+  <!-- FEEDBACK -->
+    <div v-if="!workout.sticky">
+      <Head class="mt0 pt05 pb05">
+        <div class="row j-between">
+          <span>Wiadomość dla trenera</span>
+          <i class="flaticon-list" @click="editFeedback = !editFeedback"></i>
+        </div>   
+      </Head>
+      <div class="tab">
+        <textarea class="invisible--input" rows="4" spellcheck="false" placeholder="Jak Ci poszło?" v-model="workout.feedback" :disabled="!editFeedback"></textarea>
+        <button class="button--primary" type="button" @click="sendFeedback" v-if="editFeedback">Zapisz</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import mainQuery from '~/apollo/queries/workouts/_id/main.gql';
-import Routine from '~/components/Routine';
-import WorkoutPanel from '~/components/WorkoutPanel';
+  import mainQuery from '~/apollo/queries/workouts/_id/main.gql';
+  import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
+  import Routine from '~/components/Routine';
+  import WorkoutPanel from '~/components/WorkoutPanel';
 
-export default {
-  components: {
-    Routine,
-    WorkoutPanel, 
-  },
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.route.params.id } })
-      .then(({ data }) => {
-        return {
-          workout: data.workout
-        }
-      });
-  }, 
-  computed: {
-    sections() {
-      let sections = {};
-      for (let key in this.workout) {
-        if (Array.isArray(this.workout[key]) && this.workout[key].length > 0) {
-          sections[key] = this.workout[key];
-        }
-      }
-      return sections;
+  export default {
+    components: {
+      Routine,
+      WorkoutPanel, 
     },
+    asyncData(context) {
+      let client = context.app.apolloProvider.defaultClient;
+      return client.query({ query: mainQuery, variables: { id: context.route.params.id } })
+        .then(({ data }) => {
+          return {
+            workout: data.workout
+          }
+        });
+    },
+    data() {
+      return {
+        client: this.$apollo.getClient(),
+        editFeedback: false
+      }
+    }, 
+    computed: {
+      sections() {
+        let sections = {};
+        for (let key in this.workout) {
+          if (Array.isArray(this.workout[key]) && this.workout[key].length > 0) {
+            sections[key] = this.workout[key];
+          }
+        }
+        return sections;
+      },
+    }, 
+    methods: {
+      sendFeedback() {
+        const input = {
+          where: {
+            id: this.workout.id,
+          },
+          data: {
+            feedback: this.workout.feedback
+          }
+        }
+
+        this.client.mutate({ mutation: updateWorkout, variables: { input: input }  })
+          .then(res => {
+            this.editFeedback = false;
+          })  
+          
+      }
+    }
   }
-}
 </script>
