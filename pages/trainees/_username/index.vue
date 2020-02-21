@@ -8,8 +8,11 @@
         <div class="row j-between a-center">
           <h3 class="m00">Treningi</h3>
           <div>
-            <!-- <nuxt-link to="workouts" tag="i" class="flaticon-list" v-if="user.workouts.length > 0" append></nuxt-link> -->
-            <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
+            <nuxt-link class="flaticon-list" to="workouts" tag="i" v-if="user.workouts.length > 0" append></nuxt-link>
+            <nuxt-link
+              class="flaticon-plus" 
+              :to="{ path: '/workouts/new', query: { username: user.username } }" 
+              tag="i"></nuxt-link>
           </div>
         </div>
       </Head>

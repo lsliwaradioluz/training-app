@@ -1,5 +1,5 @@
 <template>
-  <div class="category tab column">
+  <div class="category tab column" :class="{ pb0: showButtonsPanel }">
     <!-- main view  -->
     <div class="row j-between a-stretch" v-if="input == null && id != null">
       <nuxt-link class="category__link pr1" :to="removeWhitespace(name)" tag="div" append>
@@ -23,16 +23,18 @@
       </h3>
     </div>
     <!-- buttons  -->
-    <div class="category__panel mt05 pt1 t-green t-small" v-if="showButtonsPanel">
-      <div class="row" v-if="input == null && id != null">
-        <button @click="$emit('delete', id)">Usuń</button>
-        <button @click="editHeader">Edytuj</button>
+    <transition name="accordion">
+      <div class="category__panel mt05 t-green t-small" v-if="showButtonsPanel">
+        <div class="row" v-if="input == null && id != null">
+          <button @click="$emit('delete', id)">Usuń</button>
+          <button @click="editHeader">Edytuj</button>
+        </div>
+        <div class="row" v-else>
+          <button type="button" @click="id ? $emit('edit', { id: id, name: input }) : $emit('upload', input)">Zapisz</button>
+          <button type="button" @click="id ? input = null : $emit('abort-upload')">Wróć</button>
+        </div>
       </div>
-      <div class="row" v-else>
-        <button type="button" @click="id ? $emit('edit', { id: id, name: input }) : $emit('upload', input)">Zapisz</button>
-        <button type="button" @click="id ? input = null : $emit('abort-upload')">Wróć</button>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -61,6 +63,10 @@
 
 <style lang="scss" scoped>
 
+  .category {
+    transition: padding 0.3s;
+  }
+
   .category__link {
     flex-basis: 100%;
   }
@@ -69,6 +75,7 @@
     border-top: 1px solid color(gray);
 
     button {
+      padding: 1rem;
       flex-basis: 50%;
       font-size: inherit;
     }

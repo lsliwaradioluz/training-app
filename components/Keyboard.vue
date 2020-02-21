@@ -37,7 +37,6 @@
       margin-bottom: 5px;
       border-radius: 5px;
       font-size: 1rem;
-      position: relative;
     }
 
     button:active {

@@ -1,8 +1,16 @@
 <template>
-  <div class="workouteditor">
-  <!-- DATA I GODZINA  -->
-    <Head class="pt05 pb05">Data i godzina</Head>
-    <div class="row mb05">
+  <div class="workout-editor">
+  <!-- TERMIN  -->
+    <Head class="pt05 pb05">
+      <div class="row j-between">
+        <span>Termin</span>
+        <Radio :value="sticky" @change-value="sticky = $event" v-if="user.homeworks.length == 0 || showSticky">
+          <template v-slot:first>sticky</template>
+          <template v-slot:second>not</template>
+        </Radio>
+      </div>
+    </Head>
+    <div class="row mb05" v-if="!sticky">
       <input class="mr05 b-lightblack" type="date" v-model="selectedDate">
       <input class="b-lightblack" type="time" v-model="selectedTime">
     </div>
@@ -16,7 +24,7 @@
             <i class="flaticon-accept" @click="closeSectionEdit" v-else></i>
           </div>
         </Head>
-        <div class="workouteditor__blocks tab p11">
+        <div class="workout-editor__blocks tab p11">
           <p class="m00" v-if="section.length == 0">Na razie brak ćwiczeń</p>
           <div v-for="(block, blockindex) in section" :key="blockindex" :class="{ 'inactive': currentBlock != null && currentBlock != blockindex }">
             <h4 class="mt0 mb05 row j-between t-green" v-if="block.units.length > 1 || currentBlock == blockindex">
@@ -46,12 +54,12 @@
   <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
     <div v-if="currentSection">
       <div class="pl1 pr1 column t-gray t-small mb05">
-        <button class="t-small" type="button" @click="showSkillset = !showSkillset">
+        <button class="t-small" type="button" @click="showSkillset = !showSkillset" v-if="previousWorkoutSections != null">
           Dotknij tutaj, by zmienić okno
           <span v-if="!showSkillset">(Ostatni trening)</span>
           <span v-else>(Umiejętności)</span>
         </button>
-        <div class="mt05 row j-between" v-if="!showSkillset">
+        <div class="mt05 row j-around" v-if="!showSkillset">
           <button 
             type="button"
             class="t-small"
@@ -63,9 +71,9 @@
       </div>
       <transition name="fade" mode="out-in">
         <Skills :skillset="user.skill" @copy-unit="copyUnit($event)" v-if="showSkillset" />
-        <Carousel :pagination="false" v-else>
+        <Carousel :pagination="false" v-if="!showSkillset && previousWorkoutSections">
           <Routine 
-            v-for="(section, key) in previousWorkoutsSections" 
+            v-for="(section, key) in previousWorkoutSections" 
             :key="key" 
             :section="section" 
             :section-name="key"
@@ -76,10 +84,11 @@
       </transition>
     </div>
   <!-- ODPOCZYNEK  -->
+  <div>
     <Head class="pt05 pb05 b-black">Odpoczynek</Head>
     <div class="tab p11">
       <div class="row j-between">
-        <div class="workouteditor__rest column a-center j-center" v-for="(restInterval, key) in restIntervals" :key="key">
+        <div class="workout-editor__rest column a-center j-center" v-for="(restInterval, key) in restIntervals" :key="key">
           <p>{{ key | englishToPolish }}</p>
           <p @click="restIntervals[key] += 5"><i class="flaticon-up-arrow"></i></p>
           <p>{{ restInterval }}s</p>
@@ -87,10 +96,11 @@
         </div>
       </div>
     </div>
+  </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="row j-between mt1">
-      <button class="button--primary button--square" type="button" @click="uploadWorkout">Zapisz</button>
-      <button @click="$router.go(-1)" class="button--primary button--square" type="button">Wróć</button>
+    <div class="workout-editor__buttons tab p00 row j-between t-green">
+      <button class="p11" type="button" @click.once="uploadWorkout">Zapisz</button>
+      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
   </div>
 </template>
@@ -100,11 +110,13 @@ import Skills from '~/components/Skills.vue';
 import createWorkout from '~/apollo/mutations/createWorkout.gql';
 import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 import Routine from '~/components/Routine';
+import Radio from '~/components/Radio';
 
 export default {
   components: {
     Skills,
-    Routine
+    Routine, 
+    Radio,
   },
   props: {
     specificData: {
@@ -140,15 +152,15 @@ export default {
       });
       return previousWorkoutsDates;
     },
-    previousWorkoutsSections() {
-      let previousWorkoutsSections = {};
-      const workouts = this.user.workouts[this.currentWorkout];
-      for (let key in workouts) {
-        if (Array.isArray(workouts[key]) && workouts[key].length > 0) {
-          previousWorkoutsSections[key] = workouts[key];
+    previousWorkoutSections() {
+      let previousWorkoutSections = {};
+      const workout = this.user.workouts[this.currentWorkout];
+      for (let key in workout) {
+        if (Array.isArray(workout[key]) && workout[key].length > 0) {
+          previousWorkoutSections[key] = workout[key];
         }
       }
-      return previousWorkoutsSections;
+      return this.user.workouts.length > 0 ? previousWorkoutSections : null;
     },
   },
   methods: {
@@ -186,7 +198,6 @@ export default {
       if (this.workout[this.currentSection][block].units.length == 0) this.workout[this.currentSection].splice(block, 1);
     },
     uploadWorkout() {
-      console.log('uploading workout...');
       let input;
       
       if (this.edit == true) {
@@ -195,6 +206,7 @@ export default {
             id: this.id,
           },
           data: {
+            sticky: this.sticky,
             scheduled: this.dateAndTime,
             ready: this.workoutReady, 
             ...this.workout, 
@@ -204,6 +216,7 @@ export default {
       } else {
         input = {
           data: {
+            sticky: this.sticky,
             user: this.user.id,
             scheduled: this.dateAndTime,
             ready: this.workoutReady, 
@@ -225,11 +238,15 @@ export default {
 
 <style lang="scss" scoped>
 
-  .workouteditor__rest {
+  .workout-editor__rest {
     width: 20%;
   }
 
-  .workouteditor__blocks {
+  .workout-editor__blocks {
     flex: 1;
+  }
+
+  .workout-editor__buttons button {
+    width: 50%;
   }
 </style>

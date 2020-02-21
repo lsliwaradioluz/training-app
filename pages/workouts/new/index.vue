@@ -30,8 +30,10 @@ export default {
         cardio: [],
         mobility: []
       },
-      selectedDate: null, 
-      selectedTime: null,
+      showSticky: false,
+      sticky: false,
+      selectedDate: new Date().toISOString().split('T')[0], 
+      selectedTime: "18:00:00",
       currentSection: null,
       currentBlock: null,
       restIntervals: {

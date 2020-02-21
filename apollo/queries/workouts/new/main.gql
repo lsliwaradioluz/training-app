@@ -30,6 +30,9 @@ query($username: String) {
         }
       }
     }
+    homeworks: workouts(where: { sticky: "true" } ) {
+      id
+    }
     workouts(limit: 3, sort: "scheduled:desc") {
       id
       scheduled

@@ -31,6 +31,8 @@ export default {
             cardio: data.workout.cardio,
             mobility: data.workout.mobility
           },
+          sticky: data.workout.sticky,
+          showSticky: data.workout.sticky,
           selectedDate: dateTimeArray[0], 
           selectedTime: `${hours}:${minutes}`,
           restIntervals: {

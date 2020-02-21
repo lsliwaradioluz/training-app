@@ -150,7 +150,7 @@
           } else {
             this.animateCarousel();
           }
-        } else if (Math.abs(this.move) < this.sensitivity) {
+        } else if (Math.abs(this.move) < this.sensitivity && Math.abs(this.move) > 1) {
           this.animateCarousel();
         }
 

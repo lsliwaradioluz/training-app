@@ -7,7 +7,7 @@
       </div>
     </Head>
   <!-- SKILL CARDS  --> 
-    <transition name="flip" mode="out-in">
+    <transition name="fade" mode="out-in">
       <Carousel 
         v-if="editorData == null"
         :pagination="false"
@@ -79,7 +79,7 @@
               v-model="editorData.remarks"></textarea>
           </div>
           <div class="row j-between mt15">
-            <button class="button--primary ml05" type="button" @click="saveSkill">Zapisz</button>
+            <button class="button--primary ml05" type="button" @click.once="saveSkill">Zapisz</button>
             <button class="button--primary mr05" type="button" @click="editorData = null">Anuluj</button>
           </div>
         </form>

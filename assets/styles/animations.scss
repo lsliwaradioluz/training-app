@@ -1,26 +1,10 @@
+// ANIMACJA STRONY 
+
 .page-enter-active {
   animation: slide 0.2s;
 }
 
-.flip-enter-active {
-  animation: flip 0.2s reverse;
-  overflow: hidden;
-} 
-
-.flip-leave-active {
-  animation: flip 0.2s;
-  overflow: hidden;
-  position: relative; 
-}
-
-.flip-leave-active::after {
-  content: "";
-  position: absolute; 
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-}
+// ANIMACJA FADE 
 
 .fade-enter-active {
   animation: fade 0.2s;
@@ -30,14 +14,19 @@
   animation: fade 0.2s reverse;
 }
 
-@keyframes flip {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+// ANIMACJA ACCORDION 
+
+.accordion-enter-active {
+  animation: accordion 1s;
+  overflow: hidden;
 }
+
+.accordion-leave-active {
+  animation: accordion 1s reverse;
+  overflow: hidden;
+}
+
+// KEYFRAMES 
 
 @keyframes fade {
   from {
@@ -54,5 +43,14 @@
   }
   to {
     transform: translateX(0);
+  }
+}
+
+@keyframes accordion {
+  from {
+    max-height: 0;
+  }
+  to {
+    max-height: 1000px;
   }
 }

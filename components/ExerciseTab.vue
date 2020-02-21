@@ -1,18 +1,20 @@
 <template>
-  <div class="exercisetab tab p11 column">
+  <div class="exercise-tab tab p11 column" :class="{ pb0: showButtonsPanel }">
     <div class="row j-between a-stretch">
-      <nuxt-link class="exercisetab__link pr1" :to="removeWhitespace(exercise.name)" tag="div" append>
+      <nuxt-link class="exercise-tab__link pr1" :to="removeWhitespace(exercise.name)" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
-        <p class="exercisetab__description m00">Poziom {{ index + 1 }}</p>
+        <p class="exercise-tab__description m00">Poziom {{ index + 1 }}</p>
       </nuxt-link>
       <div class="row a-center">
         <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
       </div>
     </div>
-    <div class="exercisetab__panel row mt05 pt1 t-green" v-if="showButtonsPanel">
-      <button type="button" @click="deleteExercise">Usuń</button>
-      <nuxt-link tag="button" type="button" :to="`${removeWhitespace(exercise.name)}/edit`" append>Edytuj</nuxt-link>
-    </div>
+    <transition name="accordion">
+      <div class="exercise-tab__panel row mt05 t-green" v-if="showButtonsPanel">
+        <button type="button" @click="deleteExercise">Usuń</button>
+        <nuxt-link tag="button" type="button" :to="`${removeWhitespace(exercise.name)}/edit`" append>Edytuj</nuxt-link>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -48,19 +50,24 @@
 
 <style lang="scss" scoped>
 
-  .exercisetab__link {
+  .exercise-tab {
+    transition: padding 0.3s;
+  }
+
+  .exercise-tab__link {
     flex-basis: 100%;
   }
 
-  .exercisetab__description {
+  .exercise-tab__description {
     font-size: 0.7rem;
   }
 
-  .exercisetab__panel {
+  .exercise-tab__panel {
     border-top: 1px solid color(gray);
     font-size: 0.7rem;
 
     button {
+      padding: 1rem;
       flex-basis: 50%;
       font-size: inherit;
     }

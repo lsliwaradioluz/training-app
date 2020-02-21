@@ -6,10 +6,17 @@ query($username: String) {
     image {
       url
     }
-    workouts {
+    homeworks: workouts(where: { sticky: "true" }) {
+      id
+      scheduled 
+      ready
+      sticky
+    }
+    workouts( sort: "scheduled:desc", where: { sticky_ne: "true" } ) {
       id
       scheduled
       ready
+      sticky
     }
   }
 }

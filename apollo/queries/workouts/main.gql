@@ -2,10 +2,17 @@ query($id: ID!) {
   users(where:{
     id: $id
   }) {
-    workouts(sort: "scheduled:desc") {
+    workouts(sort: "scheduled:desc", where: { sticky_ne: "true" }) {
       id
       scheduled
       ready
+      sticky
+    }
+    homeworks: workouts(where: { sticky: "true" }) {
+      id
+      scheduled 
+      ready
+      sticky
     }
   }
 }

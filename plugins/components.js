@@ -7,6 +7,7 @@ import UserPanel from '../components/UserPanel';
 import Carousel from '../components/Carousel';
 import ExerciseTab from '../components/ExerciseTab';
 import Exercise from '../components/Exercise';
+import Radio from '../components/Radio';
 
 Vue.component('Head', Head);
 Vue.component('Category', Category);
@@ -16,6 +17,8 @@ Vue.component('UserPanel', UserPanel);
 Vue.component('Carousel', Carousel);
 Vue.component('ExerciseTab', ExerciseTab);
 Vue.component('Exercise', Exercise);
+Vue.component('Radio', Radio);
+
 
 
 

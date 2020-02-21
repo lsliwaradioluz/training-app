@@ -59,6 +59,11 @@ export default {
     }
   },
   methods: {
+    clearFields() {
+      this.identifier = '';
+      this.password = '';
+      this.error = '';
+    },
     confirmUser() {
       if (!this.users) {
         this.client.query({ query: mainQuery })
@@ -77,16 +82,14 @@ export default {
 
       if (user) {
         this.setUsername(user.username);
-        this.identifier = '';
-        this.error = '';
+        this.clearFields();
       } else {
         this.error = 'Nie ma takiego użytkownika';
       }
     },
     changeUser() {
       this.setUsername(null);
-      this.identifier = '';
-      this.error = '';
+      this.clearFields();
     },
     insertCode(digit) {
       if (digit == 'C') {

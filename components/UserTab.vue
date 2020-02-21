@@ -1,5 +1,5 @@
 <template>
-<div class="user tab column">
+<div class="user tab column" :class="{ pb0: showButtonsPanel }">
   <!-- main view  -->
   <div class="row j-between a-stretch">
     <nuxt-link class="user__link row a-center" tag="div" :to="user.username" append>
@@ -14,10 +14,12 @@
     </div>
   </div>
   <!-- buttons -->
-  <div class="user__panel row mt05 pt1 t-green t-small" v-if="showButtonsPanel">
-    <button @click="deleteUser">Usuń</button>
-    <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>Edytuj</nuxt-link>
-  </div>
+  <transition name="accordion">
+    <div class="user__panel row mt05 t-green t-small" v-if="showButtonsPanel">
+      <button @click="deleteUser">Usuń</button>
+      <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>Edytuj</nuxt-link>
+    </div>
+  </transition>
 </div>
 </template>
 
@@ -64,6 +66,11 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .user {
+    transition: padding 0.3s;
+  }
+
   .user__link {
     flex-basis: 100%;
 
@@ -76,6 +83,7 @@
     border-top: 1px solid color(gray);
 
     button {
+      padding: 1rem;
       flex-basis: 50%;
       font-size: inherit;
     }

@@ -2,6 +2,7 @@ query($id: ID!, $scheduled: DateTime) {
   workout(id: $id) {
     id
     scheduled
+    sticky
     afterBlockRest
     singleExerciseRest
     pairedExerciseRest
@@ -36,6 +37,9 @@ query($id: ID!, $scheduled: DateTime) {
             }
           }
         }
+      }
+      homeworks: workouts(where: { sticky: "true" }) {
+        id
       }
       workouts(limit: 3, sort: "scheduled:desc", where: { scheduled_lt: $scheduled }) {
         id

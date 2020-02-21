@@ -6,13 +6,11 @@
         <nuxt-link :to="{ path: '/workouts/new', query: { username: user.username } }" tag="i" class="flaticon-plus"></nuxt-link>
       </div>
     </Head>
-    <div v-if="user.workouts.length > 0">
-      <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout">
-        <template v-slot:date>{{ workout.scheduled | reverseDate }}</template>
-        <template v-slot:day>{{ getWeekDay(workout.scheduled) | dayName }}</template>
-      </Workout>
+    <div>
+      <Workout :workout="user.homeworks[0]" v-if="user.homeworks.length > 0"></Workout>
+      <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout"></Workout>
     </div>
-    <p class="t-center" v-else>
+    <p class="t-center" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
       Brak treningów do wyświetlenia
     </p>
   </div>
