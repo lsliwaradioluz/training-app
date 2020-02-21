@@ -1,4 +1,4 @@
-query($username: String) {
+query($username: String, $today: DateTime) {
   users(where:{
     username: $username
   }) {
@@ -8,7 +8,7 @@ query($username: String) {
     image {
       url
     }
-    workouts(limit: 1, sort: "scheduled:asc" ) {
+    workouts(limit: 1, sort: "scheduled:asc", where: { scheduled_gt: $today, sticky_ne: "true" } ) {
       id
       scheduled
       ready

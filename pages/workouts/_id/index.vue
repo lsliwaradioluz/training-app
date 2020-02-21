@@ -27,7 +27,7 @@
           <i class="flaticon-list" @click="editFeedback = !editFeedback" v-if="feedbackEditable"></i>
         </div>   
       </Head>
-      <div class="tab">
+      <div class="tab" v-if="workout.feedback">
         <textarea class="invisible--input" rows="4" spellcheck="false" placeholder="Jak Ci poszło?" v-model="workout.feedback" :disabled="!editFeedback"></textarea>
         <button class="button--primary" type="button" @click="sendFeedback" v-if="editFeedback">Zapisz</button>
       </div>
