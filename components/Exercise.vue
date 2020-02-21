@@ -1,5 +1,6 @@
 <template>
   <div class="exercise">
+  <!-- NAZWA  -->
     <Head>
       <div class="row j-between" v-if="!edit">
         <span>{{ exercise.name }}</span>
@@ -15,7 +16,7 @@
     <div class="tab" v-if="edit">
       <input class="invisible--input" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
     </div>
-    <!-- SUBKATEGORIA  -->
+  <!-- SUBKATEGORIA  -->
     <div v-if="edit">
       <Head>Subkategoria</Head>
       <div class="tab">
@@ -32,13 +33,15 @@
         </ul>
       </div>
     </div>
-    <!-- ZDJĘCIA  -->
+  
+  <!-- ZDJĘCIA  -->
     <Head v-if="edit">
       <div class="row j-between">
         <h3 class="m00">Zdjęcia</h3> 
         <i class="flaticon-plus" @click="launchFileUpload" v-if="edit"></i>
-        <form ref="form" v-show="false">
+        <form v-show="false">
           <input
+            @change="onFilesUpload"
             ref="input"
             name="files"
             type="file"
@@ -92,10 +95,10 @@
       </div>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
-    <div class="row j-between mt1" v-if="edit">
-      <button class="button--primary button--square" type="button" @click="createSaveChanges" v-if="exercise.id == null">Zapisz</button>
-      <button class="button--primary button--square" type="button" @click="updateSaveChanges" v-else>Zapisz</button>
-      <button @click="$router.go(-1)" class="button--primary button--square" type="button">Wróć</button>
+    <div class="exercise__buttons tab p00 row j-between t-green" v-if="edit">
+      <button class="p11" type="button" @click="createSaveChanges" v-if="exercise.id == null">Zapisz</button>
+      <button class="p11" type="button" @click="updateSaveChanges" v-else>Zapisz</button>
+      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
   </div>
 </template>
@@ -126,7 +129,7 @@
         client: this.$apollo.getClient(),
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
         showSubcategoriesList: false,
-        subcategoryName: this.$route.params.subcategory,
+        subcategoryName: this.addWhitespace(this.$route.params.subcategory),
         existingImages: this.exercise.images,
         uploadedFiles: [],
         currentImage: 0,
@@ -188,7 +191,10 @@
       },
       createSaveChanges() {
         if (this.$refs.input.files.length > 0) {
-          const formData = new FormData(this.$refs.form);
+          const formData = new FormData();
+          this.uploadedFiles.forEach(cur => {
+            formData.append('files', cur);
+          });
           fetch(this.endpoint, {
             method: 'POST', 
             body: formData
@@ -291,8 +297,10 @@
       width: 100%;
       height: 100%;
     }
+  }
 
-   
+  .exercise__buttons button {
+    width: 50%;
   }
 
   .rotated {

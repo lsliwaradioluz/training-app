@@ -1,5 +1,5 @@
 <template>
-  <div class="usereditor">
+  <div class="user-editor">
     <form class="tab">
       <label for="fullname">Imię i nazwisko</label>
       <input class="invisible--input" type="text" id="fullname" placeholder="np. Jan Kowalski" v-model="fullname" spellcheck="false">
@@ -10,9 +10,9 @@
       <label for="email">Email</label>
       <input class="invisible--input" type="email" id="email" placeholder="np. jankowalski@gmail.com" v-model="email" spellcheck="false">
     </form>
-    <div class="row j-between">
-      <button class="button--primary" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
-      <button @click="$router.go(-1)" class="button--primary" type="button">Wróć</button>
+    <div class="user-editor__buttons tab p00 row j-between t-green">
+      <button class="p11" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
+      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
   </div>
 </template>
@@ -106,8 +106,8 @@
     border-bottom: 1px solid color(gray);
   }
 
-  .button--primary {
-    width: 49%;
-    border-radius: 5px;
+  .user-editor__buttons button {
+    width: 50%;
   }
+  
 </style>

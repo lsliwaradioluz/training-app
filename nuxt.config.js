@@ -61,8 +61,18 @@ export default {
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
+    '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
   ],
+  oneSignal: {
+    init: {
+      appId: 'training-app',
+      allowLocalhostAsSecureOrigin: true,
+      welcomeNotification: {
+          disable: true
+      }
+    }
+  },
   pwa: {
     meta: {
       theme_color: '#343F68', 
