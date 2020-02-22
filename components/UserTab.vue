@@ -25,6 +25,7 @@
 
 <script>
   import deleteUser from '~/apollo/mutations/deleteUser.gql';
+  import deleteSkill from '~/apollo/mutations/deleteSkill.gql';
 
   export default {
     props: {
@@ -39,6 +40,7 @@
     data() {
       return {
         showButtonsPanel: false,
+        client: this.$apollo.getClient(),
       }
     },
     computed: {
@@ -53,13 +55,24 @@
             id: this.user.id,
           },
         }
-        const client = this.$apollo.getClient();
+
         if (confirm("Czy na pewno chcesz usunąć ten element?")) {
-          client.mutate({ mutation: deleteUser, variables: { input: input }  })
+          this.client.mutate({ mutation: deleteUser, variables: { input: input }  })
             .then(res => {
-              window.location.reload(true);
+              this.deleteSkill(res.data.deleteUser.user.skill.id);
             })
         }
+      }, 
+      deleteSkill(id) {
+        const input = {
+          where: {
+            id: id
+          },
+        }
+        this.client.mutate({ mutation: deleteSkill, variables: { input: input }  })
+          .then(res => {
+            window.location.reload(true);
+          })
       }
     }
   }

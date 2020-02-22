@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import mainQuery from '~/apollo/queries/trainees/_username/workouts/main.gql'
+import mainQuery from '~/apollo/queries/users/_name/workouts/main.gql'
 
 export default {
   asyncData(context) {

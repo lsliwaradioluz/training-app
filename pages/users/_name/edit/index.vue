@@ -7,7 +7,7 @@
 
 <script>
   import UserEditor from '~/components/UserEditor';
-  import mainQuery from '~/apollo/queries/trainees/_username/edit/main.gql';
+  import mainQuery from '~/apollo/queries/users/_name/edit/main.gql';
 
   export default {
     components: {

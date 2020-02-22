@@ -89,7 +89,7 @@
 </template>
 
 <script>
-  import exercisesQuery from '~/apollo/queries/trainees/_username/exercises.gql';
+  import exercisesQuery from '~/apollo/queries/users/_name/exercises.gql';
   import updateSkill from '~/apollo/mutations/updateSkill.gql';
 
   export default {

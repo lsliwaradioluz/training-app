@@ -32,7 +32,10 @@ export default {
   css: [
     '~/assets/styles/fonts.css',
     '~/assets/styles/general.scss',
-    '~/assets/styles/elements.scss',
+    '~/assets/styles/buttons.scss',
+    '~/assets/styles/inputs.scss',
+    '~/assets/styles/text.scss',
+    '~/assets/styles/other.scss',
     '~/assets/styles/colors.scss',
     '~/assets/styles/layout.scss',
     '~/assets/styles/animations.scss',
@@ -92,9 +95,7 @@ export default {
   },
   styleResources: {
     scss: [
-      '~/assets/styles/general.scss',
-      '~/assets/styles/elements.scss',
-      '~/assets/styles/animations.scss',
+      '~/assets/styles/variables.scss',
     ]
   },
   /*

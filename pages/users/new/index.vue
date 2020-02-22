@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import mainQuery from '~/apollo/queries/trainees/new/main.gql';
+  import mainQuery from '~/apollo/queries/users/new/main.gql';
   import UserEditor from '~/components/UserEditor';
 
   export default {

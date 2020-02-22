@@ -1,0 +1,82 @@
+// LISTS AND LINKS
+
+a {
+  text-decoration: none;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+ul li {
+  list-style: none;
+  padding-left: 0.3rem;
+  border-left: 1px solid color(gray);
+}
+
+ol {
+  font-weight: 600;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+// HEADERS
+
+h1 {
+  font-size: calc(1.575rem + 3.9vw);
+  letter-spacing: -.02em;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: calc(1.375rem + 1.5vw);
+}
+
+h3 {
+  font-size: 1.17rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  letter-spacing: -.02em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+}
+
+// Paragraphs
+
+label, 
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.t-center {
+  text-align: center;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.t-left {
+  text-align: left;
+}
+
+.t-small {
+  font-size: 0.7rem;
+}

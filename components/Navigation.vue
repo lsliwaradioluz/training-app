@@ -23,7 +23,7 @@
           Treningi
           <i class="flaticon-chevron"></i>
         </nuxt-link>
-        <nuxt-link to="/trainees" @click.native="toggleNav" v-if="user.admin">
+        <nuxt-link to="/users" @click.native="toggleNav" v-if="user.admin">
           <i class="flaticon-group mr05"></i>
           Podopieczni
           <i class="flaticon-chevron"></i>

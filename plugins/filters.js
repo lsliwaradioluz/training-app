@@ -11,7 +11,7 @@ Vue.filter('englishToPolish', (value) => {
     case 'workouts': 
       return 'treningi';
       break;
-    case 'trainees': 
+    case 'users': 
       return 'Podopieczni';
       break;
     case 'createworkout': 

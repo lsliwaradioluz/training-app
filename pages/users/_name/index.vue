@@ -39,7 +39,7 @@
 
 <script>
 import createSkill from '~/apollo/mutations/createSkill.gql';
-import mainQuery from '~/apollo/queries/trainees/_username/main.gql';
+import mainQuery from '~/apollo/queries/users/_name/main.gql';
 import Skills from '~/components/Skills.vue';
 
 export default {

@@ -3,6 +3,9 @@ mutation($input: deleteUserInput) {
     user {
       id
       username
+      skill { 
+        id
+      }
     }
   }
 }

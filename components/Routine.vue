@@ -2,7 +2,7 @@
   <div class="routine tab p11">
     <div class="row j-between">
       <h3 class="mt0 mb1">{{ sectionName }}</h3>
-      <i class="flaticon-plus t-green" @click="$emit('copy-section', section)" v-if="edit"></i>
+      <i class="flaticon-plus" @click="$emit('copy-section', section)" v-if="edit"></i>
     </div>
     <div v-for="block in section" :key="block.id">
       <p class="mt0 mb05 row j-between" v-if="block.units.length > 1">
