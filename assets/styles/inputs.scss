@@ -33,3 +33,8 @@ input:-webkit-autofill:active  {
   -webkit-transition-delay: 9999s;
   transition-delay: 9999s;
 }
+
+.input--invisible {
+  background-color: transparent;
+  padding: 0;
+}

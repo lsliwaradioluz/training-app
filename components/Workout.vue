@@ -12,7 +12,7 @@
           <p class="m00 t-small">W dni nietreningowe</p>
         </div>
       </nuxt-link>
-      <div v-if="!$route.path.includes('trainees')">
+      <div v-if="!$route.path.includes('users')">
         <nuxt-link
           class="button--primary"
           :class="{ 'button--inactive': !workout.ready }"

@@ -16,7 +16,7 @@
     <!-- editor view -->
     <div v-else>
       <h3 class="m00">
-        <input class="invisible--input" type="text" v-model="input" ref="categoryNameInput" spellcheck="false">
+        <input class="input--invisible" type="text" v-model="input" ref="categoryNameInput" spellcheck="false">
         <p class="category__description m00 t-small">
           Edytuj nazwę
         </p>
@@ -69,6 +69,10 @@
 
   .category__link {
     flex-basis: 100%;
+  }
+
+  .input--invisible {
+    font-size: inherit;
   }
 
   .category__panel {

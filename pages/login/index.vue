@@ -14,7 +14,7 @@
     <form class="column j-center" @submit.prevent v-else>
       <p class="m00 t-center t-small">Podaj hasło użytkownika {{ username }}:</p>
       <input 
-        class="invisible--input t-center t-small mb05" 
+        class="input--invisible t-center t-small mb05" 
         v-model="password" 
         :type="revealPassword ? 'text' : 'password'"
         autocomplete="off"

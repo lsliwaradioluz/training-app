@@ -4,7 +4,7 @@
     <div class="feedback__text">
       <p class="m00" v-if="!editFeedback && feedback">{{ feedback | shortenText }}</p>
       <textarea
-        class="invisible--input"
+        class="input--invisible"
         v-model="feedback" 
         ref="textarea"
         :rows="editFeedback ? 3 : 1"

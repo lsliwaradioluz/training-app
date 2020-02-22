@@ -1,5 +1,5 @@
 <template>
-  <div class="default b-black" :class="{ loading: loading }">
+  <div class="default b-black" :class="{ blind: loading }">
     <Navigation />
     <nuxt />
   </div>

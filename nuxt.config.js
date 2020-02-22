@@ -30,6 +30,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '~/assets/icons/final/flaticon.css',
     '~/assets/styles/fonts.css',
     '~/assets/styles/general.scss',
     '~/assets/styles/buttons.scss',
@@ -39,7 +40,6 @@ export default {
     '~/assets/styles/colors.scss',
     '~/assets/styles/layout.scss',
     '~/assets/styles/animations.scss',
-    '~/assets/icons/final/flaticon.css',
   ],
   /*
   ** Plugins to load before mounting the App

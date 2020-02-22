@@ -14,7 +14,7 @@
       <span v-else>Nazwa ćwiczenia</span>
     </Head>
     <div class="tab" v-if="edit">
-      <input class="invisible--input" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
+      <input class="input--invisible" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
     </div>
   <!-- SUBKATEGORIA  -->
     <div v-if="edit">
@@ -81,7 +81,7 @@
         <div v-if="!edit">
           <p class="mb05" v-for="(p, index) in positioning" :key="index">{{ index + 1 }}. {{ p }}</p>
         </div>
-        <textarea class="invisible--input" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.positioning" rows="5" spellcheck="false" v-else></textarea>
+        <textarea class="input--invisible" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.positioning" rows="5" spellcheck="false" v-else></textarea>
       </div>
     </div>
   <!-- OPIS TECHNIKI -->
@@ -91,7 +91,7 @@
         <div v-if="!edit">
           <p class="m00">{{ exercise.technique }}</p>
         </div>
-        <textarea class="invisible--input" placeholder="Uzupełnij opis ćwiczenia" v-model="input.technique" v-else rows="5" spellcheck="false"></textarea>
+        <textarea class="input--invisible" placeholder="Uzupełnij opis ćwiczenia" v-model="input.technique" v-else rows="5" spellcheck="false"></textarea>
       </div>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
