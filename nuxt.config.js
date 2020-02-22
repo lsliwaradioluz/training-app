@@ -36,7 +36,6 @@ export default {
     '~/assets/styles/colors.scss',
     '~/assets/styles/layout.scss',
     '~/assets/styles/animations.scss',
-    '~/assets/icons/primary/flaticon.css',
     '~/assets/icons/final/flaticon.css',
   ],
   /*

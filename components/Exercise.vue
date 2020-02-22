@@ -236,7 +236,10 @@
         });
 
         if (this.$refs.input.files.length > 0) {
-          const formData = new FormData(this.$refs.form);
+          const formData = new FormData();
+          this.uploadedFiles.forEach(cur => {
+            formData.append('files', cur);
+          });
           fetch(this.endpoint, {
             method: 'POST', 
             body: formData
