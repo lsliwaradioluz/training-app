@@ -29,7 +29,7 @@
               <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span>
             </li>
             <li>
-              <span v-if="unit.max && exercises">max: {{ unit.max }}</span>
+              <span v-if="unit.max">max: {{ unit.max }}</span>
             </li>
             <li>
               <span v-if="unit.remarks">{{ unit.remarks }}</span>

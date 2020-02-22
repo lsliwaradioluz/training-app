@@ -23,6 +23,17 @@
         Brak treningów do wyświetlenia
       </p>
     </div>
+  <!-- FEEDBACKI -->
+    <Head>Feedback</Head>
+    <Carousel :pagination="false" v-if="user.feedbacks.length > 0">
+      <div class="tab" v-for="feedback in user.feedbacks" :key="feedback.id">
+        <h3 class="m00">{{ feedback.scheduled | reverseDate }}</h3>
+        <p class="m00 t-small">{{ feedback.feedback }}</p>
+      </div>
+    </Carousel>
+    <p class="tab p11" v-else>
+      Ten użytkownik jeszcze nie wysłał żadnej wiadomości.
+    </p>
   </div>
 </template>
 

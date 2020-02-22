@@ -3,7 +3,6 @@ query($username: String) {
     username: $username
   }) {
     id
-    email
     username
     fullname
     image {
@@ -14,10 +13,10 @@ query($username: String) {
       scheduled
       ready
     }
-    homeworks: workouts(where: { sticky: "true" } ) {
+    feedbacks: workouts(limit: 3, sort: "scheduled:desc", where: { feedback_null: "false" } ) {
       id
       scheduled
-      ready
+      feedback
     }
     skill {
       id
@@ -29,6 +28,7 @@ query($username: String) {
           distance
           time
           remarks
+          max
           exercise {
             name
             id

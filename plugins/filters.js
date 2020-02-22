@@ -81,6 +81,11 @@ Vue.filter('shorten', (value) => {
   return value.length > 4 ? value.slice(0, 4) : value;
 });
 
+Vue.filter('shortenText', (value) => {
+  return value.length > 25 ? `${value.slice(0, 25)}...` : value;
+});
+
+
 Vue.filter('cutFilename', (value) => {
   const nameWithoutType = value.slice(0, -4);
   const type = value.slice(value.length - 3);
