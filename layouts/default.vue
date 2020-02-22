@@ -1,5 +1,5 @@
 <template>
-  <div class="default b-black" :class="{ blind: loading }">
+  <div class="default b-black">
     <Navigation />
     <nuxt />
   </div>
@@ -13,11 +13,6 @@ export default {
   middleware: 'redirect',
   components: {
     Navigation
-  }, 
-  computed: {
-    loading() {
-      return this.$store.state.main.loading;
-    }
-  }
+  },
 }
 </script>

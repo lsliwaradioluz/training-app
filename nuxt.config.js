@@ -48,7 +48,6 @@ export default {
     '~/plugins/filters',
     '~/plugins/components',
     '~/plugins/mixins',
-    '~/plugins/axios',
     '~/plugins/auth',
   ],
   /*

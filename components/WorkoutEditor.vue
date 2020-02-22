@@ -26,7 +26,7 @@
         </Head>
         <div class="workout-editor__blocks tab p11">
           <p class="m00" v-if="section.length == 0">Na razie brak ćwiczeń</p>
-          <div v-for="(block, blockindex) in section" :key="blockindex" :class="{ 'inactive': currentBlock != null && currentBlock != blockindex }">
+          <div v-for="(block, blockindex) in section" :key="blockindex" :class="{ 'blind': currentBlock != null && currentBlock != blockindex }">
             <h4 class="mt0 mb05 row j-between t-green" v-if="block.units.length > 1 || currentBlock == blockindex">
               <span>{{ block.name }}</span>
               <i class="flaticon-next small" @click="currentBlock = blockindex" v-if="currentSection && currentBlock != blockindex"></i>
