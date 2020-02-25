@@ -1,6 +1,6 @@
 <template>
   <div class="timer">
-    <div class="tab row j-between">
+    <div class="tab row j-between m00">
       <div>
         <h3 class="m00">Odpocznij</h3>
         <span class="t-small">Następnie: {{ next.exercise.name }}</span>
@@ -44,7 +44,6 @@
 <style lang="scss" scoped>
   .workout-assistant__image {
     img {
-      border-radius: 5px;
       width: 100%;
     }
   }
