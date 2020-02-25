@@ -14,7 +14,7 @@ export default {
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.route.params.id, scheduled: context.route.query.scheduled } })
+    return client.query({ query: mainQuery, variables: { id: context.route.params.id } })
       .then(({ data }) => {
         const date = new Date(data.workout.scheduled);
         let hours = date.getHours();
@@ -24,31 +24,13 @@ export default {
           id: data.workout.id,
           user: data.workout.user,
           scheduled: data.workout.scheduled,
-          workout: {
-            warmup: data.workout.warmup, 
-            skillwork: data.workout.skillwork, 
-            strength: data.workout.strength,
-            cardio: data.workout.cardio,
-            mobility: data.workout.mobility
-          },
-          sticky: data.workout.sticky,
-          showSticky: data.workout.sticky,
           selectedDate: dateTimeArray[0], 
           selectedTime: `${hours}:${minutes}`,
-          restIntervals: {
-            singleExerciseRest: data.workout.singleExerciseRest, 
-            pairedExerciseRest: data.workout.pairedExerciseRest, 
-            afterBlockRest: data.workout.afterBlockRest,
-            warmupRest: data.workout.warmupRest 
-          },
+          sticky: data.workout.sticky,
+          showSticky: data.workout.sticky,
+          sections: data.workout.sections,
         }
       });
-  },
-  data() {
-    return {
-      currentSection: null, 
-      currentBlock: null
-    }
   },
 }
 </script>

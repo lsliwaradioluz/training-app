@@ -1,7 +1,7 @@
 <template>
   <div class="trainee main">
     <UserPanel :user="user" />
-    <Skills :skillset="user.skill" v-if="user.skill" ref="skills" editor/>
+    <Skills :skill-data="user.skill" v-if="user.skill" editor />
   <!-- TRENINGI  -->
     <div>
       <Head>
@@ -48,7 +48,7 @@ export default {
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { username: context.route.params.username } })
+    return client.query({ query: mainQuery, variables: { username: context.route.params.name } })
       .then(({ data }) => {
         return {
           user: data.users[0]

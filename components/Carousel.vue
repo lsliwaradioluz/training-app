@@ -55,6 +55,9 @@
       autoplaySpeed: {
         type: Number, 
         default: () => 5
+      }, 
+      customLength: {
+        type: Number
       }
     },
     data() {
@@ -63,8 +66,8 @@
         numberOfColumns: 1,
         moveStart: null, 
         move: null, 
-        currentTranslate: 0, 
-        length: this.$slots.default.length,
+        currentTranslate: 0,
+        length: this.customLength == null ? this.$slots.default.length : this.customLength,
         viewportColumnsMatched: null, 
         isActive: null, 
         mousedown: false,
@@ -99,11 +102,14 @@
     watch: {
       currentPage() {
         this.animateCarousel();
-        this.$emit('changePage', this.currentPage);
+        this.$emit('change-page', this.currentPage);
       }, 
       startFromPage() {
         this.currentPage = this.startFromPage;
-      }
+      },
+      customLength() {
+        this.length = this.customLength;
+      } 
     },
     methods: {
       animateCarousel() {
@@ -195,7 +201,7 @@
             if (this.currentPage == this.numberOfPages) this.currentPage = 0;
           }, this.autoplaySpeed * 1000);
         }
-      }
+      }, 
     },
     mounted() {
       this.setColumns();

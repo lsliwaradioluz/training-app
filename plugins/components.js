@@ -9,6 +9,8 @@ import ExerciseTab from '../components/ExerciseTab';
 import Exercise from '../components/Exercise';
 import Radio from '../components/Radio';
 import Feedback from '../components/Feedback';
+import Routine from '../components/Routine';
+import WorkoutPanel from '../components/WorkoutPanel';
 
 Vue.component('Head', Head);
 Vue.component('Category', Category);
@@ -20,6 +22,11 @@ Vue.component('ExerciseTab', ExerciseTab);
 Vue.component('Exercise', Exercise);
 Vue.component('Radio', Radio);
 Vue.component('Feedback', Feedback);
+Vue.component('Routine', Routine);
+Vue.component('WorkoutPanel', WorkoutPanel);
+
+
+
 
 
 

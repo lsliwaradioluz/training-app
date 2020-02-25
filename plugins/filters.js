@@ -85,6 +85,17 @@ Vue.filter('shortenText', (value) => {
   return value.length > 25 ? `${value.slice(0, 25)}...` : value;
 });
 
+Vue.filter('shortenSection', (value) => {
+  return value.length > 15 ? `${value.slice(0, 15)}...` : value;
+});
+
+Vue.filter('showMinutes', (value) => {
+  const minutes = Math.floor(value / 60);
+  const seconds = value % 60;
+  let minutesAndSeconds = seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`;
+  return minutesAndSeconds;
+});
+
 
 Vue.filter('cutFilename', (value) => {
   const nameWithoutType = value.slice(0, -4);

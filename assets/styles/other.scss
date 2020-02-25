@@ -29,7 +29,7 @@
 
 .blind {
   position: relative;
-  color: color(inputgray);
+  color: color(inputgray) !important;
 }
 
 .blind::after {

@@ -1,7 +1,7 @@
 query {
   exercises {
     name
-    _id
+    id
     subcategory {
       id
       category {

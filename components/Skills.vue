@@ -1,86 +1,108 @@
 <template>
   <div class="skills">
+  <!-- HEADER -->
     <Head v-if="editor">
       <div class="row j-between">
         <h3 class="m00">Umiejętności</h3>
-        <i class="flaticon-plus" @click="createSkill"></i>
+        <i class="flaticon-vertical-dots" @click="showButtonsPanel = !showButtonsPanel"></i>
       </div>
-    </Head>
-  <!-- SKILL CARDS  --> 
-    <transition name="fade" mode="out-in">
-      <Carousel 
-        v-if="editorData == null"
-        :pagination="false"
-        :startFromPage="currentSkill"
-        @changePage="currentSkill = $event">
-        <div class="tab p11" v-for="(skill, key) in sortedSkills" :key="skill.id">
-          <!-- nagłówek  -->
-          <div class="row j-between">
-            <h3 class="mt0 mb1 t-green">{{ key }}</h3>
-          </div>
-          <!-- ćwiczenia  -->
-          <ul class="mb05" v-for="unit in skill" :key="unit.id">
-            <p class="mb0 row j-between">
-              <span>{{ unit.exercise.name }}</span>
-              <i class="flaticon-adjust small" @click="editSkill(unit)" v-if="editor"></i>
-              <i class="flaticon-plus skills__pick small" @click="$emit('copy-unit', unit )" v-else></i>
-            </p>
-            <li>
-              <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span>
-            </li>
-            <li>
-              <span v-if="unit.max">max: {{ unit.max }}</span>
-            </li>
-            <li>
-              <span v-if="unit.remarks">{{ unit.remarks }}</span>
-            </li>
-          </ul>
+      <transition name="accordion">
+        <div class="skills__panel row mt05 t-small" v-if="showButtonsPanel">
+          <template v-if="!editSkillset">
+            <button :class="{ pb05: showButtonsPanel }" @click="createSkillset">Dodaj</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="openEditSkillset">Edytuj</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="deleteSkillset">Usuń</button>
+          </template>
+          <template v-else>
+            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSkillset('save')">Zapisz</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSkillset('abort')">Wróć</button>
+          </template>
         </div>
-      </Carousel>
+      </transition>
+    </Head>
+  <!-- SKILL CARDS  -->
+    <transition name="fade" mode="out-in">
+      <div v-if="unit == null">
+        <Carousel 
+          :pagination="false" 
+          :custom-length="skill.skillsets.length" 
+          :active="!showButtonsPanel"
+          :start-from-page="currentTranslate" 
+          @change-page="currentTranslate = $event"
+          v-if="skill.skillsets.length > 0">
+          <div class="tab p11" v-for="(skillset, skillsetindex) in skill.skillsets" :key="skillsetindex">
+            <div class="row j-between t-green">
+              <h3 class="mt0" v-if="editSkillset">
+                <input 
+                  class="input--invisible t-green" 
+                  type="text" 
+                  :value="skill.skillsets[skillsetindex].name" 
+                  spellcheck="false"
+                  :ref="`input${skillsetindex}`">
+              </h3>
+              <h3 class="mt0" v-else>
+                {{ skillset.name }}
+              </h3>
+              <i class="flaticon-plus" @click="openEditor(skillsetindex)" v-if="skillsetindex < initialSkillLength && editor"></i>  
+            </div>
+            <ul class="mb1" v-for="(unit, unitindex) in skillset.units" :key="unitindex">
+              <p class="m00 row j-between">
+                <span>{{ unit.exercise.name }}</span>
+                <i class="flaticon-adjust small" @click="openEditor(skillsetindex, unit)" v-if="editor"></i>
+                <i class="flaticon-plus skills__pick small" @click="copyUnit(unit)" v-else></i>
+              </p>
+              <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}</span> <span v-if="unit.max">({{ unit.max }})</span></li>
+              <li><span v-if="unit.remarks">{{ unit.remarks }}</span></li>
+            </ul>
+          </div>
+        </Carousel>
+        <p class="tab mb05" v-else>
+          Na razie brak kart umiejętności
+        </p>
+      </div>
   <!-- SKILL EDITOR  -->
       <div class="tab p11" v-else>
         <div class="row j-between t-green">
-          <h3 class="mt0 mb1" v-if="editorData.index >= 0">Edytuj ćwiczenie</h3>
-          <h3 class="mt0 mb1" v-else>Nowe ćwiczenie</h3>
-          <i class="flaticon-close" @click="deleteSkill" v-if="editorData.id != undefined"></i>
+          <div>
+            <h3 class="m00" v-if="unit.id">Edytuj ćwiczenie</h3>
+            <h3 class="m00" v-else>Nowe ćwiczenie</h3>
+            <h4 class="t-small mt0 t-white">{{ skill.skillsets[currentSkillset].name }}</h4>
+          </div>
+          <i class="flaticon-close" @click="deleteUnit" v-if="unit.id != undefined"></i>
         </div>
         <form>
-          <!-- exercise name  -->
           <div>
             <input 
               class="mb0" 
               :class="{ rounded: filteredExercises.length > 0 }" 
-              @keydown="editorData.exercise._id = ''"
               type="text" 
               spellcheck="false"
-              autofocus
               placeholder="Nazwa ćwiczenia"
-              v-model="editorData.filter">
-            <ul class="trainee__list">
+              @keydown="unit.exercise.id = ''"
+              v-model="unit.filter">
+            <ul class="exercise__list">
               <li v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
             </ul>
           </div>
-          <!-- repetitions -->
-          <div class="trainee__repetitions row j-between">
-            <div class="p10" v-for="(number, key) in editorData.numbers" :key="key">
+          <div class="exercise__repetitions row j-between">
+            <div class="p10" v-for="(number, key) in unit.numbers" :key="key">
               <p>{{ key | shorten }}</p>
-              <p @click="key == 'distance' ? editorData.numbers[key] += 100 : editorData.numbers[key]++"><i class="flaticon-up-arrow small t-green"></i></p>
+              <p @click="key == 'distance' ? unit.numbers[key] += 100 : unit.numbers[key]++"><i class="flaticon-up-arrow small t-green"></i></p>
               <p>{{ number }}</p>
-              <p @click="key == 'distance' ? editorData.numbers[key] -= 100 : editorData.numbers[key]--"><i class="flaticon-down-arrow small t-green"></i></p>
+              <p @click="key == 'distance' ? unit.numbers[key] -= 100 : unit.numbers[key]--"><i class="flaticon-down-arrow small t-green"></i></p>
             </div>
           </div>
-          <!-- remarks -->
           <div>
             <textarea
               class="mb0"
               type="text" 
               spellcheck="false"
               placeholder="Uwagi"
-              v-model="editorData.remarks"></textarea>
+              v-model="unit.remarks"></textarea>
           </div>
           <div class="row j-between mt15">
-            <button class="button--primary ml05" type="button" @click.once="saveSkill">Zapisz</button>
-            <button class="button--primary mr05" type="button" @click="editorData = null">Anuluj</button>
+            <button class="button--primary ml05" type="button" @click.once="addUnit">Zapisz</button>
+            <button class="button--primary mr05" type="button" @click="unit = null">Anuluj</button>
           </div>
         </form>
       </div>
@@ -94,7 +116,7 @@
 
   export default {
     props: {
-      skillset: {
+      skillData: {
         type: Object, 
       }, 
       editor: {
@@ -105,53 +127,100 @@
     data() {
       return {
         client: this.$apollo.getClient(),
-        editorData: null, 
-        currentSkill: 0, 
+        initialSkillLength: this.skillData.skillsets.length,
+        skill: this.skillData, 
+        unit: null, 
+        currentSkillset: null, 
+        currentTranslate: 0,
+        showButtonsPanel: false,
+        editSkillset: false,
         exercises: null,
-        skills: this.skillset.units
       }
     }, 
     computed: {
-      sortedSkills() {
-        const sortedSkills = {
-          handstand: [], 
-          push: [], 
-          pull: [],
-          legs: [], 
-          core: [],
-          cardio: [], 
-          mobility: []
-        }
-
-        for (let key in sortedSkills) {
-          const matchingExercises = this.skills.filter(skill => {
-            return skill.exercise.subcategory.category.name.toLowerCase() == key.toLowerCase();
+      filteredSkillsets() {
+        let skillsetsClone = JSON.parse(JSON.stringify(this.skill.skillsets))
+        skillsetsClone.forEach((skillset, skillindex) => {
+          skillsetsClone[skillindex] = _.omit(skillset, '__typename');
+          skillset.units.forEach((unit, unitindex) => {
+            skillsetsClone[skillindex].units[unitindex] = _.omit(unit, '__typename');
+            skillsetsClone[skillindex].units[unitindex].exercise = unit.exercise.id;
           });
-          sortedSkills[key].push(...matchingExercises);
-        }
-        
-        return sortedSkills;
-      },
+        });
+
+        return skillsetsClone;
+      },  
       filteredExercises() {
         let filteredExercises = [];
-        const filter = this.editorData.filter.toLowerCase();
+        const filter = this.unit.filter.toLowerCase();
         if (filter !== '') {
           filteredExercises = this.exercises.filter(exercise => {
             const exerciseName = exercise.name.toLowerCase();
-            return exerciseName.includes(filter.toLowerCase()) == true && this.editorData.exercise._id == '';
+            return exerciseName.includes(filter) == true && this.unit.exercise.id == '';
           });
         }
         return filteredExercises;
       },
     }, 
     methods: {
-      passExercise(exercise) {
-        this.editorData.filter = exercise.name;
-        this.editorData.exercise = exercise;
+      createSkillset() {
+        const newSkillset = {
+          name: 'Nowa karta', 
+          units: [],
+        }
+        this.skill.skillsets.push(newSkillset);
+        this.editSkillset = true;
+        this.currentSkillset = this.skill.skillsets.length - 1;
+        this.currentTranslate = this.skill.skillsets.length - 1;
+        setTimeout(() => {
+          let input = `input${this.skill.skillsets.length - 1}`;
+          this.$refs[input][0].focus();
+        }, 700);
+      },
+      openEditSkillset() {
+        this.editSkillset = true;
+        setTimeout(() => {
+          let input = `input${this.currentTranslate}`;
+          this.$refs[input][0].focus();
+        }, 700);
+      },
+      closeEditSkillset(mode) {
+        this.showButtonsPanel = false;
+        if (mode == 'save') {
+          let input = `input${this.currentTranslate}`
+          this.skill.skillsets[this.currentTranslate].name = this.$refs[input][0].value;
+          this.editSkillset = false;
+          this.uploadSkill();
+        } else {
+          if (this.skill.skillsets.length == this.initialSkillLength) {
+            this.editSkillset = false
+          } else {
+            this.filteredSkillsets.splice(this.currentTranslate, 1);
+          }
+        }
+      },
+      deleteSkillset(skillsetindex) {
+        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
+          this.skill.skillsets.splice(this.currentTranslate, 1);
+          this.currentTranslate = 0;
+          this.uploadSkill();
+        }
+      },
+      openEditor(current, unit) {
+        this.currentSkillset = current;
+        if (!this.exercises) {
+          this.client.query({ query: exercisesQuery })
+            .then(({ data }) => {
+              this.exercises = data.exercises;
+              this.populateEditor(unit);
+            });
+        } else {
+          this.populateEditor(unit);
+        }
       },
       populateEditor(unit) {
         if (unit != undefined) {
-          this.editorData = {
+          this.unit = {
             id: unit.id,
             filter: unit.exercise.name || '',
             exercise: unit.exercise,
@@ -165,11 +234,10 @@
             remarks: unit.remarks || ''
           }
         } else {
-          this.editorData = {
+          this.unit = {
             filter: '',
             exercise: {
-              _id: '',
-              name: ''
+              id: '',
             }, 
             numbers: {
               sets: 0, 
@@ -182,78 +250,73 @@
           }
         }
       },
-      createSkill() {
-        if (!this.exercises) {
-          this.client.query({ query: exercisesQuery })
-            .then(({ data }) => {
-              this.exercises = data.exercises;
-              this.populateEditor();
-            });
-        } else {
-          this.populateEditor();
-        }
+      passExercise(exercise) {
+        this.unit.filter = exercise.name;
+        this.unit.exercise = exercise;
       },
-      editSkill(unit) {
-        if (!this.exercises) {
-          this.client.query({ query: exercisesQuery })
-            .then(({ data }) => {
-              this.exercises = data.exercises;
-              this.populateEditor(unit);
-            });
-        } else {
-          this.populateEditor(unit);
-        }
-      },
-      saveSkill() {
-        const skillToSave = {
-          __typename: "ComponentBlockUnit",
-          ...this.editorData.numbers,
-          exercise: this.editorData.exercise,
-          remarks: this.editorData.remarks
+      addUnit() {
+        const newUnit = {
+          ...this.unit.numbers,
+          exercise: this.unit.exercise.id,
+          remarks: this.unit.remarks
         }
 
-        if (this.editorData.id != undefined) {
-          const index = this.skills.findIndex(skill => {
-            return skill.id == this.editorData.id;
+        if (this.unit.id != undefined) {
+          const index = this.filteredSkillsets[this.currentSkillset].units.findIndex(skillset => {
+            return skillset.id == this.unit.id;
           });
-          this.skills.splice(index, 1, skillToSave);
+          this.filteredSkillsets[this.currentSkillset].units.splice(index, 1, newUnit);
         } else {
-          this.skills.push(skillToSave);
+          this.filteredSkillsets[this.currentSkillset].units.push(newUnit);
         }
-        
-        this.uploadExercise();
+        this.uploadSkill();
       }, 
-      deleteSkill() {
-        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
-          const index = this.skills.findIndex(skill => {
-            return skill.id == this.editorData.id;
-          });
-          this.skills.splice(index, 1);
-          this.uploadExercise();
-        }
-      }, 
-      uploadExercise(exercise) {
+      uploadSkill() {
         const input = {
           where: {
-            id: this.skillset.id,
+            id: this.skill.id,
           },
           data: {
-            units: this.skills
+            skillsets: this.filteredSkillsets,
           }
         }
 
         this.client.mutate({ mutation: updateSkill, variables: { input: input }  })
           .then(res => {
-            this.editorData = null;
-          });
+            window.location.reload(true);
+          })
       },
+      deleteUnit() {
+        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
+          const index = this.filteredSkillsets[this.currentSkillset].units.findIndex(unit => {
+            return unit.id == this.unit.id;
+          });
+          this.filteredSkillsets[this.currentSkillset].units.splice(index, 1);
+          this.uploadSkill();
+        }
+      }, 
+      copyUnit(unit) {
+        let unitClone = JSON.parse(JSON.stringify(unit));
+        unitClone = _.omit(unitClone, ['__typename', 'id']);
+        this.$emit('copy-unit', unitClone);
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
 
-  .trainee__list {
+  .skills__panel {
+    border-top: 1px solid color(gray);
+
+    button {
+      padding: 1rem;
+      flex-basis: 50%;
+      font-size: inherit;
+    }
+  }
+
+  .exercise__list {
     max-height: 10vh;
     overflow-y: scroll;
     border-bottom-left-radius: 5px;
@@ -266,7 +329,7 @@
     }
   }
 
-  .trainee__repetitions {
+  .exercise__repetitions {
     > div {
       width: 25%;
     }

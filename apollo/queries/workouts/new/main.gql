@@ -4,125 +4,52 @@ query($username: String) {
     username
     skill {
       id
-      units {
-        ...on ComponentBlockUnit {
-          id
-          sets
-          reps
-          distance
-          time
-          remarks
-          exercise {
-            name
+      skillsets {
+        id
+        name
+        units {
+          ...on ComponentBlocksUnit {
             id
-            _id
-            subcategory {
-              _id
-              id
+            sets
+            reps
+            distance
+            time
+            remarks
+            exercise {
               name
-              category {
-                _id
+              id
+              subcategory {
                 id
                 name
+                category {
+                  id
+                  name
+                }
               }
             }
           }
         }
       }
     }
-    homeworks: workouts(where: { sticky: "true" } ) {
-      id
-    }
-    workouts(limit: 3, sort: "scheduled:desc") {
+    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true" }) {
       id
       scheduled
-      warmup {
-        ...on ComponentBlockCombo {
+      sections {
+        id
+        name
+        rest
+        complexes {
+          name 
           id
-          name
           units {
             id
-            exercise { 
-              name
-              _id
-            }
             sets
-            reps
-            time
-            distance
+            reps 
             remarks
-          }
-        }
-      }
-      skillwork {
-        ...on ComponentBlockCombo {
-          id
-          name
-          units {
-            id
             exercise {
-              name
-              _id
-            }
-            sets
-            reps
-            time
-            distance
-            remarks
-          }
-        }
-      }
-      strength {
-        ...on ComponentBlockCombo {
-          id
-          name
-          units {
-            id
-            exercise {
-              name
               id
-            }
-            sets
-            reps
-            time
-            distance
-            remarks
-          }
-        }
-      }
-      cardio {
-        ...on ComponentBlockCombo {
-          id
-          name
-          units {
-            id
-            exercise {
               name
-              id
             }
-            sets
-            reps
-            time
-            distance
-            remarks
-          }
-        }
-      }
-      mobility {
-        ...on ComponentBlockCombo {
-          id
-          name
-          units {
-            id
-            exercise {
-              name
-              id
-            }
-            sets
-            reps
-            time
-            distance
-            remarks
           }
         }
       }

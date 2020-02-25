@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 22/02/2020 00:35
+    Creation date: 25/02/2020 09:43
     */
 
     @font-face {
@@ -49,14 +49,15 @@
 .flaticon-user:before { content: "\f109"; }
 .flaticon-group:before { content: "\f10a"; }
 .flaticon-gymnastics:before { content: "\f10b"; }
-.flaticon-kettlebells:before { content: "\f10c"; }
-.flaticon-contract:before { content: "\f10d"; }
-.flaticon-arrow:before { content: "\f10e"; }
-.flaticon-power-button:before { content: "\f10f"; }
-.flaticon-chevron:before { content: "\f110"; }
-.flaticon-vertical-dots:before { content: "\f111"; }
-.flaticon-information:before { content: "\f112"; }
-.flaticon-eye:before { content: "\f113"; }
+.flaticon-contract:before { content: "\f10c"; }
+.flaticon-vertical-dots:before { content: "\f10d"; }
+.flaticon-information:before { content: "\f10e"; }
+.flaticon-eye:before { content: "\f10f"; }
+.flaticon-play:before { content: "\f110"; }
+.flaticon-off-button:before { content: "\f111"; }
+.flaticon-left-arrow:before { content: "\f112"; }
+.flaticon-right-arrow:before { content: "\f113"; }
+.flaticon-pause:before { content: "\f114"; }
     
     $font-Flaticon-menu: "\f100";
     $font-Flaticon-up-arrow: "\f101";
@@ -70,11 +71,12 @@
     $font-Flaticon-user: "\f109";
     $font-Flaticon-group: "\f10a";
     $font-Flaticon-gymnastics: "\f10b";
-    $font-Flaticon-kettlebells: "\f10c";
-    $font-Flaticon-contract: "\f10d";
-    $font-Flaticon-arrow: "\f10e";
-    $font-Flaticon-power-button: "\f10f";
-    $font-Flaticon-chevron: "\f110";
-    $font-Flaticon-vertical-dots: "\f111";
-    $font-Flaticon-information: "\f112";
-    $font-Flaticon-eye: "\f113";
+    $font-Flaticon-contract: "\f10c";
+    $font-Flaticon-vertical-dots: "\f10d";
+    $font-Flaticon-information: "\f10e";
+    $font-Flaticon-eye: "\f10f";
+    $font-Flaticon-play: "\f110";
+    $font-Flaticon-off-button: "\f111";
+    $font-Flaticon-left-arrow: "\f112";
+    $font-Flaticon-right-arrow: "\f113";
+    $font-Flaticon-pause: "\f114";

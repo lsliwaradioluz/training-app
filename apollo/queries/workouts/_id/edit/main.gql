@@ -1,220 +1,82 @@
-query($id: ID!, $scheduled: DateTime) {
+query($id: ID!) {
   workout(id: $id) {
     id
     scheduled
     sticky
-    afterBlockRest
-    singleExerciseRest
-    pairedExerciseRest
-    warmupRest
+    sections {
+      id
+      name
+      rest
+      complexes {
+        name 
+        id
+        units {
+          id
+          sets
+          reps 
+          remarks
+          exercise {
+            id
+            name
+            subcategory {
+              id
+              name
+              category {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
     user {
       id
       fullname
       skill {
         id
-        units {
-          ...on ComponentBlockUnit {
-            id
-            sets
-            reps
-            distance
-            time
-            remarks
-            exercise {
-              name
+        skillsets {
+          id
+          name
+          units {
+            ...on ComponentBlocksUnit {
               id
-              _id
-              subcategory {
-                _id
-                id
+              sets
+              reps
+              distance
+              time
+              remarks
+              exercise {
                 name
-                category {
-                  _id
-                  id
-                  name
-                }
+                id
               }
             }
           }
         }
       }
-      homeworks: workouts(where: { sticky: "true" }) {
-        id
-      }
-      workouts(limit: 3, sort: "scheduled:desc", where: { scheduled_lt: $scheduled }) {
+      workouts(sort: "scheduled:desc", where: { id_ne: $id, sticky_ne: "true" }) {
         id
         scheduled
-        warmup {
-          ...on ComponentBlockCombo {
-            name
+        sections {
+          id
+          name
+          rest
+          complexes {
+            name 
+            id
             units {
               id
-              exercise { 
-                name
-                _id
-              }
               sets
-              reps
-              time
-              distance
+              reps 
               remarks
-            }
-          }
-        }
-        skillwork {
-          ...on ComponentBlockCombo {
-            name
-            units {
-              id
               exercise {
-                name
-                _id
-              }
-              sets
-              reps
-              time
-              distance
-              remarks
-            }
-          }
-        }
-        strength {
-          ...on ComponentBlockCombo {
-            name
-            units {
-              id
-              exercise {
-                name
                 id
-              }
-              sets
-              reps
-              time
-              distance
-              remarks
-            }
-          }
-        }
-        cardio {
-          ...on ComponentBlockCombo {
-            name
-            units {
-              id
-              exercise {
                 name
-                id
               }
-              sets
-              reps
-              time
-              distance
-              remarks
-            }
-          }
-        }
-        mobility {
-          ...on ComponentBlockCombo {
-            name
-            units {
-              id
-              exercise {
-                name
-                id
-              }
-              sets
-              reps
-              time
-              distance
-              remarks
             }
           }
         }
       }
     } 
-    warmup {
-      ...on ComponentBlockCombo {
-        name
-        units {
-          id
-          exercise {
-            name
-            _id
-          }
-          sets
-          reps
-          time
-          distance
-          remarks
-        }
-      }
-    }
-    skillwork {
-      ...on ComponentBlockCombo {
-        name
-        units {
-          id
-          exercise {
-            name
-            _id
-          }
-          sets
-          reps
-          time
-          distance
-          remarks
-        }
-      }
-    }
-    strength {
-      ...on ComponentBlockCombo {
-        name
-        units {
-          id
-          exercise {
-            name
-            _id
-          }
-          sets
-          reps
-          time
-          distance
-          remarks
-        }
-      }
-    }
-    cardio {
-      ...on ComponentBlockCombo {
-        name
-        units {
-          id
-          exercise {
-            name
-            _id
-          }
-          sets
-          reps
-          time
-          distance
-          remarks
-        }
-      }
-    }
-    mobility {
-      ...on ComponentBlockCombo {
-        name
-        units {
-          id
-          exercise {
-            name
-            _id
-          }
-          sets
-          reps
-          time
-          distance
-          remarks
-        }
-      }
-    }
   }
 }

@@ -1,16 +1,6 @@
 query($id: ID!) {
   workout(id: $id) {
     id
-    scheduled
-    sticky
-    feedback
-    user {
-      id
-      fullname
-      image {
-        url
-      }
-    } 
     sections {
       id
       name
@@ -28,13 +18,8 @@ query($id: ID!) {
           exercise {
             id
             name
-            subcategory {
-              id
-              name
-              category {
-                id
-                name
-              }
+            images {
+              url
             }
           }
         }

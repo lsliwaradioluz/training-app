@@ -1,9 +1,11 @@
 <template>
   <div class="navigation main pt1 pb1 row j-center a-center">
     <span class="logo">Piti</span>
-    <h3 class="m00 t-center">{{ header | englishToPolish }}</h3>
+    <h3 class="m00 t-center" v-if="$route.path.includes('assistant')">{{ $route.query.section | shortenSection }}</h3>
+    <h3 class="m00 t-center" v-else>{{ header | englishToPolish }}</h3>
     <span class="hamburger t-right">
-      <i class="flaticon-menu" @click="toggleNav"></i>
+      <i class="flaticon-pause" @click="$router.go(-1)" v-if="$route.path.includes('assistant')"></i>
+      <i class="flaticon-menu" @click="toggleNav" v-else></i>
     </span>
     <div class="navigation__panel b-lightblack" ref="panel">
       <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
@@ -11,27 +13,27 @@
         <nuxt-link to="/dashboard" @click.native="toggleNav">
           <i class="flaticon-user mr05"></i>
           Pulpit
-          <i class="flaticon-chevron"></i>
+          <i class="flaticon-right-arrow"></i>
         </nuxt-link>
         <nuxt-link to="/exercises" @click.native="toggleNav" v-if="user.admin">
           <i class="flaticon-gymnastics mr05"></i>
           Ćwiczenia
-          <i class="flaticon-chevron"></i>
+          <i class="flaticon-right-arrow"></i>
         </nuxt-link>
         <nuxt-link to="/workouts" @click.native="toggleNav">
           <i class="flaticon-contract mr05"></i>
           Treningi
-          <i class="flaticon-chevron"></i>
+          <i class="flaticon-right-arrow"></i>
         </nuxt-link>
         <nuxt-link to="/users" @click.native="toggleNav" v-if="user.admin">
           <i class="flaticon-group mr05"></i>
           Podopieczni
-          <i class="flaticon-chevron"></i>
+          <i class="flaticon-right-arrow"></i>
         </nuxt-link>
         <nuxt-link to="/login" @click.native="logout">
-          <i class="flaticon-power-button mr05"></i>
+          <i class="flaticon-off-button mr05"></i>
           Wyloguj
-          <i class="flaticon-chevron"></i>
+          <i class="flaticon-right-arrow"></i>
         </nuxt-link>
       </div>
     </div>
@@ -110,7 +112,7 @@ export default {
         border: none;
       }
 
-      .flaticon-chevron {
+      .flaticon-right-arrow {
         position: absolute;
         right: 0;
         font-size: 9px;
