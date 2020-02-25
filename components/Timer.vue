@@ -6,10 +6,8 @@
         <span class="t-small">Następnie: {{ next.exercise.name }}</span>
       </div>
       <div class="row a-center pl1">
-        <p 
-          class="m00 t-right fs-2" 
-          :class="{ 't-red': timeleft == 0 }">
-          <span>{{ timeleft | showMinutes }}</span>
+        <p class="m00 t-right fs-2" :class="{ 't-red': timeleft == 0 }">
+          {{ timeleft | showMinutes }}
         </p>
       </div>
     </div>
@@ -44,6 +42,7 @@
 <style lang="scss" scoped>
   .workout-assistant__image {
     img {
+      border-radius: 5px;
       width: 100%;
     }
   }

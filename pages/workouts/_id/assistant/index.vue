@@ -1,5 +1,5 @@
 <template>
-  <div class="workout-assistant">
+  <div class="workout-assistant main">
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar main pt1 pb1 row j-center a-center">
       <span class="logo">Piti</span>
@@ -10,7 +10,7 @@
     </div>
   <!-- NAWIGACJA -->
     <Carousel :pagination="false" :start-from-page="1">
-      <div class="row j-between a-center tab pt05 pb05 b-green t-black m00" v-for="(panel, index) in navigationPanels" :key="index">
+      <div class="row j-between a-center tab pt05 pb05 b-green t-black mb05" v-for="(panel, index) in navigationPanels" :key="index">
         <i class="flaticon-left-arrow small" @click="panel.previousFunction"></i>
         <p class="m00">{{ panel.caption }}</p>
         <i class="flaticon-right-arrow small" @click="panel.nextFunction"></i>
@@ -18,7 +18,7 @@
     </Carousel>
     <!-- ĆWICZENIE -->
     <div v-if="current.exercise.name != 'Odpoczynek'">
-      <div class="tab row j-between m00">
+      <div class="tab row j-between">
         <div>
           <h3 class="m00">{{ current.exercise.name }}</h3>
           <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
@@ -36,7 +36,7 @@
     </div>
     <!--  -->
     <Timer :time="current.time" :next="next" v-else />
-    <div class="workout-assistant__buttons row j-between">
+    <div class="workout-assistant__buttons row j-between mt05">
       <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Następne ćwiczenie</button>
       <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
     </div>
@@ -238,14 +238,6 @@ export default {
 
 <style lang="scss" scoped>
 
-  .workout-assistant {
-    padding: 4rem 0;
-  }
-
-  * {
-    border-radius: 0;
-  }
-
   .workout-assistant__bar {
     width: 100%;
     background-color: color(black);
@@ -265,6 +257,7 @@ export default {
 
   .workout-assistant__image {
     img {
+      border-radius: 5px;
       width: 100%;
     }
   }
