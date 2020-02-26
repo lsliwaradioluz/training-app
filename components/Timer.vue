@@ -1,18 +1,20 @@
 <template>
-  <div class="timer">
-    <div class="tab row j-between m00">
-      <div>
-        <h3 class="m00">Odpocznij</h3>
-        <span class="t-small">Następnie: {{ next.exercise.name }}</span>
-      </div>
-      <div class="row a-center pl1">
-        <p class="m00 t-right fs-2" :class="{ 't-red': timeleft == 0 }">
-          {{ timeleft | showMinutes }}
-        </p>
-      </div>
+  <div class="timer tab row j-between m00 b-black">
+    <div>
+      <h3 class="m00">Odpocznij</h3>
+      <p class="t-small m00">
+        Następnie: 
+        <span v-if="next.reps">{{ next.reps }}</span> 
+        <span v-if="next.reps && next.time">x</span> 
+        <span v-if="next.time">{{ next.time }}</span> 
+        <span v-if="next.distance">{{ next.distance }}</span> 
+        {{ next.exercise.name }}
+      </p>
     </div>
-    <div class="workout-assistant__image">
-      <img src="https://media.giphy.com/media/SKAQ4kWov6tdC/giphy.gif" alt="exercise">
+    <div class="row a-center">
+      <p class="m00 t-right fs-2" :class="{ 't-red': timeleft == 0 }">
+        {{ timeleft | showMinutes }}
+      </p>
     </div>
   </div>
 </template>

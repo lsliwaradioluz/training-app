@@ -1,5 +1,5 @@
 <template>
-  <div class="workout-assistant main">
+  <div class="workout-assistant column">
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar main pt1 pb1 row j-center a-center">
       <span class="logo">Piti</span>
@@ -10,34 +10,36 @@
     </div>
   <!-- NAWIGACJA -->
     <Carousel :pagination="false" :start-from-page="1">
-      <div class="row j-between a-center tab pt05 pb05 b-green t-black mb05" v-for="(panel, index) in navigationPanels" :key="index">
+      <div class="row j-between a-center tab pt05 pb05 b-green t-black m00" v-for="(panel, index) in navigationPanels" :key="index">
         <i class="flaticon-left-arrow small" @click="panel.previousFunction"></i>
         <p class="m00">{{ panel.caption }}</p>
         <i class="flaticon-right-arrow small" @click="panel.nextFunction"></i>
       </div>
     </Carousel>
-    <!-- ĆWICZENIE -->
+  <!-- ĆWICZENIE -->
     <div v-if="current.exercise.name != 'Odpoczynek'">
-      <div class="tab row j-between">
+      <div class="tab row j-between a-center m00 b-black">
         <div>
           <h3 class="m00">{{ current.exercise.name }}</h3>
           <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
           <p class="t-small m00" v-else>Wykonaj teraz</p>
         </div>
         <div class="row a-center">
-          <p class="m00 t-right fs-2" v-show="current.reps">{{ current.reps}}</p>
-          <p v-show="current.reps && current.time">x</p>
-          <p class="m00 t-right fs-2" v-show="current.time">{{ current.time }}s</p>
+          <p class="m00 t-right fs-2" v-if="current.reps">{{ current.reps}}</p>
+          <div v-if="current.reps && current.time">
+            <p>x</p>
+            <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}s</p>
+          </div>
+          <Stopwatch :time="10" v-if="current.time && !current.reps" />
+          <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}m</p>
         </div>
       </div>
-      <div class="workout-assistant__image p00">
-        <img src="https://media.giphy.com/media/SKAQ4kWov6tdC/giphy.gif" alt="exercise">
-      </div>
     </div>
-    <!--  -->
+  <!--  -->
     <Timer :time="current.time" :next="next" v-else />
-    <div class="workout-assistant__buttons row j-between mt05">
-      <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Następne ćwiczenie</button>
+    <img src="https://media.giphy.com/media/SKAQ4kWov6tdC/giphy.gif" alt="exercise">
+    <div class="workout-assistant__buttons row j-between">
+      <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Przejdź do {{ next.exercise.name }}</button>
       <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
     </div>
   </div>
@@ -46,11 +48,13 @@
 <script>
 import mainQuery from '~/apollo/queries/workouts/_id/assistant/main.gql';
 import Timer from '~/components/Timer';
+import Stopwatch from '~/components/Stopwatch';
 
 export default {
   layout: 'assistant',
   components: {
     Timer,
+    Stopwatch,
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
@@ -71,6 +75,7 @@ export default {
       currentSection: this.$route.query.section,
       currentComplex: 0, 
       currentExercise: 0,
+      showStopwatch: false,
     }
   },
   methods: {
@@ -238,13 +243,17 @@ export default {
 
 <style lang="scss" scoped>
 
+  * {
+    border-radius: 0;
+  }
+
+  .workout-assistant {
+    height: 100vh;
+  }
+
   .workout-assistant__bar {
     width: 100%;
     background-color: color(black);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
 
     span {
       width: 20%;
@@ -255,15 +264,19 @@ export default {
     }
   }
 
-  .workout-assistant__image {
+
     img {
-      border-radius: 5px;
+      flex-grow: 1;
       width: 100%;
     }
-  }
+
 
   .workout-assistant__buttons {
     button {
+      background-color: color(black);
+      border-color: color(black);
+      color: color(green);
+      padding: 0.7rem;
       width: 100%;
     }
   }

@@ -76,7 +76,7 @@ export default {
   // },
   pwa: {
     meta: {
-      theme_color: '#343F68', 
+      theme_color: '#222E50', 
       name: 'Piti'
     }, 
     manifest: {
