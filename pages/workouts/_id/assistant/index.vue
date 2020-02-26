@@ -1,16 +1,16 @@
 <template>
-  <div class="workout-assistant column">
+  <div class="workout-assistant column main pb2">
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar main pt1 pb1 row j-center a-center">
       <span class="logo">Piti</span>
       <h3 class="m00 t-center">{{ sections[currentSection].name | shortenSection }}</h3>
       <span class="hamburger t-right">
-        <i class="flaticon-pause" @click="$router.go(-1)" v-if="$route.path.includes('assistant')"></i>
+        <i class="flaticon-pause" @click="closeAssistant"></i>
       </span>
     </div>
   <!-- NAWIGACJA -->
     <Carousel :pagination="false" :start-from-page="1">
-      <div class="row j-between a-center tab pt05 pb05 b-green t-black m00" v-for="(panel, index) in navigationPanels" :key="index">
+      <div class="row j-between a-center tab pt05 pb05 b-green t-black" v-for="(panel, index) in navigationPanels" :key="index">
         <i class="flaticon-left-arrow small" @click="panel.previousFunction"></i>
         <p class="m00">{{ panel.caption }}</p>
         <i class="flaticon-right-arrow small" @click="panel.nextFunction"></i>
@@ -18,7 +18,7 @@
     </Carousel>
   <!-- ĆWICZENIE -->
     <div v-if="current.exercise.name != 'Odpoczynek'">
-      <div class="tab row j-between a-center m00 b-black">
+      <div class="tab row j-between a-center">
         <div>
           <h3 class="m00">{{ current.exercise.name }}</h3>
           <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
@@ -37,8 +37,8 @@
     </div>
   <!--  -->
     <Timer :time="current.time" :next="next" v-else />
-    <img src="https://media.giphy.com/media/SKAQ4kWov6tdC/giphy.gif" alt="exercise">
-    <div class="workout-assistant__buttons row j-between">
+    <img class="square" src="https://media.giphy.com/media/SKAQ4kWov6tdC/giphy.gif" alt="exercise">
+    <div class="workout-assistant__buttons row j-between mt05">
       <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Przejdź do {{ next.exercise.name }}</button>
       <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
     </div>
@@ -243,10 +243,6 @@ export default {
 
 <style lang="scss" scoped>
 
-  * {
-    border-radius: 0;
-  }
-
   .workout-assistant {
     height: 100vh;
   }
@@ -254,6 +250,10 @@ export default {
   .workout-assistant__bar {
     width: 100%;
     background-color: color(black);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 
     span {
       width: 20%;
@@ -273,10 +273,6 @@ export default {
 
   .workout-assistant__buttons {
     button {
-      background-color: color(black);
-      border-color: color(black);
-      color: color(green);
-      padding: 0.7rem;
       width: 100%;
     }
   }
