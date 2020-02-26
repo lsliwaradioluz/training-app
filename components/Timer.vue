@@ -1,5 +1,5 @@
 <template>
-  <div class="timer tab row j-between m00 b-black">
+  <div class="timer tab row j-between">
     <div>
       <h3 class="m00">Odpocznij</h3>
       <p class="t-small m00">
