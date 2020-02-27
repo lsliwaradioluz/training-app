@@ -36,7 +36,7 @@
     </div>
   <!--  -->
     <Timer :time="current.time" :next="next" v-else />
-    <img class="square grow" :src="image" alt="exercise" v-if="!dividedScreenMode">
+    <img class="square grow mb05" :src="image" alt="exercise" v-if="!dividedScreenMode">
     <div class="workout-assistant__buttons row j-between">
       <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Przejdź do {{ next.exercise.name }}</button>
       <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
