@@ -18,7 +18,7 @@
       return client.query({ query: mainQuery })
         .then(({ data }) => {
           const userIndex = data.users.findIndex(user => {
-            return user.username == context.route.params.username;
+            return user.username == context.route.params.name;
           });
           return {
             users: data.users, 

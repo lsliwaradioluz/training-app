@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import mainQuery from '~/apollo/queries/users/main.gql'
+import mainQuery from '~/apollo/queries/users/main.gql';
+
 export default {
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
