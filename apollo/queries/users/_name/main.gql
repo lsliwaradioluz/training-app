@@ -6,6 +6,7 @@ query($username: String) {
     username
     fullname
     image {
+      id
       url
     }
     workouts(sort: "createdAt:desc", where: { sticky_ne: "true" } ) {
@@ -21,6 +22,7 @@ query($username: String) {
     skill {
       id
       skillsets {
+        id
         name
         units {
           id

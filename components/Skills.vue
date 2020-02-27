@@ -51,7 +51,7 @@
                 <i class="flaticon-adjust small" @click="openEditor(skillsetindex, unit)" v-if="editor"></i>
                 <i class="flaticon-plus skills__pick small" @click="copyUnit(unit)" v-else></i>
               </p>
-              <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}</span> <span v-if="unit.max">({{ unit.max }})</span></li>
+              <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span> <span v-if="unit.max">({{ unit.max }})</span></li>
               <li><span v-if="unit.remarks">{{ unit.remarks }}</span></li>
             </ul>
           </div>
