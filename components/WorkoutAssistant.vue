@@ -18,27 +18,25 @@
       </div>
     </Carousel>
   <!-- ĆWICZENIE -->
-    <div v-if="current.exercise.name != 'Odpoczynek'">
-      <div class="tab row j-between a-center">
-        <div>
-          <h3 class="m00">{{ current.exercise.name }}</h3>
-          <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
-          <p class="t-small m00" v-else>Wykonaj teraz</p>
+    <div class="tab row j-between a-center" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
+      <div>
+        <h3 class="m00">{{ current.exercise.name }}</h3>
+        <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
+        <p class="t-small m00" v-else>Wykonaj teraz</p>
+      </div>
+      <div class="row a-center">
+        <p class="m00 t-right fs-2" v-if="current.reps">{{ current.reps}}</p>
+        <div v-if="current.reps && current.time">
+          <p>x</p>
+          <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}s</p>
         </div>
-        <div class="row a-center">
-          <p class="m00 t-right fs-2" v-if="current.reps">{{ current.reps}}</p>
-          <div v-if="current.reps && current.time">
-            <p>x</p>
-            <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}s</p>
-          </div>
-          <Stopwatch :time="10" v-if="current.time && !current.reps" />
-          <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}m</p>
-        </div>
+        <Stopwatch :time="10" v-if="current.time && !current.reps" />
+        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}m</p>
       </div>
     </div>
   <!--  -->
     <Timer :time="current.time" :next="next" v-else />
-    <img class="square" :src="image" alt="exercise" v-if="!dividedScreenMode">
+    <img class="square grow" :src="image" alt="exercise" v-if="!dividedScreenMode">
     <div class="workout-assistant__buttons row j-between">
       <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Przejdź do {{ next.exercise.name }}</button>
       <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
@@ -261,12 +259,13 @@ export default {
     }
   }
 
+  .grow {
+    flex-grow: 1;
+  }
 
-    img {
-      flex-grow: 1;
-      width: 100%;
-    }
-
+  img {
+    width: 100%;
+  }
 
   .workout-assistant__buttons {
     button {
