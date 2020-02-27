@@ -25,13 +25,13 @@
         <p class="t-small m00" v-else>Wykonaj teraz</p>
       </div>
       <div class="row a-center">
-        <p class="m00 t-right fs-2" v-if="current.reps">{{ current.reps}}</p>
-        <div v-if="current.reps && current.time">
-          <p>x</p>
-          <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}s</p>
+        <p class="m00 t-right fs-2" v-if="current.reps">{{ current.reps }}</p>
+        <div class="row" v-if="current.reps && current.time">
+          <p class="m00 row a-end">x</p>
+          <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}<span class="t-small">s</span></p>
         </div>
         <Stopwatch :time="10" v-if="current.time && !current.reps" />
-        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}m</p>
+        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}<span class="t-small">m</span></p>
       </div>
     </div>
   <!--  -->
