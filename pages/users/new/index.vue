@@ -1,5 +1,5 @@
 <template>
-  <div class="createuser main">
+  <div class="createuser">
     <Head>Nowy podopieczny</Head>
     <UserEditor :users="users" />
   </div>

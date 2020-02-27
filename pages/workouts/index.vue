@@ -1,5 +1,5 @@
 <template>
-  <div class="workouts main">
+  <div class="workouts">
     <div>
       <Workout :workout="homework" v-if="homework"></Workout>
       <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>

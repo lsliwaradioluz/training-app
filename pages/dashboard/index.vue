@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard main">
+  <div class="dashboard">
     <UserPanel :user="user" />
     <Head>
       <template>Najbliższy trening</template>

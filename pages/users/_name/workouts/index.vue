@@ -1,5 +1,5 @@
 <template>
-  <div class="trainee-workouts main">
+  <div class="trainee-workouts">
     <Head>
       <div class="row j-between">
         <h3 class="m00">Treningi {{ user.username }}</h3>

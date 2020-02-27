@@ -1,5 +1,9 @@
-query($id: ID!) {
-  workout(id: $id) {
+query($ids: [ID]!) {
+  workouts(where: { id_in: $ids }) {
+    user {
+      id
+      username
+    }
     id
     sections {
       id

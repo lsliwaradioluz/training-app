@@ -1,5 +1,5 @@
 <template>
-  <div class="createexercise main">
+  <div class="createexercise">
     <Exercise :subcategories="subcategories" edit />
   </div>
 </template>

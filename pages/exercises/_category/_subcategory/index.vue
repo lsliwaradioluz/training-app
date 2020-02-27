@@ -1,5 +1,5 @@
 <template>
-  <div class="subcategory main">
+  <div class="subcategory">
     <Head>
       <div class="row j-between">
         <span>{{ subcategory.name }}</span>

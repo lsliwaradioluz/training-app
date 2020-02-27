@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="categories main">
+    <div class="categories">
       <Head>
         <div class="row j-between">
           <h3 class="m00">{{ category.name }}</h3>

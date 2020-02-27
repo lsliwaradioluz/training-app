@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div>
     <Exercise :exercise="exercise" />
   </div>
 </template>

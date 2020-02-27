@@ -1,5 +1,5 @@
 <template>
-  <div class="users main">
+  <div class="users">
     <Head>
       <div class="row j-between">
         <h3 class="m00">Dodaj konto</h3>

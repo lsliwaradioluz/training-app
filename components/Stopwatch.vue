@@ -1,5 +1,5 @@
 <template>
-  <div class="column j-center a-center">
+  <div class="stopwatch column j-center a-center">
     <div @click="countdownInterval == null ? startCountdown() : stopCountdown()">
       <p class="m00 t-right fs-2" v-if="timeleft >= 0">
         {{ timeleft | showMinutes }}

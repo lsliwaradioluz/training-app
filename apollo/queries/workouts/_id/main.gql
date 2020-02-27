@@ -1,5 +1,5 @@
-query($id: ID!) {
-  workout(id: $id) {
+query($ids: [ID]!) {
+  workouts(where: { id_in: $ids }) {
     id
     scheduled
     sticky
@@ -7,6 +7,7 @@ query($id: ID!) {
     user {
       id
       fullname
+      username
       image {
         url
       }

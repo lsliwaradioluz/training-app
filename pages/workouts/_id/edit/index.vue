@@ -1,5 +1,5 @@
 <template>
-  <div class="editworkout main">
+  <div class="editworkout">
     <WorkoutEditor :specific-data="$data" edit />
   </div>
 </template>

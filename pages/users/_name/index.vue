@@ -1,5 +1,5 @@
 <template>
-  <div class="trainee main">
+  <div class="trainee">
     <UserPanel :user="user" />
     <Skills :skill-data="user.skill" v-if="user.skill" editor />
   <!-- TRENINGI  -->
