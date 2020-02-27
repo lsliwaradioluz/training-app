@@ -4,12 +4,9 @@ query($name: String) {
   }) {
     id
     name 
-    category {
-      name
-    }
     exercises {
-      name
       id
+      name
       level
     }
   }
