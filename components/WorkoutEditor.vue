@@ -77,7 +77,7 @@
                     <i class="flaticon-close small" @click="deleteUnit(complexindex, unitindex)"></i>
                   </span>
                 </p>
-                <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span></li>
+                <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
                 <li>{{ unit.remarks }}</li>
               </ul>
             </div>
