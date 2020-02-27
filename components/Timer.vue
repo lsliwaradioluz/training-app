@@ -1,6 +1,6 @@
 <template>
   <div class="timer tab row j-between">
-    <div>
+    <div class="column j-center">
       <h3 class="m00">Odpocznij</h3>
       <p class="t-small m00">
         Następnie: 
