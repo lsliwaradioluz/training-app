@@ -20,7 +20,7 @@
               class="flaticon-information small"></nuxt-link>
           </p>
           <li>
-            <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">{{ unit.distance }}m</span>
+            <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
           </li>
           <li>
             <span v-if="unit.remarks">{{ unit.remarks }}</span>

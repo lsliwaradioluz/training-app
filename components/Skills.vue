@@ -283,8 +283,8 @@
 
         this.client.mutate({ mutation: updateSkill, variables: { input: input }  })
           .then(res => {
-            window.location.reload(true);
-          })
+            window.location.reload();
+          });
       },
       deleteUnit() {
         if (confirm("Czy na pewno chcesz usunąć ten element?")) {

@@ -10,9 +10,9 @@
         @click="currentWorkout = index">{{ date | reverseDate }}</button>
     </div>
     <div>
-    <!-- NAGŁÓWEK -->
-      <WorkoutPanel :workout="workout" />
-    <!-- ROZPISKA  --> 
+  <!-- NAGŁÓWEK -->
+    <WorkoutPanel :workout="workout" />
+  <!-- ROZPISKA  --> 
       <Head class="mt0 pt05 pb05">
         <div class="row j-between">
           <span>Rozpiska</span>
@@ -53,11 +53,13 @@
     asyncData(context) {
       let client = context.app.apolloProvider.defaultClient;
       let IDs;
+
       if (context.store.state.main.workoutToPair) {
         IDs = [context.route.params.id, context.store.state.main.workoutToPair.id];
       } else {
         IDs = [context.route.params.id];
       }
+
       return client.query({ query: mainQuery, variables: { ids: IDs } })
         .then(({ data }) => {
           return {
@@ -73,7 +75,11 @@
     },
     computed: {
       workout() {
-        return this.workouts[this.currentWorkout];
+        const workout = this.workouts[this.currentWorkout];
+        workout.sections = workout.sections.filter(section => {
+          return section.complexes.length > 0;
+        });
+        return workout;
       },
       users() {
         let users = [];

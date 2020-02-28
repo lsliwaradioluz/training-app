@@ -8,17 +8,14 @@ query($ids: [ID]!) {
       id
       fullname
       username
-      image {
-        url
-      }
     } 
     sections {
       id
       name
       rest
       complexes {
-        name 
         id
+        name 
         units {
           id
           sets

@@ -1,18 +1,18 @@
 <template>
   <div class="timer tab row j-between">
     <div class="column j-center">
-      <h3 class="m00">Odpocznij</h3>
+      <h3 class="m00">Za chwilę:</h3>
       <p class="t-small m00">
-        Następnie: 
         <span v-if="next.reps">{{ next.reps }}</span> 
         <span v-if="next.reps && next.time">x</span> 
-        <span v-if="next.time">{{ next.time }}</span> 
-        <span v-if="next.distance">{{ next.distance }}</span> 
-        {{ next.exercise.name }}
+        <span v-if="next.time">{{ next.time }}s</span> 
+        <span v-if="next.distance">{{ next.distance }}m</span> 
+        <span>{{ next.exercise.name }}</span>,
+        <span v-if="next.remarks">{{ next.remarks }}</span> 
       </p>
     </div>
     <div class="row a-center">
-      <p class="m00 t-right fs-2" :class="{ 't-red': timeleft == 0 }">
+      <p class="m00 t-right fs-2" :class="{ 't-red': timeleft <= 10 }">
         {{ timeleft | showMinutes }}
       </p>
     </div>
@@ -31,7 +31,10 @@
       countDown() {
         const countDownInterval = setInterval(() => {
           this.timeleft--;
-          if (this.timeleft == 0) clearInterval(countDownInterval);
+          if (this.timeleft == 0) {
+            clearInterval(countDownInterval);
+            this.$emit('countdown-over');
+          };
         }, 1000);
       }
     }, 

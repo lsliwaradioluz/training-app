@@ -10,7 +10,7 @@
       </span>
     </div>
   <!-- NAWIGACJA -->
-    <Carousel :pagination="false">
+    <Carousel :pagination="false" :start-from-page="1">
       <div class="row j-between a-center tab pt05 pb05 b-green t-black" v-for="(panel, index) in navigationPanels" :key="index">
         <i class="flaticon-left-arrow small" @click="panel.previousFunction"></i>
         <p class="m00">{{ panel.caption }}</p>
@@ -31,15 +31,15 @@
           <p class="m00 t-right fs-2" v-if="current.time">{{ current.time }}<span class="t-small">s</span></p>
         </div>
         <Stopwatch :time="10" v-if="current.time && !current.reps" />
-        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.time }}<span class="t-small">m</span></p>
+        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="t-small">m</span></p>
       </div>
     </div>
   <!--  -->
-    <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" v-else />
+    <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" @countdown-over="nextUnit" v-else />
     <img class="square grow mb05" :src="image" alt="exercise" v-if="!dividedScreenMode">
     <div class="workout-assistant__buttons row j-between">
-      <button class="button--primary square" type="button" @click="nextExercise" v-if="current.exercise.name == 'Odpoczynek'">Przejdź do {{ next.exercise.name }}</button>
-      <button class="button--primary square" type="button" @click="nextExercise" v-else>Zrobione!</button>
+      <button class="button--primary square" type="button" @click="nextUnit" v-if="current.exercise.name == 'Odpoczynek'">Następne ćwiczenie</button>
+      <button class="button--primary square" type="button" @click="nextUnit" v-else>Zrobione!</button>
     </div>
   </div>
 </template>
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    nextExercise() {
+    nextUnit() {
       this.currentUnit++;
       if (this.currentUnit > this.sets[this.currentComplex].length - 1) {
         this.currentComplex++;
@@ -82,7 +82,7 @@ export default {
         }
       }
     }, 
-    previousExercise() {
+    previousUnit() {
       this.currentUnit--;
       if (this.currentUnit < 0) {
         this.currentComplex--;
@@ -93,22 +93,6 @@ export default {
           this.currentUnit = this.sets[this.currentComplex].length - 1;
         }
       } 
-    },
-    nextComplex() {
-      this.currentComplex++;
-      if (this.currentComplex > this.sets.length - 1) { 
-        this.currentComplex = this.sets.length - 1;
-      } else {
-        this.currentUnit = 0;
-      }
-    },
-    previousComplex() {
-      this.currentComplex--;
-      if (this.currentComplex < 0) {
-        this.currentComplex = 0;
-      } else {
-        this.currentUnit = 0;
-      }
     },
     nextSection() {
       this.currentSection++;
@@ -150,14 +134,9 @@ export default {
           previousFunction: this.previousSection,
         },
         {
-          caption: `Seria ${this.currentUnit + 1 }/${ this.sets[this.currentComplex].length}`, 
-          nextFunction: this.nextExercise, 
-          previousFunction: this.previousExercise,
-        },
-        {
-          caption: `Kompleks ${this.currentComplex + 1 }/${ this.sets.length}`, 
-          nextFunction: this.nextComplex, 
-          previousFunction: this.previousComplex,
+          caption: `Blok ${this.currentComplex + 1 }/${ this.sets.length} Seria ${this.currentUnit + 1 }/${ this.sets[this.currentComplex].length}`, 
+          nextFunction: this.nextUnit, 
+          previousFunction: this.previousUnit,
         }
       ]
       return navigationPanels;

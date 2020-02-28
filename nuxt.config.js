@@ -81,7 +81,6 @@ export default {
     }, 
     manifest: {
       name: 'Piti',
-      orientation: 'portrait',
       short_name: 'Piti',
       background_color:'#B0FE76'
     },

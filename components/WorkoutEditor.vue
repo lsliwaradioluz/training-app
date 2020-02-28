@@ -38,7 +38,7 @@
       </Head>
       <Carousel 
         :pagination="false" 
-        :active="!showButtonsPanel" 
+        :active="!showButtonsPanel && currentSection == null" 
         :custom-length="sections.length" 
         :start-from-page="currentTranslate" 
         @change-page="currentTranslate = $event"
@@ -266,7 +266,7 @@ export default {
         this.sections[this.currentSection].complexes[this.currentComplex].units.push(unit);
       } else {
         const newComplex = {
-          name: "Kompleks", 
+          name: "Blok", 
           units: [
             unit
           ]
