@@ -31,7 +31,7 @@
     flex-wrap: wrap;
 
     button {
-      flex-basis: calc(100%/3 - 3px);
+      width: calc(100%/3 - 3px);
       margin-bottom: 5px;
       border-radius: 5px;
       font-size: 1rem;

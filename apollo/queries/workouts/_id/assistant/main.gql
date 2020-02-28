@@ -23,6 +23,7 @@ query($ids: [ID]!) {
             id
             name
             images {
+              id
               url
             }
           }

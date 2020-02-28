@@ -14,6 +14,8 @@ query($id: ID!) {
           id
           sets
           reps 
+          time
+          distance
           remarks
           exercise {
             id

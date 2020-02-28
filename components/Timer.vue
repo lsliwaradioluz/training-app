@@ -7,8 +7,7 @@
         <span v-if="next.reps && next.time">x</span> 
         <span v-if="next.time">{{ next.time }}s</span> 
         <span v-if="next.distance">{{ next.distance }}m</span> 
-        <span>{{ next.exercise.name }}</span>,
-        <span v-if="next.remarks">{{ next.remarks }}</span> 
+        <span>{{ next.exercise.name }}</span><span v-if="next.remarks">, {{ next.remarks }}</span> 
       </p>
     </div>
     <div class="row a-center">

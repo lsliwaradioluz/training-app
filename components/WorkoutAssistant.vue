@@ -134,7 +134,7 @@ export default {
           previousFunction: this.previousSection,
         },
         {
-          caption: `Blok ${this.currentComplex + 1 }/${ this.sets.length} Seria ${this.currentUnit + 1 }/${ this.sets[this.currentComplex].length}`, 
+          caption: `Blok ${this.currentComplex + 1 }/${ this.sets.length } Seria ${this.currentUnit + 1 }/${ this.sets[this.currentComplex].length}`, 
           nextFunction: this.nextUnit, 
           previousFunction: this.previousUnit,
         }
@@ -160,16 +160,6 @@ export default {
 
       return this.sets[currentComplex][currentUnit];
     },
-    realSets() {
-      const realSets = this.sets[this.currentComplex].filter(set => {
-        return set.exercise.name != 'Odpoczynek';
-      });
-
-      return realSets;
-    },
-    realcurrentUnit() {
-      return this.currentUnit / 2.1;
-    },
     sets() {
       let workout = []; 
       this.sections[this.currentSection].complexes.forEach((complex, complexindex) => {
@@ -192,6 +182,8 @@ export default {
           return element != undefined;
         });
 
+        // Add rest intervals if should be any
+  
         for (let i = 0; i <= filteredSets.length - 1; i++) {
           if (i % 2 != 0) {
             let rest;
@@ -205,12 +197,6 @@ export default {
         }
         workout.push(filteredSets);
       });
-
-      for (let i = 0; i <= workout.length - 1; i++) {
-        if (i % 2 != 0) {
-          workout.splice(i, 0, [{ exercise: { name: 'Odpoczynek' }, time: this.sections[this.currentSection].rest }]);
-        }
-      }
 
       return workout;
     }

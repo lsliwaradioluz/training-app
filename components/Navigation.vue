@@ -1,8 +1,7 @@
 <template>
   <div class="navigation main pt1 pb1 row j-center a-center">
     <span class="logo">Piti</span>
-    <h3 class="m00 t-center" v-if="$route.path.includes('assistant')">{{ $route.query.section | shortenSection }}</h3>
-    <h3 class="m00 t-center" v-else>{{ header | englishToPolish }}</h3>
+    <h3 class="m00 t-center">{{ header | englishToPolish }}</h3>
     <span class="hamburger t-right">
       <i class="flaticon-pause" @click="$router.go(-1)" v-if="$route.path.includes('assistant')"></i>
       <i class="flaticon-menu" @click="toggleNav" v-else></i>
