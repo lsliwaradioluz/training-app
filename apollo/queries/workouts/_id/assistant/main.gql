@@ -2,7 +2,7 @@ query($ids: [ID]!) {
   workouts(where: { id_in: $ids }) {
     user {
       id
-      username
+      fullname
     }
     id
     sections {

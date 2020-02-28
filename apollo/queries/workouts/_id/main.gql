@@ -7,7 +7,6 @@ query($ids: [ID]!) {
     user {
       id
       fullname
-      username
     } 
     sections {
       id

@@ -1,7 +1,8 @@
 <template>
   <div class="timer tab row j-between">
     <div class="column j-center">
-      <h3 class="m00">Za chwilę:</h3>
+      <h3 class="m00" v-if="next.exercise.name == 'Odpocznij'">Skończyłeś blok</h3>
+      <h3 class="m00" v-else>Za chwilę</h3>
       <p class="t-small m00">
         <span v-if="next.reps">{{ next.reps }}</span> 
         <span v-if="next.reps && next.time">x</span> 

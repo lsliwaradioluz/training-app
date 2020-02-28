@@ -96,6 +96,10 @@ Vue.filter('showMinutes', (value) => {
   return minutesAndSeconds;
 });
 
+Vue.filter('getName', (value) => {
+  const nameArray = value.split(' ');
+  return nameArray[0];
+});
 
 Vue.filter('cutFilename', (value) => {
   const nameWithoutType = value.slice(0, -4);

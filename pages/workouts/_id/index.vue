@@ -5,9 +5,9 @@
         type="button"
         class="t-small"
         :class="{ 't-green': index == currentWorkout }"
-        v-for="(date, index) in users" 
+        v-for="(user, index) in users" 
         :key="index"
-        @click="currentWorkout = index">{{ date | reverseDate }}</button>
+        @click="currentWorkout = index">{{ user | getName }}</button>
     </div>
     <div>
   <!-- NAGŁÓWEK -->
@@ -84,7 +84,7 @@
       users() {
         let users = [];
         this.workouts.forEach(cur => {
-          users.push(cur.user.username);
+          users.push(cur.user.fullname);
         });
         return users;
       },
