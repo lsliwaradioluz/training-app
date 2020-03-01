@@ -174,6 +174,7 @@
         }
         this.skill.skillsets.push(newSkillset);
         this.editSkillset = true;
+        this.newSkillsetName = 'Nowa karta';
         this.currentSkillset = this.skill.skillsets.length - 1;
         this.currentTranslate = this.skill.skillsets.length - 1;
         setTimeout(() => {
@@ -314,7 +315,7 @@
   }
 
   .exercise__list {
-    max-height: 10vh;
+    max-height: 15vh;
     overflow-y: scroll;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
