@@ -22,7 +22,7 @@ import mainQuery from '~/apollo/queries/users/_name/workouts/main.gql'
 export default {
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { username: context.route.params.username } })
+    return client.query({ query: mainQuery, variables: { username: context.route.params.name } })
       .then(({ data }) => {
         return {
           user: data.users[0],
