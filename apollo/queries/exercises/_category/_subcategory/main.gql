@@ -4,7 +4,7 @@ query($name: String) {
   }) {
     id
     name 
-    exercises(limit: 3) {
+    exercises {
       id
       name
       level
