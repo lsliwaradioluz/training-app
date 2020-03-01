@@ -52,4 +52,10 @@ export default {
   .workout-assistant:nth-child(2) {
     border-top: 1px solid color(green);
   }
+
+  @media (orientation: landscape) {
+    .workout-assistant-page {
+      height: auto;
+    }
+  }
 </style>

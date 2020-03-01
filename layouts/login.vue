@@ -21,4 +21,10 @@ export default {
   .login {
     height: 100vh;
   }
+
+  @media (orientation: landscape) {
+    .login {
+      height: auto;
+    }
+  }
 </style>

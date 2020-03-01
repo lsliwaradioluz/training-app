@@ -22,7 +22,7 @@
     </Head>
   <!-- SKILL CARDS  -->
     <transition name="fade" mode="out-in">
-      <div v-if="unit == null">
+      <div v-if="unit == null" key="cards" keep-alive>
         <Carousel 
           :pagination="false" 
           :custom-length="skill.skillsets.length" 
@@ -35,22 +35,24 @@
               <h3 class="mt0" v-if="editSkillset">
                 <input 
                   class="input--invisible t-green" 
-                  type="text" 
-                  :value="skill.skillsets[skillsetindex].name" 
+                  type="text"
+                  v-model="newSkillsetName"
                   spellcheck="false"
                   :ref="`input${skillsetindex}`">
               </h3>
               <h3 class="mt0" v-else>
                 {{ skillset.name }}
               </h3>
-              <i class="flaticon-plus" @click="openEditor(skillsetindex)" v-if="skillsetindex < initialSkillLength && editor"></i>  
+              <i class="flaticon-plus" @click="openEditor(skillsetindex)" v-if="editSkillset"></i>  
             </div>
             <ul class="mb1" v-for="(unit, unitindex) in skillset.units" :key="unitindex">
-              <p class="m00 row j-between">
-                <span>{{ unit.exercise.name }}</span>
-                <i class="flaticon-adjust small" @click="openEditor(skillsetindex, unit)" v-if="editor"></i>
-                <i class="flaticon-plus skills__pick small" @click="copyUnit(unit)" v-else></i>
-              </p>
+              <div class="row j-between">
+                <p class="m00">{{ unit.exercise.name }}</p>
+                <div v-if=editSkillset>
+                  <i class="flaticon-adjust small" @click="openEditor(skillsetindex, unit, unitindex)" v-if="editor"></i>
+                  <i class="flaticon-plus skills__pick small" @click="copyUnit(unit)" v-else></i>
+                </div>
+              </div>
               <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span> <span v-if="unit.max">({{ unit.max }})</span></li>
               <li><span v-if="unit.remarks">{{ unit.remarks }}</span></li>
             </ul>
@@ -61,14 +63,14 @@
         </p>
       </div>
   <!-- SKILL EDITOR  -->
-      <div class="tab p11" v-else>
+      <div class="tab p11" key="editor" v-else>
         <div class="row j-between t-green">
           <div>
             <h3 class="m00" v-if="unit.id">Edytuj ćwiczenie</h3>
             <h3 class="m00" v-else>Nowe ćwiczenie</h3>
             <h4 class="t-small mt0 t-white">{{ skill.skillsets[currentSkillset].name }}</h4>
           </div>
-          <i class="flaticon-close" @click="deleteUnit" v-if="unit.id != undefined"></i>
+          <i class="flaticon-close" @click="deleteUnit" v-if="unit.index != undefined"></i>
         </div>
         <form>
           <div>
@@ -79,7 +81,7 @@
               spellcheck="false"
               placeholder="Nazwa ćwiczenia"
               @keydown="unit.exercise.id = ''"
-              v-model="unit.filter">
+              v-model="unit.exercise.name">
             <ul class="exercise__list">
               <li v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
             </ul>
@@ -128,18 +130,20 @@
       return {
         client: this.$apollo.getClient(),
         initialSkillLength: this.skillData.skillsets.length,
-        skill: this.skillData, 
+        skill: this.skillData,
+        skillBeforeEdit: null, 
         unit: null, 
         currentSkillset: null, 
         currentTranslate: 0,
         showButtonsPanel: false,
         editSkillset: false,
         exercises: null,
+        newSkillsetName: null,
       }
     }, 
     computed: {
       filteredSkillsets() {
-        let skillsetsClone = JSON.parse(JSON.stringify(this.skill.skillsets))
+        let skillsetsClone = JSON.parse(JSON.stringify(this.skill.skillsets));
         skillsetsClone.forEach((skillset, skillindex) => {
           skillsetsClone[skillindex] = _.omit(skillset, '__typename');
           skillset.units.forEach((unit, unitindex) => {
@@ -152,7 +156,7 @@
       },  
       filteredExercises() {
         let filteredExercises = [];
-        const filter = this.unit.filter.toLowerCase();
+        const filter = this.unit.exercise.name.toLowerCase();
         if (filter !== '') {
           filteredExercises = this.exercises.filter(exercise => {
             const exerciseName = exercise.name.toLowerCase();
@@ -179,50 +183,55 @@
       },
       openEditSkillset() {
         this.editSkillset = true;
+        this.skillBeforeEdit = JSON.parse(JSON.stringify(this.skill.skillsets[this.currentTranslate]));
         setTimeout(() => {
           let input = `input${this.currentTranslate}`;
           this.$refs[input][0].focus();
         }, 700);
+        this.newSkillsetName = this.skill.skillsets[this.currentTranslate].name;
       },
       closeEditSkillset(mode) {
         this.showButtonsPanel = false;
         if (mode == 'save') {
           let input = `input${this.currentTranslate}`
-          this.skill.skillsets[this.currentTranslate].name = this.$refs[input][0].value;
+          this.skill.skillsets[this.currentTranslate].name = this.newSkillsetName;
           this.editSkillset = false;
           this.uploadSkill();
         } else {
+          this.editSkillset = false;
           if (this.skill.skillsets.length == this.initialSkillLength) {
-            this.editSkillset = false
+            this.skill.skillsets[this.currentTranslate] = this.skillBeforeEdit;
           } else {
-            this.filteredSkillsets.splice(this.currentTranslate, 1);
+            this.skill.skillsets.splice(this.currentTranslate, 1);
+            this.currentTranslate = 0;
           }
         }
+        this.skillBeforeEdit = null;
       },
       deleteSkillset(skillsetindex) {
         if (confirm("Czy na pewno chcesz usunąć ten element?")) {
           this.skill.skillsets.splice(this.currentTranslate, 1);
           this.currentTranslate = 0;
+          this.showButtonsPanel = false;
           this.uploadSkill();
         }
       },
-      openEditor(current, unit) {
-        this.currentSkillset = current;
+      openEditor(currentSkillset, unit, unitindex) {
+        this.currentSkillset = currentSkillset;
         if (!this.exercises) {
           this.client.query({ query: exercisesQuery })
             .then(({ data }) => {
               this.exercises = data.exercises;
-              this.populateEditor(unit);
+              this.populateEditor(unit, unitindex);
             });
         } else {
-          this.populateEditor(unit);
+          this.populateEditor(unit, unitindex);
         }
       },
-      populateEditor(unit) {
+      populateEditor(unit, unitindex) {
         if (unit != undefined) {
           this.unit = {
-            id: unit.id,
-            filter: unit.exercise.name || '',
+            index: unitindex,
             exercise: unit.exercise,
             numbers: {
               sets: unit.sets || 0, 
@@ -235,8 +244,8 @@
           }
         } else {
           this.unit = {
-            filter: '',
             exercise: {
+              name: '',
               id: '',
             }, 
             numbers: {
@@ -251,25 +260,21 @@
         }
       },
       passExercise(exercise) {
-        this.unit.filter = exercise.name;
         this.unit.exercise = exercise;
       },
       addUnit() {
         const newUnit = {
           ...this.unit.numbers,
-          exercise: this.unit.exercise.id,
+          exercise: this.unit.exercise,
           remarks: this.unit.remarks
         }
 
-        if (this.unit.id != undefined) {
-          const index = this.filteredSkillsets[this.currentSkillset].units.findIndex(skillset => {
-            return skillset.id == this.unit.id;
-          });
-          this.filteredSkillsets[this.currentSkillset].units.splice(index, 1, newUnit);
+        if (this.unit.index != undefined) {
+          this.skill.skillsets[this.currentSkillset].units.splice(this.unit.index, 1, newUnit);
         } else {
-          this.filteredSkillsets[this.currentSkillset].units.push(newUnit);
+          this.skill.skillsets[this.currentSkillset].units.push(newUnit);
         }
-        this.uploadSkill();
+        this.unit = null;
       }, 
       uploadSkill() {
         const input = {
@@ -281,19 +286,11 @@
           }
         }
 
-        this.client.mutate({ mutation: updateSkill, variables: { input: input }  })
-          .then(res => {
-            window.location.reload();
-          });
+        this.client.mutate({ mutation: updateSkill, variables: { input: input }  });
       },
       deleteUnit() {
-        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
-          const index = this.filteredSkillsets[this.currentSkillset].units.findIndex(unit => {
-            return unit.id == this.unit.id;
-          });
-          this.filteredSkillsets[this.currentSkillset].units.splice(index, 1);
-          this.uploadSkill();
-        }
+        this.skill.skillsets[this.currentSkillset].units.splice(this.unit.index, 1);
+        this.unit = null;
       }, 
       copyUnit(unit) {
         let unitClone = JSON.parse(JSON.stringify(unit));
