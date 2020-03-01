@@ -18,6 +18,7 @@
               :to="`/exercises/${unit.exercise.subcategory.category.name}/${unit.exercise.subcategory.name}/${unit.exercise.name}`" 
               tag="i"
               class="flaticon-information small"></nuxt-link>
+            <i class="flaticon-plus small" @click="$emit('copy-unit', unit)" v-else></i>
           </p>
           <li>
             <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>

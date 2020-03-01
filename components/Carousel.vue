@@ -219,6 +219,7 @@
 
   .carousel {
     overflow-x: hidden;
+    overflow-y: visible;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

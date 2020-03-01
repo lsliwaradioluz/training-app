@@ -1,7 +1,7 @@
 <template>
   <div class="skills">
   <!-- HEADER -->
-    <Head v-if="editor">
+    <Head>
       <div class="row j-between">
         <h3 class="m00">Umiejętności</h3>
         <i class="flaticon-vertical-dots" @click="showButtonsPanel = !showButtonsPanel"></i>
@@ -48,7 +48,7 @@
             <ul class="mb1" v-for="(unit, unitindex) in skillset.units" :key="unitindex">
               <div class="row j-between">
                 <p class="m00">{{ unit.exercise.name }}</p>
-                <div v-if=editSkillset>
+                <div v-if="editSkillset">
                   <i class="flaticon-adjust small" @click="openEditor(skillsetindex, unit, unitindex)" v-if="editor"></i>
                   <i class="flaticon-plus skills__pick small" @click="copyUnit(unit)" v-else></i>
                 </div>

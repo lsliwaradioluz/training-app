@@ -64,19 +64,29 @@
           </div>
           <div>
             <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
-              <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex != null">
+              <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
                 {{ complex.name }}
-                <i class="flaticon-next small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
+                <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
                 <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
               </h4>
               <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
-                <p class="m00 row j-between">
-                  <span>{{ unit.exercise.name }}</span>
-                  <span v-show="currentSection != null">
-                    <i class="flaticon-next small" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2"></i>
-                    <i class="flaticon-close small" @click="deleteUnit(complexindex, unitindex)"></i>
-                  </span>
-                </p>
+                <div class="row j-between">
+                  <p class="m00">{{ unit.exercise.name }}</p>
+                  <div class="workout-editor__unit-buttons">
+                    <i 
+                      class="workout-editor__unit-button flaticon-vertical-dots small" 
+                      @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" 
+                      v-show="currentSection != null"
+                      ref="dupa"></i>
+                    <transition name="fade">
+                      <div v-if="showUnitButtons == `${complexindex}${unitindex}`">
+                        <button class="m00" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                        <button class="m00" @click="editUnit(unit, complexindex, unitindex)">Edytuj</button>
+                        <button class="m00" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                      </div>
+                    </transition>
+                  </div>
+                </div>
                 <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
                 <li>{{ unit.remarks }}</li>
               </ul>
@@ -91,33 +101,40 @@
     </div>
   <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
     <div v-if="currentSection != null && !editSection">
-      <div class="pl1 pr1 column t-gray t-small mb05">
-        <button class="t-small" type="button" @click="showSkillset = !showSkillset">
-          Dotknij tutaj, by zmienić okno
-          <span v-if="!showSkillset">(Ostatni trening)</span>
-          <span v-else>(Umiejętności)</span>
-        </button>
-        <div class="mt05 row j-around" v-if="!showSkillset">
-          <button 
-            type="button"
-            class="t-small"
-            :class="{ 't-green': index == currentWorkout }"
-            v-for="(date, index) in previousWorkoutsDates" 
-            :key="index"
-            @click="currentWorkout = index">{{ date | reverseDate }}</button>
-        </div>
-      </div>
       <transition name="fade" mode="out-in">
-        <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset" />
-        `<Carousel :pagination="false" v-if="!showSkillset">
-          <Routine 
-            v-for="section in user.workouts[this.currentWorkout].sections" 
-            :key="section.id" 
-            :section="section" 
-            @copy-section="copySection($event)"
-            @copy-complex="copyComplex($event)" 
-            edit />
-        </Carousel>
+        <UnitEditor 
+          :exercises="exercises"
+          :editedUnit="editedUnit" 
+          @add-unit="addUnit($event)"
+          @cancel="showUnitEditor = false"
+          v-if="showUnitEditor" />
+        <div v-else>
+          <div class="pl1 pr1 column t-gray t-small mb05">
+            <button class="t-small" type="button" @click="showUnitEditor = true">
+              Dodaj nowe ćwiczenie
+            </button>
+            <div class="mt05 row j-around">
+              <button 
+                type="button"
+                class="t-small"
+                :class="{ 't-green': index == currentWorkout }"
+                v-for="(date, index) in previousWorkoutsDates" 
+                :key="index"
+                @click="currentWorkout = index">{{ date | reverseDate }}</button>
+            </div>
+          </div>
+          <Carousel :pagination="false">
+            <Routine 
+              v-for="section in user.workouts[this.currentWorkout].sections" 
+              :key="section.id" 
+              :section="section" 
+              @copy-section="copySection($event)"
+              @copy-complex="copyComplex($event)"
+              @copy-unit="addUnit($event)"
+              edit />
+          </Carousel>
+        </div>
+        <!-- <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset" /> -->
       </transition>
     </div>
   <!-- PRZERWY  -->
@@ -141,16 +158,19 @@
 
 <script>
 import Skills from '~/components/Skills.vue';
+import exercisesQuery from '~/apollo/queries/users/_name/exercises.gql';
 import createWorkout from '~/apollo/mutations/createWorkout.gql';
 import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 import Routine from '~/components/Routine';
 import Radio from '~/components/Radio';
+import UnitEditor from '~/components/UnitEditor';
 
 export default {
   components: {
     Skills,
     Routine, 
     Radio,
+    UnitEditor, 
   },
   props: {
     specificData: {
@@ -165,13 +185,16 @@ export default {
       client: this.$apollo.getClient(),
       ...this.specificData,
       initialSectionsLength: this.specificData.sections.length, 
-      showSkillset: true, 
+      showUnitEditor: false, 
       editSection: false, 
       showButtonsPanel: false,
+      showUnitButtons: null,
       currentWorkout: 0,
       currentSection: null, 
       currentComplex: null,
       currentTranslate: 0, 
+      exercises: null,
+      editedUnit: null, 
     }
   },
   computed: {
@@ -220,9 +243,7 @@ export default {
       }, 700);
     },
     deleteSection() {
-      if (confirm("Czy na pewno chcesz usunąć ten element?")) {
-        this.sections.splice(this.currentTranslate, 1);
-      }
+      this.sections.splice(this.currentTranslate, 1);
       this.showButtonsPanel = false;
     },
     openEditSection() {
@@ -255,7 +276,17 @@ export default {
       }
     },
     editComplexes(sectionindex) {
-      this.currentSection = sectionindex;
+      if (!this.exercises) {
+          this.client.query({ query: exercisesQuery })
+            .then(({ data }) => {
+              this.exercises = data.exercises;
+              this.currentSection = sectionindex;
+              // this.populateEditor(unit, unitindex);
+            });
+        } else {
+          this.currentSection = sectionindex;
+          // this.populateEditor(unit, unitindex);
+        }
     },
     stopEditComplexes() {
       this.currentSection = null;
@@ -273,6 +304,19 @@ export default {
         }
         this.sections[this.currentSection].complexes.push(newComplex);
       }
+      this.showSkillset = false;
+    },
+    editUnit(unit, complexindex, unitindex) {
+      this.editedUnit = {
+        ...unit, 
+        index: unitindex, 
+        complexindex: complexindex, 
+      }
+      this.showUnitEditor = true;
+    },
+    stopEditunit() {
+      this.showUnitEditor = false;
+      this.editedUnit = null;
     },
     deleteUnit(complex, unit) {
       this.sections[this.currentSection].complexes[complex].units.splice(unit, 1);
@@ -320,6 +364,13 @@ export default {
           this.$router.go(-1);
         })  
     }
+  }, 
+  mounted() {
+    window.addEventListener('click', () => {
+      if (!event.target.classList.contains('workout-editor__unit-button')) {
+        this.showUnitButtons = null;
+      }
+    });
   }
 }
 </script>
@@ -331,6 +382,19 @@ export default {
       padding: 1rem;
       flex-basis: 50%;
       font-size: inherit;
+    }
+  }
+
+  .workout-editor__unit-buttons {
+    position: relative;
+    div {
+      background-color: color(green);
+      color: color(black);
+      border-radius: 5px;
+      position: absolute;
+      right: 125%;
+      top: 0;
+      padding: 0.3rem;
     }
   }
 
