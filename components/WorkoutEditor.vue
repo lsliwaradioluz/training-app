@@ -17,124 +17,119 @@
     </div>
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
-      <Head>
+      <Head :class="{ blind: editedUnit != null}">
         <div class="row j-between">
           <h3 class="m00">Rozpiska</h3>
           <i class="flaticon-vertical-dots" @click="showButtonsPanel = !showButtonsPanel"></i>
         </div>
-        <transition name="accordion">
-          <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
-            <template v-if="!editSection">
-              <button :class="{ pb05: showButtonsPanel }" @click="createSection">Dodaj</button>
-              <button :class="{ pb05: showButtonsPanel }" @click="openEditSection">Edytuj</button>
-              <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">Usuń</button>
-            </template>
-            <template v-else>
-              <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('save')">Zapisz</button>
-              <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('abort')">Wróć</button>
-            </template>
-          </div>
-        </transition>
+        <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
+          <template v-if="currentSection == null">
+            <button :class="{ pb05: showButtonsPanel }" @click="createSection">Dodaj</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="openEditSection">Edytuj</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">Usuń</button>
+          </template>
+          <template v-else>
+            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('save')">Zapisz</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('abort')">Wróć</button>
+          </template>
+        </div>
       </Head>
-      <Carousel 
-        :pagination="false" 
-        :active="!showButtonsPanel && currentSection == null" 
-        :custom-length="sections.length" 
-        :start-from-page="currentTranslate" 
-        @change-page="currentTranslate = $event"
-        v-if="sections.length > 0">
-        <div class="tab" v-for="(section, sectionindex) in sections" :key="sectionindex">
-          <div class="row j-between">
-            <h3 class="mt0" v-if="editSection">
-              <input 
-                class="input--invisible" 
-                type="text" 
-                placeholder="Nowa sekcja"
-                :value="sections[sectionindex].name"
-                spellcheck="false"
-                :ref="`input${sectionindex}`">
-            </h3>
-            <h3 class="mt0" v-else>
-              {{ section.name }}
-            </h3>
-            <div v-if="!editSection">
-              <i class="flaticon-plus" @click="editComplexes(sectionindex)" v-show="currentSection == null"></i>
-              <i class="flaticon-accept" @click="stopEditComplexes(sectionindex)" v-show="currentSection != null"></i>
-            </div>
-          </div>
-          <div>
-            <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
-              <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
-                {{ complex.name }}
-                <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
-                <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
-              </h4>
-              <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
-                <div class="row j-between">
-                  <p class="m00">{{ unit.exercise.name }}</p>
-                  <div class="workout-editor__unit-buttons">
-                    <i 
-                      class="workout-editor__unit-button flaticon-vertical-dots small" 
-                      @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" 
-                      v-show="currentSection != null"
-                      ref="dupa"></i>
-                    <transition name="fade">
-                      <div v-if="showUnitButtons == `${complexindex}${unitindex}`">
-                        <button class="m00" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                        <button class="m00" @click="editUnit(unit, complexindex, unitindex)">Edytuj</button>
-                        <button class="m00" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+      <transition name="fade">
+        <div v-if="!editedUnit">
+          <Carousel 
+            :pagination="false" 
+            :active="!showButtonsPanel && currentSection == null" 
+            :custom-length="sections.length" 
+            :start-from-page="currentTranslate" 
+            @change-page="currentTranslate = $event"
+            v-if="sections.length > 0">
+            <div class="tab" v-for="(section, sectionindex) in sections" :key="sectionindex">
+              <div class="row j-between">
+                <h3 class="mt0" v-if="currentSection != null">
+                  <input 
+                    class="input--invisible" 
+                    type="text" 
+                    placeholder="Nazwa sekcji"
+                    v-model="newSectionName"
+                    spellcheck="false"
+                    :ref="`input${sectionindex}`">
+                </h3>
+                <h3 class="mt0" v-else>{{ section.name }}</h3>
+                <i class="flaticon-plus" @click="openUnitEditor()" v-if="currentSection != null"></i>
+              </div>
+              <div>
+                <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
+                  <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
+                    {{ complex.name }}
+                    <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
+                    <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
+                  </h4>
+                  <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
+                    <div class="row j-between">
+                      <p class="m00">{{ unit.exercise.name }}</p>
+                      <div class="workout-editor__unit-buttons">
+                        <i 
+                          class="workout-editor__unit-button flaticon-vertical-dots small" 
+                          @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" 
+                          v-show="currentSection != null"></i>
+                        <transition name="roll">
+                          <div v-if="showUnitButtons == `${complexindex}${unitindex}`">
+                            <button class="m00" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                            <button class="m00" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
+                            <button class="m00" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                          </div>
+                        </transition>
                       </div>
-                    </transition>
-                  </div>
+                    </div>
+                    <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
+                    <li>{{ unit.remarks }}</li>
+                  </ul>
                 </div>
-                <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
-                <li>{{ unit.remarks }}</li>
-              </ul>
+                <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+              </div>
             </div>
-            <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+          </Carousel>
+          <p class="m00 tab" v-else>
+            Na razie nie dodałeś żadnych sekcji.
+          </p>
+        <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
+          <div v-if="currentSection != null">
+            <div class="pl1 pr1 column t-gray t-small mb05">
+              <button class="t-small" type="button" @click="showSkillset = !showSkillset" v-if="user.workouts.length > 0">
+                Dotknij tutaj, by zmienić okno
+                <span v-if="!showSkillset">(Ostatni trening)</span>
+                <span v-else>(Umiejętności)</span>
+              </button>
+              <div class="mt05 row j-around" v-if="!showSkillset">
+                <button 
+                  type="button"
+                  class="t-small"
+                  :class="{ 't-green': index == currentWorkout }"
+                  v-for="(date, index) in previousWorkoutsDates" 
+                  :key="index"
+                  @click="currentWorkout = index">{{ date | reverseDate }}</button>
+              </div>
+            </div>
+            <transition name="fade" mode="out-in">
+              <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset && user.skill.skillsets.length > 0" />
+              <Carousel :pagination="false" v-if="!showSkillset">
+                <Routine 
+                  v-for="section in user.workouts[this.currentWorkout].sections" 
+                  :key="section.id" 
+                  :section="section" 
+                  @copy-section="copySection($event)"
+                  @copy-complex="copyComplex($event)" 
+                  edit />
+              </Carousel>
+            </transition>
           </div>
         </div>
-      </Carousel>
-      <p class="m00 tab" v-else>
-        Na razie nie dodałeś żadnych sekcji.
-      </p>
-    </div>
-  <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
-    <div v-if="currentSection != null && !editSection">
-      <transition name="fade" mode="out-in">
         <UnitEditor 
           :exercises="exercises"
           :editedUnit="editedUnit" 
           @add-unit="addUnit($event)"
-          @cancel="showUnitEditor = false"
-          v-if="showUnitEditor" />
-        <div v-else>
-          <div class="pl1 pr1 column t-gray t-small mb05">
-            <button class="t-small" type="button" @click="showUnitEditor = true">
-              Dodaj nowe ćwiczenie
-            </button>
-            <div class="mt05 row j-around">
-              <button 
-                type="button"
-                class="t-small"
-                :class="{ 't-green': index == currentWorkout }"
-                v-for="(date, index) in previousWorkoutsDates" 
-                :key="index"
-                @click="currentWorkout = index">{{ date | reverseDate }}</button>
-            </div>
-          </div>
-          <Carousel :pagination="false">
-            <Routine 
-              v-for="section in user.workouts[this.currentWorkout].sections" 
-              :key="section.id" 
-              :section="section" 
-              @copy-section="copySection($event)"
-              @copy-complex="copyComplex($event)"
-              @copy-unit="addUnit($event)"
-              edit />
-          </Carousel>
-        </div>
-        <!-- <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset" /> -->
+          @cancel="closeUnitEditor"
+          v-else />
       </transition>
     </div>
   <!-- PRZERWY  -->
@@ -184,14 +179,15 @@ export default {
     return {
       client: this.$apollo.getClient(),
       ...this.specificData,
-      initialSectionsLength: this.specificData.sections.length, 
+      showSkillset: true,
       showUnitEditor: false, 
-      editSection: false, 
+      newSectionName: null, 
       showButtonsPanel: false,
       showUnitButtons: null,
       currentWorkout: 0,
       currentSection: null, 
       currentComplex: null,
+      currentUnit: null,
       currentTranslate: 0, 
       exercises: null,
       editedUnit: null, 
@@ -199,7 +195,10 @@ export default {
   },
   computed: {
     filteredSections() {
-      let sectionsClone = JSON.parse(JSON.stringify(this.sections));
+      let sectionsClone = this.sections.filter(section => {
+        return section.complexes.length > 0;
+      });
+      sectionsClone = JSON.parse(JSON.stringify(sectionsClone));
       sectionsClone.forEach((section, sectionindex) => {
         sectionsClone[sectionindex] = _.omit(section, '__typename', 'id');
         section.complexes.forEach((complex, complexindex) => {
@@ -230,13 +229,13 @@ export default {
   methods: {
     createSection() {
       const newSection = {
-        name: 'Nowa sekcja',
+        complexes: [],
         rest: 180, 
       };
       this.sections.push(newSection);
-      this.editSection = true;
       this.currentSection = this.sections.length - 1;
       this.currentTranslate = this.sections.length - 1;
+      this.newSectionName = 'Nowa sekcja';
       setTimeout(() => {
         let input = `input${this.sections.length - 1}`;
         this.$refs[input][0].focus();
@@ -245,57 +244,73 @@ export default {
     deleteSection() {
       this.sections.splice(this.currentTranslate, 1);
       this.showButtonsPanel = false;
+      this.currentTranslate = this.currentTranslate == 0 ? 0 : this.currentTranslate - 1;
     },
     openEditSection() {
-      this.editSection = true;
-      setTimeout(() => {
-        let input = `input${this.currentTranslate}`;
-        this.$refs[input][0].focus();
-      }, 700);
+      this.currentSection = this.currentTranslate;
+      this.newSectionName = this.sections[this.currentSection].name;
     },
     closeEditSection(mode) {
-      this.editSection = false;
-      this.showButtonsPanel = false;
-      let input = `input${this.currentTranslate}`
-      const inputValue = this.$refs[input][0].value;
       if (mode == 'save') {
-        this.sections[this.currentTranslate].name = inputValue;
-        this.editSection = false;
-        this.currentSection = null;
-        if (!this.sections[this.currentTranslate].complexes) {
-          this.$set(this.sections[this.currentTranslate], 'complexes', []);
+        this.sections[this.currentTranslate].name = this.newSectionName;
+      } else if (mode == 'abort' && !this.sections[this.currentTranslate].name) {
+        this.deleteSection();
+        this.currentTranslate = 0;
+      }
+      this.currentSection = null;
+      this.newSectionName = null;
+      this.showButtonsPanel = false;
+    },
+    populateUnitEditor(unit) {
+      if (unit != undefined) {
+        this.editedUnit = {
+          exercise: unit.exercise,
+          numbers: {
+            sets: unit.sets || 0, 
+            reps: unit.reps || 0, 
+            time: unit.time || 0,
+            distance: unit.distance || 0, 
+            max: unit.max || 0
+          },
+          remarks: unit.remarks || ''
         }
       } else {
-        this.currentSection = null;
-        if (!this.sections[this.currentTranslate].complexes) {
-          this.sections.splice(this.currentTranslate, 1);
-          this.currentTranslate = 0;
-        } else {
-          this.editSection = false;
+        this.editedUnit = {
+          exercise: {
+            name: '',
+            id: '',
+          }, 
+          numbers: {
+            sets: 0, 
+            reps: 0, 
+            time: 0,
+            distance: 0,
+          },
+          remarks: ''
         }
       }
     },
-    editComplexes(sectionindex) {
+    openUnitEditor(unit, unitindex, complexindex) {
+      if (unit != undefined) {
+        this.currentUnit = unitindex;
+        this.currentComplex = complexindex;
+      }
       if (!this.exercises) {
-          this.client.query({ query: exercisesQuery })
-            .then(({ data }) => {
-              this.exercises = data.exercises;
-              this.currentSection = sectionindex;
-              // this.populateEditor(unit, unitindex);
-            });
-        } else {
-          this.currentSection = sectionindex;
-          // this.populateEditor(unit, unitindex);
-        }
+        this.client.query({ query: exercisesQuery })
+          .then(({ data }) => {
+            this.exercises = data.exercises;
+            this.populateUnitEditor(unit);
+          });
+      } else {
+        this.populateUnitEditor(unit);
+      }
     },
-    stopEditComplexes() {
-      this.currentSection = null;
-      this.currentComplex = null;
+    closeUnitEditor() {
+      this.showUnitEditor = false;
+      this.editedUnit = null;
     },
     addUnit(unit) {
-      if (this.currentComplex != null) {
-        this.sections[this.currentSection].complexes[this.currentComplex].units.push(unit);
-      } else {
+      if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
           name: "Blok", 
           units: [
@@ -303,19 +318,13 @@ export default {
           ]
         }
         this.sections[this.currentSection].complexes.push(newComplex);
+      } else if (this.currentComplex != null && this.currentUnit == null) {
+        this.sections[this.currentSection].complexes[this.currentComplex].units.push(unit);
+      } else {
+        this.sections[this.currentSection].complexes[this.currentComplex].units[this.currentUnit] = unit;
+        this.currentComplex = null;
+        this.currentUnit = null;
       }
-      this.showSkillset = false;
-    },
-    editUnit(unit, complexindex, unitindex) {
-      this.editedUnit = {
-        ...unit, 
-        index: unitindex, 
-        complexindex: complexindex, 
-      }
-      this.showUnitEditor = true;
-    },
-    stopEditunit() {
-      this.showUnitEditor = false;
       this.editedUnit = null;
     },
     deleteUnit(complex, unit) {
@@ -388,7 +397,7 @@ export default {
   .workout-editor__unit-buttons {
     position: relative;
     div {
-      background-color: color(green);
+      background-color: white;
       color: color(black);
       border-radius: 5px;
       position: absolute;

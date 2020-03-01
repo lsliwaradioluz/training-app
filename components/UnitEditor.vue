@@ -2,7 +2,7 @@
   <div class="unit-editor">
     <div class="tab p11">
       <div class="row j-between t-green mb05">
-        <h3 class="m00" v-if="editedUnit">Edytuj ćwiczenie</h3>
+        <h3 class="m00" v-if="editedUnit.name != ''">Edytuj ćwiczenie</h3>
         <h3 class="m00" v-else>Nowe ćwiczenie</h3>
       </div>
       <form>
@@ -49,7 +49,7 @@
     props: ['editedUnit', 'exercises'],
     data() {
       return {
-        unit: null
+        unit: this.editedUnit,
       }
     }, 
     computed: {
@@ -66,37 +66,6 @@
       },
     },
     methods: {
-      populateEditor() {
-        if (this.editedUnit) {
-          this.unit = {
-            index: this.editedUnit.index,
-            complexindex: this.editedUnit.complexindex,
-            exercise: this.editedUnit.exercise,
-            numbers: {
-              sets: this.editedUnit.sets || 0, 
-              reps: this.editedUnit.reps || 0, 
-              time: this.editedUnit.time || 0,
-              distance: this.editedUnit.distance || 0, 
-              max: this.editedUnit.max || 0
-            },
-            remarks: this.editedUnit.remarks || ''
-          }
-        } else {
-          this.unit = {
-            exercise: {
-              name: '',
-              id: '',
-            }, 
-            numbers: {
-              sets: 0, 
-              reps: 0, 
-              time: 0,
-              distance: 0,
-            },
-            remarks: ''
-          }
-        }
-      },
       passExercise(exercise) {
         this.unit.exercise = exercise;
       },
@@ -109,10 +78,7 @@
 
         this.$emit('add-unit', newUnit);
       }, 
-    }, 
-    created() {
-      this.populateEditor();
-    } 
+    },
   }
 </script>
 

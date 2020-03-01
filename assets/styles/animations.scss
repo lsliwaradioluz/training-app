@@ -26,7 +26,30 @@
   overflow: hidden;
 }
 
+// ANIMACJA ROLL DO SCHOWANYCH PRZYCISKÓW 
+
+.roll-enter-active {
+  animation: roll 0.2s;
+  overflow: hidden;
+  transform-origin: top right;
+}
+
+.roll-leave-active {
+  animation: roll 0.2s reverse;
+  overflow: hidden;
+  transform-origin: top right;
+}
+
 // KEYFRAMES 
+
+@keyframes roll {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
 
 @keyframes fade {
   from {
