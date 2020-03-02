@@ -26,7 +26,7 @@
         <!-- <p class="m00 fs-2">{{ current.reps }}<span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p> -->
         <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
         <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
-        <Stopwatch :time="10" v-if="current.time && !current.reps" />
+        <Stopwatch :time="current.time" v-if="current.time && !current.reps" />
         <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
       </div>
     </div>
