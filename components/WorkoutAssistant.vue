@@ -6,7 +6,7 @@
       <h3 class="m00 t-center" v-if="!dividedScreenMode">{{ sections[currentSection].name | shortenSection }}</h3>
       <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[currentSection].name | shortenSection }}</p>
       <span class="hamburger t-right">
-        <i class="flaticon-pause" @click="closeAssistant"></i>
+        <i class="flaticon-close" @click="closeAssistant"></i>
       </span>
     </div>
   <!-- NAWIGACJA -->

@@ -23,31 +23,23 @@
             append></nuxt-link>
         </div>
       </Head>
-      <Carousel :pagination="false" @change-page="currentTranslate = $event">
+      <Carousel :pagination="false" @change-page="currentTranslate = $event" :active="!maxEditorOpen">
         <Routine 
           v-for="section in workout.sections" 
           :key="section.id" 
-          :section="section" />
+          :section="section"
+          @toggle-max-editor="maxEditorOpen = $event"
+          @add-max="addMax($event)" 
+          @subtract-max="subtractMax($event)"
+          @upload-workout="uploadWorkout" />
       </Carousel>
-    <!-- FEEDBACK -->
-      <!-- <div v-if="feedbackEditable && !workout.sticky">
-        <Head class="mt0 pt05 pb05">Wiadomość dla trenera</Head>
-        <Feedback :workout="workout" />
-      </div>
-      <div v-else-if="!workout.sticky && !feedbackEditable && workout.feedback">
-        <Head class="mt0 pt05 pb05">Wiadomość dla trenera</Head>
-        <p class="m00 tab">{{ workout.feedback }}</p>
-      </div>
-      <div v-else-if="!workout.sticky && !feedbackEditable && !workout.feedback">
-        <Head class="mt0 pt05 pb05">Wiadomość dla trenera</Head>
-        <p class="m00 tab">Użytkownik nie dodał wiadomości</p>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
   import mainQuery from '~/apollo/queries/workouts/_id/main.gql';
+  import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 
   export default {
     asyncData(context) {
@@ -69,6 +61,8 @@
     },
     data() {
       return {
+        client: this.$apollo.getClient(),
+        maxEditorOpen: false,
         currentTranslate: 0,
         currentWorkout: 0,
       }
@@ -81,6 +75,20 @@
         });
         return workout;
       },
+      filteredSections() {
+        let sectionsClone = JSON.parse(JSON.stringify(this.workout.sections));
+        sectionsClone.forEach((section, sectionindex) => {
+          sectionsClone[sectionindex] = _.omit(section, '__typename', 'id');
+          section.complexes.forEach((complex, complexindex) => {
+            sectionsClone[sectionindex].complexes[complexindex] = _.omit(complex, '__typename', 'id');
+            complex.units.forEach((unit, unitindex) => {
+              sectionsClone[sectionindex].complexes[complexindex].units[unitindex] = _.omit(unit, '__typename', 'id');
+              sectionsClone[sectionindex].complexes[complexindex].units[unitindex].exercise = unit.exercise.id;
+            });
+          });
+        });
+        return sectionsClone;
+      },
       users() {
         let users = [];
         this.workouts.forEach(cur => {
@@ -91,6 +99,33 @@
       feedbackEditable() {
         return this.$store.state.auth.user.fullname == this.workout.user.fullname ? true : false;
       },
+    }, 
+    methods: {
+      addMax({ unit, complex }) {
+        let max = this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max;
+        if (max == null) this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max = 0;
+        this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max++;
+      },
+      subtractMax({ unit, complex }) {
+        let max = this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max;
+        if (max == null) this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max = 0;
+        this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max--;
+      }, 
+      uploadWorkout() {
+        let input = {
+          where: {
+            id: this.workout.id,
+          },
+          data: {
+            sections: this.filteredSections,
+          }
+        }
+
+        this.client.mutate({ mutation: updateWorkout, variables: { input: input }  })
+          .then(res => {
+            console.log(res);
+          })  
+      }
     }
   }
 </script>

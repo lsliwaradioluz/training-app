@@ -23,6 +23,7 @@ query($ids: [ID]!) {
           time
           distance 
           remarks
+          max
           exercise {
             id
             name

@@ -114,7 +114,7 @@
               <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset && user.skill.skillsets.length > 0" />
               <Carousel :pagination="false" v-if="!showSkillset">
                 <Routine 
-                  v-for="section in user.workouts[this.currentWorkout].sections" 
+                  v-for="section in previousWorkoutSections" 
                   :key="section.id" 
                   :section="section" 
                   @copy-unit="addUnit($event)"
@@ -196,16 +196,13 @@ export default {
   },
   computed: {
     filteredSections() {
-      let sectionsClone = this.sections.filter(section => {
-        return section.complexes.length > 0;
-      });
-      sectionsClone = JSON.parse(JSON.stringify(sectionsClone));
+      let sectionsClone = JSON.parse(JSON.stringify(this.sections));
       sectionsClone.forEach((section, sectionindex) => {
         sectionsClone[sectionindex] = _.omit(section, '__typename', 'id');
         section.complexes.forEach((complex, complexindex) => {
           sectionsClone[sectionindex].complexes[complexindex] = _.omit(complex, '__typename', 'id');
           complex.units.forEach((unit, unitindex) => {
-            sectionsClone[sectionindex].complexes[complexindex].units[unitindex] = _.omit(unit, '__typename', 'id');
+            sectionsClone[sectionindex].complexes[complexindex].units[unitindex] = _.omit(unit, '__typename', 'id', 'max');
             sectionsClone[sectionindex].complexes[complexindex].units[unitindex].exercise = unit.exercise.id;
           });
         });
@@ -225,6 +222,12 @@ export default {
         previousWorkoutsDates.push(cur.scheduled);
       });
       return previousWorkoutsDates;
+    }, 
+    previousWorkoutSections() {
+      const previousWorkoutSections = this.user.workouts[this.currentWorkout].sections.filter(section => {
+        return section.complexes.length > 0;
+      });
+      return previousWorkoutSections;
     }
   },
   methods: {
@@ -337,6 +340,7 @@ export default {
     copySection(section) {
       const sectionClone = JSON.parse(JSON.stringify(section));
       this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
+      this.sections[this.currentSection].rest = sectionClone.rest;
     },
     copyComplex(complex) {
       const complexClone = JSON.parse(JSON.stringify(complex));
