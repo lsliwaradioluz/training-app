@@ -117,6 +117,7 @@
                   v-for="section in user.workouts[this.currentWorkout].sections" 
                   :key="section.id" 
                   :section="section" 
+                  @copy-unit="addUnit($event)"
                   @copy-section="copySection($event)"
                   @copy-complex="copyComplex($event)" 
                   edit />
