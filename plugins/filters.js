@@ -106,7 +106,7 @@ Vue.filter('getTime', (value) => {
 Vue.filter('getDayAndMonth', (value) => {
   const date = new Date(value);
   let day = date.getDate();
-  let month = date.getMonth();
+  let month = date.getMonth() + 1;
   let dayAndMonth = month < 10 ? `${day}.0${month}` : `${day}.${month}`;
   return dayAndMonth;
 });
