@@ -3,8 +3,8 @@
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar pb1 row j-between a-center">
       <span class="logo">Piti</span>
-      <h3 class="m00 t-center" v-if="!dividedScreenMode">{{ sections[currentSection].name | shortenSection }}</h3>
-      <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[currentSection].name | shortenSection }}</p>
+      <h3 class="m00 t-center" v-if="!dividedScreenMode">{{ sections[controllers.section].name | shortenSection }}</h3>
+      <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controllers.section].name | shortenSection }}</p>
       <span class="hamburger t-right">
         <i class="flaticon-close" @click="closeAssistant"></i>
       </span>
@@ -12,7 +12,7 @@
   <!-- NAWIGACJA -->
     <div class="row j-between a-center tab pt05 pb05 b-green t-black">
       <i class="flaticon-left-arrow small" @click="previousUnit"></i>
-      <p class="m00">{{ `Blok ${this.currentComplex + 1 }/${ this.sections[this.currentSection].complexes.length } Seria ${this.currentUnit + 1 }/${ this.units.length }` }}</p>
+      <p class="m00">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length } Seria ${controllers.unit + 1 }/${ units.length }` }}</p>
       <i class="flaticon-right-arrow small" @click="nextUnit"></i>
     </div>
   <!-- ĆWICZENIE -->
@@ -60,60 +60,70 @@ export default {
   data() {
     return {
       sections: this.workout.sections,
-      currentSection: this.$route.query.section,
-      currentComplex: 0, 
-      currentUnit: 0,
+      controllers: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
+        section: this.$route.query.section,
+        complex: 0, 
+        unit: 0,
+      }
     }
   },
   methods: {
     nextUnit() {
-      this.currentUnit++;
-      if (this.currentUnit > this.units.length - 1) {
+      this.controllers.unit++;
+      if (this.controllers.unit > this.units.length - 1) {
         this.nextComplex();
       }
+      this.$emit('set-current-state', { 
+        unit: this.controllers.unit, complex: this.controllers.complex, section: this.controllers.section 
+      });
     },
     previousUnit() {
-      this.currentUnit--;
-      if (this.currentUnit < 0) {
+      this.controllers.unit--;
+      if (this.controllers.unit < 0) {
         this.previousComplex();
       }
+      this.$emit('set-current-state', { 
+        unit: this.controllers.unit, 
+        complex: this.controllers.complex, 
+        section: this.controllers.section 
+      });
     },
     nextComplex() {
-      this.currentComplex++;
-      if (this.currentComplex > this.sections[this.currentSection].complexes.length - 1) {
+      this.controllers.complex++;
+      if (this.controllers.complex > this.sections[this.controllers.section].complexes.length - 1) {
         this.nextSection();
       } else {
-        this.currentUnit = 0;
+        this.controllers.unit = 0;
       }
     },
     previousComplex() {
-      this.currentComplex--
-      if (this.currentComplex < 0) {
+      this.controllers.complex--
+      if (this.controllers.complex < 0) {
         this.previousSection();
       } else {
-        this.currentUnit = this.units.length - 1;
+        this.controllers.unit = this.units.length - 1;
       }
     },
     nextSection() {
-      this.currentSection++;
-      if (this.currentSection > this.sections.length - 1) {
-        this.currentSection = this.sections.length - 1;
-        this.currentComplex = this.sections[this.currentSection].complexes.length - 1;
-        this.currentUnit = this.units.length - 1;
+      this.controllers.section++;
+      if (this.controllers.section > this.sections.length - 1) {
+        this.controllers.section = this.sections.length - 1;
+        this.controllers.complex = this.sections[this.controllers.section].complexes.length - 1;
+        this.controllers.unit = this.units.length - 1;
       } else {
-        this.currentUnit = 0;
-        this.currentComplex = 0;
+        this.controllers.unit = 0;
+        this.controllers.complex = 0;
       }
     },
     previousSection() {
-      this.currentSection--;
-      if (this.currentSection < 0) {
-        this.currentComplex = 0;
-        this.currentUnit = 0;
-        this.currentSection = 0;
+      this.controllers.section--;
+      if (this.controllers.section < 0) {
+        this.controllers.complex = 0;
+        this.controllers.unit = 0;
+        this.controllers.section = 0;
       } else {
-        this.currentComplex = this.sections[this.currentSection].complexes.length - 1;
-        this.currentUnit = this.units.length - 1;
+        this.controllers.complex = this.sections[this.controllers.section].complexes.length - 1;
+        this.controllers.unit = this.units.length - 1;
       }
     },
     closeAssistant() {
@@ -131,12 +141,12 @@ export default {
       }
     },
     current() {
-      return this.units[this.currentUnit];
+      return this.units[this.controllers.unit];
     },
     next() {
-      let next = this.units[this.currentUnit + 1];
+      let next = this.units[this.controllers.unit + 1];
       
-      if (this.currentUnit + 1 > this.units.length - 1) {
+      if (this.controllers.unit + 1 > this.units.length - 1) {
         next = { exercise: { name: 'Odpocznij', images: [] } }
       }
 
@@ -148,7 +158,7 @@ export default {
       // Get array of arrays containing all sets of a given exercise
       // IE: 3x8 e1, 3x6 e2
       // => [[e1, e1, e1], [e2, e2, e2]]
-      this.sections[this.currentSection].complexes[this.currentComplex].units.forEach((unit, unitindex) => {
+      this.sections[this.controllers.section].complexes[this.controllers.complex].units.forEach((unit, unitindex) => {
         const groupedUnits = [];
         for (let x = 0; x < unit.sets; x++) {
           groupedUnits.push(unit)
@@ -181,14 +191,14 @@ export default {
       // Add the rest intervals if there should be any
       for (let i = 0; i <= units.length; i++) {
         
-        if (i % 2 != 0 && this.sections[this.currentSection].rest > 0) {
+        if (i % 2 != 0 && this.sections[this.controllers.section].rest > 0) {
           let rest;
           if (i == units.length) {
-            rest = this.sections[this.currentSection].rest;
+            rest = this.sections[this.controllers.section].rest;
           } else if (units[i-1].exercise.name == units[i].exercise.name) {
-            rest = this.sections[this.currentSection].rest;
+            rest = this.sections[this.controllers.section].rest;
           } else {
-            rest = Math.floor(this.sections[this.currentSection].rest / 2);
+            rest = Math.floor(this.sections[this.controllers.section].rest / 2);
           }
           units.splice(i, 0, { exercise: { name: 'Odpoczynek' }, time: rest });
         }

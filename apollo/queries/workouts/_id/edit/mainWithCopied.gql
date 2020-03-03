@@ -1,4 +1,4 @@
-query($id: ID!) {
+query($id: ID!, $copiedWorkoutId: ID!) {
   workout(id: $id) {
     id
     scheduled
@@ -73,5 +73,36 @@ query($id: ID!) {
         }
       }
     } 
+  }
+  copiedWorkout: workout(id: $copiedWorkoutId) {
+    id
+    scheduled
+    sticky
+    user {
+      id
+      username
+    }
+    sections {
+      id
+      name
+      rest
+      complexes {
+        name 
+        id
+        units {
+          id
+          sets
+          reps 
+          time
+          distance
+          remarks
+          max
+          exercise {
+            id
+            name
+          }
+        }
+      }
+    }
   }
 }

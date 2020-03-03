@@ -1,10 +1,11 @@
 <template>
-  <div class="workout-assistant-page column j-between">      
+  <div class="workout-assistant-page column j-between">
     <WorkoutAssistant 
       v-for="workout in workouts"
       :workout="workout"
       :key="workout.id"
-      :divided-screen-mode="workouts.length > 1" />
+      :divided-screen-mode="workouts.length > 1" 
+      @set-current-state="setWorkoutAssistantState($event, workout.id)" />
   </div>
 </template>
 
@@ -41,6 +42,11 @@ export default {
         }
       });
   },
+  methods: {
+    setWorkoutAssistantState(state, id) {
+      this.$store.commit('main/setWorkoutAssistantState', { id: id, state: state });
+    }
+  }
 }
 </script>
 

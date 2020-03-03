@@ -7,6 +7,7 @@
 <script>
 import WorkoutEditor from '~/components/WorkoutEditor';
 import mainQuery from '~/apollo/queries/workouts/new/main.gql';
+import mainWithCopiedQuery from '~/apollo/queries/workouts/new/mainWithCopied.gql';
 
 export default {
   components: {
@@ -14,10 +15,12 @@ export default {
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { username: context.route.query.username } })
+    let copiedWorkoutId = context.store.state.main.workoutToCopy;
+    return client.query({ query: copiedWorkoutId ? mainWithCopiedQuery : mainQuery, variables: { username: context.route.query.username, copiedWorkoutId: copiedWorkoutId } })
       .then(({ data }) => {
         return {
           user: data.users[0],
+          previousWorkouts: copiedWorkoutId ? [data.copiedWorkout, ...data.users[0].workouts] : data.users[0].workouts,
         }
       });
   },

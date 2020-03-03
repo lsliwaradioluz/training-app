@@ -61,13 +61,15 @@
             const exerciseName = exercise.name.toLowerCase();
             return exerciseName.includes(filter) == true && this.unit.exercise.id == '';
           });
+        } else {
+          filteredExercises = [];
         }
         return filteredExercises;
       },
     },
     methods: {
       passExercise(exercise) {
-        this.unit.exercise = exercise;
+        this.unit.exercise = {...exercise};
       },
       addUnit() {
         const newUnit = {

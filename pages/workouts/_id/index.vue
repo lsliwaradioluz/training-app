@@ -126,6 +126,12 @@
             console.log(res);
           })  
       }
+    },
+    beforeRouteLeave(to, from, next) {
+      if (!to.path.includes('assistant')) {
+        this.$store.commit('main/resetWorkoutAssistantState', {});
+      }
+      next();
     }
   }
 </script>

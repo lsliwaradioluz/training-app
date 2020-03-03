@@ -109,6 +109,9 @@
       },
       customLength() {
         this.length = this.customLength;
+        if (this.currentPage > this.length - 1) {
+          this.currentPage = this.length - 1;
+        }
       } 
     },
     methods: {

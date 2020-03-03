@@ -4,7 +4,6 @@
     <Head class="pt05 pb05">
       <div class="row j-between">
         <span>Termin</span>
-        <!-- <Radio :value="sticky" @change-value="sticky = $event" v-if="user.homeworks.length == 0 || showSticky"> -->
         <Radio :value="sticky" @change-value="sticky = $event">
           <template v-slot:first>sticky</template>
           <template v-slot:second>not</template>
@@ -50,7 +49,7 @@
                     class="input--invisible" 
                     type="text" 
                     placeholder="Nazwa sekcji"
-                    v-model="newSectionName"
+                    v-model="sections[currentSection].name"
                     spellcheck="false"
                     :ref="`input${sectionindex}`">
                 </h3>
@@ -93,36 +92,30 @@
             Na razie nie dodałeś żadnych sekcji.
           </p>
         <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
-          <div v-if="currentSection != null">
-            <div class="pl1 pr1 column t-gray t-small mb05">
-              <button class="t-small" type="button" @click="showSkillset = !showSkillset" v-if="user.workouts.length > 0">
-                Dotknij tutaj, by zmienić okno
-                <span v-if="!showSkillset">(Ostatni trening)</span>
-                <span v-else>(Umiejętności)</span>
-              </button>
-              <div class="mt05 row j-around" v-if="!showSkillset">
-                <button 
-                  type="button"
-                  class="t-small"
-                  :class="{ 't-green': index == currentWorkout }"
-                  v-for="(date, index) in previousWorkoutsDates" 
-                  :key="index"
-                  @click="currentWorkout = index">{{ date | reverseDate }}</button>
-              </div>
+          <div v-if="previousWorkouts.length > 0 && currentSection != null">
+            <div class="mb05 row j-between t-gray">
+              <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
+              <span v-if="!previousWorkouts[currentWorkout].user">
+                {{ previousWorkouts[currentWorkout].scheduled | getShortDayName }}
+                {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
+              </span>
+              <span v-else>
+                {{ previousWorkouts[currentWorkout].scheduled | getShortDayName }} 
+                {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }} 
+                ({{ previousWorkouts[currentWorkout].user.username }})
+              </span>
+              <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
             </div>
-            <transition name="fade" mode="out-in">
-              <Skills :skill-data="user.skill" @copy-unit="addUnit($event)" v-if="showSkillset && user.skill.skillsets.length > 0" />
-              <Carousel :pagination="false" v-if="!showSkillset">
-                <Routine 
-                  v-for="section in previousWorkoutSections" 
-                  :key="section.id" 
-                  :section="section" 
-                  @copy-unit="addUnit($event)"
-                  @copy-section="copySection($event)"
-                  @copy-complex="copyComplex($event)" 
-                  edit />
-              </Carousel>
-            </transition>
+            <Carousel :pagination="false" :custom-length="previousWorkoutSections.length">
+              <Routine 
+                v-for="section in previousWorkoutSections" 
+                :key="section.id" 
+                :section="section" 
+                @copy-unit="addUnit($event)"
+                @copy-section="copySection($event)"
+                @copy-complex="copyComplex($event)" 
+                edit />
+            </Carousel>
           </div>
         </div>
         <UnitEditor 
@@ -180,9 +173,8 @@ export default {
     return {
       client: this.$apollo.getClient(),
       ...this.specificData,
-      showSkillset: true,
-      showUnitEditor: false, 
-      newSectionName: null, 
+      showUnitEditor: false,
+      sectionBeforeEdit: null,
       showButtonsPanel: false,
       showUnitButtons: null,
       currentWorkout: 0,
@@ -216,15 +208,8 @@ export default {
     workoutReady() {
       return this.sections.length > 0 ? true : false;
     },
-    previousWorkoutsDates() {
-      let previousWorkoutsDates = [];
-      this.user.workouts.forEach(cur => {
-        previousWorkoutsDates.push(cur.scheduled);
-      });
-      return previousWorkoutsDates;
-    }, 
     previousWorkoutSections() {
-      const previousWorkoutSections = this.user.workouts[this.currentWorkout].sections.filter(section => {
+      const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter(section => {
         return section.complexes.length > 0;
       });
       return previousWorkoutSections;
@@ -234,7 +219,7 @@ export default {
     createSection() {
       const newSection = {
         complexes: [],
-        rest: 180, 
+        rest: 60, 
       };
       this.sections.push(newSection);
       this.currentSection = this.sections.length - 1;
@@ -252,17 +237,17 @@ export default {
     },
     openEditSection() {
       this.currentSection = this.currentTranslate;
-      this.newSectionName = this.sections[this.currentSection].name;
+      this.sectionBeforeEdit = JSON.parse(JSON.stringify(this.sections[this.currentSection]));
     },
     closeEditSection(mode) {
-      if (mode == 'save') {
-        this.sections[this.currentTranslate].name = this.newSectionName;
-      } else if (mode == 'abort' && !this.sections[this.currentTranslate].name) {
+      if (mode == 'abort' && !this.sectionBeforeEdit) {
         this.deleteSection();
         this.currentTranslate = 0;
+      } else if (mode == 'abort' && this.sectionBeforeEdit) {
+        this.sections[this.currentSection] = this.sectionBeforeEdit;
       }
       this.currentSection = null;
-      this.newSectionName = null;
+      this.sectionBeforeEdit = null;
       this.showButtonsPanel = false;
     },
     populateUnitEditor(unit) {
@@ -341,6 +326,7 @@ export default {
       const sectionClone = JSON.parse(JSON.stringify(section));
       this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
       this.sections[this.currentSection].rest = sectionClone.rest;
+      this.sections[this.currentSection].name = sectionClone.name;
     },
     copyComplex(complex) {
       const complexClone = JSON.parse(JSON.stringify(complex));
@@ -377,7 +363,13 @@ export default {
         .then(res => {
           this.$router.go(-1);
         })  
-    }
+    }, 
+    showPreviousWorkout() {
+      this.currentWorkout == 0 ? this.currentWorkout = 0 : this.currentWorkout--
+    },
+    showNextWorkout() {
+      this.currentWorkout == this.previousWorkouts.length - 1 ? this.currentWorkout = this.previousWorkouts.length - 1 : this.currentWorkout++
+    }, 
   }, 
   mounted() {
     window.addEventListener('click', () => {

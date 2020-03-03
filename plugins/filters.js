@@ -60,6 +60,36 @@ Vue.filter('getDayName', (value) => {
   }
 });
 
+Vue.filter('getShortDayName', (value) => {
+  const date = new Date(value);
+  const weekDay = date.getDay();
+  
+  switch (weekDay) {
+    case 1: 
+      return 'Pn';
+      break;
+    case 2: 
+      return 'Wt';
+      break;
+    case 3: 
+      return 'Śr';
+      break;
+    case 4: 
+      return 'Cz';
+      break;
+    case 5: 
+      return 'Pt';
+      break;
+    case 6: 
+      return 'Sb';
+      break;
+    case 0: 
+      return 'Nd';
+  }
+});
+
+// Filtry daty
+
 Vue.filter('reverseDate', (value) => {
   let dateWithoutTime = value.split('T');
   return dateWithoutTime[0].split('-').reverse().join('.');
@@ -71,6 +101,14 @@ Vue.filter('getTime', (value) => {
   let minutes = date.getMinutes();
   minutes = minutes < 10 ? `${minutes}0` : minutes;
   return `${hours}:${minutes}`;
+});
+
+Vue.filter('getDayAndMonth', (value) => {
+  const date = new Date(value);
+  let day = date.getDate();
+  let month = date.getMonth();
+  let dayAndMonth = month < 10 ? `${day}.0${month}` : `${day}.${month}`;
+  return dayAndMonth;
 });
 
 Vue.filter('addZero', (value) => {

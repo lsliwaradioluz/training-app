@@ -27,11 +27,12 @@
   <!-- BUTTONS  -->
   <transition name="accordion"> 
     <div class="workout__panel row mt05 t-green t-small" v-if="showButtonsPanel">
-      <button type="button" @click="deleteWorkout">Usuń</button>
       <nuxt-link
         tag="button"
         type="button" 
         :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }">Edytuj</nuxt-link>
+      <button type="button" @click="copyWorkout">Kopiuj</button>
+      <button type="button" @click="deleteWorkout">Usuń</button>
     </div>
   </transition>
   </div>
@@ -48,6 +49,10 @@
       }
     },
     methods: {
+      copyWorkout() {
+        this.showButtonsPanel = false;
+        this.$store.commit('main/copyWorkout', this.workout.id);
+      },
       deleteWorkout() {
         const input = {
           where: {
@@ -61,7 +66,7 @@
               window.location.reload(true);
             })
         }
-      }
+      },
     }
   }
 </script>
