@@ -50,7 +50,7 @@
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" @click="showStopwatch = !showStopwatch"></i>
       </div>
-      <p class="m00 t-gray t-center t-small" v-if="!dividedScreenMode">Inspired by Spotify</p>
+      <p class="mt0 mb1 t-gray t-center t-small" v-if="!dividedScreenMode">Inspired by Spotify</p>
     </div>
   </div>
 </template>
