@@ -1,14 +1,14 @@
 <template>
   <div class="trainee">
     <UserPanel :user="user" />
-    <Skills :skill-data="user.skill" v-if="user.skill" editor />
+    <!-- <Skills :skill-data="user.skill" v-if="user.skill" editor /> -->
   <!-- TRENINGI  -->
     <div>
       <Head>
         <div class="row j-between a-center">
           <h3 class="m00">Treningi</h3>
           <div>
-            <nuxt-link class="flaticon-list" to="workouts" tag="i" append></nuxt-link>
+            <!-- <nuxt-link class="flaticon-list" to="workouts" tag="i" append></nuxt-link> -->
             <nuxt-link
               class="flaticon-plus" 
               :to="{ path: '/workouts/new', query: { username: user.username } }" 
@@ -16,12 +16,19 @@
           </div>
         </div>
       </Head>
-      <Carousel v-if="user.workouts.length > 0" :pagination="false">
+      <div>
+        <Workout :workout="user.homeworks[0]" v-if="user.homeworks.length > 0" />
+        <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
+      </div>
+      <p class="t-center" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
+        Brak treningów do wyświetlenia
+      </p>
+      <!-- <Carousel v-if="user.workouts.length > 0" :pagination="false">
         <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
       </Carousel>
       <p class="tab p11" v-else>
         Brak treningów do wyświetlenia
-      </p>
+      </p> -->
     </div>
   </div>
 </template>

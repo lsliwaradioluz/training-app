@@ -1,12 +1,17 @@
 <template>
   <div class="workout-panel tab p11 row a-center j-between">
     <div class="column a-start">
-      <h3 class="m00" v-if="!$store.state.auth.user.admin">{{ workout.scheduled | getDayName }}</h3>
+      <h3 class="m00" v-if="!$store.state.auth.user.admin">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</h3>
       <h3 class="m00" v-else>{{ workout.user.fullname }}</h3>
       <p class="m00 t-small" v-if="!workout.sticky">{{ workout.scheduled | reverseDate }}</p>
       <p class="m00 t-small" v-else>Homework</p>
     </div>
-    <p class="m00 fs-2" v-if="!$store.state.auth.user.admin">{{ workout.scheduled | getTime }}</p>
+    <nuxt-link 
+      v-if="!$store.state.auth.user.admin"
+      class="button--primary pl1 pr1" 
+      tag="button" 
+      :to="{ path: 'assistant', query: { section: section } }" 
+      append>Asystent</nuxt-link>
     <nuxt-link 
       class="button--primary" 
       type="button" 
@@ -19,7 +24,7 @@
 <script>
 
   export default {
-    props: ['workout'], 
+    props: ['workout', 'section'], 
     data() {
       return {
         showButton: false,

@@ -28,27 +28,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     user {
       id
       fullname
-      skill {
-        id
-        skillsets {
-          id
-          name
-          units {
-            ...on ComponentBlocksUnit {
-              id
-              sets
-              reps
-              distance
-              time
-              remarks
-              exercise {
-                name
-                id
-              }
-            }
-          }
-        }
-      }
       workouts(sort: "scheduled:desc", where: { id_ne: $id, sticky_ne: "true" }) {
         id
         scheduled
@@ -62,7 +41,10 @@ query($id: ID!, $copiedWorkoutId: ID!) {
             units {
               id
               sets
-              reps 
+              reps
+              time
+              distance
+              max
               remarks
               exercise {
                 id

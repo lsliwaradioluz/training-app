@@ -18,8 +18,8 @@
         <Stopwatch v-if="showStopwatch" />
       </transition>
     <!-- ĆWICZENIE -->
-      <div class="workout-assistant__exercise pt1 pb1 row a-center" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
-        <div>
+      <div class="workout-assistant__exercise pt1 pb1 row a-center j-between" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
+        <div class="left">
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
           </MovingText>
@@ -28,7 +28,7 @@
           </MovingText>
           <p class="t-small m00" v-else>Wykonaj teraz</p>
         </div>
-        <div class="row a-center j-end pl1">
+        <div class="right row a-center j-end pl1">
           <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
           <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
@@ -255,11 +255,12 @@ export default {
   }
 
   .workout-assistant__exercise {
-    div:first-child {
-      width: 70%;
-    }
-    div:nth-child(2) {
-      width: 30%;
+    .left {
+      flex-basis: 1;
+      overflow: hidden;
+    } 
+    .right {
+      flex-basis: 1;
     }
   }
 

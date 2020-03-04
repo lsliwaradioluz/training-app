@@ -11,12 +11,13 @@
     </div>
     <div>
   <!-- NAGŁÓWEK -->
-    <WorkoutPanel :workout="workout" />
+    <WorkoutPanel :workout="workout" :section="currentTranslate" />
   <!-- ROZPISKA  --> 
       <Head class="mt0 pt05 pb05">
         <div class="row j-between">
           <span>Rozpiska</span>
           <nuxt-link 
+            v-if="$store.state.auth.user.admin"
             class="flaticon-play" 
             tag="i" 
             :to="{ path: 'assistant', query: { section: currentTranslate } }" 

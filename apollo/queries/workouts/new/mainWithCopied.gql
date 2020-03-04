@@ -2,35 +2,6 @@ query($username: String, $copiedWorkoutId: ID!) {
   users( where: { username: $username } ) {
     id
     username
-    skill {
-      id
-      skillsets {
-        id
-        name
-        units {
-          ...on ComponentBlocksUnit {
-            id
-            sets
-            reps
-            distance
-            time
-            remarks
-            exercise {
-              name
-              id
-              subcategory {
-                id
-                name
-                category {
-                  id
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true" }) {
       id
       scheduled

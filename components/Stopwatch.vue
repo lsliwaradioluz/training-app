@@ -2,10 +2,10 @@
   <div class="stopwatch row j-between a-center pb05 pt05">
     <div class="stopwatch__panel">
       <div class="row" v-if="stopwatchInterval == null">
-        <button class="fs-15 mr05" @click="startTime">Start</button>
-        <button class="fs-15" @click="resetTime" v-if="time > 0">Reset</button>
+        <button class="fs-15 mr05" @click="startTime">start</button>
+        <button class="fs-15" @click="resetTime" v-if="time > 0">reset</button>
       </div>
-      <button class="fs-15" @click="stopTime" v-else>Stop</button>
+      <button class="fs-15" @click="stopTime" v-else>stop</button>
     </div>
     <p class="m00 fs-15 row j-center">{{ time | filterStopwatchTime }}</p>
   </div>

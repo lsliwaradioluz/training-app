@@ -14,38 +14,11 @@ query($username: String) {
       scheduled
       ready
     }
-    feedbacks: workouts(limit: 3, sort: "scheduled:desc", where: { feedback_null: "false" } ) {
+    homeworks: workouts(where: { sticky: "true" }) {
       id
-      scheduled
-      feedback
-    }
-    skill {
-      id
-      skillsets {
-        id
-        name
-        units {
-          id
-          sets
-          reps
-          distance
-          time
-          remarks
-          max
-          exercise {
-            name
-            id
-            subcategory {
-              id 
-              name 
-              category {
-                id 
-                name
-              }
-            }
-          }
-        }
-      } 
+      scheduled 
+      ready
+      sticky
     }
   }
 }
