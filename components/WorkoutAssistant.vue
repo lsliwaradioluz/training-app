@@ -2,7 +2,7 @@
   <div 
     class="workout-assistant column j-between main pt1 pb0" 
     :class="{ half: dividedScreenMode }" 
-    :style="{ background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }">
+    :style="{ backgroundImage: image }">
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar row j-between a-center">
       <span class="logo">Piti</span>
@@ -159,7 +159,7 @@ export default {
         return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
       } else {
         return 'none';
-      }     
+      }
     },
     current() {
       return this.units[this.controllers.unit];

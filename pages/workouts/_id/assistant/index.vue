@@ -1,5 +1,5 @@
 <template>
-  <div class="workout-assistant-page column j-between">
+  <div class="workout-assistant-page column j-between" :style="{ backgroundImage: image }">
     <WorkoutAssistant 
       v-for="workout in workouts"
       :workout="workout"
@@ -42,6 +42,15 @@ export default {
         }
       });
   },
+  computed: {
+    image() {
+      if (this.workouts.length > 1) {
+        return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif')`;
+      } else {
+        return `black`;
+      }
+    }
+  },
   methods: {
     setWorkoutAssistantState(state, id) {
       this.$store.commit('main/setWorkoutAssistantState', { id: id, state: state });
@@ -53,6 +62,8 @@ export default {
 <style lang="scss" scoped>
   .workout-assistant-page {
     height: 100vh;
+    background-size: cover;
+    background-position: center;
   }
 
   .workout-assistant:nth-child(2) {
