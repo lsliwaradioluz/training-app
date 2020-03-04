@@ -1,41 +1,56 @@
 <template>
-  <div class="workout-assistant column main pt1 pb1" :class="{ half: dividedScreenMode }">
+  <div 
+    class="workout-assistant column j-between main pt1 pb0" 
+    :class="{ half: dividedScreenMode }" 
+    :style="{ background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }">
   <!-- STATUS BAR  -->
-    <div class="workout-assistant__bar pb1 row j-between a-center">
+    <div class="workout-assistant__bar row j-between a-center">
       <span class="logo">Piti</span>
       <h3 class="m00 t-center" v-if="!dividedScreenMode">{{ sections[controllers.section].name | shortenSection }}</h3>
       <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controllers.section].name | shortenSection }}</p>
       <span class="hamburger t-right">
-        <i class="flaticon-close" @click="closeAssistant"></i>
+        <i class="flaticon-cancel small" @click="$router.go(-1)"></i>
       </span>
     </div>
-  <!-- NAWIGACJA -->
-    <div class="row j-between a-center tab pt05 pb05 b-green t-black">
-      <i class="flaticon-left-arrow small" @click="previousUnit"></i>
-      <p class="m00">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length } Seria ${controllers.unit + 1 }/${ units.length }` }}</p>
-      <i class="flaticon-right-arrow small" @click="nextUnit"></i>
-    </div>
-  <!-- ĆWICZENIE -->
-    <div class="tab row j-between a-center" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
-      <div>
-        <h3 class="m00">{{ current.exercise.name }}</h3>
-        <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
-        <p class="t-small m00" v-else>Wykonaj teraz</p>
+    <div>
+    <!-- STOPER -->
+      <transition name="slide-up">
+        <Stopwatch v-if="showStopwatch" />
+      </transition>
+    <!-- ĆWICZENIE -->
+      <div class="workout-assistant__exercise pt1 pb1 row a-center" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
+        <div>
+          <MovingText :key="current.exercise.name">
+            <h3 class="m00">{{ current.exercise.name }}</h3>
+          </MovingText>
+          <MovingText :key="current.remarks" v-if="current.remarks">
+            <p class="t-small m00">{{ current.remarks }}</p>
+          </MovingText>
+          <p class="t-small m00" v-else>Wykonaj teraz</p>
+        </div>
+        <div class="row a-center j-end pl1">
+          <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
+          <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
+          <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
+          <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
+        </div>
       </div>
-      <div class="row a-center pl1">
-        <!-- <p class="m00 fs-2">{{ current.reps }}<span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p> -->
-        <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
-        <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
-        <Stopwatch :time="current.time" v-if="current.time && !current.reps" />
-        <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
+    <!--  -->
+      <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" @countdown-over="nextUnit" v-else />
+      <div class="workout-assistant__indicators">
+        <p class="m00 t-small">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}</p>
+        <div class="row">
+          <span v-for="n in units.length" :key="n" :class="{ 'b-white': n <= controllers.unit + 1 }"></span>
+        </div>
       </div>
-    </div>
-  <!--  -->
-    <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" @countdown-over="nextUnit" v-else />
-    <img class="square grow mb05" :src="image" alt="exercise" v-if="!dividedScreenMode">
-    <div class="workout-assistant__buttons row j-between">
-      <button class="button--primary square" type="button" @click="nextUnit" v-if="current.exercise.name == 'Odpoczynek'">Następne ćwiczenie</button>
-      <button class="button--primary square" type="button" @click="nextUnit" v-else>Zrobione!</button>
+      <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
+        <i class="flaticon-past small"></i>
+        <i class="flaticon-previous-track-button" @click="previousUnit"></i>
+        <i class="flaticon-check" @click="nextUnit"></i>
+        <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
+        <i class="flaticon-clock small" @click="showStopwatch = !showStopwatch"></i>
+      </div>
+      <p class="m00 t-gray t-center t-small" v-if="!dividedScreenMode">Inspired by Spotify</p>
     </div>
   </div>
 </template>
@@ -43,6 +58,8 @@
 <script>
 import Timer from '~/components/Timer';
 import Stopwatch from '~/components/Stopwatch';
+import MovingText from '~/components/MovingText';
+
 export default {
   props: {
     workout: {
@@ -56,6 +73,7 @@ export default {
   components: {
     Timer,
     Stopwatch,
+    MovingText,
   },
   data() {
     return {
@@ -64,7 +82,8 @@ export default {
         section: this.$route.query.section,
         complex: 0, 
         unit: 0,
-      }
+      }, 
+      showStopwatch: false,
     }
   },
   methods: {
@@ -126,19 +145,21 @@ export default {
         this.controllers.unit = this.units.length - 1;
       }
     },
-    closeAssistant() {
-      if (confirm("Czy na pewno chcesz wyłączyć asystenta?")) {
-        this.$router.go(-1);
-      }
-    }
   },
   computed: {
     image() {
+      let image; 
       if (this.current.exercise.name == 'Odpoczynek' ) {
-        return this.next.exercise.images.length > 0 ? this.next.exercise.images[0].url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
+        image = this.next.exercise.images.length > 0 ? this.next.exercise.images[0].url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
       } else {
-        return this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
+        image = this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       }
+
+      if (!this.dividedScreenMode) {
+        return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
+      } else {
+        return 'none';
+      }     
     },
     current() {
       return this.units[this.controllers.unit];
@@ -214,12 +235,15 @@ export default {
 
   .workout-assistant {
     height: 100%;
+    background-size: cover;
+    background-position: center;
   }
 
   .workout-assistant__bar {
     width: 100%;
     background-color: color(black);
     width: 100%;
+    background: transparent;
 
     span {
       width: 20%;
@@ -227,6 +251,15 @@ export default {
     h3 {
       text-transform: capitalize;
       width: 60%;
+    }
+  }
+
+  .workout-assistant__exercise {
+    div:first-child {
+      width: 70%;
+    }
+    div:nth-child(2) {
+      width: 30%;
     }
   }
 
@@ -246,5 +279,21 @@ export default {
 
   .half {
     height: 50%;
+  }
+
+  .workout-assistant__indicators {
+    span {
+      height: 2px;
+      flex: 1;
+      background: color(gray);
+      margin-right: 1px;
+    }
+    span:last-child {
+      margin: 0;
+    }
+  }
+
+  .flaticon-check:before {
+    font-size: 3rem;
   }
 </style>

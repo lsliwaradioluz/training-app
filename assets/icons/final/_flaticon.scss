@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 02/03/2020 19:37
+    Creation date: 04/03/2020 12:05
     */
 
     @font-face {
@@ -58,6 +58,13 @@
 .flaticon-left-arrow:before { content: "\f112"; }
 .flaticon-right-arrow:before { content: "\f113"; }
 .flaticon-diminish:before { content: "\f114"; }
+.flaticon-pause-circular-button:before { content: "\f115"; }
+.flaticon-clock:before { content: "\f116"; }
+.flaticon-play-and-pause-button:before { content: "\f117"; }
+.flaticon-previous-track-button:before { content: "\f118"; }
+.flaticon-cancel:before { content: "\f119"; }
+.flaticon-check:before { content: "\f11a"; }
+.flaticon-past:before { content: "\f11b"; }
     
     $font-Flaticon-menu: "\f100";
     $font-Flaticon-up-arrow: "\f101";
@@ -80,3 +87,10 @@
     $font-Flaticon-left-arrow: "\f112";
     $font-Flaticon-right-arrow: "\f113";
     $font-Flaticon-diminish: "\f114";
+    $font-Flaticon-pause-circular-button: "\f115";
+    $font-Flaticon-clock: "\f116";
+    $font-Flaticon-play-and-pause-button: "\f117";
+    $font-Flaticon-previous-track-button: "\f118";
+    $font-Flaticon-cancel: "\f119";
+    $font-Flaticon-check: "\f11a";
+    $font-Flaticon-past: "\f11b";

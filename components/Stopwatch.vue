@@ -1,43 +1,50 @@
 <template>
-  <div class="stopwatch column j-center a-center">
-    <div @click="countdownInterval == null ? startCountdown() : stopCountdown()">
-      <p class="m00 t-right fs-2" v-if="timeleft >= 0">
-        {{ timeleft | showMinutes }}
-      </p>
-      <p class="column a-center m00 t-right fs-2" v-else>
-        {{ time + Math.abs(timeleft) | showMinutes }}
-      </p>
+  <div class="stopwatch row j-between a-center pb05 pt05">
+    <div class="stopwatch__panel">
+      <div class="row" v-if="stopwatchInterval == null">
+        <button class="fs-15 mr05" @click="startTime">Start</button>
+        <button class="fs-15" @click="resetTime" v-if="time > 0">Reset</button>
+      </div>
+      <button class="fs-15" @click="stopTime" v-else>Stop</button>
     </div>
-    <button class="t-green t-small" type="button" v-show="countdownInterval == null" @click="resetCounddown">Resetuj</button>
+    <p class="m00 fs-15 row j-center">{{ time | filterStopwatchTime }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['time', ],
   data() {
     return {
-      timeleft: this.time,
-      countdownInterval: null,
+      time: 0,
+      stopwatchInterval: null,
     }
   },
   methods: {
-    startCountdown() {
-      this. countdownInterval = setInterval(() => {
-        this.timeleft--;
-      }, 1000);
+    startTime() {
+      this. stopwatchInterval = setInterval(() => {
+        this.time++;
+      }, 10);
     }, 
-    stopCountdown() {
-      clearInterval(this.countdownInterval);
-      this.countdownInterval = null;
-    }, 
-    resetCounddown() {
-      this.timeleft = this.time;
-      this.startCountdown();
+    stopTime() {
+      clearInterval(this.stopwatchInterval);
+      this.stopwatchInterval = null;
+    },
+    resetTime() {
+      this.stopTime();
+      this.time = 0;
     }
-  }, 
-  mounted() {
-    this.startCountdown();
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+  .stopwatch {
+    border-bottom: 1px solid color(gray);
+  }
+
+  button {
+    font-size: inherit;
+    font-weight: 600;
+  }
+</style>

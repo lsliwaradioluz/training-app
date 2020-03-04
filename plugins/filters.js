@@ -134,6 +134,17 @@ Vue.filter('showMinutes', (value) => {
   return minutesAndSeconds;
 });
 
+Vue.filter('filterStopwatchTime', (value) => {
+  const miliseconds = value % 100 < 10 ? `0${value % 100}` : `${value % 100}`;
+  let seconds = Math.floor(value / 100);
+  if (seconds >= 60) {
+    seconds = Math.floor(seconds % 60);
+  }
+  seconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  const minutes = Math.floor(value / 6000) < 10 ? `0${Math.floor(value / 6000)}` : `${Math.floor(value / 6000)}`;
+  return `${minutes}:${seconds}.${miliseconds}`;
+});
+
 Vue.filter('getName', (value) => {
   const nameArray = value.split(' ');
   return nameArray[0];
