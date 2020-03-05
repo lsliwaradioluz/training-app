@@ -76,9 +76,11 @@
                     </div>
                     <li>
                       <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
-                      <span class="t-gray">({{ unit.rest }}s)</span>
                     </li>
                     <li>{{ unit.remarks }}</li>
+                    <li>
+                      <span class="t-gray">przerwy {{ unit.rest }}s</span>
+                    </li>
                   </ul>
                 </div>
                 <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
