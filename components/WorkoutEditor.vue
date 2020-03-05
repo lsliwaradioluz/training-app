@@ -126,19 +126,8 @@
           v-else />
       </transition>
     </div>
-  <!-- PRZERWY  -->
-    <!-- <Head class="pt05 pb05 b-black" v-if="sections.length > 0">
-      <div class="row j-between">
-        <span>Odpoczynek</span>
-        <div class="row">
-          <i class="flaticon-up-arrow small" @click="sections[currentTranslate].rest += 5"></i>
-          <span class="pl05 pr05">{{ sections[currentTranslate].rest }}s</span>
-          <i class="flaticon-down-arrow small" @click="sections[currentTranslate].rest -= 5"></i>
-        </div>
-      </div>
-    </Head> -->
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons tab p00 row j-between t-green mt05">
+    <div class="workout-editor__buttons tab p00 row j-between t-green mt05" :class="{ blind: editedUnit != null}">
       <button class="p11" type="button" @click="uploadWorkout">Zapisz</button>
       <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
@@ -251,10 +240,11 @@ export default {
 
         if (this.currentComplex != null) {
           let units = this.sections[this.currentSection].complexes[this.currentComplex].units;
-          console.log(units);
           rest = units[units.length - 1].rest;
-        } else {
-          rest = 90;
+        } else { 
+          this.sections[this.currentSection].complexes.length > 0 ? 
+            rest = this.sections[this.currentSection].complexes[0].units[0].rest
+            : rest = 90;
         }
 
         this.editedUnit = {
@@ -274,18 +264,24 @@ export default {
       }
     },
     openUnitEditor(unit, unitindex, complexindex) {
-      if (unit != undefined) {
-        this.currentUnit = unitindex;
-        this.currentComplex = complexindex;
-      }
       if (!this.exercises) {
         this.client.query({ query: exercisesQuery })
           .then(({ data }) => {
             this.exercises = data.exercises;
             this.populateUnitEditor(unit);
+            // to trzeba skrócić 
+            if (unit != undefined) {
+              this.currentUnit = unitindex;
+              this.currentComplex = complexindex;
+            }
           });
       } else {
         this.populateUnitEditor(unit);
+        // z tym
+        if (unit != undefined) {
+          this.currentUnit = unitindex;
+          this.currentComplex = complexindex;
+        }
       }
     },
     closeUnitEditor() {
