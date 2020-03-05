@@ -72,7 +72,8 @@
         isActive: null, 
         mousedown: false,
         elementWidth: 0, 
-        autoplayInterval: null
+        autoplayInterval: null, 
+        animateTimeout: null,
       }
     },
     computed: {
@@ -117,7 +118,7 @@
     methods: {
       animateCarousel() {
         this.$refs.wrapper.classList.add('scrolling');
-        setTimeout(() => {
+        this.animateTimeout = setTimeout(() => {
           this.$refs.wrapper.classList.remove('scrolling');
         }, 500);
       },
@@ -215,6 +216,10 @@
         this.setActive();
       });
     },
+    destroyed() {
+      clearInterval(this.autoplayInterval);
+      clearTimeout(this.animateTimeout);
+    }
   }
 </script>
 

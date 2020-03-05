@@ -210,18 +210,12 @@ export default {
       })
 
       // Add the rest intervals if there should be any
-      for (let i = 0; i <= units.length; i++) {
-        
-        if (i % 2 != 0 && this.sections[this.controllers.section].rest > 0) {
-          let rest;
-          if (i == units.length) {
-            rest = this.sections[this.controllers.section].rest;
-          } else if (units[i-1].exercise.name == units[i].exercise.name) {
-            rest = this.sections[this.controllers.section].rest;
-          } else {
-            rest = Math.floor(this.sections[this.controllers.section].rest / 2);
-          }
-          units.splice(i, 0, { exercise: { name: 'Odpoczynek' }, time: rest });
+      for (let i = 0; i <= units.length - 1; i++) {
+        let rest = units[i].rest;
+        if (rest > 0 && i < units.length - 1) {
+          units.splice(i+1, 0, { exercise: { name: 'Odpoczynek' }, time: rest });
+        } else if (rest > 0 && i == units.length - 1) {
+          units.splice(i+1, 0, { exercise: { name: 'Odpoczynek' }, time: rest*2 });
         }
       }
 
@@ -295,6 +289,6 @@ export default {
   }
 
   .flaticon-check:before {
-    font-size: 3rem;
+    font-size: 4rem;
   }
 </style>

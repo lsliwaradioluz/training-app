@@ -37,14 +37,11 @@
           <li>
             <span v-if="unit.remarks">{{ unit.remarks }}</span>
           </li>
+          <li>
+            <span class="t-gray">przerwy {{ unit.rest }}s</span>
+          </li>
         </ul>
       </div>
-    </div>
-    <div class="routine__rest mb05 tab" v-if="!edit">
-      <h3 class="mt0">Odpoczynek</h3>
-      <p class="m00">
-        W sekcji {{ section.name }}, wykonując ćwiczenia pojedynczo, odpoczywaj przez <span class="t-green">{{ section.rest }}</span> sekund między seriami. Jeżeli przeplatasz ćwiczenia w ramach bloku, odpoczywaj przez <span class="t-green">{{ Math.floor(section.rest / 2) }}</span> sekund.
-      </p>
     </div>
   </div>
 </template>

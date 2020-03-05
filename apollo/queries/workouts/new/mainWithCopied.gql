@@ -8,7 +8,6 @@ query($username: String, $copiedWorkoutId: ID!) {
       sections {
         id
         name
-        rest
         complexes {
           name 
           id
@@ -18,6 +17,7 @@ query($username: String, $copiedWorkoutId: ID!) {
             reps
             time
             distance
+            rest
             max 
             remarks
             exercise {
@@ -50,6 +50,7 @@ query($username: String, $copiedWorkoutId: ID!) {
           reps 
           time
           distance
+          rest
           remarks
           max
           exercise {

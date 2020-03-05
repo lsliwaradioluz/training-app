@@ -12,7 +12,6 @@ query($ids: [ID]!) {
     sections {
       id
       name
-      rest
       complexes {
         id
         name 
@@ -22,6 +21,7 @@ query($ids: [ID]!) {
           reps
           time
           distance 
+          rest
           remarks
           max
           exercise {

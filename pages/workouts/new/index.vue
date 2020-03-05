@@ -29,35 +29,30 @@ export default {
       sections: [
         { 
           name: 'Rozgrzewka',
-          rest: 45, 
           complexes: [
 
           ]
         },
         { 
           name: 'Skillwork',
-          rest: 40, 
           complexes: [
 
           ]
         },
         { 
           name: 'Strength',
-          rest: 180, 
           complexes: [
 
           ]
         },
         { 
           name: 'Cardio',
-          rest: 60, 
           complexes: [
 
           ]
         },
         { 
           name: 'Mobility',
-          rest: 40, 
           complexes: [
 
           ]

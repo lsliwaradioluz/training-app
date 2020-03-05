@@ -20,11 +20,11 @@
           </ul>
         </div>
         <div class="exercise__repetitions row j-between">
-          <div class="p10" v-for="(number, key) in unit.numbers" :key="key">
+          <div class="p10 t-center" v-for="(number, key) in unit.numbers" :key="key">
             <p>{{ key | shorten }}</p>
-            <p @click="key == 'distance' ? unit.numbers[key] += 100 : unit.numbers[key]++"><i class="flaticon-up-arrow small t-green"></i></p>
-            <p>{{ number }}</p>
-            <p @click="key == 'distance' ? unit.numbers[key] -= 100 : unit.numbers[key]--"><i class="flaticon-down-arrow small t-green"></i></p>
+            <i class="flaticon-up-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] += 100 : unit.numbers[key]++"></i>
+            <p class="m00"><input class="input--invisible t-center" type="number" v-model="unit.numbers[key]"></p>
+            <i class="flaticon-down-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] -= 100 : unit.numbers[key]--"></i>
           </div>
         </div>
         <div>
@@ -72,6 +72,11 @@
         this.unit.exercise = {...exercise};
       },
       addUnit() {
+        for (let key in this.unit.numbers) {
+          // simply using + to convert string to number 
+          this.unit.numbers[key] = +this.unit.numbers[key];
+        }
+
         const newUnit = {
           ...this.unit.numbers,
           exercise: this.unit.exercise,

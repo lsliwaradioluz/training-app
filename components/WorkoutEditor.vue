@@ -21,26 +21,21 @@
           <h3 class="m00">Rozpiska</h3>
           <i class="flaticon-vertical-dots" @click="showButtonsPanel = !showButtonsPanel"></i>
         </div>
-        <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
-          <template v-if="currentSection == null">
+        <transition name="accordion">
+          <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
             <button :class="{ pb05: showButtonsPanel }" @click="createSection">Dodaj</button>
-            <button :class="{ pb05: showButtonsPanel }" @click="openEditSection">Edytuj</button>
             <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">Usuń</button>
-          </template>
-          <template v-else>
-            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('save')">Zapisz</button>
-            <button :class="{ pb05: showButtonsPanel }" @click="closeEditSection('abort')">Wróć</button>
-          </template>
-        </div>
+          </div>
+        </transition>
       </Head>
       <transition name="fade">
         <div v-if="!editedUnit">
           <Carousel 
             :pagination="false" 
-            :active="!showButtonsPanel && currentSection == null" 
+            :active="!showButtonsPanel && currentComplex == null" 
             :custom-length="sections.length" 
-            :start-from-page="currentTranslate" 
-            @change-page="currentTranslate = $event"
+            :start-from-page="currentSection" 
+            @change-page="currentSection = $event"
             v-if="sections.length > 0">
             <div class="tab" v-for="(section, sectionindex) in sections" :key="sectionindex">
               <div class="row j-between">
@@ -54,7 +49,7 @@
                     :ref="`input${sectionindex}`">
                 </h3>
                 <h3 class="mt0" v-else>{{ section.name }}</h3>
-                <i class="flaticon-plus" @click="openUnitEditor()" v-if="currentSection != null"></i>
+                <i class="flaticon-plus" @click="openUnitEditor()"></i>
               </div>
               <div>
                 <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
@@ -69,18 +64,20 @@
                       <div class="workout-editor__unit-buttons">
                         <i 
                           class="workout-editor__unit-button flaticon-vertical-dots small" 
-                          @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" 
-                          v-show="currentSection != null"></i>
+                          @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" ></i>
                         <transition name="roll">
-                          <div v-if="showUnitButtons == `${complexindex}${unitindex}`">
-                            <button class="m00" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                            <button class="m00" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
-                            <button class="m00" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                          <div class="row" v-if="showUnitButtons == `${complexindex}${unitindex}`">
+                            <button class="m00 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                            <button class="m00 mr05 ml0" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                            <button class="m00 ml0" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
                           </div>
                         </transition>
                       </div>
                     </div>
-                    <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
+                    <li>
+                      <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
+                      <span class="t-gray">({{ unit.rest }}s)</span>
+                    </li>
                     <li>{{ unit.remarks }}</li>
                   </ul>
                 </div>
@@ -91,8 +88,8 @@
           <p class="m00 tab" v-else>
             Na razie nie dodałeś żadnych sekcji.
           </p>
-        <!-- SKILLSET I POPRZEDNIE TRENINGI  -->
-          <div v-if="previousWorkouts.length > 0 && currentSection != null">
+        <!-- POPRZEDNIE TRENINGI  -->
+          <div v-if="previousWorkouts.length > 0">
             <div class="mb05 row j-between t-gray">
               <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
               <span v-if="!previousWorkouts[currentWorkout].user">
@@ -127,7 +124,7 @@
       </transition>
     </div>
   <!-- PRZERWY  -->
-    <Head class="pt05 pb05 b-black" v-if="sections.length > 0">
+    <!-- <Head class="pt05 pb05 b-black" v-if="sections.length > 0">
       <div class="row j-between">
         <span>Odpoczynek</span>
         <div class="row">
@@ -136,7 +133,7 @@
           <i class="flaticon-down-arrow small" @click="sections[currentTranslate].rest -= 5"></i>
         </div>
       </div>
-    </Head>
+    </Head> -->
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
     <div class="workout-editor__buttons tab p00 row j-between t-green mt05">
       <button class="p11" type="button" @click="uploadWorkout">Zapisz</button>
@@ -178,10 +175,9 @@ export default {
       showButtonsPanel: false,
       showUnitButtons: null,
       currentWorkout: 0,
-      currentSection: null, 
+      currentSection: 0, 
       currentComplex: null,
       currentUnit: null,
-      currentTranslate: 0, 
       exercises: null,
       editedUnit: null, 
     }
@@ -218,37 +214,21 @@ export default {
   methods: {
     createSection() {
       const newSection = {
+        name: 'Nowa sekcja',
         complexes: [],
-        rest: 60, 
       };
       this.sections.push(newSection);
       this.currentSection = this.sections.length - 1;
-      this.currentTranslate = this.sections.length - 1;
-      this.newSectionName = 'Nowa sekcja';
+      this.showButtonsPanel = false;
       setTimeout(() => {
         let input = `input${this.sections.length - 1}`;
         this.$refs[input][0].focus();
       }, 700);
     },
     deleteSection() {
-      this.sections.splice(this.currentTranslate, 1);
+      this.sections.splice(this.currentSection, 1);
       this.showButtonsPanel = false;
-      this.currentTranslate = this.currentTranslate == 0 ? 0 : this.currentTranslate - 1;
-    },
-    openEditSection() {
-      this.currentSection = this.currentTranslate;
-      this.sectionBeforeEdit = JSON.parse(JSON.stringify(this.sections[this.currentSection]));
-    },
-    closeEditSection(mode) {
-      if (mode == 'abort' && !this.sectionBeforeEdit) {
-        this.deleteSection();
-        this.currentTranslate = 0;
-      } else if (mode == 'abort' && this.sectionBeforeEdit) {
-        this.sections[this.currentSection] = this.sectionBeforeEdit;
-      }
-      this.currentSection = null;
-      this.sectionBeforeEdit = null;
-      this.showButtonsPanel = false;
+      this.currentSection = this.currentSection == 0 ? 0 : this.currentSection - 1;
     },
     populateUnitEditor(unit) {
       if (unit != undefined) {
@@ -259,11 +239,21 @@ export default {
             reps: unit.reps || 0, 
             time: unit.time || 0,
             distance: unit.distance || 0, 
-            max: unit.max || 0
+            rest: unit.rest || 0
           },
           remarks: unit.remarks || ''
         }
       } else {
+        let rest;
+
+        if (this.currentComplex != null) {
+          let units = this.sections[this.currentSection].complexes[this.currentComplex].units;
+          console.log(units);
+          rest = units[units.length - 1].rest;
+        } else {
+          rest = 90;
+        }
+
         this.editedUnit = {
           exercise: {
             name: '',
@@ -274,6 +264,7 @@ export default {
             reps: 0, 
             time: 0,
             distance: 0,
+            rest: rest,
           },
           remarks: ''
         }
@@ -297,6 +288,8 @@ export default {
     closeUnitEditor() {
       this.showUnitEditor = false;
       this.editedUnit = null;
+      this.currentComplex = null;
+      this.currentUnit = null;
     },
     addUnit(unit) {
       if (this.currentComplex == null && this.currentUnit == null) {
@@ -325,7 +318,6 @@ export default {
     copySection(section) {
       const sectionClone = JSON.parse(JSON.stringify(section));
       this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
-      this.sections[this.currentSection].rest = sectionClone.rest;
       this.sections[this.currentSection].name = sectionClone.name;
     },
     copyComplex(complex) {

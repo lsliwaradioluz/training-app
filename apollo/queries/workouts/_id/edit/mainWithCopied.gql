@@ -6,7 +6,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     sections {
       id
       name
-      rest
       complexes {
         name 
         id
@@ -16,6 +15,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
           reps 
           time
           distance
+          rest
           remarks
           max
           exercise {
@@ -34,7 +34,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
         sections {
           id
           name
-          rest
           complexes {
             name 
             id
@@ -44,6 +43,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
               reps
               time
               distance
+              rest
               max
               remarks
               exercise {
@@ -67,7 +67,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     sections {
       id
       name
-      rest
       complexes {
         name 
         id
@@ -77,6 +76,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
           reps 
           time
           distance
+          rest
           remarks
           max
           exercise {

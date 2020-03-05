@@ -8,7 +8,6 @@ query($username: String) {
       sections {
         id
         name
-        rest
         complexes {
           name 
           id
@@ -18,6 +17,7 @@ query($username: String) {
             reps
             time
             distance
+            rest
             max 
             remarks
             exercise {
