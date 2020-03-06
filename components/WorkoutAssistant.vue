@@ -18,7 +18,7 @@
         <Stopwatch v-if="showStopwatch" />
       </transition>
   <!-- ĆWICZENIE -->
-      <div class="workout-assistant__exercise pt1 pb1 row a-center j-between" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
+      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between" :class="{ grow: dividedScreenMode }">
         <div class="left">
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
@@ -26,31 +26,52 @@
           <MovingText :key="current.remarks" v-if="current.remarks">
             <p class="t-small m00">{{ current.remarks }}</p>
           </MovingText>
-          <p class="t-small m00" v-else>Wykonaj teraz</p>
+          <div v-else>
+            <p class="t-small m00" v-if="current.exercise.name != 'Za chwilę:'">Wykonaj teraz</p>
+            <p class="t-small m00" v-else>
+              <span v-if="next.reps">{{ next.reps }}</span><span v-if="next.reps && next.time">x</span><span v-if="next.time">{{ next.time }}s</span> 
+              <span v-if="next.distance">{{ next.distance }}m</span> 
+              <span>{{ next.exercise.name }}</span><span v-if="next.remarks">, {{ next.remarks }}</span>
+            </p>
+          </div>
+          <p class="t-small m00" v-if="lastSet">Ostatnia seria</p>
         </div>
-        <div class="right row a-center j-end pl1" :class="{ 't-red': lastSet }">
+        <Timer 
+          :time="current.time" 
+          @countdown-over="nextUnit" 
+          :key="controllers.unit"
+          v-if="current.exercise.name == 'Za chwilę:' || automaticModeOn && current.time && !current.reps" />
+        <div class="right row a-center j-end pl1" v-else>
           <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
           <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
           <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
         </div>
       </div>
-      <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" @countdown-over="nextUnit" v-else />
       <div class="workout-assistant__indicators" >
         <p class="m00 t-small">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}</p>
         <div class="row">
-          <span v-for="n in units.length" :key="n" :class="{ 'b-white': n <= controllers.unit + 1 }"></span>
+          <span 
+            v-for="n in units.length" 
+            :key="n" 
+            :class="{ 'b-white': n <= controllers.unit + 1 }"
+            @click="controllers.unit = n - 1"></span>
         </div>
       </div>
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
-        <i class="flaticon-past small"></i>
+        <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-check" @click="nextUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" @click="showStopwatch = !showStopwatch"></i>
+        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
       </div>
       <p class="mt0 mb1 t-gray t-center t-small" v-if="!dividedScreenMode">Inspired by Spotify</p>
     </div>
+    <transition name="slide-up">
+      <div class="workout-assistant__modal tab b-gray t-small" v-if="showAutomaticModeModal">
+        Tryb automatyczny włączony
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -83,6 +104,8 @@ export default {
         unit: 0,
       }, 
       showStopwatch: false,
+      automaticModeOn: false,
+      showAutomaticModeModal: false, 
     }
   },
   methods: {
@@ -144,11 +167,22 @@ export default {
         this.controllers.unit = this.units.length - 1;
       }
     },
+    toggleAutomaticMode() {
+      this.automaticModeOn = !this.automaticModeOn;
+      if (this.automaticModeOn) {
+        this.showAutomaticModeModal = true;
+        setTimeout(() => {
+          this.showAutomaticModeModal = false;
+        }, 2000);
+      } else {
+        this.showAutomaticModeModal = false;
+      }
+    }
   },
   computed: {
     image() {
       let image; 
-      if (this.current.exercise.name == 'Odpoczynek' ) {
+      if (this.current.exercise.name == 'Za chwilę:' ) {
         image = this.next.exercise.images.length > 0 ? this.next.exercise.images[0].url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
       } else {
         image = this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
@@ -165,7 +199,7 @@ export default {
     },
     lastSet() {
       const lastIndex = this.units.lastIndexOf(this.units[this.controllers.unit]);
-      if (lastIndex == this.controllers.unit && this.units[this.controllers.unit].exercise.name != 'Odpoczynek') {
+      if (lastIndex == this.controllers.unit && this.units[this.controllers.unit].exercise.name != 'Za chwilę:' && this.units[this.controllers.unit].sets > 1) {
         return true;
       } else {
         return false;
@@ -175,7 +209,7 @@ export default {
       let next = this.units[this.controllers.unit + 1];
       
       if (this.controllers.unit + 1 > this.units.length - 1) {
-        next = { exercise: { name: 'Odpocznij', images: [] } }
+        next = { exercise: { name: 'Kolejny blok', images: [] } }
       }
 
       return next;
@@ -220,9 +254,9 @@ export default {
       for (let i = 0; i <= units.length - 1; i++) {
         let rest = units[i].rest;
         if (rest > 0 && i < units.length - 1) {
-          units.splice(i+1, 0, { exercise: { name: 'Odpoczynek' }, time: rest });
+          units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest });
         } else if (rest > 0 && i == units.length - 1) {
-          units.splice(i+1, 0, { exercise: { name: 'Odpoczynek' }, time: rest*2 });
+          units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest*2 });
         }
       }
 
@@ -297,5 +331,12 @@ export default {
 
   .flaticon-check:before {
     font-size: 4rem;
+  }
+
+  .workout-assistant__modal {
+    margin: 0 auto;
+    position: absolute;
+    top: 10%;
+    padding: 0.5rem;
   }
 </style>
