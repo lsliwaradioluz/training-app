@@ -20,7 +20,7 @@
         <Workout :workout="user.homeworks[0]" v-if="user.homeworks.length > 0" />
         <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" />
       </div>
-      <p class="t-center" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
+      <p class="tab pt05 pb05 t-small" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
         Brak treningów do wyświetlenia
       </p>
       <!-- <Carousel v-if="user.workouts.length > 0" :pagination="false">

@@ -8,8 +8,7 @@ query($name: String) {
       name
       id
     }
-    positioning
-    technique
+    description
     images {
       id
       url

@@ -4,8 +4,7 @@ query($name: String) {
   }) {
     id
     name
-    positioning
-    technique
+    description
     subcategory {
       id
       name

@@ -74,24 +74,14 @@
         </div>
       </div>
     </Carousel>
-  <!-- OPIS POZYCJI  -->
-    <div v-if="exercise.positioning || edit">
-      <Head>Wykonanie</Head>
+  <!-- OPIS  -->
+    <div v-if="exercise.description || edit">
+      <Head>Opis</Head>
       <div class="tab">
         <div v-if="!edit">
-          <p class="mb05" v-for="(p, index) in positioning" :key="index">{{ index + 1 }}. {{ p }}</p>
+          <p class="mb05" v-for="(p, index) in description" :key="index">{{ index + 1 }}. {{ p }}</p>
         </div>
-        <textarea class="input--invisible" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.positioning" rows="5" spellcheck="false" v-else></textarea>
-      </div>
-    </div>
-  <!-- OPIS TECHNIKI -->
-    <div v-if="exercise.technique || edit">
-      <Head>Uwagi</Head>
-      <div class="tab">
-        <div v-if="!edit">
-          <p class="m00">{{ exercise.technique }}</p>
-        </div>
-        <textarea class="input--invisible" placeholder="Uzupełnij opis ćwiczenia" v-model="input.technique" v-else rows="5" spellcheck="false"></textarea>
+        <textarea class="input--invisible" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.description" rows="5" spellcheck="false" v-else></textarea>
       </div>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
@@ -113,7 +103,7 @@
       exercise: {
         type: Object,
         default: () => {
-          return { name: '', images: [], positioning: '', technique: '' }
+          return { name: '', images: [], description: '', technique: '' }
         }
       }, 
       subcategories: {
@@ -135,15 +125,15 @@
         currentImage: 0,
         input: {
           name: this.exercise.name,
-          positioning: this.exercise.positioning, 
+          description: this.exercise.description, 
           technique: this.exercise.technique, 
           subcategory: this.$route.query.subcategoryId ? this.$route.query.subcategoryId : this.exercise.subcategory.id,
         }
       }
     },
     computed: {
-      positioning() {
-        return this.exercise.positioning ? this.exercise.positioning.split('.') : [];
+      description() {
+        return this.exercise.description ? this.exercise.description.split('.') : [];
       }, 
       filteredSubcategories() {
         const filteredSubcategories = this.subcategories.filter(subcategory => {

@@ -40,7 +40,6 @@ query($username: String, $copiedWorkoutId: ID!) {
     sections {
       id
       name
-      rest
       complexes {
         name 
         id
