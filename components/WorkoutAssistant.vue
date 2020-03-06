@@ -13,11 +13,11 @@
       </span>
     </div>
     <div>
-    <!-- STOPER -->
+  <!-- STOPER -->
       <transition name="slide-up">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-    <!-- ĆWICZENIE -->
+  <!-- ĆWICZENIE -->
       <div class="workout-assistant__exercise pt1 pb1 row a-center j-between" :class="{ grow: dividedScreenMode }" v-if="current.exercise.name != 'Odpoczynek'">
         <div class="left">
           <MovingText :key="current.exercise.name">
@@ -28,16 +28,15 @@
           </MovingText>
           <p class="t-small m00" v-else>Wykonaj teraz</p>
         </div>
-        <div class="right row a-center j-end pl1">
+        <div class="right row a-center j-end pl1" :class="{ 't-red': lastSet }">
           <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
           <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
           <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
         </div>
       </div>
-    <!--  -->
       <Timer :class="{ grow: dividedScreenMode }" :time="current.time" :next="next" @countdown-over="nextUnit" v-else />
-      <div class="workout-assistant__indicators">
+      <div class="workout-assistant__indicators" >
         <p class="m00 t-small">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}</p>
         <div class="row">
           <span v-for="n in units.length" :key="n" :class="{ 'b-white': n <= controllers.unit + 1 }"></span>
@@ -163,6 +162,14 @@ export default {
     },
     current() {
       return this.units[this.controllers.unit];
+    },
+    lastSet() {
+      const lastIndex = this.units.lastIndexOf(this.units[this.controllers.unit]);
+      if (lastIndex == this.controllers.unit && this.units[this.controllers.unit].exercise.name != 'Odpoczynek') {
+        return true;
+      } else {
+        return false;
+      }
     },
     next() {
       let next = this.units[this.controllers.unit + 1];
