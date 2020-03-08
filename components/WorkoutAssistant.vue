@@ -1,12 +1,12 @@
 <template>
   <div 
-    class="workout-assistant column j-between main pt1 pb0" 
-    :class="{ half: dividedScreenMode }" 
+    class="workout-assistant column j-end main pt1 pb0" 
+    :class="{ half: isScreenDivided }" 
     :style="{ backgroundImage: image }">
   <!-- STATUS BAR  -->
-    <div class="workout-assistant__bar row j-between a-center">
+    <div class="workout-assistant__bar row j-between a-center main pb1 pt1">
       <span class="logo">Piti</span>
-      <h3 class="m00 t-center" v-if="!dividedScreenMode">{{ sections[controllers.section].name | shortenSection }}</h3>
+      <h3 class="m00 t-center" v-if="!isScreenDivided">{{ sections[controllers.section].name | shortenSection }}</h3>
       <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controllers.section].name | shortenSection }}</p>
       <span class="hamburger t-right">
         <i class="flaticon-cancel small" @click="$router.go(-1)"></i>
@@ -14,11 +14,35 @@
     </div>
     <div>
   <!-- STOPER -->
-      <transition name="slide-up">
+      <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
+  <!-- ROZPISKA -->
+      <div class="workout-assistant__complex-tab main" v-if="showWholeComplex">
+        <div class="workout-assistant__bar row j-between a-center main pb1 pt1 b-assistantblack">
+          <span class="logo">Piti</span>
+          <h3 class="m00 t-center">{{ sections[controllers.section].complexes[controllers.complex].name | shortenSection }}</h3>
+          <span class="hamburger t-right">
+            <i class="flaticon-cancel small" @click="showWholeComplex = false"></i>
+          </span>
+        </div>
+        <div>
+          <div 
+            class="mb1 column a-center" 
+            v-for="(unit, index) in sections[controllers.section].complexes[controllers.complex].units" 
+            :key="index">
+            <nuxt-link
+              :to="`/exercises/${unit.exercise.subcategory.category.name}/${unit.exercise.subcategory.name}/${unit.exercise.name}`" 
+              tag="i"
+              class="flaticon-information small"></nuxt-link>
+            <p class="m00 t-center">{{ unit.exercise.name }}</p>
+            <p class="m00 t-center t-small" v-if="unit.remarks">{{ unit.remarks }}</p>
+            <p class="m00 t-center t-small" v-else>(Brak uwag)</p>
+          </div>
+        </div>
+      </div>
   <!-- ĆWICZENIE -->
-      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between" :class="{ grow: dividedScreenMode }">
+      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between" :class="{ grow: isScreenDivided }">
         <div class="left">
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
@@ -34,7 +58,7 @@
               <span>{{ next.exercise.name }}</span><span v-if="next.remarks">, {{ next.remarks }}</span>
             </p>
           </div>
-          <p class="t-small m00" v-if="lastSet">Ostatnia seria</p>
+          <p class="t-small m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
           :time="current.time" 
@@ -49,26 +73,33 @@
         </div>
       </div>
       <div class="workout-assistant__indicators" >
-        <p class="m00 t-small">{{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}</p>
-        <div class="row">
+        <p class="m00 t-small">
+          {{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}
+        </p>
+        <div class="row j-between">
           <span 
-            v-for="n in units.length" 
-            :key="n" 
-            :class="{ 'b-white': n <= controllers.unit + 1 }"
-            @click="controllers.unit = n - 1"></span>
+            class="workout-assistant__indicators-bar t-center"
+            :class="{ 'b-white': index <= controllers.unit }"
+            v-for="(unit, index) in units" 
+            :key="index" 
+            @click="controllers.unit = index"></span>
         </div>
       </div>
-      <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
+      <div class="workout-assistant__buttons row j-between a-center pt1">
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-check" @click="nextUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
       </div>
-      <p class="mt0 mb1 t-gray t-center t-small" v-if="!dividedScreenMode">Inspired by Spotify</p>
+      <div class="row j-between" v-if="!isScreenDivided">
+        <p class="m00 t-gray t-center t-small mb1">Inspired by Spotify</p>
+        <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
+      </div>
     </div>
+  <!-- MODAL TRYBU AUTOMATYCZNEGO  -->
     <transition name="slide-up">
-      <div class="workout-assistant__modal tab b-gray t-small" v-if="showAutomaticModeModal">
+      <div class="workout-assistant__modal tab b-gray t-small" v-show="showAutomaticModeModal">
         Tryb automatyczny włączony
       </div>
     </transition>
@@ -85,7 +116,7 @@ export default {
     workout: {
       type: Object, 
     }, 
-    dividedScreenMode: {
+    isScreenDivided: {
       type: Boolean, 
       default: () => true
     },
@@ -94,6 +125,11 @@ export default {
     Timer,
     Stopwatch,
     MovingText,
+  },
+  watch: {
+    cameBackFromExercise() {
+      this.showWholeComplex = this.cameBackFromExercise;
+    }
   },
   data() {
     return {
@@ -105,7 +141,8 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
-      showAutomaticModeModal: false, 
+      showAutomaticModeModal: false,
+      showWholeComplex: this.cameBackFromExercise,
     }
   },
   methods: {
@@ -188,7 +225,7 @@ export default {
         image = this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       }
 
-      if (!this.dividedScreenMode) {
+      if (!this.isScreenDivided) {
         return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
       } else {
         return 'none';
@@ -261,7 +298,7 @@ export default {
       }
 
       return units;
-    }
+    },
   }
 }
 </script>
@@ -272,20 +309,42 @@ export default {
     height: 100%;
     background-size: cover;
     background-position: center;
+    position: relative;
   }
 
   .workout-assistant__bar {
     width: 100%;
-    background-color: color(black);
-    width: 100%;
     background: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     span {
       width: 20%;
+      z-index: initial;
     }
     h3 {
       text-transform: capitalize;
       width: 60%;
+    }
+  }
+
+  .workout-assistant__complex-tab {
+    position: absolute; 
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: color(assistantblack);
+    z-index: 1;
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    div:nth-child(2) div {
+      animation: fade-and-slide-down 0.7s;
     }
   }
 
@@ -317,14 +376,14 @@ export default {
     height: 50%;
   }
 
-  .workout-assistant__indicators {
-    span {
-      height: 2px;
-      flex: 1;
-      background: color(gray);
-      margin-right: 1px;
-    }
-    span:last-child {
+  .workout-assistant__indicators-bar {
+    height: 2px;
+    flex: 1;
+    margin-right: 1px;
+    background: color(gray);
+    position: relative;
+
+    &:last-child {
       margin: 0;
     }
   }

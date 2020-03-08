@@ -4,7 +4,7 @@
       v-for="workout in workouts"
       :workout="workout"
       :key="workout.id"
-      :divided-screen-mode="workouts.length > 1" 
+      :is-screen-divided="workouts.length > 1"
       @set-current-state="setWorkoutAssistantState($event, workout.id)" />
   </div>
 </template>
@@ -55,6 +55,13 @@ export default {
     setWorkoutAssistantState(state, id) {
       this.$store.commit('main/setWorkoutAssistantState', { id: id, state: state });
     }
+  }, 
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (from.path.includes('exercises')) {
+        vm.$children[0].showWholeComplex = true;
+      }
+    });
   }
 }
 </script>

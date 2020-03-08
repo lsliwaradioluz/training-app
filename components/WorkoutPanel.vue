@@ -8,12 +8,12 @@
     </div>
     <nuxt-link 
       v-if="!$store.state.auth.user.admin"
-      class="button--primary pl1 pr1" 
+      class="button--primary ml1 pl1 pr1" 
       tag="button" 
       :to="{ path: 'assistant', query: { section: section } }" 
       append>Asystent</nuxt-link>
     <nuxt-link 
-      class="button--primary" 
+      class="button--primary ml1" 
       type="button" 
       to="/users"
       @click.native="pairWorkout" 

@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 06/03/2020 14:07
+  	Creation date: 08/03/2020 00:39
   	*/
 
 @font-face {
@@ -58,3 +58,5 @@
 .flaticon-cancel:before { content: "\f119"; }
 .flaticon-check:before { content: "\f11a"; }
 .flaticon-login:before { content: "\f11b"; }
+.flaticon-setup:before { content: "\f11c"; }
+.flaticon-menu-1:before { content: "\f11d"; }

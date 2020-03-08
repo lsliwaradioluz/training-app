@@ -1,6 +1,6 @@
 <template>
   <div class="timer pl1">
-    <p class="m00 t-right fs-2" :class="{ 't-green': timeleft <= 10 }">
+    <p class="m00 t-right fs-2 t-green" :class="{ 't-red': timeleft <= 10 }">
       {{ timeleft | showMinutes }}
     </p>
   </div>
@@ -12,14 +12,16 @@
     data() {
       return {
         timeleft: this.time,
+        countDownInterval: null,
       }
     },
     methods: {
       countDown() {
-        const countDownInterval = setInterval(() => {
+        this.countDownInterval = setInterval(() => {
           this.timeleft--;
           if (this.timeleft == -1) {
-            clearInterval(countDownInterval);
+            this.timeleft = 0;
+            clearInterval(this.countDownInterval);
             this.$emit('countdown-over');
           };
         }, 1000);

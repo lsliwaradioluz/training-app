@@ -56,6 +56,7 @@
         type: Number, 
         default: () => 5
       }, 
+      // usuń custom length jeżeli rerendering z :key zadziała
       customLength: {
         type: Number
       }
@@ -108,6 +109,7 @@
       startFromPage() {
         this.currentPage = this.startFromPage;
       },
+      // usuń watch customLength jeżeli rerendering z :key zadziała
       customLength() {
         this.length = this.customLength;
         if (this.currentPage > this.length - 1) {
@@ -264,7 +266,10 @@
     cursor: grabbing;
   }
 
-  .carousel-wrapper > div {
+  .carousel-wrapper > div, 
+  .carousel-wrapper > p,
+  .carousel-wrapper > span, 
+  .carousel-wrapper > ul {
     width: 100%;
     flex-shrink: 0;
     position: relative;
