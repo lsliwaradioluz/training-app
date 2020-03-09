@@ -10,6 +10,7 @@
         ref="navdot"
         @click="scrollWithNavdots(n)"></div>
     </div>
+    <p>{{ test.touchstart }}:{{ test.touchmove }}</p>
     <div 
       class="carousel-wrapper a-stretch"
       :class="{ 'inactive': !isActive }"
@@ -77,6 +78,10 @@
         elementWidth: 0, 
         autoplayInterval: null, 
         animateTimeout: null,
+        test: {
+          touchmove: false, 
+          touchstart: false,
+        }
       }
     },
     computed: {
@@ -131,6 +136,7 @@
         this.currentTranslate = parseFloat(this.$refs.wrapper.style.transform.slice(11, -3));
       },
       onTouchStart() {
+        this.test.touchstart = true;
         clearInterval(this.autoplayInterval);
         if (event.type == 'touchstart') {
           this.moveStart = event.touches[0].screenX
@@ -140,7 +146,7 @@
         }
       },
       onTouchMove() {
-        alert('touchmove!');
+        this.test.touchmove = true;
         let translate;
 
         if (event.type == 'touchmove') {
@@ -157,6 +163,8 @@
         this.$refs.wrapper.style.transform = `translateX(${translate}px)`;
       }, 
       onTouchEnd() {
+        this.test.touchstart = false;
+        this.test.touchmove = false;
         if (Math.abs(this.move) > this.sensitivity) {
           if (this.move > 0 && !this.maxScrollLeft) {
             this.currentPage--
