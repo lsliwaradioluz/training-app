@@ -146,7 +146,7 @@
         }
       },
       onTouchMove() {
-        alert('touchmove!');
+        if (this.currentPage > 0) alert('touchmove!');
         this.test.touchmove = true;
         let translate;
 
