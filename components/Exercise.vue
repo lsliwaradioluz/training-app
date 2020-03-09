@@ -13,9 +13,9 @@
       </div>
       <span v-else>Nazwa ćwiczenia</span>
     </Head>
-    <div class="tab" v-if="edit">
+    <p class="m00 tab" v-if="edit">
       <input class="input--invisible" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
-    </div>
+    </p>
   <!-- SUBKATEGORIA  -->
     <div v-if="edit">
       <Head>Subkategoria</Head>
@@ -33,7 +33,6 @@
         </ul>
       </div>
     </div>
-  
   <!-- ZDJĘCIA  -->
     <Head v-if="edit">
       <div class="row j-between">
@@ -81,7 +80,14 @@
         <div v-if="!edit">
           <p class="mb05" v-for="(p, index) in description" :key="index">{{ index + 1 }}. {{ p }}</p>
         </div>
-        <textarea class="input--invisible" placeholder="Uzupełnij instrukcję wykonania ćwiczenia" v-model="input.description" rows="5" spellcheck="false" v-else></textarea>
+        <p class="m00" v-else>
+          <textarea 
+            class="input--invisible" 
+            placeholder="Uzupełnij instrukcję wykonania ćwiczenia" 
+            v-model="input.description" 
+            rows="5" 
+            spellcheck="false"></textarea>
+        </p>
       </div>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
@@ -125,8 +131,7 @@
         currentImage: 0,
         input: {
           name: this.exercise.name,
-          description: this.exercise.description, 
-          technique: this.exercise.technique, 
+          description: this.exercise.description,
           subcategory: this.$route.query.subcategoryId ? this.$route.query.subcategoryId : this.exercise.subcategory.id,
         }
       }
