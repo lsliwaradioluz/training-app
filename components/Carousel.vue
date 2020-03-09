@@ -22,6 +22,8 @@
 </template>
 
 <script>
+  // na ios karuzela działa tylko na pierwszym slajdzie 
+  // na kolejnych nie da się jej przesunąć, choć działa kliknięcie na pagination 
   export default {
     props: {
       active: {
@@ -129,7 +131,6 @@
         this.currentTranslate = parseFloat(this.$refs.wrapper.style.transform.slice(11, -3));
       },
       onTouchStart() {
-        if (this.currentPage > 0) alert('dotyk!');
         clearInterval(this.autoplayInterval);
         if (event.type == 'touchstart') {
           this.moveStart = event.touches[0].screenX
@@ -139,6 +140,7 @@
         }
       },
       onTouchMove() {
+        alert('touchmove!');
         let translate;
 
         if (event.type == 'touchmove') {
