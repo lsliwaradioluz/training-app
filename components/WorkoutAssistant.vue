@@ -17,7 +17,7 @@
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-  <!-- ROZPISKA -->
+  <!-- ROZPISKA OBECNEGO BLOKU -->
       <div class="workout-assistant__complex-tab main" v-if="showWholeComplex">
         <div class="workout-assistant__bar row j-between a-center main pb1 pt1 b-assistantblack">
           <span class="logo">Piti</span>
@@ -28,16 +28,19 @@
         </div>
         <div>
           <div 
-            class="mb1 column a-center" 
+            class="mb1 row j-between" 
             v-for="(unit, index) in sections[controllers.section].complexes[controllers.complex].units" 
             :key="index">
+            <ul>
+              <p class="m00">{{ unit.exercise.name }}</p>
+              <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
+              <li v-if="unit.remarks">{{ unit.remarks }}</li>
+              <li>przerwy {{ unit.rest }}s</li>
+            </ul>
             <nuxt-link
               :to="`/exercises/${unit.exercise.subcategory.category.name}/${unit.exercise.subcategory.name}/${unit.exercise.name}`" 
               tag="i"
-              class="flaticon-information small"></nuxt-link>
-            <p class="m00 t-center">{{ unit.exercise.name }}</p>
-            <p class="m00 t-center t-small" v-if="unit.remarks">{{ unit.remarks }}</p>
-            <p class="m00 t-center t-small" v-else>(Brak uwag)</p>
+              class="flaticon-information small ml1"></nuxt-link>
           </div>
         </div>
       </div>
@@ -294,7 +297,7 @@ export default {
 
       return units;
     },
-  },
+  }
 }
 </script>
 

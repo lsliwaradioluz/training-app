@@ -129,6 +129,7 @@
         this.currentTranslate = parseFloat(this.$refs.wrapper.style.transform.slice(11, -3));
       },
       onTouchStart() {
+        alert('dotyk!');
         clearInterval(this.autoplayInterval);
         if (event.type == 'touchstart') {
           this.moveStart = event.touches[0].screenX
