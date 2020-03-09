@@ -136,7 +136,6 @@
         this.currentTranslate = parseFloat(this.$refs.wrapper.style.transform.slice(11, -3));
       },
       onTouchStart() {
-        alert('touchstart!');
         this.test.touchstart = true;
         clearInterval(this.autoplayInterval);
         if (event.type == 'touchstart') {
@@ -147,6 +146,7 @@
         }
       },
       onTouchMove() {
+        alert('touchmove!');
         this.test.touchmove = true;
         let translate;
 
