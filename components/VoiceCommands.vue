@@ -14,12 +14,12 @@
             const isFinal = e.results[0].isFinal;
             const transcript = e.results[0][0].transcript.toLowerCase();
             
-            if (isFinal && transcript == 'next') {
-              this.$emit('next');
-            }
-
-            if (isFinal && transcript == 'back') {
-              this.$emit('previous');
+            if (isFinal) {
+              if (transcript == 'next' || transcript == 'dalej' ) {
+                this.$emit('next');
+              } else if (transcript == 'back' || transcript == 'wróć') {
+                this.$emit('previous');
+              }
             }
           });
 
