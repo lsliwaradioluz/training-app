@@ -7,6 +7,6 @@ Vue.mixin({
     },
     addWhitespace(string) {
       return string.replace(/_/g,' ');
-    }
+    },
   }
 });

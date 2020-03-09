@@ -103,6 +103,7 @@
         Tryb automatyczny włączony
       </div>
     </transition>
+    <VoiceCommands @next="nextUnit" @previous="previousUnit" />
   </div>
 </template>
 
@@ -110,6 +111,7 @@
 import Timer from '~/components/Timer';
 import Stopwatch from '~/components/Stopwatch';
 import MovingText from '~/components/MovingText';
+import VoiceCommands from '~/components/VoiceCommands';
 
 export default {
   props: {
@@ -125,6 +127,7 @@ export default {
     Timer,
     Stopwatch,
     MovingText,
+    VoiceCommands,
   },
   watch: {
     cameBackFromExercise() {
@@ -299,7 +302,7 @@ export default {
 
       return units;
     },
-  }
+  },
 }
 </script>
 

@@ -66,7 +66,7 @@
   min-height: 10px;
   width: 100%;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
   color: transparent;
   white-space: nowrap;
 }

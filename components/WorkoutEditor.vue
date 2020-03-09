@@ -291,18 +291,19 @@ export default {
       this.currentUnit = null;
     },
     addUnit(unit) {
+      const unitClone = JSON.parse(JSON.stringify(unit));
       if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
           name: "Blok", 
           units: [
-            unit
+            unitClone
           ]
         }
         this.sections[this.currentSection].complexes.push(newComplex);
       } else if (this.currentComplex != null && this.currentUnit == null) {
-        this.sections[this.currentSection].complexes[this.currentComplex].units.push(unit);
+        this.sections[this.currentSection].complexes[this.currentComplex].units.push(unitClone);
       } else {
-        this.sections[this.currentSection].complexes[this.currentComplex].units[this.currentUnit] = unit;
+        this.sections[this.currentSection].complexes[this.currentComplex].units[this.currentUnit] = unitClone;
         this.currentComplex = null;
         this.currentUnit = null;
       }
@@ -312,6 +313,7 @@ export default {
       this.sections[this.currentSection].complexes[complex].units.splice(unit, 1);
       if (this.sections[this.currentSection].complexes[complex].units.length == 0) { 
         this.sections[this.currentSection].complexes.splice(complex, 1);
+        this.currentComplex = null;
       }
     },
     copySection(section) {
