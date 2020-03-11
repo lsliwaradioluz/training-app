@@ -88,16 +88,18 @@
             @click="controllers.unit = index"></span>
         </div>
       </div>
-      <div class="workout-assistant__buttons row j-between a-center pt1">
-        <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
+      <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
+        <div class="column">
+          <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
+          <i class="flaticon-microphone small" :class="{ 't-green': voiceCommandsOn }" @click="voiceCommandsOn = !voiceCommandsOn"></i>
+        </div>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-check" @click="nextUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-      </div>
-      <div class="row j-between" v-if="!isScreenDivided">
-        <p class="m00 t-gray t-center t-small mb1">Inspired by Spotify</p>
-        <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
+        <div class="column">
+          <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
+          <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
+        </div>
       </div>
     </div>
   <!-- MODAL TRYBU AUTOMATYCZNEGO  -->
@@ -106,6 +108,7 @@
         Tryb automatyczny włączony
       </div>
     </transition>
+    <VoiceCommands v-if="voiceCommandsOn" />
   </div>
 </template>
 
@@ -113,6 +116,7 @@
 import Timer from '~/components/Timer';
 import Stopwatch from '~/components/Stopwatch';
 import MovingText from '~/components/MovingText';
+import VoiceCommands from '~/components/VoiceCommands';
 
 export default {
   props: {
@@ -128,6 +132,7 @@ export default {
     Timer,
     Stopwatch,
     MovingText,
+    VoiceCommands,
   },
   data() {
     return {
@@ -139,6 +144,7 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
+      voiceCommandsOn: false,
       showAutomaticModeModal: false,
       showWholeComplex: this.cameBackFromExercise,
     }
