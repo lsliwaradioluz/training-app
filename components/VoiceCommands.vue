@@ -3,14 +3,19 @@
 
 <script>
   export default {
+    data() {
+      return {
+        recognition: null,
+      }
+    },
     methods: {
       startRecording() {
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = new SpeechRecognition();
-        recognition.interimResults = true;
+        this.recognition = new SpeechRecognition();
+        this.recognition.interimResults = true;
 
         setTimeout(() => {
-          recognition.addEventListener('result', e => {
+          this.recognition.addEventListener('result', e => {
             const isFinal = e.results[0].isFinal;
             const transcript = e.results[0][0].transcript.toLowerCase();
             
@@ -23,8 +28,8 @@
             }
           });
 
-          recognition.addEventListener('end', recognition.start);
-          recognition.start();
+          this.recognition.addEventListener('end', this.recognition.start);
+          this.recognition.start();
         }, 1000); 
       }
     },

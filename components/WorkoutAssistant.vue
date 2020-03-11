@@ -91,7 +91,11 @@
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
         <div class="column">
           <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
-          <i class="flaticon-microphone small" :class="{ 't-green': voiceCommandsOn }" @click="voiceCommandsOn = !voiceCommandsOn"></i>
+          <i 
+            class="flaticon-microphone small" 
+            :class="{ 't-green': voiceCommandsOn }" 
+            @click="voiceCommandsOn = !voiceCommandsOn" 
+            v-if="!isScreenDivided"></i>
         </div>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-check" @click="nextUnit"></i>
@@ -108,7 +112,7 @@
         Tryb automatyczny włączony
       </div>
     </transition>
-    <VoiceCommands v-if="voiceCommandsOn" />
+    <VoiceCommands v-if="voiceCommandsOn" @next="nextUnit" @previous="previousUnit" />
   </div>
 </template>
 
@@ -314,7 +318,7 @@ export default {
   .workout-assistant__bar {
     width: 100%;
     background: transparent;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
 
