@@ -137,7 +137,7 @@
       </transition>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons tab p00 row j-between t-green mt05" :class="{ blind: editedUnit != null}">
+    <div class="workout-editor__buttons tab p00 row j-between t-green" :class="{ blind: editedUnit != null}">
       <button class="p11" type="button" @click="uploadWorkout">Zapisz</button>
       <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
