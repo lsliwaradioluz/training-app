@@ -26,14 +26,6 @@ query($ids: [ID]!) {
               id
               url
             }
-            subcategory {
-              id
-              name
-              category {
-                id
-                name
-              }
-            }
           }
         }
       }

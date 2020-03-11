@@ -5,34 +5,17 @@
       <div class="row j-between" v-if="!edit">
         <span>{{ exercise.name }}</span>
         <nuxt-link 
-          class="flaticon-adjust" 
+          class="flaticon-adjust ml1" 
           tag="i" 
           to="edit" 
           v-if="$store.state.auth.user.admin" 
-          append/>
+          append />
       </div>
       <span v-else>Nazwa ćwiczenia</span>
     </Head>
-    <p class="m00 tab" v-if="edit">
+    <p class="mt0 mb05 tab" v-if="edit">
       <input class="input--invisible" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
     </p>
-  <!-- SUBKATEGORIA  -->
-    <div v-if="edit">
-      <Head>Subkategoria</Head>
-      <div class="tab">
-        <p class="row j-between m00">
-          <span>{{ subcategoryName }}</span>
-          <span class="t-small" @click="showSubcategoriesList = !showSubcategoriesList" :class="{ rotated: showSubcategoriesList }">▼</span>
-        </p>
-        <ul v-if="showSubcategoriesList">
-          <li 
-            class="m00" 
-            v-for="subcategory in filteredSubcategories" 
-            :key="subcategory.id"
-            @click="pickSubcategory(subcategory)">{{ subcategory.name }}</li>
-        </ul>
-      </div>
-    </div>
   <!-- ZDJĘCIA  -->
     <Head v-if="edit">
       <div class="row j-between">
@@ -111,9 +94,6 @@
         default: () => {
           return { name: '', images: [], description: '', technique: '' }
         }
-      }, 
-      subcategories: {
-        type: Array, 
       },
       edit: {
         type: Boolean, 
@@ -124,28 +104,18 @@
       return {
         client: this.$apollo.getClient(),
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
-        showSubcategoriesList: false,
-        subcategoryName: this.addWhitespace(this.$route.params.subcategory),
         existingImages: this.exercise.images,
         uploadedFiles: [],
         currentImage: 0,
         input: {
           name: this.exercise.name,
           description: this.exercise.description,
-          subcategory: this.$route.query.subcategoryId ? this.$route.query.subcategoryId : this.exercise.subcategory.id,
         }
       }
     },
     computed: {
       description() {
         return this.exercise.description ? this.exercise.description.split('.') : [];
-      }, 
-      filteredSubcategories() {
-        const filteredSubcategories = this.subcategories.filter(subcategory => {
-          return subcategory.name != this.subcategoryName;
-        });
-
-        return filteredSubcategories;
       },
     }, 
     methods: {
@@ -263,11 +233,6 @@
         //   this.updateExercise();
         // }
       },
-      pickSubcategory(subcategory) {
-        this.input.subcategory = subcategory.id;
-        this.subcategoryName = subcategory.name;
-        this.showSubcategoriesList = false;
-      }
     },
   }
 </script>

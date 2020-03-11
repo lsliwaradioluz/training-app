@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Head from '../components/Head';
-import Category from '../components/Category';
 import Workout from '../components/Workout';
 import UserTab from '../components/UserTab';
 import UserPanel from '../components/UserPanel';
@@ -13,7 +12,6 @@ import WorkoutPanel from '../components/WorkoutPanel';
 import WorkoutPairingTab from '../components/WorkoutPairingTab';
 
 Vue.component('Head', Head);
-Vue.component('Category', Category);
 Vue.component('Workout', Workout);
 Vue.component('UserTab', UserTab);
 Vue.component('UserPanel', UserPanel);

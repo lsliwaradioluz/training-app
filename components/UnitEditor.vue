@@ -45,10 +45,13 @@
 </template>
 
 <script>
+  import createExercise from '~/apollo/mutations/createExercise.gql';
+
   export default {
     props: ['editedUnit', 'exercises'],
     data() {
       return {
+        client: this.$apollo.getClient(),
         unit: this.editedUnit,
       }
     }, 
@@ -71,9 +74,17 @@
       passExercise(exercise) {
         this.unit.exercise = {...exercise};
       },
-      addUnit() {
+      createExercise() {
+        const input = {
+          data: {
+            name: this.unit.exercise.name
+          }
+        }
+        return this.client.mutate({ mutation: createExercise, variables: { input: input } });
+      }, 
+      createUnit() {
         for (let key in this.unit.numbers) {
-          // simply using + to convert string to number 
+          // inputs (even type number) always return string. We simply use + to convert string to number 
           this.unit.numbers[key] = +this.unit.numbers[key];
         }
 
@@ -84,7 +95,20 @@
         }
 
         this.$emit('add-unit', newUnit);
-      }, 
+      },
+      addUnit() {
+        if (this.unit.exercise.id == '') {
+          if (confirm(`Wykonanie tej operacji doda ćwiczenie ${this.unit.exercise.name} do bazy. Kontynuować?`)) {
+            this.createExercise()
+              .then(res => {
+                this.unit.exercise.id = res.data.createExercise.exercise.id;
+                this.createUnit();
+              });
+          }
+        } else {
+          this.createUnit();
+        }
+      } 
     },
   }
 </script>

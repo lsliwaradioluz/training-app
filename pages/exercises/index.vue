@@ -3,30 +3,22 @@
     <div class="categories">
       <Head>
         <div class="row j-between">
-          <h3 class="m00">Kategorie</h3>
-          <i class="flaticon-plus" @click="createCategory = true" v-if="createCategory == false"></i>
+          <h3 class="m00">
+            <input class="input--invisible" v-model="filter" placeholder="Znajdź ćwiczenie..." spellcheck="false" autocomplete="off">
+          </h3>
+          <nuxt-link class="flaticon-plus ml1" tag="i" :to="{ path: 'new' }" append></nuxt-link>
         </div>
       </Head>
-      <Category name="Nowa kategoria" v-if="createCategory" @upload="uploadCategory($event)" @abort-upload="createCategory = false"></Category>
-      <Category
-        :class="{ inactive: createCategory == true }" 
-        v-for="category in categories" 
-        :key="category.id" 
-        :name="category.name"
-        :id="category.id"
-        :subfields="category.subcategories"
-        @delete="deleteCategory($event)"
-        @edit="editCategory($event.id, $event.name)">
-      </Category>
+      <ExerciseTab 
+        v-for="exercise in filteredExercises" 
+        :key="exercise.id"
+        :exercise="exercise"/>
     </div>
   </div>
 </template>
 
 <script>
   import mainQuery from '~/apollo/queries/exercises/main.gql';
-  import createCategory from '~/apollo/mutations/createCategory.gql';
-  import deleteCategory from '~/apollo/mutations/deleteCategory.gql';
-  import updateCategory from '~/apollo/mutations/updateCategory.gql';
 
   export default {
     asyncData(context) {
@@ -34,58 +26,29 @@
       return client.query({ query: mainQuery }) 
         .then(({ data }) => {
           return {
-            categories: data.categories
+            exercises: data.exercises
           }
         }) 
-    }, 
+    },
     data() {
       return {
-        createCategory: false, 
-        client: this.$apollo.getClient(),
+        filter: ''
       }
-    },
-    methods: {
-      uploadCategory(name) {
-        const input = {
-          data: {
-            name: name
-          }
-        }
-
-        this.client.mutate({ mutation: createCategory, variables: { input: input } })
-          .then(res => {
-            window.location.reload(true);
+    }, 
+    computed: {
+      filteredExercises() {
+        let filteredExercises = [];
+        let filter = this.filter.toLowerCase();
+        if (filter !== '') {
+          filteredExercises = this.exercises.filter(exercise => {
+            const exerciseName = exercise.name.toLowerCase();
+            return exerciseName.includes(filter) || filter.includes(exerciseName);
           });
+        } else {
+          filteredExercises = this.exercises;
+        }
+        return filteredExercises;
       },
-      deleteCategory(id) {
-        if (confirm('Czy na pewno chcesz usunąć?')) {
-          const input = {
-            where: {
-              id: id
-            }
-          }
-
-          this.client.mutate({ mutation: deleteCategory, variables: { input: input }})
-            .then(res => {
-              window.location.reload(true);
-            });
-        }
-      }, 
-      editCategory(id, name) {
-        const input = {
-          where: {
-            id: id
-          }, 
-          data: {
-            name: name
-          }
-        }
-
-        this.client.mutate({ mutation: updateCategory, variables: { input: input }})
-            .then(res => {
-              window.location.reload(true);
-            });
-      }
     }
   }
 </script>

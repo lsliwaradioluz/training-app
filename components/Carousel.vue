@@ -57,11 +57,7 @@
       autoplaySpeed: {
         type: Number, 
         default: () => 5
-      }, 
-      // usuń custom length jeżeli rerendering z :key zadziała
-      customLength: {
-        type: Number
-      }
+      },
     },
     data() {
       return {
@@ -70,7 +66,7 @@
         moveStart: null, 
         move: null, 
         currentTranslate: 0,
-        length: this.customLength == null ? this.$slots.default.length : this.customLength,
+        length: this.$slots.default.length,
         viewportColumnsMatched: null, 
         isActive: null, 
         mousedown: false,
@@ -111,13 +107,6 @@
       startFromPage() {
         this.currentPage = this.startFromPage;
       },
-      // usuń watch customLength jeżeli rerendering z :key zadziała
-      customLength() {
-        this.length = this.customLength;
-        if (this.currentPage > this.length - 1) {
-          this.currentPage = this.length - 1;
-        }
-      } 
     },
     methods: {
       animateCarousel() {
@@ -236,6 +225,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    width: 100%;
   }
 
   .carousel-navdots {

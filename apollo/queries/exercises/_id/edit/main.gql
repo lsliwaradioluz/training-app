@@ -1,0 +1,11 @@
+query($id: ID!) {
+  exercise(id: $id) {
+    id
+    name
+    description
+    images {
+      id
+      url
+    }
+  },
+}

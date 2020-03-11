@@ -24,21 +24,23 @@
             append></nuxt-link>
         </div>
       </Head>
-      <Carousel 
-        :pagination="false" 
-        @change-page="currentTranslate = $event" 
-        :active="!maxEditorOpen"
-        :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? $store.state.main.workoutAssistantState[workout.id].section : 0"
-        :key="workout.id">
-        <Routine 
-          v-for="section in workout.sections" 
-          :key="section.id" 
-          :section="section"
-          @toggle-max-editor="maxEditorOpen = $event"
-          @add-max="addMax($event)" 
-          @subtract-max="subtractMax($event)"
-          @upload-workout="uploadWorkout" />
+      <div class="carousel-container">
+        <Carousel 
+          :pagination="false" 
+          @change-page="currentTranslate = $event" 
+          :active="!maxEditorOpen"
+          :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? $store.state.main.workoutAssistantState[workout.id].section : 0"
+          :key="workout.id">
+          <div class="p01 column" v-for="section in workout.sections" :key="section.id">
+            <Routine 
+              :section="section"
+              @toggle-max-editor="maxEditorOpen = $event"
+              @add-max="addMax($event)" 
+              @subtract-max="subtractMax($event)"
+              @upload-workout="uploadWorkout" />
+          </div>
       </Carousel>
+      </div>
     </div>
   </div>
 </template>

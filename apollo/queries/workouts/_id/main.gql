@@ -27,14 +27,6 @@ query($ids: [ID]!) {
           exercise {
             id
             name
-            subcategory {
-              id
-              name
-              category {
-                id
-                name
-              }
-            }
           }
         }
       }

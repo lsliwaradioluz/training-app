@@ -6,6 +6,7 @@ query($username: String, $today: DateTime) {
     username
     fullname
     image {
+      id
       url
     }
     workouts(limit: 1, sort: "scheduled:asc", where: { scheduled_gt: $today, sticky_ne: "true" } ) {

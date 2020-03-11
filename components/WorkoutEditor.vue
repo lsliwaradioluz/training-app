@@ -23,71 +23,81 @@
         </div>
         <transition name="accordion">
           <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
-            <button :class="{ pb05: showButtonsPanel }" @click="createSection">Dodaj</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="createSection('before')">
+              <i class="flaticon-left-arrow fs-05" />
+              <span>Dodaj</span>
+            </button>
             <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">Usuń</button>
+            <button :class="{ pb05: showButtonsPanel }" @click="createSection('after')">
+              <span>Dodaj</span>
+              <i class="flaticon-right-arrow fs-05" />
+            </button>
           </div>
         </transition>
       </Head>
       <transition name="fade">
         <div v-if="!editedUnit">
+        <div class="carousel-container" v-if="sections.length > 0">
           <Carousel 
             :pagination="false" 
             :active="!showButtonsPanel && currentComplex == null" 
-            :custom-length="sections.length" 
             :start-from-page="currentSection" 
-            @change-page="currentSection = $event"
-            v-if="sections.length > 0">
-            <div class="tab" v-for="(section, sectionindex) in sections" :key="sectionindex">
-              <div class="row j-between">
-                <h3 class="mt0" v-if="currentSection != null">
-                  <input 
-                    class="input--invisible" 
-                    type="text" 
-                    placeholder="Nazwa sekcji"
-                    v-model="sections[currentSection].name"
-                    spellcheck="false"
-                    :ref="`input${sectionindex}`">
-                </h3>
-                <h3 class="mt0" v-else>{{ section.name }}</h3>
-                <i class="flaticon-plus" @click="openUnitEditor()"></i>
-              </div>
-              <div>
-                <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
-                  <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
-                    {{ complex.name }}
-                    <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
-                    <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
-                  </h4>
-                  <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
-                    <div class="row j-between">
-                      <p class="m00">{{ unit.exercise.name }}</p>
-                      <div class="workout-editor__unit-buttons">
-                        <i 
-                          class="workout-editor__unit-button flaticon-vertical-dots small" 
-                          @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" ></i>
-                        <transition name="roll">
-                          <div class="row" v-if="showUnitButtons == `${complexindex}${unitindex}`">
-                            <button class="m00 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                            <button class="m00 mr05 ml0" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
-                            <button class="m00 ml0" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
-                          </div>
-                        </transition>
-                      </div>
-                    </div>
-                    <li>
-                      <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
-                      <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
-                    </li>
-                    <li>{{ unit.remarks }}</li>
-                    <li>
-                      <span class="t-gray">przerwy {{ unit.rest }}s</span>
-                    </li>
-                  </ul>
+            :key="sections.length"
+            @change-page="currentSection = $event">
+            <div class="p01 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
+              <div class="tab column fg1">
+                <div class="row j-between">
+                  <h3 class="mt0" v-if="currentSection != null">
+                    <input 
+                      class="input--invisible" 
+                      type="text" 
+                      placeholder="Nazwa sekcji"
+                      v-model="sections[sectionindex].name"
+                      spellcheck="false"
+                      :ref="`input${sectionindex}`">
+                  </h3>
+                  <h3 class="mt0" v-else>{{ section.name }}</h3>
+                  <i class="flaticon-plus" @click="openUnitEditor()"></i>
                 </div>
-                <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+                <div>
+                  <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
+                    <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
+                      <input class="input--invisible" v-model="section.complexes[complexindex].name">
+                      <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
+                      <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
+                    </h4>
+                    <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
+                      <div class="row j-between">
+                        <p class="m00">{{ unit.exercise.name }}</p>
+                        <div class="workout-editor__unit-buttons">
+                          <i 
+                            class="workout-editor__unit-button flaticon-vertical-dots small" 
+                            @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" ></i>
+                          <transition name="roll">
+                            <div class="row" v-if="showUnitButtons == `${complexindex}${unitindex}`">
+                              <button class="m00 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                              <button class="m00 mr05 ml0" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                              <button class="m00 ml0" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
+                            </div>
+                          </transition>
+                        </div>
+                      </div>
+                      <li>
+                        <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
+                        <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
+                      </li>
+                      <li>{{ unit.remarks }}</li>
+                      <li>
+                        <span class="t-gray">przerwy {{ unit.rest }}s</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+                </div>
               </div>
             </div>
           </Carousel>
+        </div>
           <p class="m00 tab" v-else>
             Na razie nie dodałeś żadnych sekcji.
           </p>
@@ -106,7 +116,7 @@
               </span>
               <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
             </div>
-            <Carousel :pagination="false" :custom-length="previousWorkoutSections.length">
+            <Carousel :pagination="false" :key="previousWorkoutSections.length">
               <Routine 
                 v-for="section in previousWorkoutSections" 
                 :key="section.id" 
@@ -135,7 +145,6 @@
 </template>
 
 <script>
-import Skills from '~/components/Skills.vue';
 import exercisesQuery from '~/apollo/queries/users/_name/exercises.gql';
 import createWorkout from '~/apollo/mutations/createWorkout.gql';
 import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
@@ -145,7 +154,6 @@ import UnitEditor from '~/components/UnitEditor';
 
 export default {
   components: {
-    Skills,
     Routine, 
     Radio,
     UnitEditor, 
@@ -163,7 +171,6 @@ export default {
       client: this.$apollo.getClient(),
       ...this.specificData,
       showUnitEditor: false,
-      sectionBeforeEdit: null,
       showButtonsPanel: false,
       showUnitButtons: null,
       currentWorkout: 0,
@@ -204,16 +211,17 @@ export default {
     }
   },
   methods: {
-    createSection() {
+    createSection(index) {
       const newSection = {
         name: 'Nowa sekcja',
         complexes: [],
       };
-      this.sections.push(newSection);
-      this.currentSection = this.sections.length - 1;
+      const newIndex = index == 'before' ? this.currentSection : this.currentSection + 1;
+      this.sections.splice(newIndex, 0, newSection);
+      this.currentSection = newIndex;
       this.showButtonsPanel = false;
       setTimeout(() => {
-        let input = `input${this.sections.length - 1}`;
+        let input = `input${newIndex}`;
         this.$refs[input][0].focus();
       }, 700);
     },
@@ -375,6 +383,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+  .dupa {
+    flex-grow: 1;
+  }
+
   .workout-editor__panel {
     border-top: 1px solid color(gray);
     button {

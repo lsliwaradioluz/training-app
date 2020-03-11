@@ -1,11 +1,7 @@
 query {
-  categories {
+  exercises(sort: "name:asc") {
     id
     name
-    subcategories(limit: 3) {
-      id
-      name
-    }
+    description
   }
-
 }

@@ -2,12 +2,5 @@ query {
   exercises {
     name
     id
-    subcategory {
-      id
-      category {
-        id
-        name
-      }
-    }
   }
 }

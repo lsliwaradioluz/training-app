@@ -1,8 +1,0 @@
-mutation($input: createSubcategoryInput) {
-  createSubcategory(input: $input) {
-    subcategory {
-      id
-      name
-    }
-  }
-}

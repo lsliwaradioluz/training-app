@@ -1,8 +1,0 @@
-mutation($input: updateSubcategoryInput) {
-  updateSubcategory(input: $input) {
-    subcategory {
-      id
-      name
-    }
-  }
-}

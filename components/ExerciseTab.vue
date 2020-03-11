@@ -1,9 +1,10 @@
 <template>
   <div class="exercise-tab tab p11 column" :class="{ pb0: showButtonsPanel }">
     <div class="row j-between a-stretch">
-      <nuxt-link class="exercise-tab__link pr1" :to="removeWhitespace(exercise.name)" tag="div" append>
+      <nuxt-link class="exercise-tab__link pr1" :to="exercise.id" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
-        <p class="exercise-tab__description m00">Poziom {{ index + 1 }}</p>
+        <p class="exercise-tab__description m00" v-if="exercise.description">{{ exercise.description | shortenText }}</p>
+        <p class="exercise-tab__description m00" v-else>Brak opisu</p>
       </nuxt-link>
       <div class="row a-center">
         <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
@@ -12,7 +13,7 @@
     <transition name="accordion">
       <div class="exercise-tab__panel row mt05 t-green" v-if="showButtonsPanel">
         <button type="button" @click="deleteExercise">Usuń</button>
-        <nuxt-link tag="button" type="button" :to="`${removeWhitespace(exercise.name)}/edit`" append>Edytuj</nuxt-link>
+        <nuxt-link tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
       </div>
     </transition>
   </div>
@@ -22,7 +23,7 @@
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
   
   export default {
-    props: ['exercise', 'index'], 
+    props: ['exercise'], 
     data() {
       return {
         showButtonsPanel: false, 

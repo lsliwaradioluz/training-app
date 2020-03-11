@@ -38,7 +38,7 @@
               <li>przerwy {{ unit.rest }}s</li>
             </ul>
             <nuxt-link
-              :to="`/exercises/${unit.exercise.subcategory.category.name}/${unit.exercise.subcategory.name}/${unit.exercise.name}`" 
+              :to="`/exercises/${unit.exercise.id}`" 
               tag="i"
               class="flaticon-information small ml1"></nuxt-link>
           </div>
@@ -288,13 +288,8 @@ export default {
       // Add the rest intervals if there should be any
       for (let i = 0; i <= units.length - 1; i++) {
         let rest = units[i].rest;
-        if (rest > 0 && i < units.length - 1) {
-          units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest });
-        } else if (rest > 0 && i == units.length - 1) {
-          units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest*2 });
-        }
-      }
-
+        if (rest > 0) units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest });
+      } 
       return units;
     },
   }
