@@ -11,22 +11,22 @@
     <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex">
       <h4 class="mt0 mb05 t-green row j-between" v-if="complex.units.length > 1">
         <span>{{ complex.name }}</span>
-        <i class="flaticon-plus small" @click="$emit('copy-complex', complex)" v-if="edit"></i>
+        <i class="flaticon-plus fs-09" @click="$emit('copy-complex', complex)" v-if="edit"></i>
       </h4>
       <ul class="mb05" :class="{ pl05: complex.units.length > 1}" v-for="(unit, unitindex) in complex.units" :key="unitindex">
-        <div class="row j-between">
+        <div class="row j-between a-start">
           <p class="m00">{{ unit.exercise.name }}</p>
           <div v-if="!maxEditorOpen">
             <nuxt-link
               v-if="!edit"
               :to="`/exercises/${unit.exercise.id}`" 
               tag="i"
-              class="flaticon-information small ml1"></nuxt-link>
-            <i class="flaticon-plus small" @click="$emit('copy-unit', unit)" v-else></i>
+              class="flaticon-information fs-09 ml1"></nuxt-link>
+            <i class="flaticon-plus fs-09" @click="$emit('copy-unit', unit)" v-else></i>
           </div>
           <div class="routine__max-buttons row pl1" v-if="maxEditorOpen">
-            <i class="flaticon-diminish small" @click="$emit('subtract-max', { unit: unitindex, complex: complexindex })"></i>
-            <i class="flaticon-plus small" @click="$emit('add-max', { unit: unitindex, complex: complexindex })"></i>
+            <i class="flaticon-diminish fs-09" @click="$emit('subtract-max', { unit: unitindex, complex: complexindex })"></i>
+            <i class="flaticon-plus fs-09" @click="$emit('add-max', { unit: unitindex, complex: complexindex })"></i>
           </div>
         </div>
         <li>

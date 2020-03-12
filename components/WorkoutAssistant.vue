@@ -1,8 +1,9 @@
 <template>
   <div 
     class="workout-assistant column j-end main pt1 pb0" 
-    :class="{ half: isScreenDivided }" 
+    :class="{ half: isScreenDivided }"
     :style="{ backgroundImage: image }">
+    <!-- <audio :src="require('@/assets/sounds/Feathers.mp3')" controls></audio> -->
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar row j-between a-center main pb1 pt1">
       <span class="logo">Piti</span>
@@ -13,6 +14,12 @@
       </span>
     </div>
     <div>
+  <!-- MODAL TRYBU AUTOMATYCZNEGO  -->
+      <transition name="slide-to-right">
+        <div class="workout-assistant__modal t-small" v-show="showAutomaticModeModal">
+          Tryb automatyczny włączony
+        </div>
+      </transition>
   <!-- STOPER -->
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
@@ -21,7 +28,7 @@
       <div class="workout-assistant__complex-tab main" v-if="showWholeComplex">
         <div class="workout-assistant__bar row j-between a-center main pb1 pt1 b-assistantblack">
           <span class="logo">Piti</span>
-          <h3 class="m00 t-center">{{ sections[controllers.section].complexes[controllers.complex].name | shortenSection }}</h3>
+          <h3 class="m00 t-center">Rozpiska</h3>
           <span class="hamburger t-right">
             <i class="flaticon-cancel small" @click="showWholeComplex = false"></i>
           </span>
@@ -50,24 +57,15 @@
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
           </MovingText>
-          <MovingText :key="current.remarks" v-if="current.remarks">
-            <p class="t-small m00">{{ current.remarks }}</p>
-          </MovingText>
-          <div v-else>
-            <p class="t-small m00" v-if="current.exercise.name != 'Za chwilę:'">Wykonaj teraz</p>
-            <p class="t-small m00" v-else>
-              <span v-if="next.reps">{{ next.reps }}</span><span v-if="next.reps && next.time">x</span><span v-if="next.time">{{ next.time }}s</span> 
-              <span v-if="next.distance">{{ next.distance }}m</span> 
-              <span>{{ next.exercise.name }}</span><span v-if="next.remarks">, {{ next.remarks }}</span>
-            </p>
-          </div>
+          <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
+          <p class="t-small m00" v-else>Wykonaj teraz</p>
           <p class="t-small m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
           :time="current.time" 
           @countdown-over="nextUnit" 
           :key="controllers.unit"
-          v-if="current.exercise.name == 'Za chwilę:' || automaticModeOn && current.time && !current.reps" />
+          v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="right row a-center j-end pl1" v-else>
           <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
@@ -91,14 +89,10 @@
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
         <div class="column">
           <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
-          <i 
-            class="flaticon-microphone small" 
-            :class="{ 't-green': voiceCommandsOn }" 
-            @click="voiceCommandsOn = !voiceCommandsOn" 
-            v-if="!isScreenDivided"></i>
+          <i class="flaticon-speaker small"></i>
         </div>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
-        <i class="flaticon-check" @click="nextUnit"></i>
+        <i class="flaticon-check fs-4" @click="nextUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <div class="column">
           <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
@@ -106,13 +100,6 @@
         </div>
       </div>
     </div>
-  <!-- MODAL TRYBU AUTOMATYCZNEGO  -->
-    <transition name="slide-up">
-      <div class="workout-assistant__modal tab b-gray t-small" v-show="showAutomaticModeModal">
-        Tryb automatyczny włączony
-      </div>
-    </transition>
-    <VoiceCommands v-if="voiceCommandsOn" @next="nextUnit" @previous="previousUnit" />
   </div>
 </template>
 
@@ -120,7 +107,6 @@
 import Timer from '~/components/Timer';
 import Stopwatch from '~/components/Stopwatch';
 import MovingText from '~/components/MovingText';
-import VoiceCommands from '~/components/VoiceCommands';
 
 export default {
   props: {
@@ -136,7 +122,6 @@ export default {
     Timer,
     Stopwatch,
     MovingText,
-    VoiceCommands,
   },
   data() {
     return {
@@ -148,12 +133,15 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
-      voiceCommandsOn: false,
       showAutomaticModeModal: false,
       showWholeComplex: this.cameBackFromExercise,
     }
   },
   methods: {
+    playSound(url) {
+      var snd = new Audio(require('@/assets/sounds/Feathers.mp3')); 
+      snd.play();
+    },
     nextUnit() {
       this.controllers.unit++;
       if (this.controllers.unit > this.units.length - 1) {
@@ -227,8 +215,12 @@ export default {
   computed: {
     image() {
       let image; 
-      if (this.current.exercise.name == 'Za chwilę:' ) {
+      if (this.current.exercise.name == 'Odpocznij') {
         image = this.next.exercise.images.length > 0 ? this.next.exercise.images[0].url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
+      } else if (this.current.exercise.name == 'Rozpoczynasz nowy blok' || this.current.exercise.name == 'Witaj w cyfrowym asystencie treningu!') {
+        image = 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
+      } else if (this.current.exercise.name == 'Ukończyłeś blok' || this.current.exercise.name == 'Ukończyłeś sekcję' || this.current.exercise.name == 'Ukończyłeś trening') {
+        image = 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
       } else {
         image = this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       }
@@ -293,13 +285,67 @@ export default {
       // Filter the array to remove undefined if exists
       units = units.filter(unit => {
         return unit != undefined;
-      })
+      });
 
       // Add the rest intervals if there should be any
       for (let i = 0; i <= units.length - 1; i++) {
         let rest = units[i].rest;
-        if (rest > 0) units.splice(i+1, 0, { exercise: { name: 'Za chwilę:' }, time: rest });
-      } 
+        if (rest > 0 && i < units.length - 1) {
+          let remarks; 
+          if (units[i+1].reps) {
+            remarks = `Następnie: ${units[i+1].reps} ${units[i+1].exercise.name}`;
+          } else if (units[i+1].time) {
+            remarks = `Następnie: ${units[i+1].time}s ${units[i+1].exercise.name}`;
+          } else if (units[i+1].distance) {
+            remarks = `Następnie: ${units[i+1].distance}m ${units[i+1].exercise.name}`;
+          }
+
+          units.splice(i+1, 0, { 
+            exercise: { 
+              name: 'Odpocznij' 
+            }, 
+            time: rest, 
+            remarks: remarks,
+          });
+        } else if (rest > 0 && i == units.length - 1) {
+          let name, remarks; 
+
+          if (this.controllers.complex < this.sections[this.controllers.section].complexes.length - 1) {
+            name = 'Ukończyłeś blok';
+            remarks = 'Odpocznij i przejdź do kolejnego';
+          } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section < this.sections.length - 1) {
+            name = 'Ukończyłeś sekcję';
+            remarks = 'Odpocznij i przejdź do kolejnej';
+          } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section == this.sections.length - 1) {
+            name = 'Ukończyłeś trening';
+            remarks = 'Daj znać trenerowi, jak poszło!';
+          }
+
+          units.splice(i+1, 0, { 
+            exercise: { 
+              name: name,
+            },
+            remarks: remarks,
+          });
+        }
+      }
+
+      units.unshift({ 
+        exercise: { 
+          name: 'Rozpoczynasz nowy blok' 
+        },
+        remarks: 'Zapoznaj się z rozpiską i przygotuj sprzęt', 
+      });
+
+      if (this.controllers.section == 0 && this.controllers.complex == 0) {
+        units.unshift({
+          exercise: {
+            name: 'Witaj w cyfrowym asystencie treningu!',
+          }, 
+          remarks: 'Włącz lub wyłącz dźwięk ikoną głośnika'
+        })
+      }
+
       return units;
     },
   }
@@ -389,16 +435,5 @@ export default {
     &:last-child {
       margin: 0;
     }
-  }
-
-  .flaticon-check:before {
-    font-size: 4rem;
-  }
-
-  .workout-assistant__modal {
-    margin: 0 auto;
-    position: absolute;
-    top: 10%;
-    padding: 0.5rem;
   }
 </style>

@@ -50,3 +50,8 @@
 .small:before {
   font-size: 0.9rem;
 }
+
+.pulsing-element {
+  position: relative;
+  animation: pulse 1s infinite;
+}

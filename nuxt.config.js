@@ -101,15 +101,19 @@ export default {
   ** Build configuration
   */
   build: {
-    /*
-    ** You can extend webpack config here
-    */
-   plugins: [
-    new webpack.ProvidePlugin({
-      '_': 'lodash'
-    })
+    plugins: [
+      new webpack.ProvidePlugin({
+        '_': 'lodash'
+      })
     ],
     extend (config, ctx) {
+      config.module.rules.push({
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]'
+        }
+      })
     }
   }
 }

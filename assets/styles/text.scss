@@ -81,32 +81,42 @@ p {
   font-size: 0.7rem;
 }
 
+[class*='fs-'] {
+  line-height: 1;
+}
+
 .fs-05 {
   font-size: 0.5rem;
-  line-height: 1;
+}
+
+.fs-09 {
+  font-size: 0.9rem;;
 }
 
 .fs-1 {
   font-size: 1rem;
-  line-height: 1;
 }
 
 .fs-15 {
   font-size: 1.5rem;
-  line-height: 1;
 }
 
 .fs-2 {
   font-size: 2rem;
-  line-height: 1;
 }
 
 .fs-25 {
   font-size: 2.5rem;
-  line-height: 1;
 }
 
 .fs-3 {
   font-size: 3rem;
-  line-height: 1;
+}
+
+.fs-35 {
+  font-size: 3.5rem;
+}
+
+.fs-4 {
+  font-size: 4rem;
 }

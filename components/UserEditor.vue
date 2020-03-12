@@ -2,13 +2,13 @@
   <div class="user-editor">
     <form class="tab">
       <label for="fullname">Imię i nazwisko</label>
-      <input class="input--invisible" type="text" id="fullname" placeholder="np. Jan Kowalski" v-model="fullname" spellcheck="false">
+      <input class="input--invisible" type="text" id="fullname" placeholder="np. Jan Kowalski" v-model="fullname" spellcheck="false" autocomplete="false">
       <br>
       <label for="username">Nazwa użytkownika</label>
-      <input class="input--invisible" type="text" id="username" placeholder="np. jkowalski" v-model="username" spellcheck="false">
+      <input class="input--invisible" type="text" id="username" placeholder="np. jkowalski" v-model="username" spellcheck="false" autocomplete="false">
       <br>
       <label for="email">Email</label>
-      <input class="input--invisible" type="email" id="email" placeholder="np. jankowalski@gmail.com" v-model="email" spellcheck="false">
+      <input class="input--invisible" type="email" id="email" placeholder="np. jankowalski@gmail.com" v-model="email" spellcheck="false" autocomplete="false">
     </form>
     <div class="user-editor__buttons tab p00 row j-between t-green">
       <button class="p11" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>

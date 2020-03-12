@@ -38,12 +38,12 @@
       startMoveFunction() {
         this.translateTimeout = setTimeout(() => {
           this.translateInterval = setInterval(this.moveFunction, 35);
-        }, 2000);
+        }, 1000);
       }, 
       startMoveBackFunction() {
         this.translateTimeout = setTimeout(() => {
           this.translateInterval = setInterval(this.moveBackFunction, 35);
-        }, 2000);
+        }, 1000);
       }
     },
     mounted() {
