@@ -87,17 +87,12 @@
         </div>
       </div>
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
-        <div class="column">
-          <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
-          <i class="flaticon-speaker small"></i>
-        </div>
+        <i class="flaticon-speaker small"></i>
+        <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
-        <i class="flaticon-check fs-4" @click="nextUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <div class="column">
-          <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-          <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
-        </div>
+        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
+        <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
       </div>
     </div>
   </div>
