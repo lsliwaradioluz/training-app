@@ -2,8 +2,8 @@
   <div 
     class="workout-assistant column j-end main pt1 pb0" 
     :class="{ half: isScreenDivided }"
-    :style="{ backgroundImage: image }">
-    <!-- <audio :src="require('@/assets/sounds/Feathers.mp3')" controls></audio> -->
+    :style="{ backgroundImage: image }"
+    @click.self="nextUnit">
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar row j-between a-center main pb1 pt1">
       <span class="logo">Piti</span>
@@ -62,7 +62,9 @@
           <p class="t-small m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
-          :time="current.time" 
+          :time="current.time"
+          :bell="current.exercise.name != 'Odpocznij'"
+          :mute="voiceAssistantSpeaking"
           @countdown-over="nextUnit" 
           :key="controllers.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
@@ -87,13 +89,19 @@
         </div>
       </div>
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
-        <i class="flaticon-speaker small"></i>
+        <i class="flaticon-speaker small" :class="{ 't-green': voiceAssistantOn }" @click="voiceAssistantOn = !voiceAssistantOn"></i>
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
         <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
       </div>
+      <VoiceAssistant 
+        :soundname="current.soundname || 'wykonaj-ćwiczenie.mp3'" 
+        :key="current.soundname"
+        @playing="voiceAssistantSpeaking = true" 
+        @ended="voiceAssistantSpeaking = false"
+        v-if="voiceAssistantOn && !current.time || voiceAssistantOn && current.time > 20" />
     </div>
   </div>
 </template>
@@ -102,6 +110,7 @@
 import Timer from '~/components/Timer';
 import Stopwatch from '~/components/Stopwatch';
 import MovingText from '~/components/MovingText';
+import VoiceAssistant from '~/components/VoiceAssistant';
 
 export default {
   props: {
@@ -117,6 +126,7 @@ export default {
     Timer,
     Stopwatch,
     MovingText,
+    VoiceAssistant,
   },
   data() {
     return {
@@ -128,15 +138,13 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
+      voiceAssistantOn: true,
+      voiceAssistantSpeaking: true, 
       showAutomaticModeModal: false,
       showWholeComplex: this.cameBackFromExercise,
     }
   },
   methods: {
-    playSound(url) {
-      var snd = new Audio(require('@/assets/sounds/Feathers.mp3')); 
-      snd.play();
-    },
     nextUnit() {
       this.controllers.unit++;
       if (this.controllers.unit > this.units.length - 1) {
@@ -299,21 +307,25 @@ export default {
             exercise: { 
               name: 'Odpocznij' 
             }, 
-            time: rest, 
+            time: 31, 
             remarks: remarks,
+            soundname: 'odpocznij.mp3'
           });
         } else if (rest > 0 && i == units.length - 1) {
-          let name, remarks; 
+          let name, remarks, soundname; 
 
           if (this.controllers.complex < this.sections[this.controllers.section].complexes.length - 1) {
             name = 'Ukończyłeś blok';
             remarks = 'Odpocznij i przejdź do kolejnego';
+            soundname = 'blok-zakonczony.mp3';
           } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section < this.sections.length - 1) {
             name = 'Ukończyłeś sekcję';
             remarks = 'Odpocznij i przejdź do kolejnej';
+            soundname = 'sekcja-zakończona.mp3';
           } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section == this.sections.length - 1) {
             name = 'Ukończyłeś trening';
             remarks = 'Daj znać trenerowi, jak poszło!';
+            soundname = 'trening-zakończony.mp3';
           }
 
           units.splice(i+1, 0, { 
@@ -321,6 +333,7 @@ export default {
               name: name,
             },
             remarks: remarks,
+            soundname: soundname,
           });
         }
       }
@@ -330,6 +343,7 @@ export default {
           name: 'Rozpoczynasz nowy blok' 
         },
         remarks: 'Zapoznaj się z rozpiską i przygotuj sprzęt', 
+        soundname: 'rozpoczynasz-blok.mp3'
       });
 
       if (this.controllers.section == 0 && this.controllers.complex == 0) {
@@ -337,7 +351,8 @@ export default {
           exercise: {
             name: 'Witaj w cyfrowym asystencie treningu!',
           }, 
-          remarks: 'Włącz lub wyłącz dźwięk ikoną głośnika'
+          remarks: 'Włącz lub wyłącz dźwięk ikoną głośnika', 
+          soundname: 'witaj-w-asystencie.mp3'
         })
       }
 
