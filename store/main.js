@@ -29,7 +29,7 @@ export const mutations = {
   }, 
   resetWorkoutAssistantState(state, workoutAssistantState) {
     state.workoutAssistantState = workoutAssistantState;
-  }
+  },
 }
 
 export const getters = {  

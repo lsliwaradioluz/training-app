@@ -10,6 +10,10 @@ import Radio from '../components/Radio';
 import Routine from '../components/Routine';
 import WorkoutPanel from '../components/WorkoutPanel';
 import WorkoutPairingTab from '../components/WorkoutPairingTab';
+import Timer from '../components/Timer';
+import Stopwatch from '../components/Stopwatch';
+import MovingText from '../components/MovingText';
+import VoiceAssistant from '../components/VoiceAssistant';
 
 Vue.component('Head', Head);
 Vue.component('Workout', Workout);
@@ -22,6 +26,13 @@ Vue.component('Radio', Radio);
 Vue.component('Routine', Routine);
 Vue.component('WorkoutPanel', WorkoutPanel);
 Vue.component('WorkoutPairingTab', WorkoutPairingTab);
+Vue.component('Timer', Timer);
+Vue.component('Stopwatch', Stopwatch);
+Vue.component('MovingText', MovingText);
+Vue.component('VoiceAssistant', VoiceAssistant);
+
+
+
 
 
 

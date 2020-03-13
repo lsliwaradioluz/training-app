@@ -29,7 +29,7 @@
           :pagination="false" 
           @change-page="currentTranslate = $event" 
           :active="!maxEditorOpen"
-          :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? $store.state.main.workoutAssistantState[workout.id].section : 0"
+          :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? +$store.state.main.workoutAssistantState[workout.id].section : 0"
           :key="workout.id">
           <div class="p01 column" v-for="section in workout.sections" :key="section.id">
             <Routine 

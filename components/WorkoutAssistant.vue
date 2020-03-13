@@ -7,8 +7,8 @@
   <!-- STATUS BAR  -->
     <div class="workout-assistant__bar row j-between a-center main pb1 pt1">
       <span class="logo">Piti</span>
-      <h3 class="m00 t-center" v-if="!isScreenDivided">{{ sections[controllers.section].name | shortenSection }}</h3>
-      <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controllers.section].name | shortenSection }}</p>
+      <h3 class="m00 t-center" v-if="!isScreenDivided">{{ sections[controls.section].name | shortenSection }}</h3>
+      <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controls.section].name | shortenSection }}</p>
       <span class="hamburger t-right">
         <i class="flaticon-cancel small" @click="$router.go(-1)"></i>
       </span>
@@ -16,15 +16,15 @@
     <div>
   <!-- MODAL INFO  -->
       <transition name="slide-to-right">
-        <div class="t-small" v-show="showInfoModal">
+        <p class="m00 t-small" v-show="showInfoModal">
           {{ infoModalMessage }}
-        </div>
+        </p>
       </transition>
   <!-- STOPER -->
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-  <!-- ROZPISKA OBECNEGO BLOKU -->
+  <!-- ROZPISKA AKTUALNEGO BLOKU -->
       <div class="workout-assistant__complex-tab main" v-if="showWholeComplex">
         <div class="workout-assistant__bar row j-between a-center main pb1 pt1 b-assistantblack">
           <span class="logo">Piti</span>
@@ -36,7 +36,7 @@
         <div>
           <div 
             class="mb1 row j-between" 
-            v-for="(unit, index) in sections[controllers.section].complexes[controllers.complex].units" 
+            v-for="(unit, index) in sections[controls.section].complexes[controls.complex].units" 
             :key="index">
             <ul>
               <p class="m00">{{ unit.exercise.name }}</p>
@@ -53,7 +53,7 @@
       </div>
   <!-- ĆWICZENIE -->
       <div class="workout-assistant__exercise pt1 pb1 row a-start j-between" :class="{ grow: isScreenDivided }">
-        <div class="left">
+        <div>
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
           </MovingText>
@@ -66,9 +66,9 @@
           :bell="current.exercise.name != 'Odpocznij'"
           :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
           @countdown-over="nextUnit" 
-          :key="controllers.unit"
+          :key="controls.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
-        <div class="right row a-center j-end pl1" v-else>
+        <div class="row a-center j-end pl1" v-else>
           <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
           <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
@@ -77,18 +77,18 @@
       </div>
       <div class="workout-assistant__indicators" >
         <p class="m00 t-small">
-          {{ `Blok ${controllers.complex + 1 }/${ sections[controllers.section].complexes.length}` }}
+          {{ `Blok ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
         </p>
         <div class="row j-between">
           <span 
             class="workout-assistant__indicators-bar t-center"
-            :class="{ 'b-white': index <= controllers.unit }"
+            :class="{ 'b-white': index <= controls.unit }"
             v-for="(unit, index) in units" 
             :key="index" 
-            @click="controllers.unit = index"></span>
+            @click="controls.unit = index"></span>
         </div>
       </div>
-      <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
+      <div class="row j-between a-center pt1 pb1">
         <span>
           <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
           <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
@@ -111,10 +111,6 @@
 </template>
 
 <script>
-import Timer from '~/components/Timer';
-import Stopwatch from '~/components/Stopwatch';
-import MovingText from '~/components/MovingText';
-import VoiceAssistant from '~/components/VoiceAssistant';
 
 export default {
   props: {
@@ -126,16 +122,10 @@ export default {
       default: () => true
     },
   },
-  components: {
-    Timer,
-    Stopwatch,
-    MovingText,
-    VoiceAssistant,
-  },
   data() {
     return {
       sections: this.workout.sections,
-      controllers: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
+      controls: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
         section: this.$route.query.section,
         complex: 0, 
         unit: 0,
@@ -156,13 +146,13 @@ export default {
       this.showInfoModal = true;
       switch (this.voiceAssistantMode) {
         case 'on':
-          this.infoModalMessage = 'Asystent głosowy: wszystkie dźwięki';
+          this.infoModalMessage = 'Asystent głosowy włączony';
           break;
         case 'half-on':
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent w trybie: dźwięki wyłączone'; 
+          this.infoModalMessage = 'Asystent głosowy wyłączony'; 
       }
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;
@@ -179,61 +169,61 @@ export default {
   },
   methods: {
     nextUnit() {
-      this.controllers.unit++;
-      if (this.controllers.unit > this.units.length - 1) {
+      this.controls.unit++;
+      if (this.controls.unit > this.units.length - 1) {
         this.nextComplex();
       }
       this.$emit('set-current-state', { 
-        unit: this.controllers.unit, complex: this.controllers.complex, section: this.controllers.section 
+        unit: this.controls.unit, complex: this.controls.complex, section: this.controls.section 
       });
     },
     previousUnit() {
-      this.controllers.unit--;
-      if (this.controllers.unit < 0) {
+      this.controls.unit--;
+      if (this.controls.unit < 0) {
         this.previousComplex();
       }
       this.$emit('set-current-state', { 
-        unit: this.controllers.unit, 
-        complex: this.controllers.complex, 
-        section: this.controllers.section 
+        unit: this.controls.unit, 
+        complex: this.controls.complex, 
+        section: this.controls.section 
       });
     },
     nextComplex() {
-      this.controllers.complex++;
-      if (this.controllers.complex > this.sections[this.controllers.section].complexes.length - 1) {
+      this.controls.complex++;
+      if (this.controls.complex > this.sections[this.controls.section].complexes.length - 1) {
         this.nextSection();
       } else {
-        this.controllers.unit = 0;
+        this.controls.unit = 0;
       }
     },
     previousComplex() {
-      this.controllers.complex--
-      if (this.controllers.complex < 0) {
+      this.controls.complex--
+      if (this.controls.complex < 0) {
         this.previousSection();
       } else {
-        this.controllers.unit = this.units.length - 1;
+        this.controls.unit = this.units.length - 1;
       }
     },
     nextSection() {
-      this.controllers.section++;
-      if (this.controllers.section > this.sections.length - 1) {
-        this.controllers.section = this.sections.length - 1;
-        this.controllers.complex = this.sections[this.controllers.section].complexes.length - 1;
-        this.controllers.unit = this.units.length - 1;
+      this.controls.section++;
+      if (this.controls.section > this.sections.length - 1) {
+        this.controls.section = this.sections.length - 1;
+        this.controls.complex = this.sections[this.controls.section].complexes.length - 1;
+        this.controls.unit = this.units.length - 1;
       } else {
-        this.controllers.unit = 0;
-        this.controllers.complex = 0;
+        this.controls.unit = 0;
+        this.controls.complex = 0;
       }
     },
     previousSection() {
-      this.controllers.section--;
-      if (this.controllers.section < 0) {
-        this.controllers.complex = 0;
-        this.controllers.unit = 0;
-        this.controllers.section = 0;
+      this.controls.section--;
+      if (this.controls.section < 0) {
+        this.controls.complex = 0;
+        this.controls.unit = 0;
+        this.controls.section = 0;
       } else {
-        this.controllers.complex = this.sections[this.controllers.section].complexes.length - 1;
-        this.controllers.unit = this.units.length - 1;
+        this.controls.complex = this.sections[this.controls.section].complexes.length - 1;
+        this.controls.unit = this.units.length - 1;
       }
     },
     toggleAutomaticMode() {
@@ -277,20 +267,20 @@ export default {
       }
     },
     current() {
-      return this.units[this.controllers.unit];
+      return this.units[this.controls.unit];
     },
     lastSet() {
-      const lastIndex = this.units.lastIndexOf(this.units[this.controllers.unit]);
-      if (lastIndex == this.controllers.unit && this.units[this.controllers.unit].exercise.name != 'Za chwilę:' && this.units[this.controllers.unit].sets > 1) {
+      const lastIndex = this.units.lastIndexOf(this.units[this.controls.unit]);
+      if (lastIndex == this.controls.unit && this.units[this.controls.unit].exercise.name != 'Za chwilę:' && this.units[this.controls.unit].sets > 1) {
         return true;
       } else {
         return false;
       }
     },
     next() {
-      let next = this.units[this.controllers.unit + 1];
+      let next = this.units[this.controls.unit + 1];
       
-      if (this.controllers.unit + 1 > this.units.length - 1) {
+      if (this.controls.unit + 1 > this.units.length - 1) {
         next = { exercise: { name: 'Kolejny blok', images: [] } }
       }
 
@@ -302,7 +292,7 @@ export default {
       // Get array of arrays containing all sets of a given exercise
       // IE: 3x8 e1, 3x6 e2
       // => [[e1, e1, e1], [e2, e2, e2]]
-      this.sections[this.controllers.section].complexes[this.controllers.complex].units.forEach((unit, unitindex) => {
+      this.sections[this.controls.section].complexes[this.controls.complex].units.forEach((unit, unitindex) => {
         const groupedUnits = [];
         for (let x = 0; x < unit.sets; x++) {
           groupedUnits.push(unit)
@@ -356,15 +346,15 @@ export default {
         } else if (rest > 0 && i == units.length - 1) {
           let name, remarks, soundname; 
 
-          if (this.controllers.complex < this.sections[this.controllers.section].complexes.length - 1) {
+          if (this.controls.complex < this.sections[this.controls.section].complexes.length - 1) {
             name = 'Ukończyłeś blok';
             remarks = 'Odpocznij i przejdź do kolejnego';
             soundname = 'blok-zakonczony.mp3';
-          } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section < this.sections.length - 1) {
+          } else if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section < this.sections.length - 1) {
             name = 'Ukończyłeś sekcję';
             remarks = 'Odpocznij i przejdź do kolejnej';
             soundname = 'sekcja-zakończona.mp3';
-          } else if (this.controllers.complex == this.sections[this.controllers.section].complexes.length - 1 && this.controllers.section == this.sections.length - 1) {
+          } else if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section == this.sections.length - 1) {
             name = 'Ukończyłeś trening';
             remarks = 'Daj znać trenerowi, jak poszło!';
             soundname = 'trening-zakończony.mp3';
@@ -388,7 +378,7 @@ export default {
         soundname: 'rozpoczynaszblok.mp3'
       });
 
-      if (this.controllers.section == 0 && this.controllers.complex == 0) {
+      if (this.controls.section == 0 && this.controls.complex == 0) {
         units.unshift({
           exercise: {
             name: 'Witaj w cyfrowym asystencie treningu!',
@@ -400,7 +390,7 @@ export default {
 
       return units;
     },
-  }
+  }, 
 }
 </script>
 
@@ -449,28 +439,18 @@ export default {
     }
   }
 
-  .workout-assistant__exercise {
-    .left {
+  .workout-assistant__exercise div {
+    &:first-child {
       flex-basis: 1;
       overflow: hidden;
     } 
-    .right {
+    &:nth-child(2) {
       flex-basis: 1;
     }
   }
 
   .grow {
     flex-grow: 1;
-  }
-
-  img {
-    width: 100%;
-  }
-
-  .workout-assistant__buttons {
-    button {
-      width: 100%;
-    }
   }
 
   .half {
