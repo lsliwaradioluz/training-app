@@ -101,7 +101,7 @@
         <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
       </div>
       <VoiceAssistant 
-        :soundname="current.soundname || 'wykonaj-ćwiczenie.mp3'" 
+        :soundname="soundname" 
         :key="current.soundname"
         :mute="voiceAssistantMode != 'on'"
         @playing="voiceAssistantSpeaking = true" 
@@ -249,6 +249,15 @@ export default {
     }
   },
   computed: {
+    soundname() {
+      if (this.current.soundname) {
+        return this.current.soundname;
+      } else if (!this.current.soundname && this.lastSet) {
+        return 'ostatniaseria.mp3';
+      } else {
+        return 'dzialaj.mp3';
+      }
+    },
     image() {
       let image; 
       if (this.current.exercise.name == 'Odpocznij') {
@@ -342,7 +351,7 @@ export default {
             }, 
             time: rest, 
             remarks: remarks,
-            soundname: 'odpocznij.mp3'
+            soundname: 'luz.mp3'
           });
         } else if (rest > 0 && i == units.length - 1) {
           let name, remarks, soundname; 

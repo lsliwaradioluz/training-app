@@ -30,17 +30,18 @@
     },
     watch: {
       timeleft() {
-        if (!this.mute) {
-          if (this.timeleft == 30) {
-            this.playSound('30.mp3');
-          } else if (this.timeleft == 20) {
-            this.playSound('20.mp3');
-          } else if (this.timeleft == 10) {
-            this.playSound('10.mp3');
-          } else if (this.timeleft == 3) {
-            this.playSound('321.mp3');
-          }
-        } 
+        if (this.timeleft == 30) {
+          this.playSound('30.mp3');
+        } else if (this.timeleft == 20) {
+          this.playSound('20.mp3');
+        } else if (this.timeleft == 10) {
+          this.playSound('10.mp3');
+        } else if (this.timeleft == 3) {
+          this.playSound('321.mp3');
+        }
+      }, 
+      mute() {
+        if (this.sound) this.mute ? this.sound.muted = true : this.sound.muted = false;
       }
     },
     methods: {
@@ -56,6 +57,7 @@
       }, 
       playSound(soundname) {
         this.sound = new Audio(require(`@/assets/sounds/${soundname}`)); 
+        this.sound.volume = 0.3;
         this.sound.play();
       },
     }, 

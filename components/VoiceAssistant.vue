@@ -1,6 +1,6 @@
 <template>
 <div>
-  <audio @playing="$emit('playing')" @ended="$emit('ended')" autoplay ref="audio">
+  <audio @playing="$emit('playing')" @ended="$emit('ended')" autoplay volume="0.2" ref="audio">
     <source :src="require(`@/assets/sounds/${soundname}`)" type="audio/ogg">
   </audio>
 </div>
@@ -15,6 +15,7 @@
       }
     }, 
     mounted() {
+      this.$refs.audio.volume = 0.3;
       this.mute ? this.$refs.audio.muted = true : this.$refs.audio.muted = false;
     },
     destroyed() {
