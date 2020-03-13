@@ -1,6 +1,6 @@
 <template>
 <div>
-  <audio autoplay @playing="$emit('playing')" @ended="$emit('ended')">
+  <audio @playing="$emit('playing')" @ended="$emit('ended')" autoplay ref="audio">
     <source :src="require(`@/assets/sounds/${soundname}`)" type="audio/ogg">
   </audio>
 </div>
@@ -8,6 +8,17 @@
 
 <script>
   export default {
-    props: ['soundname'],
+    props: ['soundname', 'mute'],
+    watch: {
+      mute() {
+        this.mute ? this.$refs.audio.muted = true : this.$refs.audio.muted = false;
+      }
+    }, 
+    mounted() {
+      this.mute ? this.$refs.audio.muted = true : this.$refs.audio.muted = false;
+    },
+    destroyed() {
+      this.$emit('ended');
+    }
   }
 </script>

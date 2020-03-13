@@ -103,9 +103,9 @@
       <VoiceAssistant 
         :soundname="current.soundname || 'wykonaj-ćwiczenie.mp3'" 
         :key="current.soundname"
+        :mute="voiceAssistantMode != 'on'"
         @playing="voiceAssistantSpeaking = true" 
-        @ended="voiceAssistantSpeaking = false"
-        v-if="voiceAssistantMode == 'on' && !current.time || voiceAssistantMode == 'on' && current.time > 20" />
+        @ended="voiceAssistantSpeaking = false" />
     </div>
   </div>
 </template>
@@ -143,7 +143,7 @@ export default {
       showStopwatch: false,
       automaticModeOn: false,
       voiceAssistantMode: 'on',
-      voiceAssistantSpeaking: true, 
+      voiceAssistantSpeaking: false, 
       showInfoModal: false,
       infoModalMessage: null,
       infoModalTimeout: null,
@@ -156,13 +156,13 @@ export default {
       this.showInfoModal = true;
       switch (this.voiceAssistantMode) {
         case 'on':
-          this.infoModalMessage = 'Asystent w trybie: full';
+          this.infoModalMessage = 'Asystent głosowy: wszystkie dźwięki';
           break;
         case 'half-on':
-          this.infoModalMessage = 'Asystent w trybie: half';
+          this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent w trybie: off'; 
+          this.infoModalMessage = 'Asystent w trybie: dźwięki wyłączone'; 
       }
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;

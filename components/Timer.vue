@@ -23,25 +23,24 @@
     },
     data() {
       return {
+        sound: null,
         timeleft: this.time,
         countDownInterval: null,
       }
     },
     watch: {
       timeleft() {
-        if (!this.bell && !this.mute) {
-          if (this.time > 30 && this.timeleft == 30) {
+        if (!this.mute) {
+          if (this.timeleft == 30) {
             this.playSound('30.mp3');
-          } else if (this.time > 20 && this.timeleft == 20) {
+          } else if (this.timeleft == 20) {
             this.playSound('20.mp3');
-          } else if (this.time > 20 && this.timeleft == 10) {
+          } else if (this.timeleft == 10) {
             this.playSound('10.mp3');
           } else if (this.timeleft == 3) {
             this.playSound('321.mp3');
           }
-        } else if (this.bell && !this.mute) {
-          if (this.timeleft == 1) this.playSound('bell.mp3');
-        }
+        } 
       }
     },
     methods: {
@@ -56,12 +55,15 @@
         }, 1000);
       }, 
       playSound(soundname) {
-        var snd = new Audio(require(`@/assets/sounds/${soundname}`)); 
-        snd.play();
+        this.sound = new Audio(require(`@/assets/sounds/${soundname}`)); 
+        this.sound.play();
       },
     }, 
     mounted() {
       this.countDown();
+    }, 
+    destroyed() {
+      if (this.sound) this.sound.pause();
     }
   }
 </script> 
