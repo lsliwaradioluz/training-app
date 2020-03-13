@@ -25,8 +25,7 @@
         </div>
       </Head>
       <div class="carousel-container">
-        <Carousel 
-          :pagination="false" 
+        <Carousel
           @change-page="currentTranslate = $event" 
           :active="!maxEditorOpen"
           :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? +$store.state.main.workoutAssistantState[workout.id].section : 0"
