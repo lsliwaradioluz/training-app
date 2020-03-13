@@ -1,5 +1,14 @@
 <template>
-  <div class="carousel">
+  <div 
+    class="carousel" 
+    v-on="isActive && active ? { 
+      touchstart: onTouchStart, 
+      touchmove: onTouchMove, 
+      touchend: onTouchEnd, 
+      mousedown: onTouchStart, 
+      mousemove: onTouchMove, 
+      mouseup: onTouchEnd 
+    } : {}">
     <div class="carousel-navdots" v-if="isActive" v-show="pagination">
       <div 
         class="carousel-navdot" 
@@ -8,14 +17,6 @@
         v-show="numberOfPages > 1"
         :key="n"
         ref="navdot"
-        v-on="isActive && active ? { 
-          touchstart: onTouchStart, 
-          touchmove: onTouchMove, 
-          touchend: onTouchEnd, 
-          mousedown: onTouchStart, 
-          mousemove: onTouchMove, 
-          mouseup: onTouchEnd 
-        } : {}"
         @click="scrollWithNavdots(n)"></div>
     </div>
     <div 
