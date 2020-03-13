@@ -385,7 +385,7 @@ export default {
           name: 'Rozpoczynasz nowy blok' 
         },
         remarks: 'Zapoznaj się z rozpiską i przygotuj sprzęt', 
-        soundname: 'rozpoczynasz-blok.mp3'
+        soundname: 'rozpoczynaszblok.mp3'
       });
 
       if (this.controllers.section == 0 && this.controllers.complex == 0) {
