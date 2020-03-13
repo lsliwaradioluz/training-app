@@ -8,14 +8,21 @@
         v-show="numberOfPages > 1"
         :key="n"
         ref="navdot"
+        v-on="isActive && active ? { 
+          touchstart: onTouchStart, 
+          touchmove: onTouchMove, 
+          touchend: onTouchEnd, 
+          mousedown: onTouchStart, 
+          mousemove: onTouchMove, 
+          mouseup: onTouchEnd 
+        } : {}"
         @click="scrollWithNavdots(n)"></div>
     </div>
     <div 
       class="carousel-wrapper a-stretch"
       :class="{ 'inactive': !isActive }"
       :style="{ transform: `translateX(${translate}px)` }"
-      ref="wrapper" 
-      v-on="isActive && active ? { touchstart: onTouchStart, touchmove: onTouchMove, touchend: onTouchEnd, mousedown: onTouchStart, mousemove: onTouchMove, mouseup: onTouchEnd } : {}">
+      ref="wrapper">
         <slot></slot>
     </div>
   </div>
