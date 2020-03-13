@@ -14,10 +14,10 @@
       </span>
     </div>
     <div>
-  <!-- MODAL TRYBU AUTOMATYCZNEGO  -->
+  <!-- MODAL INFO  -->
       <transition name="slide-to-right">
-        <div class="workout-assistant__modal t-small" v-show="showAutomaticModeModal">
-          Tryb automatyczny włączony
+        <div class="t-small" v-show="showInfoModal">
+          {{ infoModalMessage }}
         </div>
       </transition>
   <!-- STOPER -->
@@ -64,7 +64,7 @@
         <Timer 
           :time="current.time"
           :bell="current.exercise.name != 'Odpocznij'"
-          :mute="voiceAssistantSpeaking"
+          :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
           @countdown-over="nextUnit" 
           :key="controllers.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
@@ -89,7 +89,11 @@
         </div>
       </div>
       <div class="workout-assistant__buttons row j-between a-center pt1 pb1">
-        <i class="flaticon-speaker small" :class="{ 't-green': voiceAssistantOn }" @click="voiceAssistantOn = !voiceAssistantOn"></i>
+        <span>
+          <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
+          <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
+          <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
+        </span>
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
@@ -101,7 +105,7 @@
         :key="current.soundname"
         @playing="voiceAssistantSpeaking = true" 
         @ended="voiceAssistantSpeaking = false"
-        v-if="voiceAssistantOn && !current.time || voiceAssistantOn && current.time > 20" />
+        v-if="voiceAssistantMode == 'on' && !current.time || voiceAssistantMode == 'on' && current.time > 20" />
     </div>
   </div>
 </template>
@@ -138,10 +142,39 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
-      voiceAssistantOn: true,
+      voiceAssistantMode: 'on',
       voiceAssistantSpeaking: true, 
-      showAutomaticModeModal: false,
+      showInfoModal: false,
+      infoModalMessage: null,
+      infoModalTimeout: null,
       showWholeComplex: this.cameBackFromExercise,
+    }
+  },
+  watch: {
+    voiceAssistantMode() {
+      clearTimeout(this.infoModalTimeout);
+      this.showInfoModal = true;
+      switch (this.voiceAssistantMode) {
+        case 'on':
+          this.infoModalMessage = 'Asystent w trybie: full';
+          break;
+        case 'half-on':
+          this.infoModalMessage = 'Asystent w trybie: half';
+          break;
+        case 'off':
+          this.infoModalMessage = 'Asystent w trybie: off'; 
+      }
+      this.infoModalTimeout = setTimeout(() => {
+        this.showInfoModal = false;
+      }, 2000);
+    },
+    automaticModeOn() {
+      clearTimeout(this.infoModalTimeout);
+      this.showInfoModal = true;
+      this.infoModalMessage = this.automaticModeOn ? 'Tryb automatyczny włączony' : 'Tryb automatyczny wyłączony';
+      this.infoModalTimeout = setTimeout(() => {
+        this.showInfoModal = false;
+      }, 2000);
     }
   },
   methods: {
@@ -206,12 +239,12 @@ export default {
     toggleAutomaticMode() {
       this.automaticModeOn = !this.automaticModeOn;
       if (this.automaticModeOn) {
-        this.showAutomaticModeModal = true;
+        this.showInfoModal = true;
         setTimeout(() => {
-          this.showAutomaticModeModal = false;
+          this.showInfoModal = false;
         }, 2000);
       } else {
-        this.showAutomaticModeModal = false;
+        this.showInfoModal = false;
       }
     }
   },
@@ -307,7 +340,7 @@ export default {
             exercise: { 
               name: 'Odpocznij' 
             }, 
-            time: 31, 
+            time: rest, 
             remarks: remarks,
             soundname: 'odpocznij.mp3'
           });
