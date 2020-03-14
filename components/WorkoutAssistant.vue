@@ -89,7 +89,7 @@
         </div>
       </div>
       <div class="row j-between a-center pt1 pb1">
-        <span>
+        <span :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }">
           <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
           <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
           <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
@@ -98,14 +98,14 @@
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" @click="showWholeComplex = true"></i>
+        <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': controls.unit == 1 && controls.complex == 0 || controls.unit == 0 && controls.complex != 0 }" @click="showWholeComplex = true"></i>
       </div>
       <VoiceAssistant 
         :soundname="soundname" 
         :key="current.soundname"
-        :mute="voiceAssistantMode != 'on'"
         @playing="voiceAssistantSpeaking = true" 
-        @ended="voiceAssistantSpeaking = false" />
+        @ended="voiceAssistantSpeaking = false"
+        v-if="voiceAssistantMode == 'on'" />
     </div>
   </div>
 </template>
@@ -132,7 +132,7 @@ export default {
       }, 
       showStopwatch: false,
       automaticModeOn: false,
-      voiceAssistantMode: 'on',
+      voiceAssistantMode: 'off',
       voiceAssistantSpeaking: false, 
       showInfoModal: false,
       infoModalMessage: null,
@@ -152,7 +152,7 @@ export default {
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent głosowy wyciszony'; 
+          this.infoModalMessage = 'Asystent głosowy wyłączony'; 
       }
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;
@@ -390,7 +390,7 @@ export default {
 
       return units;
     },
-  }, 
+  },
 }
 </script>
 
