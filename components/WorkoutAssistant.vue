@@ -89,10 +89,10 @@
         </div>
       </div>
       <div class="row j-between a-center pt1 pb1">
-        <span :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }">
-          <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
-          <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
-          <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
+        <span>
+          <i class="flaticon-sound small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
+          <i class="flaticon-speaker small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
+          <i class="flaticon-mute small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'on'" v-else></i>
         </span>
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
