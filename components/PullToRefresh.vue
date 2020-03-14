@@ -1,6 +1,6 @@
 <template>
-  <div class="pull-to-refresh" :class="{ animated: !move }" :style="{ transform: `translateY(${Math.abs(this.move) / 4}px)` }">
-    <p class="m00 t-center">{{ Math.floor(move / 2) }}%</p>
+  <div class="pull-to-refresh" :class="{ animated: !move }" :style="{ height: `${Math.abs(this.move) / 4}px` }">
+    <p class="m00 t-center">{{ Math.floor(move) }}%</p>
   </div>
 </template>
 
@@ -35,16 +35,16 @@ export default {
         }
       }, 
       onTouchEnd() {
-        if (Math.abs(this.move) >= 200) {
+        if (Math.abs(this.move) >= 100) {
           window.location.reload();
         } else {
           this.move = null;
-          document.body.style.overflow = "scroll";
         }
+        document.body.style.overflow = "scroll";
       },
   },
   mounted() {
-    if (navigator.vendor != 'Google Inc.') {
+    // if (navigator.vendor != 'Google Inc.') {
       window.addEventListener('touchstart', () => {
         this.scroll = window.scrollY;
         if (this.scroll == 0) this.onTouchStart();
@@ -57,18 +57,18 @@ export default {
       window.addEventListener('touchend', () => {
         this.onTouchEnd();
       });
-    }
+    // }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
   .pull-to-refresh {
-    position: fixed;
-    bottom: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 1000000;
+    position: absolute;
+    top: 100%;
+    height: 0;
+    overflow: hidden;
   }
 
   .animated {

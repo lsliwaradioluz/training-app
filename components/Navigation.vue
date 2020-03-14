@@ -36,13 +36,18 @@
         </nuxt-link>
       </div>
     </div>
+    <PullToRefresh />
   </div>
 </template>
 
 <script>
+import PullToRefresh from '~/components/PullToRefresh';
 import { mapMutations } from 'vuex'
 
 export default {
+  components: {
+    PullToRefresh,
+  },
   computed: {
     user() {
       return this.$store.getters['auth/user']
