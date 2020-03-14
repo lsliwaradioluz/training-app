@@ -401,6 +401,7 @@ export default {
     background-size: cover;
     background-position: center;
     position: relative;
+    overflow: hidden;
   }
 
   .workout-assistant__bar {
