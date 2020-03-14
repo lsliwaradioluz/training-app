@@ -18,6 +18,7 @@ import mainQuery from '~/apollo/queries/users/main.gql';
 
 export default {
   asyncData(context) {
+    console.log(context);
     let client = context.app.apolloProvider.defaultClient;
     return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
       .then(({ data }) => {
