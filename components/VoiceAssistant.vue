@@ -1,6 +1,6 @@
 <template>
 <div>
-  <audio @playing="$emit('playing')" @ended="$emit('ended')" autoplay volume="0.2" ref="audio">
+  <audio @playing="$emit('playing')" @ended="$emit('ended')" autoplay controls volume="0.2" ref="audio">
     <source :src="require(`@/assets/sounds/${soundname}`)" type="audio/ogg">
   </audio>
 </div>
