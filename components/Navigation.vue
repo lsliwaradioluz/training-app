@@ -1,6 +1,6 @@
 <template>
   <div class="navigation main pt1 pb1 row j-center a-center">
-    <span class="logo">Piti</span>
+    <span class="logo" @click="reloadPage">Piti</span>
     <h3 class="m00 t-center">{{ header | englishToPolish }}</h3>
     <span class="hamburger t-right">
       <i class="flaticon-pause" @click="$router.go(-1)" v-if="$route.path.includes('assistant')"></i>
@@ -36,18 +36,13 @@
         </nuxt-link>
       </div>
     </div>
-    <PullToRefresh />
   </div>
 </template>
 
 <script>
-import PullToRefresh from '~/components/PullToRefresh';
 import { mapMutations } from 'vuex'
 
 export default {
-  components: {
-    PullToRefresh,
-  },
   computed: {
     user() {
       return this.$store.getters['auth/user']
@@ -64,6 +59,9 @@ export default {
   methods: {
     toggleNav() {
       this.$refs.panel.classList.toggle('toggled');
+    },
+    reloadPage() {
+      window.location.reload();
     },
     ...mapMutations({
       logout: 'auth/logout'
