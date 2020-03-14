@@ -152,7 +152,7 @@ export default {
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent głosowy wyłączony'; 
+          this.infoModalMessage = 'Asystent głosowy wyciszony'; 
       }
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;
