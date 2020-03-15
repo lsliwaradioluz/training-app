@@ -39,17 +39,21 @@
       <p class="m00" style="opacity: 0.5">Na razie brak zdjęcia</p>
     </div>
   <!-- OPIS  -->
-    <div v-if="exercise.description || edit">
+    <div>
       <Head>Opis</Head>
       <div class="tab">
-        <p class="m00" v-if="!edit">{{ exercise.description }}</p>
-        <p class="m00" v-else>
+        <p class="m00">
+          <span v-if="!edit">
+            <span class="m00" v-if="exercise.description">{{ exercise.description }}</span>
+            <span class="m00" style="opacity: 0.5" v-else>Na razie brak opisu</span>
+          </span>
           <textarea 
             class="input--invisible" 
             placeholder="Uzupełnij instrukcję wykonania ćwiczenia" 
             v-model="input.description" 
             rows="5" 
-            spellcheck="false"></textarea>
+            spellcheck="false"
+            v-else></textarea>
         </p>
       </div>
     </div>
