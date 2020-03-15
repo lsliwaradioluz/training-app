@@ -251,13 +251,13 @@ export default {
     image() {
       let image; 
       if (this.current.exercise.name == 'Odpocznij') {
-        image = this.next.exercise.images.length > 0 ? this.next.exercise.images[0].url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
+        image = this.next.exercise.image ? this.next.exercise.image.url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
       } else if (this.current.exercise.name == 'Rozpoczynasz nowy blok' || this.current.exercise.name == 'Witaj w cyfrowym asystencie treningu!') {
         image = 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       } else if (this.current.exercise.name == 'Ukończyłeś blok' || this.current.exercise.name == 'Ukończyłeś sekcję' || this.current.exercise.name == 'Ukończyłeś trening') {
         image = 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
       } else {
-        image = this.current.exercise.images.length > 0 ? this.current.exercise.images[0].url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
+        image = this.current.exercise.image ? this.current.exercise.image.url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       }
 
       if (!this.isScreenDivided) {

@@ -22,7 +22,7 @@ query($ids: [ID]!) {
           exercise {
             id
             name
-            images {
+            image {
               id
               url
             }

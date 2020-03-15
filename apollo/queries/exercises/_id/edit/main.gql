@@ -3,7 +3,7 @@ query($id: ID!) {
     id
     name
     description
-    images {
+    image {
       id
       url
     }
