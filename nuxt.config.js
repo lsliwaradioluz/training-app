@@ -62,16 +62,16 @@ export default {
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    // '@nuxtjs/onesignal',
+    '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
   ],
   oneSignal: {
     init: {
       appId: '48d7ddc5-2947-437c-b475-17e6094f470b',
       allowLocalhostAsSecureOrigin: true,
-      // welcomeNotification: {
-      //     disable: true
-      // }
+      welcomeNotification: {
+          disable: false,
+      }
     }
   },
   pwa: {
