@@ -28,13 +28,13 @@
       timeleft() {
         if (!this.mute) {
           if (this.timeleft == 30) {
-            this.playSound('30.mp3');
+            this.playSound('thirty.mp3');
           } else if (this.timeleft == 20) {
-            this.playSound('20.mp3');
+            this.playSound('twenty.mp3');
           } else if (this.timeleft == 10) {
-            this.playSound('10.mp3');
+            this.playSound('ten.mp3');
           } else if (this.timeleft == 3) {
-            this.playSound('321.mp3');
+            this.playSound('threetwoone.mp3');
           }
         }
       }, 
