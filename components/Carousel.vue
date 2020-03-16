@@ -22,7 +22,7 @@
     </div>
     <div 
       class="carousel-wrapper a-stretch"
-      :class="{ 'inactive': !isActive }"
+      :class="{ 'inactive': !isActive, 'carousel--revealed': revealCarousel }"
       :style="{ transform: `translateX(${translate}px)` }"
       ref="wrapper">
         <slot></slot>
@@ -67,7 +67,16 @@
       },
       navdotsSettings: {
         type: Object, 
-        default: { activeColor: '#05AA19', shape: 'round' }
+        default() { 
+          return {
+            activeColor: "#05AA19", 
+            shape: "round"
+          }
+        }
+      }, 
+      reveal: {
+        type: Boolean, 
+        default: () => false,
       }
     },
     data() {
@@ -84,6 +93,7 @@
         elementWidth: 0, 
         autoplayInterval: null, 
         animateTimeout: null,
+        revealCarousel: this.reveal,
       }
     },
     computed: {
@@ -132,6 +142,8 @@
       },
       onTouchStart() {
         clearInterval(this.autoplayInterval);
+        if (this.revealCarousel) this.revealCarousel = false;
+        
         if (event.type == 'touchstart') {
           this.moveStart = event.touches[0].screenX
         } else {
@@ -239,6 +251,11 @@
     width: 100%;
   }
 
+  .carousel--revealed {
+    animation: slide 3s;
+    animation-iteration-count: infinite;
+  }
+
   .carousel-navdots {
     display: flex;
     justify-content: center;
@@ -301,6 +318,21 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: flex-start;
+    }
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-8px);
+    }
+    50% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
   

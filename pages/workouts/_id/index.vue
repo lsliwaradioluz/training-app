@@ -26,11 +26,12 @@
       </Head>
       <div class="carousel-container">
         <Carousel 
-          @change-page="currentTranslate = $event" 
+          :pagination="false"
           :active="!maxEditorOpen"
-          :navdots-settings="{ activeColor: '#B0FE76', shape: 'flat' }"
           :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? +$store.state.main.workoutAssistantState[workout.id].section : 0"
-          :key="workout.id">
+          :key="workout.id"
+          @change-page="currentTranslate = $event" 
+          reveal>
           <div class="p01 column" v-for="section in workout.sections" :key="section.id">
             <Routine 
               :section="section"
