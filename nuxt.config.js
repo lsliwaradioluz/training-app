@@ -65,15 +65,15 @@ export default {
     // '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
   ],
-  // oneSignal: {
-  //   init: {
-  //     appId: 'training-app',
-  //     allowLocalhostAsSecureOrigin: true,
-  //     welcomeNotification: {
-  //         disable: true
-  //     }
-  //   }
-  // },
+  oneSignal: {
+    init: {
+      appId: '48d7ddc5-2947-437c-b475-17e6094f470b',
+      allowLocalhostAsSecureOrigin: true,
+      // welcomeNotification: {
+      //     disable: true
+      // }
+    }
+  },
   pwa: {
     meta: {
       theme_color: '#343F68', 
