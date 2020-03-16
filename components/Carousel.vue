@@ -243,7 +243,7 @@
 
   .carousel {
     overflow-x: hidden;
-    overflow-y: visible;
+    overflow-y: initial;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -254,6 +254,7 @@
   .carousel--revealed {
     animation: slide 3s;
     animation-iteration-count: infinite;
+    animation-delay: 2s;
   }
 
   .carousel-navdots {

@@ -60,7 +60,12 @@
                   <i class="flaticon-plus" @click="openUnitEditor()"></i>
                 </div>
                 <div>
-                  <div class="mb05" v-for="(complex, complexindex) in section.complexes" :key="complexindex" :class="{ 'blind': currentComplex != null && currentComplex != complexindex }">
+                  <div 
+                    class="mb05"
+                    :class="{ 'blind': currentComplex != null && currentComplex != complexindex }" 
+                    v-for="(complex, complexindex) in section.complexes" 
+                    :key="complexindex"
+                    draggable="true">
                     <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
                       <input class="input--invisible" v-model="section.complexes[complexindex].name">
                       <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
@@ -72,12 +77,14 @@
                         <div class="workout-editor__unit-buttons">
                           <i 
                             class="workout-editor__unit-button flaticon-vertical-dots small" 
-                            @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`" ></i>
+                            @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`"></i>
                           <transition name="roll">
                             <div class="row" v-if="showUnitButtons == `${complexindex}${unitindex}`">
-                              <button class="m00 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                              <button class="m00 mr05 ml0" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
-                              <button class="m00 ml0" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
+                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">W górę</button>
+                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">W dół</button>
+                              <button @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                              <button @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                              <button @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
                             </div>
                           </transition>
                         </div>
@@ -86,7 +93,7 @@
                         <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
                         <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
                       </li>
-                      <li>{{ unit.remarks }}</li>
+                      <li>{{ unit.remarks.toLowerCase() }}</li>
                       <li>
                         <span class="t-gray">przerwy {{ unit.rest }}s</span>
                       </li>
@@ -324,6 +331,14 @@ export default {
         this.currentComplex = null;
       }
     },
+    moveUnit(sectionindex, complexindex, unitindex, direction) {
+      let currentUnits = this.sections[sectionindex].complexes[complexindex].units;
+      let unitToMove = currentUnits[unitindex];
+      let newIndex = direction == 'up' ? unitindex - 1 : unitindex + 1;
+      
+      currentUnits.splice(unitindex, 1);
+      currentUnits.splice(newIndex, 0, unitToMove);
+    },
     copySection(section) {
       const sectionClone = JSON.parse(JSON.stringify(section));
       this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
@@ -406,7 +421,10 @@ export default {
       position: absolute;
       right: 125%;
       top: 0;
-      padding: 0.3rem;
+      padding: 5px 2.5px;
+      button {
+        margin: 0 5px;
+      }
     }
   }
 
