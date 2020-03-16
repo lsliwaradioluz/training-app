@@ -416,6 +416,7 @@ export default {
     position: relative;
     div {
       background-color: white;
+      border: 1px solid color(black);
       color: color(black);
       border-radius: 5px;
       position: absolute;
