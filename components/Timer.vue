@@ -11,11 +11,7 @@
     props: {
       time: {
         type: Number, 
-      }, 
-      bell: {
-        type: Boolean, 
-        default: () => false,
-      }, 
+      },
       mute: {
         type: Boolean, 
         default: () => false,
@@ -30,14 +26,16 @@
     },
     watch: {
       timeleft() {
-        if (this.timeleft == 30) {
-          this.playSound('30.mp3');
-        } else if (this.timeleft == 20) {
-          this.playSound('20.mp3');
-        } else if (this.timeleft == 10) {
-          this.playSound('10.mp3');
-        } else if (this.timeleft == 3) {
-          this.playSound('321.mp3');
+        if (!this.mute) {
+          if (this.timeleft == 30) {
+            this.playSound('30.mp3');
+          } else if (this.timeleft == 20) {
+            this.playSound('20.mp3');
+          } else if (this.timeleft == 10) {
+            this.playSound('10.mp3');
+          } else if (this.timeleft == 3) {
+            this.playSound('321.mp3');
+          }
         }
       }, 
       mute() {

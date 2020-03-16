@@ -63,7 +63,6 @@
         </div>
         <Timer 
           :time="current.time"
-          :bell="current.exercise.name != 'Odpocznij'"
           :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
           @countdown-over="nextUnit" 
           :key="controls.unit"
