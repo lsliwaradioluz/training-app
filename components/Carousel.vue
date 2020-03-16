@@ -1,7 +1,7 @@
 <template>
   <div 
     class="carousel" 
-    v-on="isActive && active ? { 
+    v-on="isActive && active && length > 1 ? { 
       touchstart: onTouchStart, 
       touchmove: onTouchMove, 
       touchend: onTouchEnd, 
@@ -9,10 +9,11 @@
       mousemove: onTouchMove, 
       mouseup: onTouchEnd 
     } : {}">
-    <div class="carousel-navdots" v-if="isActive" v-show="pagination">
+    <div class="carousel-navdots" v-if="isActive" v-show="pagination && length > 1">
       <div 
-        class="carousel-navdot" 
-        :class="{ 'active': n == currentPage + 1 }" 
+        class="carousel-navdot"
+        :class="`navdot--${navdotsSettings.shape}`"
+        :style="{ backgroundColor: n == currentPage + 1 ? navdotsSettings.activeColor : 'gray' }"
         v-for="n in numberOfPages" 
         v-show="numberOfPages > 1"
         :key="n"
@@ -30,8 +31,6 @@
 </template>
 
 <script>
-  // na ios karuzela działa tylko na pierwszym slajdzie 
-  // na kolejnych nie da się jej przesunąć, choć działa kliknięcie na pagination 
   export default {
     props: {
       active: {
@@ -66,6 +65,10 @@
         type: Number, 
         default: () => 5
       },
+      navdotsSettings: {
+        type: Object, 
+        default: { activeColor: '#05AA19', shape: 'round' }
+      }
     },
     data() {
       return {
@@ -239,21 +242,31 @@
   .carousel-navdots {
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem; 
+    padding-bottom: 0.5rem;
   }
 
   .carousel-navdot {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    background-color: gray;
-    margin: 0 5px;
     transition: all 0.5s;
     cursor: pointer;
   }
 
-  .active {
-    background-color: #05AA19;
+  .navdot--round {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+  }
+
+  .navdot--square {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+  }
+
+  .navdot--flat {
+    height: 1px;
+    width: 15px;
+    margin: 0 1px;
   }
 
   .carousel-wrapper {

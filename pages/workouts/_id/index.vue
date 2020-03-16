@@ -26,9 +26,9 @@
       </Head>
       <div class="carousel-container">
         <Carousel 
-          :pagination="false" 
           @change-page="currentTranslate = $event" 
           :active="!maxEditorOpen"
+          :navdots-settings="{ activeColor: '#B0FE76', shape: 'flat' }"
           :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? +$store.state.main.workoutAssistantState[workout.id].section : 0"
           :key="workout.id">
           <div class="p01 column" v-for="section in workout.sections" :key="section.id">

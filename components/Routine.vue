@@ -34,7 +34,7 @@
           <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
         </li>
         <li>
-          <span v-if="unit.remarks">{{ unit.remarks }}</span>
+          <span v-if="unit.remarks">{{ unit.remarks.toLowerCase() }}</span>
         </li>
         <li>
           <span class="t-gray">przerwy {{ unit.rest }}s</span>
