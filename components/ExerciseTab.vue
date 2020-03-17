@@ -31,8 +31,8 @@
       }
     }, 
     methods: {
-      deleteExercise() {
-        if (confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
+      async deleteExercise() {
+        if (this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
           const input = {
             where: {
               id: this.exercise.id
@@ -41,7 +41,7 @@
 
           this.client.mutate({ mutation: deleteExercise, variables: { input: input } })
             .then(res => {
-              window.location.reload(true);
+              window.location.reload();
             });
         }
       }

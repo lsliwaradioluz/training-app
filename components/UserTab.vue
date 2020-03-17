@@ -16,7 +16,8 @@
   <!-- buttons -->
   <transition name="accordion">
     <div class="user__panel row mt05 t-green t-small" v-if="showButtonsPanel">
-      <button @click="deleteUser">Usuń</button>
+      <!-- disable delete button if user is an admin (just in case)  -->
+      <button v-on="!user.admin ? { click: deleteUser } : {}">Usuń</button>
       <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>Edytuj</nuxt-link>
     </div>
   </transition>
@@ -25,7 +26,6 @@
 
 <script>
   import deleteUser from '~/apollo/mutations/deleteUser.gql';
-  import deleteSkill from '~/apollo/mutations/deleteSkill.gql';
 
   export default {
     props: {
@@ -49,30 +49,19 @@
       }
     },
     methods: {
-      deleteUser() {
+      async deleteUser() {
         const input = {
           where: {
             id: this.user.id,
           },
         }
 
-        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
+        if (await this.$root.$confirm("Czy na pewno chcesz usunąć tego użytkownika?")) {
           this.client.mutate({ mutation: deleteUser, variables: { input: input }  })
-            .then(res => {
-              this.deleteSkill(res.data.deleteUser.user.skill.id);
+            .then(() => {
+              window.location.reload();
             })
         }
-      }, 
-      deleteSkill(id) {
-        const input = {
-          where: {
-            id: id
-          },
-        }
-        this.client.mutate({ mutation: deleteSkill, variables: { input: input }  })
-          .then(res => {
-            window.location.reload(true);
-          })
       }
     }
   }

@@ -3,6 +3,7 @@
     <Navigation />
     <WorkoutPairingTab v-if="$store.state.main.workoutToPair && !$route.params.id" />
     <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy" />
+    <Confirm ref="confirm" />
     <nuxt />
   </div>
 </template>

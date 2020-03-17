@@ -14,6 +14,7 @@ import Timer from '../components/Timer';
 import Stopwatch from '../components/Stopwatch';
 import MovingText from '../components/MovingText';
 import VoiceAssistant from '../components/VoiceAssistant';
+import Confirm from '../components/Confirm';
 
 Vue.component('Head', Head);
 Vue.component('Workout', Workout);
@@ -30,6 +31,7 @@ Vue.component('Timer', Timer);
 Vue.component('Stopwatch', Stopwatch);
 Vue.component('MovingText', MovingText);
 Vue.component('VoiceAssistant', VoiceAssistant);
+Vue.component('Confirm', Confirm);
 
 
 

@@ -36,7 +36,7 @@
             v-model="unit.remarks"></textarea>
         </div>
         <div class="row j-between mt15">
-          <button class="button--primary ml05" type="button" @click.once="addUnit">Zapisz</button>
+          <button class="button--primary ml05" type="button" @click="addUnit" :disabled="disableAddUnitButton">Zapisz</button>
           <button class="button--primary mr05" type="button" @click="$emit('cancel')">Anuluj</button>
         </div>
       </form>
@@ -53,6 +53,7 @@
       return {
         client: this.$apollo.getClient(),
         unit: this.editedUnit,
+        disableAddUnitButton: false,
       }
     }, 
     computed: {
@@ -96,9 +97,10 @@
 
         this.$emit('add-unit', newUnit);
       },
-      addUnit() {
+      async addUnit() {
         if (this.unit.exercise.id == '') {
-          if (confirm(`Wykonanie tej operacji doda ćwiczenie ${this.unit.exercise.name} do bazy. Kontynuować?`)) {
+          if (await this.$root.$confirm(`Wykonanie tej operacji doda ćwiczenie ${this.unit.exercise.name} do bazy. Kontynuować?`)) {
+            this.disableAddUnitButton = true;
             this.createExercise()
               .then(res => {
                 this.unit.exercise.id = res.data.createExercise.exercise.id;

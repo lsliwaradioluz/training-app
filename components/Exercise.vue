@@ -32,7 +32,7 @@
       </div>  
     </Head>
     <div class="exercise__image mb05" :style="{ backgroundImage: `url('${uploadedImage.url}')`}" v-if="uploadedImage"></div>
-    <div class="tab mt05 mb05 p32 column a-center j-center" v-else>
+    <div class="tab mt05 mb05 p32 column a-center j-center" v-if="edit && !uploadedImage">
       <span class="column j-center a-center" style="opacity: 0.5" v-if="!loadingImage">
         <i class="flaticon-plus fs-2" @click="launchFileUpload" />
         <p class="m00 mt05 t-small">Na razie brak zdjęcia</p>
@@ -144,12 +144,11 @@
 
         this.client.mutate({ mutation: updateExercise, variables: { input: input } })
           .then(res => {
-            console.log(res);
             this.$router.go(-1);
           });
       },
-      deleteExercise() {
-        if (confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
+      async deleteExercise() {
+        if (await this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
           const input = {
             where: {
               id: this.exercise.id

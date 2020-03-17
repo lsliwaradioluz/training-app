@@ -53,14 +53,14 @@
         this.showButtonsPanel = false;
         this.$store.commit('main/copyWorkout', this.workout.id);
       },
-      deleteWorkout() {
+      async deleteWorkout() {
         const input = {
           where: {
             id: this.workout.id,
           },
         }
         const client = this.$apollo.getClient();
-        if (confirm("Czy na pewno chcesz usunąć ten element?")) {
+        if (await this.$root.$confirm("Czy na pewno chcesz usunąć ten element?")) {
           client.mutate({ mutation: deleteWorkout, variables: { input: input }  })
             .then(res => {
               window.location.reload(true);
