@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 13/03/2020 07:33
+    Creation date: 17/03/2020 08:13
     */
 
     @font-face {
@@ -58,18 +58,17 @@
 .flaticon-left-arrow:before { content: "\f112"; }
 .flaticon-right-arrow:before { content: "\f113"; }
 .flaticon-diminish:before { content: "\f114"; }
-.flaticon-pause-circular-button:before { content: "\f115"; }
-.flaticon-clock:before { content: "\f116"; }
-.flaticon-play-and-pause-button:before { content: "\f117"; }
-.flaticon-previous-track-button:before { content: "\f118"; }
-.flaticon-cancel:before { content: "\f119"; }
-.flaticon-check:before { content: "\f11a"; }
-.flaticon-login:before { content: "\f11b"; }
-.flaticon-setup:before { content: "\f11c"; }
-.flaticon-menu-1:before { content: "\f11d"; }
-.flaticon-sound:before { content: "\f11e"; }
-.flaticon-speaker:before { content: "\f11f"; }
-.flaticon-mute:before { content: "\f120"; }
+.flaticon-clock:before { content: "\f115"; }
+.flaticon-play-and-pause-button:before { content: "\f116"; }
+.flaticon-previous-track-button:before { content: "\f117"; }
+.flaticon-cancel:before { content: "\f118"; }
+.flaticon-login:before { content: "\f119"; }
+.flaticon-setup:before { content: "\f11a"; }
+.flaticon-menu-1:before { content: "\f11b"; }
+.flaticon-sound:before { content: "\f11c"; }
+.flaticon-speaker:before { content: "\f11d"; }
+.flaticon-mute:before { content: "\f11e"; }
+.flaticon-counterclockwise:before { content: "\f11f"; }
     
     $font-Flaticon-menu: "\f100";
     $font-Flaticon-up-arrow: "\f101";
@@ -92,15 +91,14 @@
     $font-Flaticon-left-arrow: "\f112";
     $font-Flaticon-right-arrow: "\f113";
     $font-Flaticon-diminish: "\f114";
-    $font-Flaticon-pause-circular-button: "\f115";
-    $font-Flaticon-clock: "\f116";
-    $font-Flaticon-play-and-pause-button: "\f117";
-    $font-Flaticon-previous-track-button: "\f118";
-    $font-Flaticon-cancel: "\f119";
-    $font-Flaticon-check: "\f11a";
-    $font-Flaticon-login: "\f11b";
-    $font-Flaticon-setup: "\f11c";
-    $font-Flaticon-menu-1: "\f11d";
-    $font-Flaticon-sound: "\f11e";
-    $font-Flaticon-speaker: "\f11f";
-    $font-Flaticon-mute: "\f120";
+    $font-Flaticon-clock: "\f115";
+    $font-Flaticon-play-and-pause-button: "\f116";
+    $font-Flaticon-previous-track-button: "\f117";
+    $font-Flaticon-cancel: "\f118";
+    $font-Flaticon-login: "\f119";
+    $font-Flaticon-setup: "\f11a";
+    $font-Flaticon-menu-1: "\f11b";
+    $font-Flaticon-sound: "\f11c";
+    $font-Flaticon-speaker: "\f11d";
+    $font-Flaticon-mute: "\f11e";
+    $font-Flaticon-counterclockwise: "\f11f";

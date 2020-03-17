@@ -21,8 +21,7 @@
     <Head v-if="edit">
       <div class="row j-between">
         <h3 class="m00">Zdjęcie</h3>
-        <i class="flaticon-plus" @click="launchFileUpload" v-if="edit && !uploadedImage"></i>
-        <i class="flaticon-close" @click="deleteImage" v-else></i>
+        <i class="flaticon-close" @click="deleteImage" v-if="edit && uploadedImage"></i>
         <form v-show="false">
           <input
             @change="uploadImage"
@@ -32,11 +31,16 @@
         </form>
       </div>  
     </Head>
-    <div class="exercise__image" v-if="uploadedImage">
-      <img :src="uploadedImage.url" alt="image">
-    </div>
-    <div class="tab mt05 mb05" v-if="!uploadedImage">
-      <p class="m00" style="opacity: 0.5">Na razie brak zdjęcia</p>
+    <div class="exercise__image mb05" :style="{ backgroundImage: `url('${uploadedImage.url}')`}" v-if="uploadedImage"></div>
+    <div class="tab mt05 mb05 p32 column a-center j-center" v-else>
+      <span class="column j-center a-center" style="opacity: 0.5" v-if="!loadingImage">
+        <i class="flaticon-plus fs-2" @click="launchFileUpload" />
+        <p class="m00 mt05 t-small">Na razie brak zdjęcia</p>
+      </span>
+      <span class="column j-center a-center" style="opacity: 0.5" v-else>
+        <i class="flaticon-counterclockwise fs-2 icon--spinning"></i>
+        <p class="m00 mt05 t-small">Wczytuję...</p>
+      </span>
     </div>
   <!-- OPIS  -->
     <div>
@@ -89,6 +93,7 @@
         client: this.$apollo.getClient(),
         showButtonsPanel: false,
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
+        loadingImage: false,
         uploadedImage: this.exercise.image || null,
         input: {
           name: this.exercise.name,
@@ -101,6 +106,7 @@
         this.$refs.input.click();
       },
       uploadImage() {
+        this.loadingImage = true;
         const formData = new FormData();
         formData.append('files', this.$refs.input.files[0]);
         fetch(this.endpoint, {
@@ -110,6 +116,7 @@
         .then(res => {
           res.json().then(data => {
             this.uploadedImage = data[0];
+            this.loadingImage = false;
           });
         })
       },
@@ -162,20 +169,10 @@
 <style lang="scss" scoped>
 
   .exercise__image {
-    position: relative;
-
-    img {
-      border-radius: 5px;
-      width: 100%;
-    }
-
-    div {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-    }
+    height: 50vh;
+    border-radius: 5px;
+    background-size: cover;
+    background-position: center;
   }
 
   .exercise__buttons button {
@@ -192,4 +189,18 @@
       font-size: inherit;
     }
   }
+
+  .icon--spinning {
+    animation: spin 1.5s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
 </style>
