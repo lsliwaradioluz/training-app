@@ -1,22 +1,14 @@
 <template>
-  <div class="exercise">
+  <div class="exercise-editor">
   <!-- NAZWA  -->
-    <Head>
-      <div class="row j-between" v-if="!edit">
-        <span>{{ exercise.name }}</span>
-        <i class="flaticon-vertical-dots ml1" @click="showButtonsPanel = !showButtonsPanel" v-if="$store.state.auth.user.admin"/>
-      </div>
-      <span v-else>Nazwa ćwiczenia</span>
-      <transition name="accordion">
-        <div class="exercise__panel row mt05" v-if="showButtonsPanel">
-          <button :class="{ pb05: showButtonsPanel }" type="button" @click="deleteExercise">Usuń</button>
-          <nuxt-link :class="{ pb05: showButtonsPanel }" tag="button" type="button" to="edit" append>Edytuj</nuxt-link>
-        </div>
-      </transition>
-    </Head>
-    <p class="mt0 mb05 tab" v-if="edit">
-      <input class="input--invisible" placeholder="Wpisz nazwę ćwiczenia" v-model="input.name" spellcheck="false">
-    </p>
+    <Head>Nazwy ćwiczenia</Head>
+    <form class="tab">
+      <label class="t-green" for="fullname">Nazwa główna</label>
+      <input class="input--invisible" type="text" id="fullname" placeholder="np. pull-ups" v-model="input.name" spellcheck="false" autocomplete="off">
+      <br>
+      <label class="t-green" for="username">Nazwa alternatywna</label>
+      <input class="input--invisible" type="text" id="username" placeholder="np. podciąganie na drążku" v-model="input.alias" spellcheck="false" autocomplete="off">
+    </form>
   <!-- ZDJĘCIE  -->
     <Head v-if="edit">
       <div class="row j-between">
@@ -31,7 +23,9 @@
         </form>
       </div>  
     </Head>
-    <div class="exercise__image mb05" :style="{ backgroundImage: `url('${uploadedImage.url}')`}" v-if="uploadedImage"></div>
+    <div class="exercise-editor__image" v-if="uploadedImage">
+      <img :src="uploadedImage.url">
+    </div>
     <div class="tab mt05 mb05 p32 column a-center j-center" v-if="edit && !uploadedImage">
       <span class="column j-center a-center" style="opacity: 0.5" v-if="!loadingImage">
         <i class="flaticon-plus fs-2" @click="launchFileUpload" />
@@ -62,7 +56,7 @@
       </div>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
-    <div class="exercise__buttons tab p00 row j-between t-green" v-if="edit">
+    <div class="exercise-editor__buttons tab p00 row j-between t-green" v-if="edit">
       <button class="p11" type="button" @click="createExercise" v-if="exercise.id == null">Zapisz</button>
       <button class="p11" type="button" @click="updateExercise" v-else>Zapisz</button>
       <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
@@ -90,6 +84,7 @@
     },
     data() {
       return {
+        audioSource: null,
         client: this.$apollo.getClient(),
         showButtonsPanel: false,
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
@@ -97,6 +92,7 @@
         uploadedImage: this.exercise.image || null,
         input: {
           name: this.exercise.name,
+          alias: this.exercise.alias,
           description: this.exercise.description,
         }
       }
@@ -160,6 +156,12 @@
               this.$router.go(-1);
             });
         }
+      }, 
+      recordVoiceName() {
+        navigator.mediaDevices.getUserMedia({audio: true})
+        .then(mediaStreamObj => {
+          this.audioSource = mediaStreamObj;
+        });
       }
     },
   }
@@ -167,18 +169,19 @@
 
 <style lang="scss" scoped>
 
-  .exercise__image {
-    height: 50vh;
-    border-radius: 5px;
-    background-size: cover;
-    background-position: center;
+  .exercise-editor__image {
+    height: 90%;
+    img {
+      border-radius: 5px;
+      width: 100%;
+    }
   }
 
-  .exercise__buttons button {
+  .exercise-editor__buttons button {
     width: 50%;
   }
 
-  .exercise__panel {
+  .exercise-editor__panel {
     border-top: 1px solid color(gray);
     font-size: 0.7rem;
 

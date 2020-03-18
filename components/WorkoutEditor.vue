@@ -74,20 +74,13 @@
                     <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
                       <div class="row j-between">
                         <p class="m00">{{ unit.exercise.name }}</p>
-                        <div class="workout-editor__unit-buttons">
-                          <i 
-                            class="workout-editor__unit-button flaticon-vertical-dots small" 
-                            @click="showUnitButtons == `${complexindex}${unitindex}` ? showUnitButtons = null : showUnitButtons = `${complexindex}${unitindex}`"></i>
-                          <transition name="roll">
-                            <div class="row" v-if="showUnitButtons == `${complexindex}${unitindex}`">
-                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">W górę</button>
-                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">W dół</button>
-                              <button @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                              <button @click="deleteUnit(complexindex, unitindex)">Usuń</button>
-                              <button @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
-                            </div>
-                          </transition>
-                        </div>
+                        <ContextMenu small-icon>
+                          <button class="mr05 ml05" @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">W górę</button>
+                          <button class="mr05 ml05" @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">W dół</button>
+                          <button class="mr05 ml05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
+                          <button class="mr05 ml05" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
+                          <button class="mr05 ml05" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
+                        </ContextMenu>
                       </div>
                       <li>
                         <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
@@ -387,46 +380,18 @@ export default {
       this.currentWorkout == this.previousWorkouts.length - 1 ? this.currentWorkout = this.previousWorkouts.length - 1 : this.currentWorkout++
     }, 
   }, 
-  mounted() {
-    window.addEventListener('click', () => {
-      if (!event.target.classList.contains('workout-editor__unit-button')) {
-        this.showUnitButtons = null;
-      }
-    });
-  }
 }
 </script>
 
 <style lang="scss" scoped>
 
-  .dupa {
-    flex-grow: 1;
-  }
-
   .workout-editor__panel {
     border-top: 1px solid color(gray);
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
-    }
-  }
-
-  .workout-editor__unit-buttons {
-    position: relative;
-    div {
-      background-color: white;
-      border: 1px solid color(black);
-      color: color(black);
-      border-radius: 5px;
-      position: absolute;
-      right: 125%;
-      top: 0;
-      padding: 5px 2.5px;
-      button {
-        margin: 0 5px;
-      }
-    }
+    // button {
+    //   padding: 1rem;
+    //   flex-basis: 50%;
+    //   font-size: inherit;
+    // }
   }
 
   .workout-editor__buttons button {

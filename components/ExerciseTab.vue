@@ -3,8 +3,8 @@
     <div class="row j-between a-stretch">
       <nuxt-link class="exercise-tab__link pr1" :to="exercise.id" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
-        <p class="exercise-tab__description m00" v-if="exercise.description">{{ exercise.description | shortenText }}</p>
-        <p class="exercise-tab__description m00" v-else>Brak opisu</p>
+        <p class="exercise-tab__description m00" v-if="exercise.alias">{{ exercise.alias }}</p>
+        <p class="exercise-tab__description m00" v-else>Brak alternatywnej nazwy</p>
       </nuxt-link>
       <div class="row a-center">
         <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>

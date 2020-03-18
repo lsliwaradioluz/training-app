@@ -1,6 +1,6 @@
 <template>
   <div class="createexercise">
-    <Exercise edit />
+    <ExerciseEditor edit />
   </div>
 </template>
 

@@ -18,11 +18,11 @@
           <p class="m00">{{ unit.exercise.name }}</p>
           <div v-if="!maxEditorOpen">
             <nuxt-link
-              v-if="!edit"
+              v-if="!edit && unit.exercise.image"
               :to="`/exercises/${unit.exercise.id}`" 
               tag="i"
               class="flaticon-information fs-09 ml1"></nuxt-link>
-            <i class="flaticon-plus fs-09" @click="$emit('copy-unit', unit)" v-else></i>
+            <i class="flaticon-plus fs-09" @click="$emit('copy-unit', unit)" v-if="edit"></i>
           </div>
           <div class="routine__max-buttons row pl1" v-if="maxEditorOpen">
             <i class="flaticon-diminish fs-09" @click="$emit('subtract-max', { unit: unitindex, complex: complexindex })"></i>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Exercise :exercise="exercise" />
+    <ExerciseView :exercise="exercise" />
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import mainQuery from '~/apollo/queries/exercises/_id/main.gql'
 
 export default {
+  layout: 'exercise',
   asyncData(context) {
     const client = context.app.apolloProvider.defaultClient;
     return client.query({ query: mainQuery, variables: { id: context.route.params.id } }) 

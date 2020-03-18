@@ -2,6 +2,7 @@ query {
   exercises(sort: "createdAt:desc") {
     id
     name
+    alias
     description
   }
 }

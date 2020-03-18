@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation main pt1 pb1 row j-center a-center">
+  <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent }">
     <span class="logo" @click="reloadPage">Piti</span>
     <h3 class="m00 t-center">{{ header | englishToPolish }}</h3>
     <span class="hamburger t-right">
@@ -43,6 +43,12 @@
 import { mapMutations } from 'vuex'
 
 export default {
+  props: {
+    transparent: {
+      type: Boolean, 
+      default: () => false,
+    }
+  },
   computed: {
     user() {
       return this.$store.getters['auth/user']
@@ -74,7 +80,6 @@ export default {
   
   .navigation {
     width: 100%;
-    background-color: color(black);
     position: fixed;
     top: 0;
     left: 0;

@@ -97,7 +97,7 @@
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': current.exercise.name == 'Rozpoczynasz nowy blok' }"></i>
+        <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': current.exercise.name == 'Rozpoczynasz nowy blok' }" @click="showWholeComplex = true"></i>
       </div>
       <VoiceAssistant 
         :soundname="soundname" 

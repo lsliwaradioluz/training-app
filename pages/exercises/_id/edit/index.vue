@@ -1,6 +1,6 @@
 <template>
   <div class="editexercise">
-    <Exercise :exercise="exercise" edit />
+    <ExerciseEditor :exercise="exercise" edit />
   </div>
 </template>
 
