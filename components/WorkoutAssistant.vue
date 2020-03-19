@@ -87,6 +87,7 @@
             @click="controls.unit = index"></span>
         </div>
       </div>
+  <!-- PANEL STEROWANIA -->
       <div class="row j-between a-center pt1 pb1">
         <span>
           <i class="flaticon-sound small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
@@ -99,18 +100,6 @@
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
         <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': current.exercise.name == 'Rozpoczynasz nowy blok' }" @click="showWholeComplex = true"></i>
       </div>
-      <audio controls autoplay :key="currentSound" @ended="currentSound++">
-      <source :src="sounds[currentSound]" type="audio/mpeg">
-    </audio>
-      <!-- <p>{{ controls.unit }}</p>
-      <audio 
-        @playing="voiceAssistantSpeaking = true" 
-        @ended="voiceAssistantSpeaking = false"
-        :key="controls.unit" 
-        autoplay controls
-        v-if="voiceAssistantMode == 'on'">
-        <source :src="require(`@/assets/sounds/${soundname}`)" type="audio/mpeg">
-      </audio> -->
       <!-- <VoiceAssistant 
         :soundname="soundname" 
         :key="current.soundname"
@@ -135,11 +124,7 @@ export default {
   },
   data() {
     return {
-      currentSound: 0,
-    sounds: [
-    	'https://res.cloudinary.com/drsgb4wld/video/upload/v1584607225/rozpoczynasz-blok_zhsvcf.mp3', 
-      'https://res.cloudinary.com/drsgb4wld/video/upload/v1584607224/blok-zakonczony_cslkei.mp3', 
-    ],
+      audio: null,
       sections: this.workout.sections,
       controls: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
         section: this.$route.query.section,
@@ -163,9 +148,11 @@ export default {
       switch (this.voiceAssistantMode) {
         case 'on':
           this.infoModalMessage = 'Asystent głosowy włączony';
+          this.playAudio();
           break;
         case 'half-on':
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
+          this.stopAudio();
           break;
         case 'off':
           this.infoModalMessage = 'Asystent głosowy wyłączony'; 
@@ -173,6 +160,9 @@ export default {
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;
       }, 2000);
+    },
+    currentUnit() {
+      if (this.voiceAssistantMode == 'on') this.playAudio();
     },
     automaticModeOn() {
       clearTimeout(this.infoModalTimeout);
@@ -252,9 +242,22 @@ export default {
       } else {
         this.showInfoModal = false;
       }
-    }
+    },
+    playAudio() {
+      if (this.audio) this.audio.pause();
+      this.audio = new Audio();
+      this.audio.src = require(`@/assets/sounds/${this.soundname}`);
+      this.audio.play();
+    },
+    stopAudio() {
+      this.audio.pause();
+      this.audio = null;
+    },
   },
   computed: {
+    currentUnit() {
+      return this.controls.unit;
+    },
     soundname() {
       if (this.current.soundname) {
         return this.current.soundname;
