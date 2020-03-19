@@ -152,7 +152,7 @@ export default {
           break;
         case 'half-on':
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
-          this.stopAudio();
+          this.audio.pause();
           break;
         case 'off':
           this.infoModalMessage = 'Asystent głosowy wyłączony'; 
@@ -244,14 +244,9 @@ export default {
       }
     },
     playAudio() {
-      if (this.audio) this.audio.pause();
-      this.audio = new Audio();
+      if (!this.audio) this.audio = new Audio();
       this.audio.src = require(`@/assets/sounds/${this.soundname}`);
       this.audio.play();
-    },
-    stopAudio() {
-      this.audio.pause();
-      this.audio = null;
     },
   },
   computed: {
