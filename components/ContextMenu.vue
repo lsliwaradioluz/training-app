@@ -22,7 +22,7 @@
     data() {
       return {
         showButtons: false,
-        // generate random ID for the trigger button
+        // we generate random ID for the trigger button
         randomID: Math.random().toString(36).substr(2, 9),
       }
     },

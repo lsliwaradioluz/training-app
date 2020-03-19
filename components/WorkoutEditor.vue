@@ -387,11 +387,11 @@ export default {
 
   .workout-editor__panel {
     border-top: 1px solid color(gray);
-    // button {
-    //   padding: 1rem;
-    //   flex-basis: 50%;
-    //   font-size: inherit;
-    // }
+    button {
+      padding: 1rem;
+      flex-basis: 50%;
+      font-size: inherit;
+    }
   }
 
   .workout-editor__buttons button {
