@@ -65,6 +65,7 @@
           :time="current.time"
           :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
           @countdown-over="nextUnit" 
+          @beep="playAudio($event)"
           :key="controls.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="row a-center j-end pl1" v-else>
@@ -148,7 +149,7 @@ export default {
       switch (this.voiceAssistantMode) {
         case 'on':
           this.infoModalMessage = 'Asystent głosowy włączony';
-          this.playAudio();
+          this.playAudio(this.soundname);
           break;
         case 'half-on':
           this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
@@ -162,7 +163,7 @@ export default {
       }, 2000);
     },
     currentUnit() {
-      if (this.voiceAssistantMode == 'on') this.playAudio();
+      if (this.voiceAssistantMode == 'on') this.playAudio(this.soundname);
     },
     automaticModeOn() {
       clearTimeout(this.infoModalTimeout);
@@ -243,9 +244,9 @@ export default {
         this.showInfoModal = false;
       }
     },
-    playAudio() {
+    playAudio(audio) {
       if (!this.audio) this.audio = new Audio();
-      this.audio.src = require(`@/assets/sounds/${this.soundname}`);
+      this.audio.src = require(`@/assets/sounds/${audio}`);
       this.audio.play();
     },
   },
