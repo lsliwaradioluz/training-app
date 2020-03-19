@@ -99,16 +99,18 @@
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
         <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': current.exercise.name == 'Rozpoczynasz nowy blok' }" @click="showWholeComplex = true"></i>
       </div>
-      <p>{{ soundname }}</p>
+      <audio controls autoplay :key="currentSound" @ended="currentSound++">
+      <source :src="sounds[currentSound]" type="audio/mpeg">
+    </audio>
+      <!-- <p>{{ controls.unit }}</p>
       <audio 
         @playing="voiceAssistantSpeaking = true" 
-        @ended="voiceAssistantSpeaking = false" 
-        ref="audio" 
+        @ended="voiceAssistantSpeaking = false"
         :key="controls.unit" 
         autoplay controls
         v-if="voiceAssistantMode == 'on'">
         <source :src="require(`@/assets/sounds/${soundname}`)" type="audio/mpeg">
-      </audio>
+      </audio> -->
       <!-- <VoiceAssistant 
         :soundname="soundname" 
         :key="current.soundname"
@@ -133,6 +135,11 @@ export default {
   },
   data() {
     return {
+      currentSound: 0,
+    sounds: [
+    	'https://res.cloudinary.com/drsgb4wld/video/upload/v1584607225/rozpoczynasz-blok_zhsvcf.mp3', 
+      'https://res.cloudinary.com/drsgb4wld/video/upload/v1584607224/blok-zakonczony_cslkei.mp3', 
+    ],
       sections: this.workout.sections,
       controls: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
         section: this.$route.query.section,
