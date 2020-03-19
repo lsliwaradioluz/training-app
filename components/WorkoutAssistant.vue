@@ -64,8 +64,7 @@
         <Timer 
           :time="current.time"
           :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
-          @countdown-over="nextUnit" 
-          @beep="playAudio($event)"
+          @countdown-over="nextUnit"
           :key="controls.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="row a-center j-end pl1" v-else>
@@ -152,7 +151,7 @@ export default {
           this.playAudio(this.soundname);
           break;
         case 'half-on':
-          this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
+          this.infoModalMessage = 'Asystent głosowy: tylko dź,3więki timera';
           this.audio.pause();
           break;
         case 'off':
