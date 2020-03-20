@@ -23,9 +23,9 @@ export default {
     background: linear-gradient(135deg, color(black), color(lightblack));
   }
 
-  @media (orientation: landscape) {
-    .login {
-      height: auto;
-    }
-  }
+  // @media (orientation: landscape) {
+  //   .login {
+  //     height: auto;
+  //   }
+  // }
 </style>
