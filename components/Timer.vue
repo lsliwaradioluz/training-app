@@ -19,7 +19,6 @@
     },
     data() {
       return {
-        sound: null,
         timeleft: this.time,
         countDownInterval: null,
       }
@@ -28,13 +27,13 @@
       timeleft() {
         if (!this.mute) {
           if (this.timeleft == 30) {
-            this.playSound('thirty.mp3');
+            this.$emit('beep', 'thirty.mp3');
           } else if (this.timeleft == 20) {
-            this.playSound('twenty.mp3');
+            this.$emit('beep', 'twenty.mp3');
           } else if (this.timeleft == 10) {
-            this.playSound('ten.mp3');
+            this.$emit('beep', 'ten.mp3');
           } else if (this.timeleft == 3) {
-            this.playSound('threetwoone.mp3');
+            this.$emit('beep', 'threetwoone.mp3');
           }
         }
       }, 
@@ -53,25 +52,9 @@
           };
         }, 1000);
       }, 
-      playSound(soundname) {
-        this.sound = new Audio(require(`@/assets/sounds/${soundname}`)); 
-        this.sound.play();
-      },
     }, 
     mounted() {
       this.countDown();
-    }, 
-    destroyed() {
-      if (this.sound) this.sound.pause();
-    }
+    },
   }
 </script> 
-
-<style lang="scss" scoped>
-  .workout-assistant__image {
-    img {
-      border-radius: 5px;
-      width: 100%;
-    }
-  }
-</style>

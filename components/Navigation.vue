@@ -1,10 +1,11 @@
 <template>
-  <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent }">
+  <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent && !isAssistant }">
     <span class="logo" @click="reloadPage">Piti</span>
-    <h3 class="m00 t-center">{{ header | englishToPolish }}</h3>
+    <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
+    <h3 class="m00 t-center" v-else>Asystent</h3>
     <span class="hamburger t-right">
-      <i class="flaticon-pause" @click="$router.go(-1)" v-if="$route.path.includes('assistant')"></i>
-      <i class="flaticon-menu" @click="toggleNav" v-else></i>
+      <i class="flaticon-menu" @click="toggleNav" v-if="!isAssistant"></i>
+      <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleWorkoutAssistant')" v-else></i>
     </span>
     <div class="navigation__panel b-lightblack" ref="panel">
       <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
@@ -50,6 +51,9 @@ export default {
     }
   },
   computed: {
+    isAssistant() {
+      return this.$store.state.assistant.showWorkoutAssistant;
+    },
     user() {
       return this.$store.getters['auth/user']
     }, 

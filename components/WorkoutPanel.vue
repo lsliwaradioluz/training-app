@@ -6,12 +6,11 @@
       <p class="m00 t-small" v-if="!workout.sticky">{{ workout.scheduled | reverseDate }}</p>
       <p class="m00 t-small" v-else>Homework</p>
     </div>
-    <nuxt-link 
-      v-if="!$store.state.auth.user.admin"
-      class="button--primary ml1 pl1 pr1" 
-      tag="button" 
-      :to="{ path: 'assistant', query: { section: section } }" 
-      append>Asystent</nuxt-link>
+    <button 
+      class="button--primary ml1 pl1 pr1"
+      type="button" 
+      @click="$emit('show-assistant')"
+      v-if="!$store.state.auth.user.admin">Asystent</button>
     <nuxt-link 
       class="button--primary ml1" 
       type="button" 
@@ -24,7 +23,7 @@
 <script>
 
   export default {
-    props: ['workout', 'section'], 
+    props: ['workout'], 
     data() {
       return {
         showButton: false,

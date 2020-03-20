@@ -17,6 +17,7 @@ import MovingText from '../components/MovingText';
 import VoiceAssistant from '../components/VoiceAssistant';
 import Confirm from '../components/Confirm';
 import ContextMenu from '../components/ContextMenu';
+import WorkoutAssistant from '../components/WorkoutAssistant';
 
 Vue.component('Head', Head);
 Vue.component('Workout', Workout);
@@ -36,6 +37,7 @@ Vue.component('MovingText', MovingText);
 Vue.component('VoiceAssistant', VoiceAssistant);
 Vue.component('Confirm', Confirm);
 Vue.component('ContextMenu', ContextMenu);
+Vue.component('WorkoutAssistant', WorkoutAssistant);
 
 
 

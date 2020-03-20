@@ -22,7 +22,7 @@
     </div>
     <div 
       class="carousel-wrapper a-stretch"
-      :class="{ 'inactive': !isActive, 'carousel--revealed': revealCarousel }"
+      :class="{ 'inactive': !isActive }"
       :style="{ transform: `translateX(${translate}px)` }"
       ref="wrapper">
         <slot></slot>
@@ -73,8 +73,8 @@
             shape: "round"
           }
         }
-      }, 
-      reveal: {
+      },
+      isShown: {
         type: Boolean, 
         default: () => false,
       }
@@ -93,7 +93,6 @@
         elementWidth: 0, 
         autoplayInterval: null, 
         animateTimeout: null,
-        revealCarousel: this.reveal,
       }
     },
     computed: {
@@ -128,6 +127,11 @@
       startFromPage() {
         this.currentPage = this.startFromPage;
       },
+      isShown() {
+        this.$nextTick(() => {
+          this.elementWidth = this.$slots.default[0].elm.offsetWidth;
+        });
+      }
     },
     methods: {
       animateCarousel() {
@@ -249,12 +253,6 @@
     -ms-user-select: none;
     user-select: none;
     width: 100%;
-  }
-
-  .carousel--revealed {
-    animation: slide 3s;
-    animation-iteration-count: infinite;
-    animation-delay: 2s;
   }
 
   .carousel-navdots {

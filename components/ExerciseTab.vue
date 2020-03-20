@@ -32,7 +32,7 @@
     }, 
     methods: {
       async deleteExercise() {
-        if (this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
+        if (await this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
           const input = {
             where: {
               id: this.exercise.id

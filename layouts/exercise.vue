@@ -2,6 +2,7 @@
   <div class="b-black">
     <Navigation transparent />
     <nuxt />
+    <Confirm />
   </div>
 </template>
 

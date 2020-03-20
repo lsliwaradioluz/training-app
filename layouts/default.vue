@@ -1,9 +1,9 @@
 <template>
-  <div class="default b-black main">
+  <div class="default b-black" :class="{ main: !$store.state.assistant.showWorkoutAssistant}">
     <Navigation />
-    <WorkoutPairingTab v-if="$store.state.main.workoutToPair && !$route.params.id" />
-    <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy" />
-    <Confirm ref="confirm" />
+    <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
+    <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
+    <Confirm />
     <nuxt />
   </div>
 </template>

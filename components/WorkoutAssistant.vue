@@ -1,19 +1,22 @@
 <template>
   <div 
-    class="workout-assistant column j-end main pt1 pb0" 
-    :class="{ half: isScreenDivided }"
+    class="workout-assistant main column j-end pb0"
     :style="{ backgroundImage: image }"
     @click.self="nextUnit">
-  <!-- STATUS BAR  -->
-    <div class="workout-assistant__bar row j-between a-center main pb1 pt1">
-      <span class="logo">Piti</span>
-      <h3 class="m00 t-center" v-if="!isScreenDivided">{{ sections[controls.section].name | shortenSection }}</h3>
-      <p class="m00 t-center" v-else>{{ workout.user.fullname | getName }}: {{ sections[controls.section].name | shortenSection }}</p>
-      <span class="hamburger t-right">
-        <i class="flaticon-cancel small" @click="$router.go(-1)"></i>
-      </span>
-    </div>
     <div>
+  <!-- OPIS BLOKU -->
+    <transition name="slide-to-right">
+      <div class="workout-assistant__block-description" v-show="showBlockDescription">
+        <p 
+          class="m00 t-small row j-between" 
+          :class="{ 't-green': controls.section == 0 && controls.complex == 0 ? index + 2 == controls.unit : index + 1 == controls.unit }" 
+          v-for="(description, index) in blockDescriptions" 
+          :key="index">
+          <span>{{ description.name }}</span>
+          <span>{{ description.reps }}</span>
+        </p>
+      </div>
+    </transition>
   <!-- MODAL INFO  -->
       <transition name="slide-to-right">
         <p class="m00 t-small" v-show="showInfoModal">
@@ -24,35 +27,8 @@
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-  <!-- ROZPISKA AKTUALNEGO BLOKU -->
-      <div class="workout-assistant__complex-tab main" v-if="showWholeComplex">
-        <div class="workout-assistant__bar row j-between a-center main pb1 pt1 b-assistantblack">
-          <span class="logo">Piti</span>
-          <h3 class="m00 t-center">Rozpiska</h3>
-          <span class="hamburger t-right">
-            <i class="flaticon-cancel small" @click="showWholeComplex = false"></i>
-          </span>
-        </div>
-        <div>
-          <div 
-            class="mb1 row j-between" 
-            v-for="(unit, index) in sections[controls.section].complexes[controls.complex].units" 
-            :key="index">
-            <ul>
-              <p class="m00">{{ unit.exercise.name }}</p>
-              <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
-              <li v-if="unit.remarks">{{ unit.remarks }}</li>
-              <li>przerwy {{ unit.rest }}s</li>
-            </ul>
-            <nuxt-link
-              :to="`/exercises/${unit.exercise.id}`" 
-              tag="i"
-              class="flaticon-information small ml1"></nuxt-link>
-          </div>
-        </div>
-      </div>
   <!-- ĆWICZENIE -->
-      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between" :class="{ grow: isScreenDivided }">
+      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between">
         <div>
           <MovingText :key="current.exercise.name">
             <h3 class="m00">{{ current.exercise.name }}</h3>
@@ -64,7 +40,8 @@
         <Timer 
           :time="current.time"
           :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
-          @countdown-over="nextUnit"
+          @countdown-over="nextUnit" 
+          @beep="playAudio($event)"
           :key="controls.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="row a-center j-end pl1" v-else>
@@ -75,9 +52,12 @@
         </div>
       </div>
       <div class="workout-assistant__indicators" >
-        <p class="m00 t-small">
-          {{ `Blok ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
-        </p>
+        <div class="row j-between" style="margin-bottom: 1px">
+          <p class="m00 t-small">
+            {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
+          </p>
+          <p class="m00 t-small" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
+        </div>
         <div class="row j-between">
           <span 
             class="workout-assistant__indicators-bar t-center"
@@ -90,22 +70,16 @@
   <!-- PANEL STEROWANIA -->
       <div class="row j-between a-center pt1 pb1">
         <span>
-          <i class="flaticon-sound small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
-          <i class="flaticon-speaker small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
-          <i class="flaticon-mute small" :class="{ 'pulsing-element': controls.section == 0 && controls.complex == 0 && controls.unit == 0 }" @click="voiceAssistantMode = 'on'" v-else></i>
+          <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
+          <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
+          <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
         </span>
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 'pulsing-element': current.exercise.name == 'Rozpoczynasz nowy blok' }" @click="showWholeComplex = true"></i>
+        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="toggleStopwatch"></i>
+        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
       </div>
-      <!-- <VoiceAssistant 
-        :soundname="soundname" 
-        :key="current.soundname"
-        @playing="voiceAssistantSpeaking = true" 
-        @ended="voiceAssistantSpeaking = false"
-        v-if="voiceAssistantMode == 'on'" /> -->
     </div>
   </div>
 </template>
@@ -117,17 +91,24 @@ export default {
     workout: {
       type: Object, 
     }, 
+    index: {
+      type: Number, 
+    },
     isScreenDivided: {
       type: Boolean, 
       default: () => true
     },
+    sectionIndex: {
+      type: Number, 
+      default: () => 0
+    }
   },
   data() {
     return {
       audio: null,
       sections: this.workout.sections,
-      controls: this.$store.state.main.workoutAssistantState[this.workout.id] ? { ...this.$store.state.main.workoutAssistantState[this.workout.id] } : {
-        section: this.$route.query.section,
+      controls: {
+        section: this.sectionIndex,
         complex: 0, 
         unit: 0,
       }, 
@@ -138,7 +119,7 @@ export default {
       showInfoModal: false,
       infoModalMessage: null,
       infoModalTimeout: null,
-      showWholeComplex: this.cameBackFromExercise,
+      showBlockDescription: false, 
     }
   },
   watch: {
@@ -151,18 +132,25 @@ export default {
           this.playAudio(this.soundname);
           break;
         case 'half-on':
-          this.infoModalMessage = 'Asystent głosowy: tylko dź,3więki timera';
-          this.audio.pause();
+          this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
+          if (this.voiceAssistantSpeaking) this.audio.pause();
           break;
         case 'off':
           this.infoModalMessage = 'Asystent głosowy wyłączony'; 
+          this.audio.pause();
       }
       this.infoModalTimeout = setTimeout(() => {
         this.showInfoModal = false;
       }, 2000);
     },
     currentUnit() {
+      this.$store.commit('assistant/setCurrentSection', { index: this.index, section: this.controls.section });
       if (this.voiceAssistantMode == 'on') this.playAudio(this.soundname);
+    },
+    showWorkoutAssistant(value) {
+      if (!value) {
+        if (this.voiceAssistantSpeaking) this.audio.pause();
+      }
     },
     automaticModeOn() {
       clearTimeout(this.infoModalTimeout);
@@ -179,20 +167,12 @@ export default {
       if (this.controls.unit > this.units.length - 1) {
         this.nextComplex();
       }
-      this.$emit('set-current-state', { 
-        unit: this.controls.unit, complex: this.controls.complex, section: this.controls.section 
-      });
     },
     previousUnit() {
       this.controls.unit--;
       if (this.controls.unit < 0) {
         this.previousComplex();
       }
-      this.$emit('set-current-state', { 
-        unit: this.controls.unit, 
-        complex: this.controls.complex, 
-        section: this.controls.section 
-      });
     },
     nextComplex() {
       this.controls.complex++;
@@ -245,11 +225,47 @@ export default {
     },
     playAudio(audio) {
       if (!this.audio) this.audio = new Audio();
+      if (audio == this.soundname) this.voiceAssistantSpeaking = true;
+      this.audio.addEventListener('ended', () => {
+        this.voiceAssistantSpeaking = false;
+      });
       this.audio.src = require(`@/assets/sounds/${audio}`);
       this.audio.play();
     },
+    toggleStopwatch() {
+      if (this.showBlockDescription) this.showBlockDescription = false;
+      this.showStopwatch = !this.showStopwatch;
+    },
+    toggleBlockDescription() {
+      if (this.showStopwatch) this.showStopwatch = false;
+      this.showBlockDescription = !this.showBlockDescription;
+    }
   },
   computed: {
+    blockDescriptions() {
+      let description = [];
+      this.units.forEach(cur => {
+        let reps;
+        if (cur.reps && !cur.time) {
+          reps = cur.reps;
+        } else if (cur.reps && cur.time) {
+          reps = `${cur.reps}x${cur.time}s`;
+        } else if (cur.time) {
+          reps = `${cur.time}s`;
+        } else if (cur.distance) {
+          reps = `${cur.distance}m`;
+        }
+
+        if (cur.sets || cur.time) {
+          description.push({ reps: `${reps}`, name: `${cur.exercise.name}` });
+        }
+      });
+
+      return description;
+    },
+    showWorkoutAssistant() {
+      return this.$store.state.assistant.showWorkoutAssistant;
+    },
     currentUnit() {
       return this.controls.unit;
     },
@@ -274,11 +290,7 @@ export default {
         image = this.current.exercise.image ? this.current.exercise.image.url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
       }
 
-      if (!this.isScreenDivided) {
-        return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
-      } else {
-        return 'none';
-      }
+      return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
     },
     current() {
       return this.units[this.controls.unit];
@@ -293,11 +305,7 @@ export default {
     },
     next() {
       let next = this.units[this.controls.unit + 1];
-      
-      if (this.controls.unit + 1 > this.units.length - 1) {
-        next = { exercise: { name: 'Kolejny blok', images: [] } }
-      }
-
+      if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
       return next;
     },
     units() {
@@ -411,65 +419,19 @@ export default {
 <style lang="scss" scoped>
 
   .workout-assistant {
-    height: 100%;
+    height: 100vh;
     background-size: cover;
     background-position: center;
     position: relative;
     overflow: hidden;
   }
 
-  .workout-assistant__bar {
-    width: 100%;
-    background: transparent;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    span {
-      width: 20%;
-      z-index: initial;
-    }
-    h3 {
-      text-transform: capitalize;
-      width: 60%;
-    }
-  }
-
-  .workout-assistant__complex-tab {
-    position: absolute; 
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    background-color: color(assistantblack);
-    z-index: 1;
-    overflow: scroll;
-
+  .workout-assistant__block-description {
+    max-height: 40vh;
+    overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none;
     }
-
-    div:nth-child(2) div {
-      animation: fade-and-slide-down 0.7s;
-    }
-  }
-
-  .workout-assistant__exercise div {
-    &:first-child {
-      flex-basis: 1;
-      overflow: hidden;
-    } 
-    &:nth-child(2) {
-      flex-basis: 1;
-    }
-  }
-
-  .grow {
-    flex-grow: 1;
-  }
-
-  .half {
-    height: 50%;
   }
 
   .workout-assistant__indicators-bar {

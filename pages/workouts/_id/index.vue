@@ -1,47 +1,54 @@
 <template>
   <div class="workout">
-    <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
-      <button 
-        type="button"
-        class="t-small"
-        :class="{ 't-green': index == currentWorkout }"
-        v-for="(user, index) in users" 
-        :key="index"
-        @click="currentWorkout = index">{{ user | getName }}</button>
-    </div>
-    <div>
-  <!-- NAGŁÓWEK -->
-    <WorkoutPanel :workout="workout" :section="currentTranslate" />
-  <!-- ROZPISKA  --> 
-      <Head class="mt0 pt05 pb05">
-        <div class="row j-between">
-          <span>Rozpiska</span>
-          <nuxt-link 
-            v-if="$store.state.auth.user.admin"
-            class="flaticon-play" 
-            tag="i" 
-            :to="{ path: 'assistant', query: { section: currentTranslate } }" 
-            append></nuxt-link>
-        </div>
-      </Head>
-      <div class="carousel-container">
-        <Carousel 
-          :pagination="false"
-          :active="!maxEditorOpen"
-          :start-from-page="$store.state.main.workoutAssistantState[workout.id] ? +$store.state.main.workoutAssistantState[workout.id].section : 0"
-          :key="workout.id"
-          @change-page="currentTranslate = $event" 
-          reveal>
-          <div class="p01 column" v-for="section in workout.sections" :key="section.id">
-            <Routine 
-              :section="section"
-              @toggle-max-editor="maxEditorOpen = $event"
-              @add-max="addMax($event)" 
-              @subtract-max="subtractMax($event)"
-              @upload-workout="uploadWorkout" />
-          </div>
-      </Carousel>
+    <div v-show="!$store.state.assistant.showWorkoutAssistant">
+      <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
+        <button 
+          type="button"
+          class="t-small"
+          :class="{ 't-green': index == currentWorkout }"
+          v-for="(user, index) in users" 
+          :key="index"
+          @click="$store.commit('assistant/setCurrentWorkout', index)">{{ user | getName }}</button>
       </div>
+      <div>
+    <!-- NAGŁÓWEK -->
+      <WorkoutPanel :workout="workout" @show-assistant="showWorkoutAssistant = true" />
+    <!-- ROZPISKA  --> 
+        <Head class="mt0 pt05 pb05">
+          <div class="row j-between">
+            <span>Rozpiska</span>
+            <button type="button" @click="$store.commit('assistant/toggleWorkoutAssistant')"><i class="flaticon-play"></i></button>
+          </div>
+        </Head>
+        <div class="carousel-container">
+          <Carousel 
+            :pagination="false"
+            :active="!maxEditorOpen"
+            :start-from-page="currentSection"
+            :key="workout.id"
+            @change-page="$store.commit('assistant/setCurrentSection', { index: currentWorkout, section: $event })">
+            <div class="p01 column" v-for="section in workout.sections" :key="section.id">
+              <Routine 
+                :section="section"
+                @toggle-max-editor="maxEditorOpen = $event"
+                @add-max="addMax($event)" 
+                @subtract-max="subtractMax($event)"
+                @upload-workout="uploadWorkout" />
+            </div>
+          </Carousel>
+        </div>
+      </div>
+    </div>
+    <div v-show="$store.state.assistant.showWorkoutAssistant">
+      <Carousel :is-shown="$store.state.assistant.showWorkoutAssistant" :pagination="false" @change-page="$store.commit('assistant/setCurrentWorkout', $event)">
+        <WorkoutAssistant
+          v-for="(workout, index) in workouts"
+          :index="index"
+          :workout="workout"
+          :section-index="currentSection"
+          :key="workout.id"
+          :is-screen-divided="workouts.length > 1" />
+      </Carousel>
     </div>
   </div>
 </template>
@@ -72,11 +79,15 @@
       return {
         client: this.$apollo.getClient(),
         maxEditorOpen: false,
-        currentTranslate: 0,
-        currentWorkout: 0,
       }
     },
     computed: {
+      currentWorkout() {
+        return this.$store.state.assistant.currentWorkout;
+      },
+      currentSection() {
+        return this.$store.state.assistant.currentSection[this.currentWorkout];
+      },
       workout() {
         const workout = this.workouts[this.currentWorkout];
         workout.sections = workout.sections.filter(section => {
@@ -111,14 +122,14 @@
     }, 
     methods: {
       addMax({ unit, complex }) {
-        let max = this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max;
-        if (max == null) this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max = 0;
-        this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max++;
+        let max = this.workout.sections[this.currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workout.sections[this.currentSection].complexes[complex].units[unit].max = 0;
+        this.workout.sections[this.currentSection].complexes[complex].units[unit].max++;
       },
       subtractMax({ unit, complex }) {
-        let max = this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max;
-        if (max == null) this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max = 0;
-        this.workout.sections[this.currentTranslate].complexes[complex].units[unit].max--;
+        let max = this.workout.sections[this.currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workout.sections[this.currentSection].complexes[complex].units[unit].max = 0;
+        this.workout.sections[this.currentSection].complexes[complex].units[unit].max--;
       }, 
       uploadWorkout() {
         let input = {
@@ -136,11 +147,27 @@
           })  
       }
     },
-    beforeRouteLeave(to, from, next) {
-      if (!to.path.includes('assistant')) {
-        this.$store.commit('main/resetWorkoutAssistantState', {});
+    beforeRouteEnter(to, from, next) {
+      if (!from.path.includes('exercises')) {
+        next(vm => {
+          vm.$store.commit('assistant/setCurrentSection');
+        });
+      } else {
+        next();
       }
-      next();
+      
+    }, 
+    async beforeRouteLeave(to, from, next) {
+      // Jeżeli ktos przez przypadek użyje strzałki cofnij, by wyjść z asystenta, zapytaj go, czy na pewno tego chce
+      if (this.$store.state.assistant.showWorkoutAssistant) {
+        if (await this.$root.$confirm('Czy na pewno chcesz wyjść z tego treningu?')) {
+          this.$store.commit('assistant/toggleWorkoutAssistant');
+          next();
+        }
+      } else {
+        next();
+      }
     }
   }
 </script>
+

@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 export const state = () => ({
   workoutToPair: null,
   workoutToCopy: null,
-  workoutAssistantState: {},
 });
 
 export const mutations = {
@@ -22,13 +21,6 @@ export const mutations = {
   stopCopyWorkout(state) {
     state.workoutToCopy = null;
     Cookies.set('workoutToCopy', null);
-  },
-  setWorkoutAssistantState(state, payload) {
-    state.workoutAssistantState[payload.id] = payload.state;
-    Cookies.set('workoutAssistantState', state.workoutAssistantState);
-  }, 
-  resetWorkoutAssistantState(state, workoutAssistantState) {
-    state.workoutAssistantState = workoutAssistantState;
   },
 }
 

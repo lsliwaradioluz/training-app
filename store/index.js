@@ -22,6 +22,5 @@ export const actions = {
     commit('auth/setUsername', username);
     commit('main/pairWorkout', workoutToPair);
     commit('main/copyWorkout', workoutToCopy);
-    if (workoutAssistantState != null) commit('main/resetWorkoutAssistantState', workoutAssistantState);
   }
 }
