@@ -1,5 +1,5 @@
 <template>
-  <div class="login main b-black column j-center">
+  <div class="login main column j-center">
     <h4 class="logo t-center m00">Piti</h4>
     <Nuxt />
   </div>
@@ -20,6 +20,7 @@ export default {
 
   .login {
     height: 100vh;
+    background: linear-gradient(to right, color(black), color(lightblack));
   }
 
   @media (orientation: landscape) {

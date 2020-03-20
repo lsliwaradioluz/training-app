@@ -1,54 +1,48 @@
 <template>
   <div class="signin t-white column j-center">
-    <form class="column j-center" v-if="!username" @submit.prevent>
-      <p class="m00 mb1 t-center t-small">Podaj nazwę użytkownika:</p>
+    <form class="column j-center" @submit.prevent>
       <input 
-        class="mb05 t-center" 
+        class="mb05" 
         v-model="identifier" 
         type="text"
-        autocomplete="off"
+        autocomplete="on"
+        placeholder="login"
         spellcheck="false">
-      <button class="button--primary square mt05" @click="confirmUser" type="button">Dalej</button>
-      <p class="signin__error t-red mb0 mt05 t-small t-center">{{ error }}</p>
-    </form>
-    <form class="column j-center" @submit.prevent v-else>
-      <p class="m00 t-center t-small">Podaj hasło użytkownika {{ username }}:</p>
-      <input 
-        class="input--invisible t-center t-small mb05" 
-        v-model="password" 
-        :type="revealPassword ? 'text' : 'password'"
-        autocomplete="off"
-        disabled>
-      <Keyboard 
-        @key-pressed="insertCode($event)"
-        @reveal-password="revealPassword = true" 
-        @hide-password="revealPassword = false" />
+      <span class="row">
+        <input 
+          class="mb05" 
+          v-model="password" 
+          placeholder="hasło"
+          :type="revealPassword ? 'text' : 'password'"
+          autocomplete="on"
+          spellcheck="false">
+        <button 
+          class="signin__reveal-button ml05 mb05" 
+          type="button" 
+          @touchstart="revealPassword = true" 
+          @touchend="revealPassword = false">
+          <i class="flaticon-eye"></i>
+        </button>
+      </span>
+      <button class="button--primary square mb1 fs-1" @click.prevent="signIn" type="button">Zaloguj</button>
       <p class="signin__error t-red m00 t-small t-center">{{ error }}</p>
-      <button class="button--primary square m10" @click.prevent="signIn" type="button">Zaloguj się</button>
-      <div class="column a-center">
-        <button class="t-center t-small mb05" type="button" @click="changeUser">Nie jesteś {{ username }}?</button>
-        <!-- <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link> -->
-      </div>
+      <!-- <div class="column a-center">
+        <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link>
+      </div> -->
     </form>      
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex';
-import Keyboard from '~/components/Keyboard';
-import mainQuery from '~/apollo/queries/login/main.gql'
 
 export default {
-  components: {
-    Keyboard,
-  },
   layout: 'login',
   data() {
     return { 
       client: this.$apollo.getClient(),
-      users: null,
-      revealPassword: false,
       identifier: '',
+      revealPassword: false,
       password: '',
       error: ''
     }
@@ -59,45 +53,6 @@ export default {
     }
   },
   methods: {
-    clearFields() {
-      this.identifier = '';
-      this.password = '';
-      this.error = '';
-    },
-    confirmUser() {
-      if (!this.users) {
-        this.client.query({ query: mainQuery })
-          .then(({ data }) => {
-            this.users = data.users; 
-            this.verifyUser();
-          });
-      } else {
-        this.verifyUser();
-      }
-    },
-    verifyUser() {
-      const user = this.users.find(user => {
-        return user.username.toLowerCase() == this.identifier.toLowerCase();
-      });
-
-      if (user) {
-        this.setUsername(user.username);
-        this.clearFields();
-      } else {
-        this.error = 'Nie ma takiego użytkownika';
-      }
-    },
-    changeUser() {
-      this.setUsername(null);
-      this.clearFields();
-    },
-    insertCode(digit) {
-      if (digit == 'C') {
-        this.password = this.password.substring(0, this.password.length - 1);
-      } else {
-        this.password += digit;
-      }
-    },
     signIn() {
       const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/local' : 'https://powerful-taiga-81942.herokuapp.com/auth/local';
       this.$axios.$post(endpoint, {
@@ -120,7 +75,7 @@ export default {
           });
         })
         .catch(err => {
-          this.error = 'Hasło nieprawidłowe';
+          this.error = 'Nieprawidłowy login lub hasło';
         })
     },
     ...mapMutations({
@@ -130,4 +85,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .signin__reveal-button {
+    background-color: color(inputgray);
+    border-radius: 5px;
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+</style>
 
