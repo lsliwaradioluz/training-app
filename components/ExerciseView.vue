@@ -1,5 +1,5 @@
 <template>
-  <div class="exercise-view column j-end" :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` }">
+  <div class="exercise-view column j-end" :style="{ backgroundImage: exercise.image ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` : 'none' }">
     <div class="p11">
       <div class="row j-between a-center">
         <div class="dupa">
@@ -8,7 +8,6 @@
           </MovingText>
           <p class="m00 t-small">{{ exercise.alias }}</p>
         </div>
-        <!--  -->
         <ContextMenu class="ml1" v-if="$store.state.auth.user.admin">
           <span>
             <button class="ml05 mr05" type="button" @click="showDescription = true" v-show="!showDescription">Rozwiń opis</button>
@@ -25,7 +24,6 @@
           v-else>
           <i class="flaticon-down-arrow" />
         </button>
-        <!--  -->
       </div>
       <transition name="accordion">
         <div class="mt1" v-show="showDescription">
