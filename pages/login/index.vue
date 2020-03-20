@@ -74,8 +74,7 @@ export default {
         })
     },
     ...mapMutations({
-      setUser: 'auth/setUser', 
-      setUsername: 'auth/setUsername',
+      setUser: 'auth/setUser',
     })
   }
 }

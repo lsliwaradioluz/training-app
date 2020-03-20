@@ -20,7 +20,7 @@ export default {
 
   .login {
     height: 100vh;
-    background: linear-gradient(to right, color(black), color(lightblack));
+    background: linear-gradient(135deg, color(black), color(lightblack));
   }
 
   @media (orientation: landscape) {

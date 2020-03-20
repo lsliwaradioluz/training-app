@@ -1,6 +1,7 @@
 query($ids: [ID]!) {
   workouts(where: { id_in: $ids }) {
     id
+    createdAt
     scheduled
     sticky
     feedback

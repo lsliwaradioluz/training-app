@@ -2,14 +2,14 @@
   <div class="exercise-view column j-end" :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` }">
     <div class="p11">
       <div class="row j-between a-center">
-        <div>
+        <div class="dupa">
           <MovingText>
-            <h3 class="m00 t-center">{{ exercise.name }}</h3>
+            <h3 class="m00">{{ exercise.name }}</h3>
           </MovingText>
           <p class="m00 t-small">{{ exercise.alias }}</p>
         </div>
         <!--  -->
-        <ContextMenu v-if="$store.state.auth.user.admin">
+        <ContextMenu class="ml1" v-if="$store.state.auth.user.admin">
           <span>
             <button class="ml05 mr05" type="button" @click="showDescription = true" v-show="!showDescription">Rozwiń opis</button>
             <button class="ml05 mr05" type="button" @click="showDescription = false" v-show="showDescription">Zwiń opis</button>
@@ -89,6 +89,10 @@
 
   .rotation {
     transform: rotate(180deg);
+  }
+
+  .dupa {
+    overflow: hidden;
   }
 
 </style>

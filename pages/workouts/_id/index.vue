@@ -28,7 +28,7 @@
             :key="workout.id"
             @change-page="$store.commit('assistant/setCurrentSection', { index: currentWorkout, section: $event })">
             <div class="p01 column" v-for="section in workout.sections" :key="section.id">
-              <Routine 
+              <Routine
                 :section="section"
                 @toggle-max-editor="maxEditorOpen = $event"
                 @add-max="addMax($event)" 
@@ -150,7 +150,7 @@
     beforeRouteEnter(to, from, next) {
       if (!from.path.includes('exercises')) {
         next(vm => {
-          vm.$store.commit('assistant/setCurrentSection');
+          vm.$store.commit('assistant/clearAssistantState');
         });
       } else {
         next();

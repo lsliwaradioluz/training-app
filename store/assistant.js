@@ -4,7 +4,8 @@ import Vue from 'vue'
 export const state = () => ({
   showWorkoutAssistant: false,
   currentWorkout: 0,
-  currentSection: [0, 0]
+  currentSection: [0, 0], 
+  showBlockDescription: false,
 });
 
 export const mutations = {
@@ -21,6 +22,15 @@ export const mutations = {
       state.currentSection = [0, 0];
     }
   },
+  toggleBlockDescription(state) {
+    state.showBlockDescription = !state.showBlockDescription;
+  }, 
+  clearAssistantState(state) {
+    state.showWorkoutAssistant = false;
+    state.showBlockDescription = false;
+    state.currentWorkout = 0;
+    state.currentSection = [0, 0];
+  }
 }
 
 export const getters = {  

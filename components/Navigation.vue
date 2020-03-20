@@ -3,29 +3,32 @@
     <span class="logo" @click="reloadPage">Piti</span>
     <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
     <h3 class="m00 t-center" v-else>Asystent</h3>
-    <span class="hamburger t-right">
-      <i class="flaticon-menu" @click="toggleNav" v-if="!isAssistant"></i>
-      <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleWorkoutAssistant')" v-else></i>
+    <span class="t-right">
+      <i class="flaticon-menu" @click="navToggled = !navToggled" v-if="!isAssistant"></i>
+      <span v-else>
+        <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleWorkoutAssistant')" v-if="!$store.state.assistant.showBlockDescription"></i>
+        <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleBlockDescription')" v-else></i>
+      </span>
     </span>
-    <div class="navigation__panel b-lightblack" ref="panel">
+    <div class="navigation__panel b-lightblack" :class="{ toggled: navToggled }" ref="panel">
       <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
       <div class="navigation__links column tab p11 pt0">
-        <nuxt-link to="/dashboard" @click.native="toggleNav">
+        <nuxt-link to="/dashboard">
           <i class="flaticon-user mr05"></i>
           Pulpit
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/exercises" @click.native="toggleNav" v-if="user.admin">
+        <nuxt-link to="/exercises" v-if="user.admin">
           <i class="flaticon-gymnastics mr05"></i>
           Ćwiczenia
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/workouts" @click.native="toggleNav">
+        <nuxt-link to="/workouts">
           <i class="flaticon-contract mr05"></i>
           Treningi
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/users" @click.native="toggleNav" v-if="user.admin">
+        <nuxt-link to="/users" v-if="user.admin">
           <i class="flaticon-group mr05"></i>
           Podopieczni
           <i class="flaticon-right-arrow"></i>
@@ -50,6 +53,11 @@ export default {
       default: () => false,
     }
   },
+  data() {
+    return {
+      navToggled: false,
+    }
+  },
   computed: {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;
@@ -67,15 +75,19 @@ export default {
     }
   }, 
   methods: {
-    toggleNav() {
-      this.$refs.panel.classList.toggle('toggled');
-    },
     reloadPage() {
       window.location.reload();
     },
     ...mapMutations({
       logout: 'auth/logout'
     })
+  }, 
+  mounted() {
+    window.addEventListener('click', () => {
+      if (!event.target.classList.contains('flaticon-menu')) {
+        this.navToggled = false;
+      }
+    });
   }
 }
 </script>

@@ -6,15 +6,26 @@
     <div>
   <!-- OPIS BLOKU -->
     <transition name="slide-to-right">
-      <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
-        <p 
-          class="m00 t-small row j-between" 
-          :class="{ 't-green': controls.section == 0 && controls.complex == 0 ? index + 2 == controls.unit : index + 1 == controls.unit }" 
-          v-for="(description, index) in blockDescriptions" 
-          :key="index">
-          <span>{{ description.name }}</span>
-          <span>{{ description.reps }}</span>
-        </p>
+      <div class="workout-assistant__block-description main pb05" v-show="$store.state.assistant.showBlockDescription">
+        <ul class="mb05" v-for="unit in sections[controls.section].complexes[controls.complex].units" :key="unit.id">
+          <p class="m00 row j-between">
+            <span>{{ unit.exercise.name }}</span>
+            <!-- <nuxt-link
+              v-if="unit.exercise.image"
+              :to="`/exercises/${unit.exercise.id}`" 
+              tag="i"
+              class="flaticon-information fs-09 ml1"></nuxt-link> -->
+          </p>
+          <li>
+            <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
+          </li>
+          <li>
+            <span v-if="unit.remarks">{{ unit.remarks.toLowerCase() }}</span>
+          </li>
+          <li>
+            <span>przerwy {{ unit.rest }}s</span>
+          </li>
+        </ul>
       </div>
     </transition>
   <!-- STOPER -->
@@ -72,7 +83,7 @@
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="showBlockDescription = !showBlockDescription"></i>
+        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="$store.commit('assistant/toggleBlockDescription')"></i>
       </div>
     </div>
   <!-- MODAL INFO  -->
@@ -228,27 +239,6 @@ export default {
     },
   },
   computed: {
-    blockDescriptions() {
-      let description = [];
-      this.units.forEach(cur => {
-        let reps;
-        if (cur.reps && !cur.time) {
-          reps = cur.reps;
-        } else if (cur.reps && cur.time) {
-          reps = `${cur.reps}x${cur.time}s`;
-        } else if (cur.time) {
-          reps = `${cur.time}s`;
-        } else if (cur.distance) {
-          reps = `${cur.distance}m`;
-        }
-
-        if (cur.sets || cur.time) {
-          description.push({ reps: `${reps}`, name: `${cur.exercise.name}` });
-        }
-      });
-
-      return description;
-    },
     showWorkoutAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;
     },
@@ -418,7 +408,7 @@ export default {
     left: 0;
     background-color: black;
     height: 100%;
-    width: 85%;
+    width: 100%;
     z-index: 2;
   }
 

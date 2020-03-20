@@ -1,10 +1,17 @@
 <template>
   <div class="workout-panel tab p11 row a-center j-between">
     <div class="column a-start">
-      <h3 class="m00" v-if="!$store.state.auth.user.admin">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</h3>
-      <h3 class="m00" v-else>{{ workout.user.fullname }}</h3>
-      <p class="m00 t-small" v-if="!workout.sticky">{{ workout.scheduled | reverseDate }}</p>
-      <p class="m00 t-small" v-else>Homework</p>
+      <div v-if="!$store.state.auth.user.admin">
+        <h3 class="m00" v-if="workout.sticky">Podwieszony</h3>
+        <h3 class="m00" v-else>{{ workout.scheduled | reverseDate }}</h3>
+        <p class="m00 t-small" v-if="workout.sticky">dodano {{ workout.createdAt | reverseDate }}</p>
+        <p class="m00 t-small" v-else>{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
+      </div>
+      <div v-else>
+        <h3 class="m00">{{ workout.user.fullname }}</h3>
+        <p class="m00 t-small" v-if="workout.sticky">Podwieszony</p>
+        <p class="m00 t-small" v-else>{{ workout.scheduled | reverseDate }}</p>
+      </div>
     </div>
     <button 
       class="button--primary ml1 pl1 pr1"

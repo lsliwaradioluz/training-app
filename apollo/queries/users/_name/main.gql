@@ -19,6 +19,7 @@ query($username: String) {
       scheduled 
       ready
       sticky
+      createdAt
     }
   }
 }

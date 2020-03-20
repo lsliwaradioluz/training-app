@@ -8,8 +8,8 @@
           <p class="m00 t-small">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
         </div>
         <div v-else>
-          <h3 class="m00">Homework</h3>
-          <p class="m00 t-small">W dni nietreningowe</p>
+          <h3 class="m00">Podwieszony</h3>
+          <p class="m00 t-small">dodano {{ workout.createdAt | reverseDate }}</p>
         </div>
       </nuxt-link>
       <div v-if="!$route.path.includes('users')">
