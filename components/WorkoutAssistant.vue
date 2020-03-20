@@ -6,7 +6,7 @@
     <div>
   <!-- OPIS BLOKU -->
     <transition name="slide-to-right">
-      <div class="workout-assistant__block-description" v-show="showBlockDescription">
+      <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
         <p 
           class="m00 t-small row j-between" 
           :class="{ 't-green': controls.section == 0 && controls.complex == 0 ? index + 2 == controls.unit : index + 1 == controls.unit }" 
@@ -17,12 +17,6 @@
         </p>
       </div>
     </transition>
-  <!-- MODAL INFO  -->
-      <transition name="slide-to-right">
-        <p class="m00 t-small" v-show="showInfoModal">
-          {{ infoModalMessage }}
-        </p>
-      </transition>
   <!-- STOPER -->
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
@@ -30,7 +24,7 @@
   <!-- ĆWICZENIE -->
       <div class="workout-assistant__exercise pt1 pb1 row a-start j-between">
         <div>
-          <MovingText :key="current.exercise.name">
+          <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00">{{ current.exercise.name }}</h3>
           </MovingText>
           <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
@@ -68,7 +62,7 @@
         </div>
       </div>
   <!-- PANEL STEROWANIA -->
-      <div class="row j-between a-center pt1 pb1">
+      <div class="row j-between a-center pt1 pb1" style="z-index: 300">
         <span>
           <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
           <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
@@ -77,10 +71,16 @@
         <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="toggleStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
+        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
+        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="showBlockDescription = !showBlockDescription"></i>
       </div>
     </div>
+  <!-- MODAL INFO  -->
+    <transition name="slide-to-right">
+      <p class="workout-assistant__modal m00 t-small" v-show="showInfoModal">
+        {{ infoModalMessage }}
+      </p>
+    </transition>
   </div>
 </template>
 
@@ -128,7 +128,7 @@ export default {
       this.showInfoModal = true;
       switch (this.voiceAssistantMode) {
         case 'on':
-          this.infoModalMessage = 'Asystent głosowy włączony';
+          this.infoModalMessage = 'Asystent głosowy: włączony';
           this.playAudio(this.soundname);
           break;
         case 'half-on':
@@ -136,7 +136,7 @@ export default {
           if (this.voiceAssistantSpeaking) this.audio.pause();
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent głosowy wyłączony'; 
+          this.infoModalMessage = 'Asystent głosowy: wyłączony'; 
           this.audio.pause();
       }
       this.infoModalTimeout = setTimeout(() => {
@@ -152,14 +152,6 @@ export default {
         if (this.voiceAssistantSpeaking) this.audio.pause();
       }
     },
-    automaticModeOn() {
-      clearTimeout(this.infoModalTimeout);
-      this.showInfoModal = true;
-      this.infoModalMessage = this.automaticModeOn ? 'Tryb automatyczny włączony' : 'Tryb automatyczny wyłączony';
-      this.infoModalTimeout = setTimeout(() => {
-        this.showInfoModal = false;
-      }, 2000);
-    }
   },
   methods: {
     nextUnit() {
@@ -213,15 +205,17 @@ export default {
       }
     },
     toggleAutomaticMode() {
+      clearTimeout(this.infoModalTimeout);
       this.automaticModeOn = !this.automaticModeOn;
+      this.showInfoModal = true;
       if (this.automaticModeOn) {
-        this.showInfoModal = true;
-        setTimeout(() => {
-          this.showInfoModal = false;
-        }, 2000);
+        this.infoModalMessage = 'Tryb automatyczny włączony';
       } else {
-        this.showInfoModal = false;
+        this.infoModalMessage = 'Tryb automatyczny wyłączony';
       }
+      this.infoModalTimeout = setTimeout(() => {
+        this.showInfoModal = false;
+      }, 2000);
     },
     playAudio(audio) {
       if (!this.audio) this.audio = new Audio();
@@ -232,14 +226,6 @@ export default {
       this.audio.src = require(`@/assets/sounds/${audio}`);
       this.audio.play();
     },
-    toggleStopwatch() {
-      if (this.showBlockDescription) this.showBlockDescription = false;
-      this.showStopwatch = !this.showStopwatch;
-    },
-    toggleBlockDescription() {
-      if (this.showStopwatch) this.showStopwatch = false;
-      this.showBlockDescription = !this.showBlockDescription;
-    }
   },
   computed: {
     blockDescriptions() {
@@ -427,10 +413,22 @@ export default {
   }
 
   .workout-assistant__block-description {
-    max-height: 40vh;
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    height: 100%;
+    width: 85%;
+    z-index: 2;
+  }
+
+  .workout-assistant__exercise div {
+    &:first-child {
+      flex-basis: 1;
+      overflow: hidden;
+    } 
+    &:nth-child(2) {
+      flex-basis: 1;
     }
   }
 
@@ -444,5 +442,13 @@ export default {
     &:last-child {
       margin: 0;
     }
+  }
+
+  .workout-assistant__modal {
+    position: absolute;
+    top: 5rem;
+    background-color: color(gray);
+    padding: 0.5rem;
+    border-radius: 5px;
   }
 </style>

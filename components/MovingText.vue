@@ -8,6 +8,7 @@
 </template>
 
 <script>
+
   export default {
     data() {
       return {
@@ -56,7 +57,7 @@
     destroyed() {
       clearTimeout(this.translateTimeout);
       clearInterval(this.translateInterval);
-    }
+    },
   }
 </script>
 
