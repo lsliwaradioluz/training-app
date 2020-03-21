@@ -50,7 +50,7 @@ export default {
       },
   },
   mounted() {
-    // if (navigator.vendor != 'Google Inc.') {
+    if (navigator.vendor != 'Google Inc.') {
       window.addEventListener('touchstart', () => {
         this.scroll = window.scrollY;
         if (this.scroll == 0 && !this.moving) this.onTouchStart();
@@ -63,7 +63,7 @@ export default {
       window.addEventListener('touchend', () => {
         this.onTouchEnd();
       });
-    // }
+    }
   }
 }
 </script>
