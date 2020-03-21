@@ -1,6 +1,9 @@
 <template>
-  <div class="pull-to-refresh" :class="{ animated: !move }" :style="{ height: `${Math.abs(this.move) / 4}px` }">
-    <p class="m00 t-center">{{ Math.floor(move) }}%</p>
+  <div 
+    ref="pull"
+    class="pull-to-refresh row j-center a-center"
+    :style="{ top: `${-40 + Math.floor(move)}px`, opacity: `${Math.floor(move)/150}`, transform: `rotate(${Math.floor(move*1.5)}deg)`,  }">
+    <i class="flaticon-counterclockwise t-black"></i>
   </div>
 </template>
 
@@ -11,46 +14,49 @@ export default {
       scroll: 0, 
       moveStart: null,
       move: null,
+      moving: false,
     }
   },
   methods: {
     onTouchStart() {
         this.moveStart = null;
         this.move = null;
-        if (event.type == 'touchstart') {
-          this.moveStart = event.touches[0].screenY
-        } else {
-          this.moveStart = event.screenY;
-          this.mousedown = true;
-        }
+        this.moveStart = event.touches[0].screenY;
       },
       onTouchMove() {
         if (this.scroll == 0 && this.move != null) { 
-          document.body.style.overflow = "hidden";
+          // document.body.style.overflow = "hidden";
+          this.moving = true;
         }
-        if (event.type == 'touchmove') {
+        
+        if (event.touches[0].screenY - this.moveStart < 220) {
           this.move = event.touches[0].screenY - this.moveStart;
-        } else if (event.type == 'mousemove' && this.mousedown == true) {
-          this.move = event.screenY - this.moveStart
         }
       }, 
       onTouchEnd() {
-        if (Math.abs(this.move) >= 100) {
+        this.$refs.pull.classList.add('go-back');
+        setTimeout(() => {
+            this.$refs.pull.classList.remove('go-back');
+          }, 300);
+        if (Math.abs(this.move) >= 150) {
+          this.move = 150;
+          this.$refs.pull.classList.add('icon--spinning');
           window.location.reload();
         } else {
-          this.move = null;
+          this.move = 0;
+          this.moving = false;
+          // document.body.style.overflow = "scroll";
         }
-        document.body.style.overflow = "scroll";
       },
   },
   mounted() {
     // if (navigator.vendor != 'Google Inc.') {
       window.addEventListener('touchstart', () => {
         this.scroll = window.scrollY;
-        if (this.scroll == 0) this.onTouchStart();
+        if (this.scroll == 0 && !this.moving) this.onTouchStart();
       });
       window.addEventListener('touchmove', () => {
-        if (this.scroll == 0 && this.move >= 0) {
+        if (this.scroll == 0 && this.move >= 0 || this.scroll == 0 && this.moving) {
           this.onTouchMove();
         }
       });
@@ -65,13 +71,19 @@ export default {
 <style lang="scss" scoped>
 
   .pull-to-refresh {
-    position: absolute;
-    top: 100%;
-    height: 0;
+    position: fixed;
+    height: 40px;
+    width: 40px;
+    top: -40px;
     overflow: hidden;
+    background-color: white;
+    border-radius: 50%;
+    padding: 0.5rem;
+    border: 1px solid black;
   }
 
-  .animated {
-    transition: transform 0.1s;
+  .go-back {
+    transition: all 0.3s;
   }
+
 </style>
