@@ -2,7 +2,7 @@
   <div 
     ref="pull"
     class="pull-to-refresh row j-center a-center"
-    :style="{ top: `${-40 + Math.floor(move)}px`, opacity: `${Math.floor(move)/150}`, transform: `rotate(${Math.floor(move*1.5)}deg)`,  }">
+    :style="{ top: `${-40 + Math.floor(move)}px`, opacity: `${Math.floor(move)/100}`, transform: `rotate(${Math.floor(move*1.5)}deg)`,  }">
     <i class="flaticon-counterclockwise t-black"></i>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
           this.moving = true;
         }
         
-        if (event.touches[0].screenY - this.moveStart < 220) {
+        if (event.touches[0].screenY - this.moveStart < 120) {
           this.move = event.touches[0].screenY - this.moveStart;
         }
       }, 
@@ -38,7 +38,7 @@ export default {
         setTimeout(() => {
             this.$refs.pull.classList.remove('go-back');
           }, 300);
-        if (Math.abs(this.move) >= 150) {
+        if (Math.abs(this.move) >= 100) {
           this.move = 150;
           this.$refs.pull.classList.add('icon--spinning');
           window.location.reload();
@@ -50,7 +50,7 @@ export default {
       },
   },
   mounted() {
-    if (navigator.vendor != 'Google Inc.') {
+    // if (navigator.vendor != 'Google Inc.') {
       window.addEventListener('touchstart', () => {
         this.scroll = window.scrollY;
         if (this.scroll == 0 && !this.moving) this.onTouchStart();
@@ -63,7 +63,7 @@ export default {
       window.addEventListener('touchend', () => {
         this.onTouchEnd();
       });
-    }
+    // }
   }
 }
 </script>
