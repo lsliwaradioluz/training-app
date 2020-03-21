@@ -1,5 +1,6 @@
 <template>
   <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent && !isAssistant }">
+    <PullToRefresh />
     <span class="logo" @click="reloadPage">Piti</span>
     <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
     <h3 class="m00 t-center" v-else>Asystent</h3>
@@ -45,8 +46,12 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import PullToRefresh from '~/components/PullToRefresh';
 
 export default {
+  components: {
+    PullToRefresh,
+  },
   props: {
     transparent: {
       type: Boolean, 
