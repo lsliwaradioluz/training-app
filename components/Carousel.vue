@@ -92,7 +92,6 @@
         moveStart: null, 
         move: null, 
         currentTranslate: 0,
-        length: this.$slots.default.length,
         viewportColumnsMatched: null, 
         isActive: null, 
         mousedown: false,
@@ -102,14 +101,27 @@
       }
     },
     computed: {
+      length() {
+        const slot = this.$slots.default;
+        const filteredSlot = [];
+        for (let key in slot) {
+          if (slot[key].tag != undefined) filteredSlot.push(slot[key]);
+        }
+        return filteredSlot.length;
+      },
       maxScrollLeft() {
-        return this.currentPage == 0 ? true : false;
+        return this.currentPage == 0;
       },
       maxScrollRight() {
-        return this.currentPage + 1 == this.numberOfPages ? true : false;
+        const lastElementVisible = this.currentPage + this.numberOfColumns;
+        return lastElementVisible >= this.length;
       },
       numberOfPages() {
-        return Math.ceil(this.length / this.numberOfColumns);
+        if (this.length >= this.numberOfColumns) {
+          return this.length - this.numberOfColumns + 1;
+        } else {
+          return 0;
+        }
       },
       sortedColumns() {
         return this.columns.sort((a, b) => {
@@ -197,7 +209,9 @@
             this.viewportColumnsMatched = true;
             this.numberOfColumns = cur[1];
             this.$refs.wrapper.childNodes.forEach(cur => {
-              cur.style.width = `${100/this.numberOfColumns}%`;
+              if (cur.nodeName != '#text') {
+                cur.style.width = `${100/this.numberOfColumns}%`;
+              }
             });
           }
         });
@@ -292,6 +306,7 @@
     align-items: stretch;
     cursor: grab;
     z-index: 10;
+    white-space: nowrap;
   }
 
   .carousel-wrapper:active {
