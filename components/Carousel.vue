@@ -27,6 +27,12 @@
       ref="wrapper">
         <slot></slot>
     </div>
+    <transition name="fade-arrows">
+      <div v-show="indicate && length > 1 && !moveStart">
+        <div class="carousel__indicator-left">‹</div>
+        <div class="carousel__indicator-right">›</div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -74,6 +80,10 @@
           }
         }
       },
+      indicate: {
+        type: Boolean, 
+        default: () => false,
+      }
     },
     data() {
       return {
@@ -281,6 +291,7 @@
     display: flex;
     align-items: stretch;
     cursor: grab;
+    z-index: 10;
   }
 
   .carousel-wrapper:active {
@@ -304,11 +315,45 @@
     flex-direction: column;
   }
 
+  .carousel__indicator-left,
+  .carousel__indicator-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 1rem;
+    text-align: center;
+    opacity: 0.2;
+    font-size: 2rem;
+  }
+
+  .carousel__indicator-right {
+    left: initial;
+    right: 0;
+  }
+
   @media (min-width: 1024px) {
     .inactive {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: flex-start;
+    }
+  }
+
+  .fade-arrows-enter-active {
+    animation: fade-arrows 0.5s reverse;
+  }
+
+  .fade-arrows-leave-active {
+    animation: fade-arrows 0.3s;
+  }
+
+  @keyframes fade-arrows {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
   

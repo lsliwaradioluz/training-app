@@ -1,14 +1,17 @@
 <template>
   <div class="dashboard">
     <UserPanel :user="user" />
-    <Head>
-      <template>Najbliższy trening</template>
-    </Head>
+    <Head>Najbliższy trening</Head>
     <div>
       <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
       <p class="tab p11" v-else>
         Brak zaplanowanych treningów.
       </p>
+    </div>
+    <Head>Co nowego?</Head>
+    <div class="tab">
+      <p class="mt0 mb05 t-small t-green">23.03.2020</p>
+      <p class="m00">Ulepszony asystent treningów już dostępny! Sprawdź jego możliwości</p>
     </div>
   </div>  
 </template>

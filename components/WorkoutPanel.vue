@@ -48,13 +48,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-  .workout-panel__icon {
-    background-image: url('~assets/images/weightlifting.svg');
-    background-size: cover;
-    background-position: center;
-    flex-shrink: 0;
-  }
-</style>

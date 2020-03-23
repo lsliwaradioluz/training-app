@@ -30,7 +30,8 @@
             :pagination="false"
             :start-from-page="currentSection[currentWorkout]"
             :key="`${showWorkoutAssistant}${currentWorkout}`"
-            @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
+            @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
+            indicate>
             <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
               <Routine
                 :section="section"
@@ -170,7 +171,9 @@
     },
     async beforeRouteLeave(to, from, next) {
       if (!to.path.includes('exercises')) {
-        this.clearAssistantState();
+        setTimeout(() => {
+          this.clearAssistantState();
+        }, 500);
       }
       // Jeżeli ktos przez przypadek użyje strzałki cofnij, by wyjść z asystenta, zapytaj go, czy na pewno tego chce
       if (this.showWorkoutAssistant) {
