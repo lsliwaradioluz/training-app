@@ -1,7 +1,7 @@
 <template>
   <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent && !isAssistant }">
     <PullToRefresh />
-    <span class="logo" @click="reloadPage">Piti</span>
+    <nuxt-link class="logo" tag="span" to="/">Piti</nuxt-link>
     <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
     <h3 class="m00 t-center" v-else>Asystent</h3>
     <span class="t-right">
@@ -63,7 +63,15 @@ export default {
       navToggled: false,
     }
   },
+  watch: {
+    route() {
+      this.navToggled = false;
+    }
+  },
   computed: {
+    route() {
+      return this.$route;
+    },
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;
     },
@@ -80,9 +88,6 @@ export default {
     }
   }, 
   methods: {
-    reloadPage() {
-      window.location.reload();
-    },
     ...mapMutations({
       logout: 'auth/logout'
     })
@@ -131,10 +136,12 @@ export default {
     box-shadow: none;
 
     a {
-      padding: 0.5rem 0;
+      padding: 1rem 0 0.5rem 0;
       display: flex;
+      align-items: center;
       position: relative;
       border-bottom: 1px solid color(black);
+      margin: 0;
 
       &:last-child {
         border: none;

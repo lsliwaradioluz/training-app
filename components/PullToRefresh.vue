@@ -24,8 +24,7 @@ export default {
         this.moveStart = event.touches[0].screenY;
       },
       onTouchMove() {
-        if (this.scroll == 0 && this.move != null) { 
-          // document.body.style.overflow = "hidden";
+        if (this.scroll == 0 && this.move != null) {
           this.moving = true;
         }
         
@@ -39,18 +38,17 @@ export default {
             this.$refs.pull.classList.remove('go-back');
           }, 300);
         if (Math.abs(this.move) >= 100) {
-          this.move = 150;
+          this.move = 90;
           this.$refs.pull.classList.add('icon--spinning');
           window.location.reload();
         } else {
           this.move = 0;
           this.moving = false;
-          // document.body.style.overflow = "scroll";
         }
       },
   },
   mounted() {
-    // if (navigator.vendor != 'Google Inc.') {
+    if (navigator.vendor != 'Google Inc.') {
       window.addEventListener('touchstart', () => {
         this.scroll = window.scrollY;
         if (this.scroll == 0 && !this.moving) this.onTouchStart();
@@ -63,7 +61,7 @@ export default {
       window.addEventListener('touchend', () => {
         this.onTouchEnd();
       });
-    // }
+    }
   }
 }
 </script>

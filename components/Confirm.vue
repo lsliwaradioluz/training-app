@@ -4,7 +4,7 @@
       <p class="t-center">{{ message }}</p>
       <div class="confirm__buttons row j-around">
         <button class="button--primary pl2 pr2" type="button" @click="confirm">Tak</button>
-        <button class="button--primary pl2 pr2" type="button" @click="hide">Nie</button>
+        <button class="button--primary pl2 pr2" type="button" @click="decline">Nie</button>
       </div>
     </div>
   </div>
@@ -17,7 +17,6 @@
         showConfirm: false,
         message: null, 
         resolve: null, 
-        reject: null,
       }
     },
     methods: {
@@ -30,6 +29,10 @@
       }, 
       confirm() {
         this.resolve(true);
+        this.hide();
+      },
+      decline() {
+        this.resolve(false);
         this.hide();
       },
       hide() {

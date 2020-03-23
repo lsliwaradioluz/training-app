@@ -22,9 +22,9 @@ button {
 //   transition: opacity 0.3s;
 // }
 
-button:active::after {
-  opacity: 1;
-}
+// button:active::after {
+//   opacity: 1;
+// }
 
 .button--primary {
   cursor: pointer;

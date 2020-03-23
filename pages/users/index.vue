@@ -5,7 +5,9 @@
         <h3 class="m00">
           <input class="input--invisible" v-model="filter" placeholder="Znajdź użytkownika..." spellcheck="false" autocomplete="off">
         </h3>
-        <nuxt-link class="flaticon-plus ml1" to="new" tag="i" append></nuxt-link>
+        <nuxt-link to="new" append>
+          <i class="flaticon-plus ml1"></i>
+        </nuxt-link>
       </div>
     </Head>
     <UserTab :user="$store.state.auth.user" edit />
@@ -48,7 +50,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -6,7 +6,7 @@
     <div>
   <!-- OPIS BLOKU -->
     <transition name="slide-to-right">
-      <div class="workout-assistant__block-description main pb05" v-show="$store.state.assistant.showBlockDescription">
+      <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
         <ul class="mb05" v-for="unit in sections[controls.section].complexes[controls.complex].units" :key="unit.id">
           <p class="m00 row j-between">
             <span>{{ unit.exercise.name }}</span>
@@ -83,7 +83,7 @@
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="$store.commit('assistant/toggleBlockDescription')"></i>
+        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
       </div>
     </div>
   <!-- MODAL INFO  -->
@@ -96,13 +96,14 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   props: {
     workout: {
       type: Object, 
     }, 
-    index: {
+    workoutIndex: {
       type: Number, 
     },
     isScreenDivided: {
@@ -130,7 +131,6 @@ export default {
       showInfoModal: false,
       infoModalMessage: null,
       infoModalTimeout: null,
-      showBlockDescription: false, 
     }
   },
   watch: {
@@ -155,16 +155,27 @@ export default {
       }, 2000);
     },
     currentUnit() {
-      this.$store.commit('assistant/setCurrentSection', { index: this.index, section: this.controls.section });
+      this.$emit('set-current-section', this.controls.section);
       if (this.voiceAssistantMode == 'on') this.playAudio(this.soundname);
     },
-    showWorkoutAssistant(value) {
+    async showWorkoutAssistant(value) {
       if (!value) {
         if (this.voiceAssistantSpeaking) this.audio.pause();
+      }
+
+      if (value && this.controls.section != this.sectionIndex) {
+        if (await this.$root.$confirm("Wznowić asystenta?")) {
+          this.$emit('set-current-section', this.controls.section);
+        } else {
+          this.controls.section = this.sectionIndex;
+        }
       }
     },
   },
   methods: {
+    ...mapMutations({
+      toggleBlockDescription: 'assistant/toggleBlockDescription',
+    }),
     nextUnit() {
       this.controls.unit++;
       if (this.controls.unit > this.units.length - 1) {
@@ -239,9 +250,10 @@ export default {
     },
   },
   computed: {
-    showWorkoutAssistant() {
-      return this.$store.state.assistant.showWorkoutAssistant;
-    },
+    ...mapGetters({
+      showWorkoutAssistant: 'assistant/showWorkoutAssistant',
+      showBlockDescription: 'assistant/showBlockDescription',
+    }),
     currentUnit() {
       return this.controls.unit;
     },

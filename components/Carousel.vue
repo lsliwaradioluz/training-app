@@ -74,10 +74,6 @@
           }
         }
       },
-      isShown: {
-        type: Boolean, 
-        default: () => false,
-      }
     },
     data() {
       return {
@@ -120,18 +116,13 @@
       }
     },
     watch: {
-      currentPage() {
+      currentPage(value) {
         this.animateCarousel();
-        this.$emit('change-page', this.currentPage);
+        this.$emit('change-page', value);
       }, 
-      startFromPage() {
-        this.currentPage = this.startFromPage;
+      startFromPage(value) {
+        this.currentPage = value;
       },
-      isShown() {
-        this.$nextTick(() => {
-          this.elementWidth = this.$slots.default[0].elm.offsetWidth;
-        });
-      }
     },
     methods: {
       animateCarousel() {
@@ -253,6 +244,7 @@
     -ms-user-select: none;
     user-select: none;
     width: 100%;
+    position: relative;
   }
 
   .carousel-navdots {
@@ -317,21 +309,6 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: flex-start;
-    }
-  }
-
-  @keyframes slide {
-    0% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(-8px);
-    }
-    50% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(0);
     }
   }
   

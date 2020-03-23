@@ -1,6 +1,7 @@
 <template>
   <div class="workout">
-    <div v-show="!$store.state.assistant.showWorkoutAssistant">
+  <!-- BUTTONY  -->
+    <div v-show="!showWorkoutAssistant">
       <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
         <button 
           type="button"
@@ -8,26 +9,31 @@
           :class="{ 't-green': index == currentWorkout }"
           v-for="(user, index) in users" 
           :key="index"
-          @click="$store.commit('assistant/setCurrentWorkout', index)">{{ user | getName }}</button>
+          @click="setCurrentWorkout(index)">
+          {{ user | getName }}</button>
       </div>
       <div>
-    <!-- NAGŁÓWEK -->
-      <WorkoutPanel :workout="workout" @show-assistant="showWorkoutAssistant = true" />
-    <!-- ROZPISKA  --> 
+  <!-- NAGŁÓWEK -->
+      <WorkoutPanel :workout="workoutNoEmptySections" @show-assistant="runWorkoutAssistant" />
+  <!-- ROZPISKA  --> 
         <Head class="mt0 pt05 pb05">
           <div class="row j-between">
             <span>Rozpiska</span>
-            <button type="button" @click="$store.commit('assistant/toggleWorkoutAssistant')"><i class="flaticon-play"></i></button>
+            <button type="button" @click="runWorkoutAssistant">
+              <i class="flaticon-play"></i>
+            </button>
           </div>
         </Head>
         <div class="carousel-container">
-          <Carousel 
-            :pagination="false"
+          <Carousel
             :active="!maxEditorOpen"
-            :start-from-page="currentSection"
-            :key="workout.id"
-            @change-page="$store.commit('assistant/setCurrentSection', { index: currentWorkout, section: $event })">
-            <div class="p01 column" v-for="section in workout.sections" :key="section.id">
+            :pagination="false"
+            :start-from-page="currentSection[currentWorkout]"
+            :key="`${showWorkoutAssistant}${currentWorkout}`"
+            @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
+            :autoplay="workouts.length == 1"
+            :autoplaySpeed="3">
+            <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
               <Routine
                 :section="section"
                 @toggle-max-editor="maxEditorOpen = $event"
@@ -37,23 +43,32 @@
             </div>
           </Carousel>
         </div>
+        <!--  -->
       </div>
     </div>
-    <div v-show="$store.state.assistant.showWorkoutAssistant">
-      <Carousel :is-shown="$store.state.assistant.showWorkoutAssistant" :pagination="false" @change-page="$store.commit('assistant/setCurrentWorkout', $event)">
+  <!-- ASYSTENT  -->
+    <div v-if="renderWorkoutAssistant">
+      <!-- poniżej w change-page -->
+      <Carousel 
+        v-show="showWorkoutAssistant" 
+        :pagination="false" 
+        :start-from-page="currentWorkout"
+        @change-page="setCurrentWorkout($event)">
         <WorkoutAssistant
           v-for="(workout, index) in workouts"
-          :index="index"
-          :workout="workout"
-          :section-index="currentSection"
           :key="workout.id"
-          :is-screen-divided="workouts.length > 1" />
+          :workout="workout"
+          :workout-index="index"
+          :section-index="currentSection[index]" 
+          :is-screen-divided="workouts.length > 1" 
+          @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })" />
       </Carousel>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapMutations, mapGetters } from 'vuex';
   import mainQuery from '~/apollo/queries/workouts/_id/main.gql';
   import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 
@@ -79,16 +94,16 @@
       return {
         client: this.$apollo.getClient(),
         maxEditorOpen: false,
+        renderWorkoutAssistant: false,
       }
     },
     computed: {
-      currentWorkout() {
-        return this.$store.state.assistant.currentWorkout;
-      },
-      currentSection() {
-        return this.$store.state.assistant.currentSection[this.currentWorkout];
-      },
-      workout() {
+      ...mapGetters({
+        showWorkoutAssistant: 'assistant/showWorkoutAssistant',
+        currentWorkout: 'assistant/currentWorkout',
+        currentSection: 'assistant/currentSection',
+      }),
+      workoutNoEmptySections() {
         const workout = this.workouts[this.currentWorkout];
         workout.sections = workout.sections.filter(section => {
           return section.complexes.length > 0;
@@ -96,7 +111,7 @@
         return workout;
       },
       filteredSections() {
-        let sectionsClone = JSON.parse(JSON.stringify(this.workout.sections));
+        let sectionsClone = JSON.parse(JSON.stringify(this.workoutNoEmptySections.sections));
         sectionsClone.forEach((section, sectionindex) => {
           sectionsClone[sectionindex] = _.omit(section, '__typename', 'id');
           section.complexes.forEach((complex, complexindex) => {
@@ -116,25 +131,30 @@
         });
         return users;
       },
-      feedbackEditable() {
-        return this.$store.state.auth.user.fullname == this.workout.user.fullname ? true : false;
-      },
     }, 
     methods: {
+      ...mapMutations({
+        setCurrentWorkout: 'assistant/setCurrentWorkout',
+        toggleWorkoutAssistant: 'assistant/toggleWorkoutAssistant', 
+        clearAssistantState: 'assistant/clearAssistantState',
+        setCurrentSection: 'assistant/setCurrentSection',
+      }),
       addMax({ unit, complex }) {
-        let max = this.workout.sections[this.currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workout.sections[this.currentSection].complexes[complex].units[unit].max = 0;
-        this.workout.sections[this.currentSection].complexes[complex].units[unit].max++;
+        const currentSection = this.currentSection[this.currentWorkout];
+        let max = this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
+        this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max++;
       },
       subtractMax({ unit, complex }) {
-        let max = this.workout.sections[this.currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workout.sections[this.currentSection].complexes[complex].units[unit].max = 0;
-        this.workout.sections[this.currentSection].complexes[complex].units[unit].max--;
+        const currentSection = this.currentSection[this.currentWorkout];
+        let max = this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
+        this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max--;
       }, 
       uploadWorkout() {
         let input = {
           where: {
-            id: this.workout.id,
+            id: this.workoutNoEmptySections.id,
           },
           data: {
             sections: this.filteredSections,
@@ -142,31 +162,25 @@
         }
 
         this.client.mutate({ mutation: updateWorkout, variables: { input: input }  })
-          .then(res => {
-            console.log(res);
-          })  
+      }, 
+      runWorkoutAssistant() {
+        if (!this.renderWorkoutAssistant) {
+          this.renderWorkoutAssistant = true;
+        }
+        this.toggleWorkoutAssistant();
       }
     },
-    beforeRouteEnter(to, from, next) {
-      if (!from.path.includes('exercises')) {
-        next(vm => {
-          vm.$store.commit('assistant/clearAssistantState');
-        });
-      } else {
-        next();
-      }
-      
-    }, 
     async beforeRouteLeave(to, from, next) {
-      // Jeżeli ktos przez przypadek użyje strzałki cofnij, by wyjść z asystenta, zapytaj go, czy na pewno tego chce
-      if (this.$store.state.assistant.showWorkoutAssistant) {
-        if (await this.$root.$confirm('Czy na pewno chcesz wyjść z tego treningu?')) {
-          this.$store.commit('assistant/toggleWorkoutAssistant');
-          next();
-        }
-      } else {
-        next();
+      if (!to.path.includes('exercises')) {
+        this.clearAssistantState();
       }
+      // Jeżeli ktos przez przypadek użyje strzałki cofnij, by wyjść z asystenta, zapytaj go, czy na pewno tego chce
+      if (this.showWorkoutAssistant) {
+        if (await this.$root.$confirm('Czy na pewno chcesz wyjść z tego treningu?')) {
+          this.toggleWorkoutAssistant(); 
+        }
+      } 
+      next();
     }
   }
 </script>
