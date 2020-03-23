@@ -30,9 +30,7 @@
             :pagination="false"
             :start-from-page="currentSection[currentWorkout]"
             :key="`${showWorkoutAssistant}${currentWorkout}`"
-            @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
-            :autoplay="workouts.length == 1"
-            :autoplaySpeed="3">
+            @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
             <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
               <Routine
                 :section="section"
