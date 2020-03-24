@@ -306,7 +306,6 @@
     align-items: stretch;
     cursor: grab;
     z-index: 10;
-    white-space: nowrap;
   }
 
   .carousel-wrapper:active {
