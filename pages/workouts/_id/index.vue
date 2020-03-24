@@ -47,7 +47,6 @@
     </div>
   <!-- ASYSTENT  -->
     <div v-if="renderWorkoutAssistant">
-      <!-- poniżej w change-page -->
       <Carousel 
         v-show="showWorkoutAssistant" 
         :pagination="false" 

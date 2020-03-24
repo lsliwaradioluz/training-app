@@ -23,7 +23,7 @@ export default {
           user: data.users[0], 
         }
       });
-  }
+  },
 }
 </script>
 

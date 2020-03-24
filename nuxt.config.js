@@ -62,18 +62,8 @@ export default {
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    '@nuxtjs/onesignal',
     '@nuxtjs/pwa',
   ],
-  oneSignal: {
-    init: {
-      appId: '6e3d2614-2e5f-4c1e-b391-c83993f060ce',
-      allowLocalhostAsSecureOrigin: true,
-      welcomeNotification: {
-        disable: false,
-      }
-    }
-  },
   pwa: {
     meta: {
       theme_color: '#343F68', 
