@@ -1,6 +1,5 @@
 <template>
-  <div id="wrapper" ref="wrapper">
-    <slot></slot>
+  <div id="wrapper" ref="wrapper" @touchstart.prevent @touchmove.prevent>
     <div id="bar" ref="bar">
       <slot></slot>
     </div>
@@ -13,7 +12,7 @@
     data() {
       return {
         wrapperWidth: null,
-        barWidth: null,
+        scrollWidth: null,
         translate: 0,
         translateTimeout: null,
         translateInterval: null,
@@ -21,16 +20,16 @@
     }, 
     methods: {
       moveFunction() {
-        this.translate--;
-        this.$refs.bar.style.left = `${this.translate}px`;
-        if (Math.abs(this.translate) == this.barWidth - this.wrapperWidth) {
+        this.translate++;
+        this.$refs.wrapper.scrollLeft = this.translate;
+        if (this.translate + this.wrapperWidth == this.scrollWidth) {
           clearInterval(this.translateInterval);
           this.startMoveBackFunction();
         }
       }, 
       moveBackFunction() {
-        this.translate++;
-        this.$refs.bar.style.left = `${this.translate}px`;
+        this.translate--;
+        this.$refs.wrapper.scrollLeft = this.translate;
         if (this.translate == 0) {
           clearInterval(this.translateInterval);
           this.startMoveFunction();
@@ -48,9 +47,9 @@
       }
     },
     mounted() {
-      this.barWidth = this.$refs.bar.offsetWidth;
+      this.scrollWidth = this.$refs.wrapper.scrollWidth;
       this.wrapperWidth = this.$refs.wrapper.offsetWidth;
-      if (this.wrapperWidth < this.barWidth) {
+      if (this.scrollWidth > this.wrapperWidth) {
         this.startMoveFunction();
       }
     }, 
@@ -61,22 +60,19 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
-#wrapper {
-  min-height: 10px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  color: transparent;
-  white-space: nowrap;
-}
+  #wrapper {
+    width: 100%;
+    overflow: scroll;
+  }
 
-#bar {
-  position: absolute;
-  top: 0;
-  white-space: nowrap;
-  color: white;
-}
+  #wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  #bar {
+    white-space: nowrap;
+  }
 
 </style>

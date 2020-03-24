@@ -7,25 +7,18 @@
   <!-- OPIS BLOKU -->
     <transition name="slide-to-right">
       <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
-        <ul class="mb05" v-for="unit in sections[controls.section].complexes[controls.complex].units" :key="unit.id">
-          <p class="m00 row j-between">
-            <span>{{ unit.exercise.name }}</span>
-            <!-- <nuxt-link
-              v-if="unit.exercise.image"
-              :to="`/exercises/${unit.exercise.id}`" 
-              tag="i"
-              class="flaticon-information fs-09 ml1"></nuxt-link> -->
+        <div 
+          class="row j-between" 
+          :class="{ 't-green': controls.section == 0 ? index == controls.unit - 2 : index == controls.unit - 1 }" 
+          v-for="(unit, index) in blockDescription" 
+          :key="index">
+          <MovingText :key="showBlockDescription">
+            <p class="m00">{{ unit.exercise.name }}</p>
+          </MovingText>
+          <p class="m00 ml1">
+            <span v-if="unit.reps">{{ unit.reps }}</span><span v-if="unit.time"><span v-if="unit.reps">x</span>{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
           </p>
-          <li>
-            <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
-          </li>
-          <li>
-            <span v-if="unit.remarks">{{ unit.remarks.toLowerCase() }}</span>
-          </li>
-          <li>
-            <span>przerwy {{ unit.rest }}s</span>
-          </li>
-        </ul>
+        </div>
       </div>
     </transition>
   <!-- STOPER -->
@@ -168,6 +161,8 @@ export default {
           this.$emit('set-current-section', this.controls.section);
         } else {
           this.controls.section = this.sectionIndex;
+          this.controls.complex = 0;
+          this.controls.unit = 0;
         }
       }
     },
@@ -295,6 +290,12 @@ export default {
       let next = this.units[this.controls.unit + 1];
       if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
       return next;
+    },
+    blockDescription() {
+      return this.units.filter(unit => {
+        return unit.sets || unit.time;
+      });
+      return this.units;
     },
     units() {
       let units = [];
