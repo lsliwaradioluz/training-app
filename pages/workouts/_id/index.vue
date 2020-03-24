@@ -170,19 +170,16 @@
     },
     beforeRouteEnter(to, from, next) {
       next(vm => {
-        if (!from.path.includes('exercises') && !from.params.id) {
+        if (from.name != 'exercises-id') {
           vm.clearAssistantState();
         }
       });
     },
     async beforeRouteLeave(to, from, next) {
-
       // if trying to leave straight from assistant, ask for permission
       if (this.showWorkoutAssistant) {
         if (await this.$root.$confirm('Czy na pewno chcesz wyjść z tego treningu?')) {
           this.toggleWorkoutAssistant();
-          next();
-          return
         } else {
           return
         }
