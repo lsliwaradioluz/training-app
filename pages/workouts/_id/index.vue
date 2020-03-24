@@ -168,18 +168,25 @@
         this.toggleWorkoutAssistant();
       }
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        if (!from.path.includes('exercises') && !from.params.id) {
+          vm.clearAssistantState();
+        }
+      });
+    },
     async beforeRouteLeave(to, from, next) {
-      if (!to.path.includes('exercises')) {
-        setTimeout(() => {
-          this.clearAssistantState();
-        }, 500);
-      }
-      // Jeżeli ktos przez przypadek użyje strzałki cofnij, by wyjść z asystenta, zapytaj go, czy na pewno tego chce
+
+      // if trying to leave straight from assistant, ask for permission
       if (this.showWorkoutAssistant) {
         if (await this.$root.$confirm('Czy na pewno chcesz wyjść z tego treningu?')) {
-          this.toggleWorkoutAssistant(); 
+          this.toggleWorkoutAssistant();
+          next();
+          return
+        } else {
+          return
         }
-      } 
+      }
       next();
     }
   }
