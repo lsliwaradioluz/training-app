@@ -1,6 +1,6 @@
 <template>
-  <div class="default b-black" :class="{ main: !$store.state.assistant.showWorkoutAssistant}">
-    <Navigation />
+  <div class="default b-black" :class="{ main: !isAssistant && !isExercise }">
+    <Navigation :transparent="isAssistant || isExercise" />
     <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
     <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
     <Confirm />
@@ -20,6 +20,14 @@ export default {
     WorkoutPairingTab,
     WorkoutCopyingTab, 
   },
+  computed: {
+    isAssistant() {
+      return this.$store.state.assistant.showWorkoutAssistant;
+    },
+    isExercise() {
+      return this.$route.name == 'exercises-id';
+    }
+  }
 }
 </script>
 

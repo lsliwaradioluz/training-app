@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent && !isAssistant }">
+  <div class="navigation main pt1 pb1 row j-center a-center" :class="{ 'b-black': !transparent }">
     <PullToRefresh />
     <nuxt-link class="logo" tag="span" to="/">Piti</nuxt-link>
     <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>

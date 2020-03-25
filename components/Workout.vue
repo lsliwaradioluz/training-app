@@ -25,16 +25,16 @@
       </div>
     </div>
   <!-- BUTTONS  -->
-  <transition name="accordion"> 
-    <div class="workout__panel row mt05 t-green t-small" v-if="showButtonsPanel">
-      <nuxt-link
-        tag="button"
-        type="button" 
-        :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }">Edytuj</nuxt-link>
-      <button type="button" @click="copyWorkout">Kopiuj</button>
-      <button type="button" @click="deleteWorkout">Usuń</button>
-    </div>
-  </transition>
+    <transition name="accordion"> 
+      <div class="workout__panel row mt05 t-green t-small" v-if="showButtonsPanel">
+        <nuxt-link
+          tag="button"
+          type="button" 
+          :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }">Edytuj</nuxt-link>
+        <button type="button" @click="copyWorkout">Kopiuj</button>
+        <button type="button" @click="deleteWorkout">Usuń</button>
+      </div>
+    </transition>
   </div>
 </template>
 

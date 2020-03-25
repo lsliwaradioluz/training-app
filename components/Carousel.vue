@@ -358,10 +358,6 @@
     animation: fade-arrows 0.5s reverse;
   }
 
-  .fade-arrows-leave-active {
-    animation: fade-arrows 0.3s;
-  }
-
   @keyframes fade-arrows {
     from {
       opacity: 1;
