@@ -31,7 +31,11 @@
           tag="button"
           type="button" 
           :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }">Edytuj</nuxt-link>
-        <button type="button" @click="copyWorkout">Kopiuj</button>
+        <nuxt-link
+          type="button"
+          tag="button"
+          to="/users"
+          @click.native="copyWorkout">Kopiuj</nuxt-link>
         <button type="button" @click="deleteWorkout">Usuń</button>
       </div>
     </transition>
@@ -42,7 +46,7 @@
   import deleteWorkout from '~/apollo/mutations/deleteWorkout.gql';
 
   export default {
-    props: ['workout'],
+    props: ['workout', 'user'],
     data() {
       return {
         showButtonsPanel: false
@@ -50,8 +54,13 @@
     },
     methods: {
       copyWorkout() {
+        const workoutToCopy = {
+          id: this.workout.id,
+          user: this.user.username, 
+          scheduled: this.workout.scheduled
+        }
         this.showButtonsPanel = false;
-        this.$store.commit('main/copyWorkout', this.workout.id);
+        this.$store.commit('main/copyWorkout', workoutToCopy);
       },
       async deleteWorkout() {
         const input = {

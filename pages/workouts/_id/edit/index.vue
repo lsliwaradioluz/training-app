@@ -15,7 +15,7 @@ export default {
   },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
-    let copiedWorkoutId = context.store.state.main.workoutToCopy;
+    let copiedWorkoutId = context.store.state.main.workoutToCopy.id;
     return client.query({ query: copiedWorkoutId ? mainWithCopiedQuery : mainQuery, variables: { id: context.route.params.id, copiedWorkoutId: copiedWorkoutId } })
       .then(({ data }) => {
         const date = new Date(data.workout.scheduled);

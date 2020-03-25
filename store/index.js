@@ -10,8 +10,8 @@ export const actions = {
     if (req && req.headers && req.headers.cookie) {
       const parsed = cookieparser.parse(req.headers.cookie);
       user = (parsed.user && JSON.parse(parsed.user)) || null;
+      workoutToCopy = (parsed.workoutToCopy && JSON.parse(parsed.workoutToCopy)) || null;
       workoutToPair = (parsed.workoutToPair && JSON.parse(parsed.workoutToPair)) || null;
-      workoutToCopy = parsed.workoutToCopy == 'null' ? JSON.parse(parsed.workoutToCopy) : parsed.workoutToCopy;
     }
     
     commit('auth/setUser', user);

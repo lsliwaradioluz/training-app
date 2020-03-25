@@ -21,6 +21,7 @@
     <nuxt-link 
       class="button--primary ml1" 
       type="button" 
+      tag="button"
       to="/users"
       @click.native="pairWorkout" 
       v-else>Paruj</nuxt-link>
