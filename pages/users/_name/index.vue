@@ -1,6 +1,6 @@
 <template>
   <div class="trainee">
-    <UserPanel :user="user" />
+    <UserPanel :user="users[0]" />
   <!-- TRENINGI  -->
     <div>
       <Head>
@@ -30,14 +30,29 @@
 import mainQuery from '~/apollo/queries/users/_name/main.gql';
 
 export default {
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { username: context.route.params.name } })
-      .then(({ data }) => {
+  apollo: {
+    users: {
+      query: mainQuery,
+      variables() {
         return {
-          user: data.users[0]
+          username: this.$route.params.name
         }
-      });
+      },
+      update(data) {
+        return data.users
+      },
+    }
+  }, 
+  computed: {
+    user() {
+      return this.users[0];
+    }
   },
+  // mounted() {
+  //   this.$apollo.queries.users.setOptions({
+  //     pollInterval: 3000,
+  //     fetchPolicy: 'cache-and-network'
+  //   })
+  // },
 }
 </script>

@@ -2,6 +2,10 @@ mutation($input: createWorkoutInput) {
   createWorkout(input: $input) {
     workout {
       id
+      scheduled
+      ready
+      sticky
+      createdAt
     }
   }
 }

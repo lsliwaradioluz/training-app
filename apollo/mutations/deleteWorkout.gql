@@ -2,6 +2,10 @@ mutation($input: deleteWorkoutInput) {
   deleteWorkout(input: $input) {
     workout {
       id
+      scheduled 
+      ready
+      sticky
+      createdAt
     }
   }
 }

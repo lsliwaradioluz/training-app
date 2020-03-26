@@ -103,7 +103,7 @@
           </p>
         <!-- POPRZEDNIE TRENINGI  -->
           <div v-if="previousWorkouts.length > 0">
-            <div class="mb05 row j-between t-gray">
+            <div class="mb05 row j-between a-center t-gray">
               <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
               <span v-if="!previousWorkouts[currentWorkout].user">
                 {{ previousWorkouts[currentWorkout].scheduled | getShortDayName }}
@@ -116,16 +116,18 @@
               </span>
               <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
             </div>
-            <Carousel :pagination="false" :key="previousWorkoutSections.length">
-              <Routine 
-                v-for="section in previousWorkoutSections" 
-                :key="section.id" 
-                :section="section" 
-                @copy-unit="addUnit($event)"
-                @copy-section="copySection($event)"
-                @copy-complex="copyComplex($event)" 
-                edit />
-            </Carousel>
+            <div class="carousel-container" v-if="sections.length > 0">
+              <Carousel :pagination="false" :key="previousWorkoutSections.length">
+                <div class="p01 column" v-for="section in previousWorkoutSections" :key="section.id">
+                  <Routine
+                    :section="section" 
+                    @copy-unit="addUnit($event)"
+                    @copy-section="copySection($event)"
+                    @copy-complex="copyComplex($event)" 
+                    edit />
+                </div>
+              </Carousel>
+            </div>
           </div>
         </div>
         <UnitEditor 
@@ -146,6 +148,7 @@
 
 <script>
 import exercisesQuery from '~/apollo/queries/users/_name/exercises.gql';
+import mainQuery from '~/apollo/queries/users/_name/main.gql';
 import createWorkout from '~/apollo/mutations/createWorkout.gql';
 import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 import Routine from '~/components/Routine';
@@ -367,11 +370,28 @@ export default {
           }
         }
       }
-
-      this.client.mutate({ mutation: this.edit ? updateWorkout : createWorkout, variables: { input: input }  })
-        .then(res => {
+      
+      if (this.edit) {
+        this.client.mutate({ mutation: updateWorkout, variables: { input: input }})
+          .then(res => {
+            this.$router.go(-1);
+          });
+      } else {
+        this.client.mutate({ 
+          mutation: createWorkout, 
+          variables: { input: input },
+          update: (store, { data: { createWorkout } }) => {
+            // read data from cache for this query
+            const data = store.readQuery({ query: mainQuery, variables: { username:  this.user.username } });
+            // push new item to the data read from the cache 
+            data.users[0].workouts.unshift(createWorkout.workout);
+            // write data back to cache 
+            store.writeQuery({ query: mainQuery, data })
+          }
+        }).then(res => {
           this.$router.go(-1);
-        })  
+        });
+      }
     }, 
     showPreviousWorkout() {
       this.currentWorkout == 0 ? this.currentWorkout = 0 : this.currentWorkout--

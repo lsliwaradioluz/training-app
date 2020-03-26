@@ -44,12 +44,14 @@
 
 <script>
   import deleteWorkout from '~/apollo/mutations/deleteWorkout.gql';
+  import mainQuery from '~/apollo/queries/users/_name/main.gql';
 
   export default {
     props: ['workout', 'user'],
     data() {
       return {
-        showButtonsPanel: false
+        showButtonsPanel: false, 
+        client: this.$apollo.getClient(),
       }
     },
     methods: {
@@ -68,12 +70,25 @@
             id: this.workout.id,
           },
         }
-        const client = this.$apollo.getClient();
         if (await this.$root.$confirm("Czy na pewno chcesz usunąć ten element?")) {
-          client.mutate({ mutation: deleteWorkout, variables: { input: input }  })
-            .then(res => {
-              window.location.reload(true);
-            })
+          this.client.mutate({ 
+            mutation: deleteWorkout, 
+            variables: { 
+              input: input 
+            },
+            update: (cache, { data: { deleteWorkout } }) => {
+              // read data from cache for this query
+              const data = cache.readQuery({ query: mainQuery, variables: { username: this.$route.params.name } });
+              // find index of deleted item in cached user.workouts array 
+              const workoutIndex = data.users[0].workouts.findIndex(workout => {
+                return workout.id == deleteWorkout.workout.id;
+              });
+              // remove deleted item from cache 
+              data.users[0].workouts.splice(workoutIndex, 1);
+              // write data back to the cache
+              this.client.writeQuery({ query: mainQuery, data: data });
+            }
+          })
         }
       },
     }

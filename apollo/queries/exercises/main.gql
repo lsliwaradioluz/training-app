@@ -1,5 +1,5 @@
 query {
-  exercises(sort: "createdAt:desc") {
+  exercises(sort: "updatedAt:desc") {
     id
     name
     alias
