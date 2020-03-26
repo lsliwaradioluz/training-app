@@ -1,13 +1,12 @@
 <template>
-  <div class="trainee">
-    <UserPanel :user="users[0]" />
+  <div class="trainee" v-if="user">
+    <UserPanel :user="user" />
   <!-- TRENINGI  -->
     <div>
       <Head>
         <div class="row j-between a-center">
           <h3 class="m00">Treningi</h3>
           <div>
-            <!-- <nuxt-link class="flaticon-list" to="workouts" tag="i" append></nuxt-link> -->
             <nuxt-link
               class="flaticon-plus" 
               :to="{ path: '/workouts/new', query: { username: user.username } }" 
@@ -30,29 +29,31 @@
 import mainQuery from '~/apollo/queries/users/_name/main.gql';
 
 export default {
+  // asyncData(context) {
+  //   let client = context.app.apolloProvider.defaultClient;
+  //   return client.query({ query: mainQuery, variables: { username: context.route.params.name } })
+  //     .then(({ data }) => {
+  //       return {
+  //         user: data.users[0]
+  //       }
+  //     });
+  // },
   apollo: {
     users: {
+      prefetch: true, 
       query: mainQuery,
       variables() {
-        return {
-          username: this.$route.params.name
-        }
-      },
+        return { username: this.$route.params.name }
+      }, 
       update(data) {
         return data.users
-      },
+      }
     }
   }, 
   computed: {
     user() {
-      return this.users[0];
+      return this.users ? this.users[0] : null; 
     }
-  },
-  // mounted() {
-  //   this.$apollo.queries.users.setOptions({
-  //     pollInterval: 3000,
-  //     fetchPolicy: 'cache-and-network'
-  //   })
-  // },
+  }
 }
 </script>
