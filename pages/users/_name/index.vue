@@ -1,28 +1,33 @@
 <template>
-  <div class="trainee" v-if="user">
-    <UserPanel :user="user" />
-  <!-- TRENINGI  -->
-    <div>
-      <Head>
-        <div class="row j-between a-center">
-          <h3 class="m00">Treningi</h3>
-          <div>
-            <nuxt-link
-              class="flaticon-plus" 
-              :to="{ path: '/workouts/new', query: { username: user.username } }" 
-              tag="i"></nuxt-link>
-          </div>
-        </div>
-      </Head>
+<div>
+  <transition name="fade">
+    <div class="trainee" v-if="!$apollo.loading">
+      <UserPanel :user="user" />
+    <!-- TRENINGI  -->
       <div>
-        <Workout :workout="user.homeworks[0]" :user="user" v-if="user.homeworks.length > 0" />
-        <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" :user="user" />
+        <Head>
+          <div class="row j-between a-center">
+            <h3 class="m00">Treningi</h3>
+            <div>
+              <nuxt-link
+                class="flaticon-plus" 
+                :to="{ path: '/workouts/new', query: { username: user.username } }" 
+                tag="i"></nuxt-link>
+            </div>
+          </div>
+        </Head>
+        <div>
+          <Workout :workout="user.homeworks[0]" :user="user" v-if="user.homeworks.length > 0" />
+          <Workout v-for="workout in user.workouts" :key="workout.id" :workout="workout" :user="user" />
+        </div>
+        <p class="tab" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
+          Brak treningów do wyświetlenia
+        </p>
       </div>
-      <p class="tab" v-if="user.workouts.length == 0 && user.homeworks.length == 0">
-        Brak treningów do wyświetlenia
-      </p>
     </div>
-  </div>
+    <Placeholder v-else />
+  </transition>
+</div>
 </template>
 
 <script>
@@ -38,22 +43,24 @@ export default {
   //       }
   //     });
   // },
+  data() {
+    return {
+      user: Object,
+    }
+  },
   apollo: {
     users: {
-      prefetch: true, 
       query: mainQuery,
       variables() {
         return { username: this.$route.params.name }
       }, 
-      update(data) {
-        return data.users
-      }
+      manual: true, 
+      result ({ data, loading }) {
+        if (!loading) {
+          this.user = data.users[0]
+        }
+      },
     }
-  }, 
-  computed: {
-    user() {
-      return this.users ? this.users[0] : null; 
-    }
-  }
+  },
 }
 </script>

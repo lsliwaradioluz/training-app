@@ -24,6 +24,7 @@ export default {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;
     },
-  }
+  },
 }
 </script>
+
