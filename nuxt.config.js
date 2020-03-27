@@ -24,7 +24,7 @@ export default {
     name: 'page'
   },
   env: {
-    endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337' : 'http://powerful-taiga-81942.herokuapp.com'
+    endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337' : 'http://piti-backend.herokuapp.com'
   },
   /*
   ** Global CSS
@@ -79,7 +79,7 @@ export default {
   apollo: {  
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://powerful-taiga-81942.herokuapp.com/graphql',
+        httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://piti-backend.herokuapp.com/graphql',
       }
     }
   },
