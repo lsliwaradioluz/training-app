@@ -9,12 +9,13 @@ export const mutations = {
     state.user = user;
     Cookies.set('user', user);
   },
-  logout(state) {
+  async logout(state) {
     this.$router.push({
       path: '/login'
     });
     state.user = null;
     Cookies.set('user', null);
+    await this.$apolloHelpers.onLogout();
   }
 }
 

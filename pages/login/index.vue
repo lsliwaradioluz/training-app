@@ -64,6 +64,8 @@ export default {
             admin: res.user.admin,
           }
 
+          this.$apolloHelpers.onLogin(res.jwt, undefined, { expires: 7 })
+
           this.setUser(user);
           this.$router.push({
             path: '/dashboard'
