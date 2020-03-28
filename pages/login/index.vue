@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     signIn() {
-      const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/local' : 'https://powerful-taiga-81942.herokuapp.com/auth/local';
+      const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/local' : 'https://piti-backend.herokuapp.com/auth/local';
       this.$axios.$post(endpoint, {
         identifier: this.identifier.toLowerCase(), 
         password: this.password
