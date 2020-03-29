@@ -87,7 +87,7 @@
         audioSource: null,
         client: this.$apollo.getClient(),
         showButtonsPanel: false,
-        endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://powerful-taiga-81942.herokuapp.com/upload',
+        endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://piti-backend.herokuapp.com/upload',
         loadingImage: false,
         uploadedImage: this.exercise.image || null,
         input: {
