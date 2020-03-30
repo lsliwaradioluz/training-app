@@ -18,86 +18,113 @@
     <div class="workout-editor__routine">
       <Head :class="{ blind: editedUnit != null}">
         <div class="row j-between">
-          <h3 class="m00">Rozpiska</h3>
-          <i class="flaticon-vertical-dots" @click="showButtonsPanel = !showButtonsPanel"></i>
+          <h3 class="m00">Sekcje</h3>
+          <ContextMenu @toggled="showUnitButtons = $event">
+            <template v-slot:trigger>
+              <i class="flaticon-vertical-dots"></i>
+            </template>
+            <template v-slot:options>
+              <button :class="{ pb05: showButtonsPanel }" @click="createSection('before')">
+                <i class="flaticon-left-arrow-1 fs-09" style="margin-right: .25rem"></i>
+                Dodaj przed
+              </button>
+              <button :class="{ pb05: showButtonsPanel }" @click="createSection('after')">
+                <i class="flaticon-right-arrow-1 fs-09" style="margin-right: .25rem" />
+                Dodaj za
+              </button>
+              <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">
+                <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+                Usuń
+              </button>
+            </template>
+          </ContextMenu>
         </div>
-        <transition name="accordion">
-          <div class="workout-editor__panel row mt05 t-small" v-if="showButtonsPanel">
-            <button :class="{ pb05: showButtonsPanel }" @click="createSection('before')">
-              <i class="flaticon-left-arrow fs-05" />
-              <span>Dodaj</span>
-            </button>
-            <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">Usuń</button>
-            <button :class="{ pb05: showButtonsPanel }" @click="createSection('after')">
-              <span>Dodaj</span>
-              <i class="flaticon-right-arrow fs-05" />
-            </button>
-          </div>
-        </transition>
       </Head>
       <transition name="fade">
         <div v-if="!editedUnit">
-        <div class="carousel-container" v-if="sections.length > 0">
-          <Carousel 
-            :pagination="false" 
-            :active="!showButtonsPanel && currentComplex == null" 
-            :start-from-page="currentSection" 
-            :key="sections.length"
-            @change-page="currentSection = $event">
-            <div class="p01 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
-              <div class="tab column fg1">
-                <div class="row j-between">
-                  <h3 class="mt0" v-if="currentSection != null">
-                    <input 
-                      class="input--invisible" 
-                      type="text" 
-                      placeholder="Nazwa sekcji"
-                      v-model="sections[sectionindex].name"
-                      spellcheck="false"
-                      :ref="`input${sectionindex}`">
-                  </h3>
-                  <h3 class="mt0" v-else>{{ section.name }}</h3>
-                  <i class="flaticon-plus" @click="openUnitEditor()"></i>
-                </div>
-                <div>
-                  <div 
-                    class="mb05"
-                    :class="{ 'blind': currentComplex != null && currentComplex != complexindex }" 
-                    v-for="(complex, complexindex) in section.complexes" 
-                    :key="complexindex"
-                    draggable="true">
-                    <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
-                      <input class="input--invisible" v-model="section.complexes[complexindex].name">
-                      <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
-                      <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
-                    </h4>
-                    <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
-                      <div class="row j-between">
-                        <p class="m00">{{ unit.exercise.name }}</p>
-                        <ContextMenu small-icon>
-                          <button class="mr05 ml05" @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">W górę</button>
-                          <button class="mr05 ml05" @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">W dół</button>
-                          <button class="mr05 ml05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">Paruj</button>
-                          <button class="mr05 ml05" @click="deleteUnit(complexindex, unitindex)">Usuń</button>
-                          <button class="mr05 ml05" @click="openUnitEditor(unit, unitindex, complexindex)">Edytuj</button>
-                        </ContextMenu>
-                      </div>
-                      <li>
-                        <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
-                        <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
-                      </li>
-                      <li>{{ unit.remarks.toLowerCase() }}</li>
-                      <li>
-                        <span class="t-gray">przerwy {{ unit.rest }}s</span>
-                      </li>
-                    </ul>
+          <div class="carousel-container" v-if="sections.length > 0">
+            <Carousel 
+              :pagination="false" 
+              :active="!showButtonsPanel && currentComplex == null && !showUnitButtons" 
+              :start-from-page="currentSection" 
+              :key="sections.length"
+              @change-page="currentSection = $event">
+              <div class="p01 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
+                <div class="tab column fg1">
+                  <div class="row j-between">
+                    <h3 class="mt0" v-if="currentSection != null">
+                      <input 
+                        class="input--invisible" 
+                        type="text" 
+                        placeholder="Nazwa sekcji"
+                        v-model="sections[sectionindex].name"
+                        spellcheck="false"
+                        :ref="`input${sectionindex}`">
+                    </h3>
+                    <h3 class="mt0" v-else>{{ section.name }}</h3>
+                    <i class="flaticon-plus" @click="openUnitEditor()"></i>
                   </div>
-                  <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+                  <div>
+                    <div 
+                      class="mb05"
+                      :class="{ 'blind': currentComplex != null && currentComplex != complexindex }" 
+                      v-for="(complex, complexindex) in section.complexes" 
+                      :key="complexindex"
+                      draggable="true">
+                      <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
+                        <input class="input--invisible" v-model="section.complexes[complexindex].name">
+                        <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
+                        <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
+                      </h4>
+                      <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
+                        <div class="row j-between">
+                          <p class="m00">{{ unit.exercise.name }}</p>
+                          <ContextMenu 
+                            @toggled="showUnitButtons = $event"
+                            :bottom="section.complexes.length > 1 && unitindex == complex.units.length - 1 && complexindex == section.complexes.length - 1">
+                            <template v-slot:trigger>
+                              <i class="flaticon-vertical-dots fs-09"></i>
+                            </template>
+                            <template v-slot:options>
+                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">
+                                <i class="flaticon-up fs-09" style="margin-right: .25rem"></i>
+                                Przesuń w górę
+                              </button>
+                              <button @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
+                                <i class="flaticon-down-arrow-1 fs-09" style="margin-right: .25rem"></i>
+                                Przesuń w dół
+                              </button>
+                              <button @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
+                                <i class="flaticon-double-arrow-cross-of-shuffle fs-09" style="margin-right: .25rem"></i>
+                                Paruj
+                              </button>
+                              <button @click="openUnitEditor(unit, unitindex, complexindex)">
+                                <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+                                Edytuj
+                              </button>
+                              <button @click="deleteUnit(complexindex, unitindex)">
+                                <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+                                Usuń
+                              </button>
+                            </template>
+                          </ContextMenu>
+                        </div>
+                        <li>
+                          <span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
+                          <span class="t-green" v-if="unit.max && unit.max > 0">(+{{ unit.max }})</span><span class="t-red" v-if="unit.max && unit.max < 0">({{ unit.max }})</span>
+                        </li>
+                        <li>{{ unit.remarks.toLowerCase() }}</li>
+                        <li>
+                          <span class="t-gray">przerwy {{ unit.rest }}s</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Carousel>
-        </div>
+            </Carousel>
+          </div>
           <p class="m00 tab" v-else>
             Na razie nie dodałeś żadnych sekcji.
           </p>
@@ -204,7 +231,11 @@ export default {
       return new Date(this.selectedDate + " " + this.selectedTime);
     },
     workoutReady() {
-      return this.sections.length > 0 ? true : false;
+      const sectionsNotEmpty = this.sections.filter(section => {
+        return section.complexes.length > 0;
+      });
+
+      return Boolean(sectionsNotEmpty.length);
     },
     previousWorkoutSections() {
       const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter(section => {

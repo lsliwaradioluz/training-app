@@ -10,17 +10,24 @@
       </div>
     </nuxt-link>
     <div class="row a-center" v-if="edit">
-      <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
+      <ContextMenu>
+        <template v-slot:trigger>
+          <i class="flaticon-vertical-dots t-green"></i>
+        </template>
+        <template v-slot:options>
+          <!-- disable delete button if user is an admin  -->
+          <button v-on="!user.admin ? { click: deleteUser } : {}">
+            <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+            Usuń
+          </button>
+          <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>
+            <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+            Edytuj
+          </nuxt-link>
+        </template>
+      </ContextMenu>
     </div>
   </div>
-  <!-- buttons -->
-  <transition name="accordion">
-    <div class="user__panel row mt05 t-green t-small" v-if="showButtonsPanel">
-      <!-- disable delete button if user is an admin (just in case)  -->
-      <button v-on="!user.admin ? { click: deleteUser } : {}">Usuń</button>
-      <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>Edytuj</nuxt-link>
-    </div>
-  </transition>
 </div>
 </template>
 
@@ -39,7 +46,6 @@
     },
     data() {
       return {
-        showButtonsPanel: false,
         client: this.$apollo.getClient(),
       }
     },
@@ -69,25 +75,11 @@
 
 <style lang="scss" scoped>
 
-  .user {
-    transition: padding 0.3s;
-  }
-
   .user__link {
     flex-basis: 100%;
 
     h3:first-letter {
       text-transform: lowercase;
-    }
-  }
-
-  .user__panel {
-    border-top: 1px solid color(gray);
-
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
     }
   }
 </style>

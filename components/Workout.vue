@@ -21,24 +21,34 @@
           :disabled="!workout.ready">Plan</nuxt-link>
       </div>
       <div class="row a-center" v-else>
-        <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
+        <ContextMenu>
+          <template v-slot:trigger>
+            <i class="flaticon-vertical-dots t-green"></i>
+          </template>
+          <template v-slot:options>
+            <nuxt-link
+              tag="button"
+              type="button" 
+              :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: workout.scheduled } }">
+              <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+              Edytuj
+              </nuxt-link>
+            <nuxt-link
+              type="button"
+              tag="button"
+              to="/users"
+              @click.native="copyWorkout">
+              <i class="flaticon-paper fs-09" style="margin-right: .25rem"></i>
+              Kopiuj
+              </nuxt-link>
+            <button type="button" @click="deleteWorkout">
+              <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+              Usuń
+            </button>
+          </template>
+        </ContextMenu>
       </div>
     </div>
-  <!-- BUTTONS  -->
-    <transition name="accordion"> 
-      <div class="workout__panel row mt05 t-green t-small" v-if="showButtonsPanel">
-        <nuxt-link
-          tag="button"
-          type="button" 
-          :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: this.workout.scheduled } }">Edytuj</nuxt-link>
-        <nuxt-link
-          type="button"
-          tag="button"
-          to="/users"
-          @click.native="copyWorkout">Kopiuj</nuxt-link>
-        <button type="button" @click="deleteWorkout">Usuń</button>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -50,7 +60,6 @@
     props: ['workout', 'user'],
     data() {
       return {
-        showButtonsPanel: false, 
         client: this.$apollo.getClient(),
       }
     },
@@ -97,27 +106,13 @@
 
 <style lang="scss" scoped>
 
-  .workout {
-    transition: padding 0.3s;
-  }
-
   .workout__link {
     flex-basis: 100%;
   }
 
-  .workout__panel {
-    border-top: 1px solid color(gray);
-
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
-    }
-  }
-
   .sticky {
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     &::after {
       content: "";
       position: absolute;
@@ -125,6 +120,8 @@
       bottom: 0;
       height: 100%;
       width: 3px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
       background-color: color(green);
     }
   }

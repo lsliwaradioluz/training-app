@@ -7,24 +7,8 @@ button {
   color: inherit;
   font-family: 'Nunito', sans-serif !important;
   position: relative;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
-
-// button::after {
-//   content: "";
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   height: 100%;
-//   width: 100%;
-//   background-color: rgba(0, 0, 0, 0.034);
-//   opacity: 0;
-//   transition: opacity 0.3s;
-// }
-
-// button:active::after {
-//   opacity: 1;
-// }
 
 .button--primary {
   cursor: pointer;

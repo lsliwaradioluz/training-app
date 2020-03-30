@@ -46,20 +46,6 @@
   overflow: hidden;
 }
 
-// ANIMACJA ROLL DO SCHOWANYCH PRZYCISKÓW 
-
-.roll-enter-active {
-  animation: roll 0.2s;
-  overflow: hidden;
-  transform-origin: top right;
-}
-
-.roll-leave-active {
-  animation: roll 0.2s reverse;
-  overflow: hidden;
-  transform-origin: top right;
-}
-
 .icon--spinning {
   animation: spin 1.5s linear infinite;
 }
@@ -92,15 +78,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes roll {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="exercise-tab tab p11 column" :class="{ pb0: showButtonsPanel }">
+  <div class="exercise-tab tab p11 column">
     <div class="row j-between a-stretch">
       <nuxt-link class="exercise-tab__link pr1" :to="exercise.id" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
@@ -7,15 +7,24 @@
         <p class="exercise-tab__description m00" v-else>Brak alternatywnej nazwy</p>
       </nuxt-link>
       <div class="row a-center">
-        <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i>
+        <!-- <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i> -->
+        <ContextMenu>
+          <template v-slot:trigger>
+            <i class="flaticon-vertical-dots t-green"></i>
+          </template>
+          <template v-slot:options>
+            <button type="button" @click="deleteExercise">
+              <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+              Usuń
+            </button>
+            <nuxt-link tag="button" type="button" :to="`${exercise.id}/edit`" append>
+              <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+              Edytuj
+            </nuxt-link>
+          </template>
+        </ContextMenu>
       </div>
     </div>
-    <transition name="accordion">
-      <div class="exercise-tab__panel row mt05 t-green" v-if="showButtonsPanel">
-        <button type="button" @click="deleteExercise">Usuń</button>
-        <nuxt-link tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -26,7 +35,6 @@
     props: ['exercise'], 
     data() {
       return {
-        showButtonsPanel: false, 
         client: this.$apollo.getClient(),
       }
     }, 
@@ -51,26 +59,11 @@
 
 <style lang="scss" scoped>
 
-  .exercise-tab {
-    transition: padding 0.3s;
-  }
-
   .exercise-tab__link {
     flex-basis: 100%;
   }
 
   .exercise-tab__description {
     font-size: 0.7rem;
-  }
-
-  .exercise-tab__panel {
-    border-top: 1px solid color(gray);
-    font-size: 0.7rem;
-
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
-    }
   }
 </style>

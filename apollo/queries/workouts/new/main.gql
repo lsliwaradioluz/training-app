@@ -2,7 +2,7 @@ query($username: String) {
   users( where: { username: $username } ) {
     id
     username
-    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true" }) {
+    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true", ready: "true" }) {
       id
       scheduled
       sections {
