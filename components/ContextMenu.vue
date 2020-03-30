@@ -25,19 +25,10 @@
 <script>
   export default {
     props: {
-      iconSize: {
-        type: Number, 
-        default: () => 18,
-        // maybe 20? 
-      }, 
       fromBottom: {
         type: Boolean, 
         default: () => true, 
-      }, 
-      fromTop: {
-        type: Boolean, 
-        default: () => false, 
-      }, 
+      },
       left: {
         type: Boolean, 
         default: () => true, 
@@ -83,7 +74,6 @@
       window.addEventListener('click', () => {
         // if you click an element other than trigger button with given randomID, close the panel
         if (!event.target.offsetParent || event.target.offsetParent.id != `trigger-button_${this.randomID}`) {
-          console.log(1);
           this.showButtons = false;
         }
       });
@@ -109,7 +99,7 @@
     border-radius: 5px;
     position: absolute;
     top: 0;
-    padding: 5px;
+    padding: .125rem;
     padding-right: 3rem;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.233);
     z-index: 1000;
@@ -118,7 +108,13 @@
   .context-menu__panel button,
   .context-menu__panel a {
     text-align: left;
-    padding: 2px 0;
+    padding: 0.5rem;
+    font-size: .75rem;
+  }
+
+  .context-menu__panel i {
+    font-size: .75rem;
+    margin-right: .25rem;
   }
 
 

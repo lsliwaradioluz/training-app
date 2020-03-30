@@ -1,5 +1,5 @@
 <template>
-<div class="user tab column" :class="{ pb0: showButtonsPanel }">
+<div class="user tab column">
   <!-- main view  -->
   <div class="row j-between a-stretch">
     <nuxt-link class="user__link row a-center" tag="div" :to="user.username" append>

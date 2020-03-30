@@ -1,5 +1,5 @@
 <template>
-  <div class="workout tab column" :class="{ sticky: workout.sticky, pb0: showButtonsPanel }">
+  <div class="workout tab column" :class="{ sticky: workout.sticky }">
   <!-- MAIN TAB -->
     <div class="row j-between a-stretch">
       <nuxt-link class="workout__link" tag="div" :to="`/workouts/${this.workout.id}`">
@@ -30,7 +30,7 @@
               tag="button"
               type="button" 
               :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: workout.scheduled } }">
-              <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+              <i class="flaticon-writing"></i>
               Edytuj
               </nuxt-link>
             <nuxt-link
@@ -38,11 +38,11 @@
               tag="button"
               to="/users"
               @click.native="copyWorkout">
-              <i class="flaticon-paper fs-09" style="margin-right: .25rem"></i>
+              <i class="flaticon-paper"></i>
               Kopiuj
               </nuxt-link>
             <button type="button" @click="deleteWorkout">
-              <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+              <i class="flaticon-trash"></i>
               Usuń
             </button>
           </template>

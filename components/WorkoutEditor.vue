@@ -81,7 +81,7 @@
                           <p class="m00">{{ unit.exercise.name }}</p>
                           <ContextMenu 
                             @toggled="showUnitButtons = $event"
-                            :bottom="section.complexes.length > 1 && unitindex == complex.units.length - 1 && complexindex == section.complexes.length - 1">
+                            :bottom="unitindex == complex.units.length - 1 && complexindex == section.complexes.length - 1 && complex.units.length > 1">
                             <template v-slot:trigger>
                               <i class="flaticon-vertical-dots fs-09"></i>
                             </template>
@@ -435,15 +435,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .workout-editor__panel {
-    border-top: 1px solid color(gray);
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
-    }
-  }
 
   .workout-editor__buttons button {
     width: 50%;
