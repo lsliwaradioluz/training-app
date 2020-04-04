@@ -111,4 +111,12 @@
   input:focus {
     border-bottom: 1px solid white;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active  {
+    -webkit-transition-delay: 9999s;
+    transition-delay: 9999s;
+  }
 </style>
