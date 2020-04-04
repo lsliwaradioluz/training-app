@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 30/03/2020 12:50
+  	Creation date: 04/04/2020 22:58
   	*/
 
 @font-face {
@@ -24,6 +24,7 @@
 
 [class^="flaticon-"] {
   font-size: 20px;
+  font-weight: 300;
 }
 
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
@@ -31,46 +32,45 @@
   font-family: Flaticon;
   font-size: inherit;
   font-style: normal;
-  font-weight: 300;
+  font-weight: inherit;
 }
 
-.flaticon-menu:before { content: "\f100"; }
-.flaticon-up-arrow:before { content: "\f101"; }
-.flaticon-down-arrow:before { content: "\f102"; }
-.flaticon-list:before { content: "\f103"; }
-.flaticon-close:before { content: "\f104"; }
-.flaticon-next:before { content: "\f105"; }
-.flaticon-plus:before { content: "\f106"; }
-.flaticon-accept:before { content: "\f107"; }
-.flaticon-adjust:before { content: "\f108"; }
-.flaticon-user:before { content: "\f109"; }
-.flaticon-group:before { content: "\f10a"; }
-.flaticon-gymnastics:before { content: "\f10b"; }
-.flaticon-contract:before { content: "\f10c"; }
-.flaticon-vertical-dots:before { content: "\f10d"; }
-.flaticon-information:before { content: "\f10e"; }
-.flaticon-eye:before { content: "\f10f"; }
-.flaticon-play:before { content: "\f110"; }
-.flaticon-off-button:before { content: "\f111"; }
-.flaticon-left-arrow:before { content: "\f112"; }
-.flaticon-right-arrow:before { content: "\f113"; }
-.flaticon-diminish:before { content: "\f114"; }
-.flaticon-clock:before { content: "\f115"; }
-.flaticon-play-and-pause-button:before { content: "\f116"; }
-.flaticon-previous-track-button:before { content: "\f117"; }
-.flaticon-cancel:before { content: "\f118"; }
-.flaticon-login:before { content: "\f119"; }
-.flaticon-setup:before { content: "\f11a"; }
-.flaticon-menu-1:before { content: "\f11b"; }
-.flaticon-sound:before { content: "\f11c"; }
-.flaticon-speaker:before { content: "\f11d"; }
-.flaticon-mute:before { content: "\f11e"; }
-.flaticon-counterclockwise:before { content: "\f11f"; }
-.flaticon-trash:before { content: "\f120"; }
-.flaticon-up:before { content: "\f121"; }
-.flaticon-down-arrow-1:before { content: "\f122"; }
-.flaticon-writing:before { content: "\f123"; }
-.flaticon-double-arrow-cross-of-shuffle:before { content: "\f124"; }
+
+.flaticon-up-arrow:before { content: "\f100"; }
+.flaticon-down-arrow:before { content: "\f101"; }
+.flaticon-close:before { content: "\f102"; }
+.flaticon-plus:before { content: "\f103"; }
+.flaticon-accept:before { content: "\f104"; }
+.flaticon-vertical-dots:before { content: "\f105"; }
+.flaticon-information:before { content: "\f106"; }
+.flaticon-eye:before { content: "\f107"; }
+.flaticon-play:before { content: "\f108"; }
+.flaticon-left-arrow:before { content: "\f109"; }
+.flaticon-right-arrow:before { content: "\f10a"; }
+.flaticon-diminish:before { content: "\f10b"; }
+.flaticon-clock:before { content: "\f10c"; }
+.flaticon-play-and-pause-button:before { content: "\f10d"; }
+.flaticon-previous-track-button:before { content: "\f10e"; }
+.flaticon-cancel:before { content: "\f10f"; }
+.flaticon-login:before { content: "\f110"; }
+.flaticon-menu:before { content: "\f111"; }
+.flaticon-sound:before { content: "\f112"; }
+.flaticon-speaker:before { content: "\f113"; }
+.flaticon-mute:before { content: "\f114"; }
+.flaticon-counterclockwise:before { content: "\f115"; }
+.flaticon-trash:before { content: "\f116"; }
+.flaticon-up:before { content: "\f117"; }
+.flaticon-down-arrow-1:before { content: "\f118"; }
+.flaticon-writing:before { content: "\f119"; }
+.flaticon-double-arrow-cross-of-shuffle:before { content: "\f11a"; }
+.flaticon-home:before { content: "\f11b"; }
+.flaticon-logout:before { content: "\f11c"; }
+.flaticon-email:before { content: "\f11d"; }
+.flaticon-lock:before { content: "\f11e"; }
+.flaticon-user-1:before { content: "\f11f"; }
+.flaticon-check-mark:before { content: "\f120"; }
+.flaticon-kettlebell:before { content: "\f121"; }
+.flaticon-3d:before { content: "\f122"; }
+.flaticon-user:before { content: "\f123"; }
+.flaticon-right-arrow-1:before { content: "\f124"; }
 .flaticon-left-arrow-1:before { content: "\f125"; }
-.flaticon-right-arrow-1:before { content: "\f126"; }
-.flaticon-paper:before { content: "\f127"; }

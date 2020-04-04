@@ -1,32 +1,40 @@
 <template>
-  <div class="createworkout">
-    <WorkoutEditor :specific-data="$data" />
+  <div class="create-workout">
+    <WorkoutEditor :specific-data="$data" v-if="!$apollo.loading" />
+    <Placeholder v-else />
   </div>
 </template>
 
 <script>
-import WorkoutEditor from '~/components/WorkoutEditor';
 import mainQuery from '~/apollo/queries/workouts/new/main.gql';
 import mainWithCopiedQuery from '~/apollo/queries/workouts/new/mainWithCopied.gql';
 
 export default {
-  components: {
-    WorkoutEditor, 
-  },
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    let copiedWorkoutId = context.store.state.main.workoutToCopy ? context.store.state.main.workoutToCopy.id : null;
-
-    return client.query({ query: copiedWorkoutId ? mainWithCopiedQuery : mainQuery, variables: { username: context.route.query.username, copiedWorkoutId: copiedWorkoutId } })
-      .then(({ data }) => {
+  apollo: {
+    user: {
+      query() {
+        return this.$store.state.main.workoutToCopy ? mainWithCopiedQuery : mainQuery
+      }, 
+      variables() {
         return {
-          user: data.users[0],
-          previousWorkouts: copiedWorkoutId ? [data.copiedWorkout, ...data.users[0].workouts] : data.users[0].workouts,
+          id: this.$route.query.id,
+          copiedWorkoutId: this.$store.state.main.workoutToCopy ? this.$store.state.main.workoutToCopy.id : null,
         }
-      });
+      },
+      manual: true, 
+      result({ data, loading }) {
+        if (!loading) {
+          if (data.copiedWorkout) {
+            data.user.workouts.unshift(data.copiedWorkout);
+          }
+          this.user = data.user;
+        }
+      }, 
+    },
   },
   data() {
     return {
+      user: Object,
       sections: [
         { 
           name: 'Rozgrzewka',

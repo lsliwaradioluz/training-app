@@ -19,7 +19,7 @@
         <Head class="mt0 pt05 pb05">
           <div class="row j-between">
             <span>Rozpiska</span>
-            <button type="button" @click="runWorkoutAssistant">
+            <button type="button" @click="runWorkoutAssistant" v-if="$store.state.auth.user.admin">
               <i class="flaticon-play"></i>
             </button>
           </div>

@@ -24,7 +24,6 @@ export default {
       text-transform: none;
     }
   }
-
   .userpanel__fullname {
     font-size: 0.7rem;
   }

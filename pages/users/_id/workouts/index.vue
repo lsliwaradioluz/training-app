@@ -1,4 +1,4 @@
-<template>
+_<template>
   <div class="trainee-workouts">
     <Head>
       <div class="row j-between">
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import mainQuery from '~/apollo/queries/users/_name/workouts/main.gql'
+import mainQuery from '~/apollo/queries/users/_id/workouts/main.gql'
 
 export default {
   asyncData(context) {

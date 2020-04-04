@@ -4,7 +4,12 @@ export default (context) => {
     return context.redirect('/dashboard');
   }
 
-  if (context.store.state.auth.user == null && !context.route.path.includes('login')) {
+  if (
+    context.store.state.auth.user == null 
+    && !context.route.path.includes('login') 
+    && !context.route.path.includes('register-coach')
+    && !context.route.path.includes('register-trainee')
+    ) {
     return context.redirect('/login');
   }
 }

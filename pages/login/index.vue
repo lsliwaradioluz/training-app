@@ -1,34 +1,26 @@
 <template>
-  <div class="signin t-white column j-center">
-    <form class="column j-center" @submit.prevent>
-      <input 
-        class="mb05" 
+  <div class="login tab column j-center m00 pt2">
+    <h3 class="logo t-center mt0 mb1 fs-48">Piti</h3>
+    <form class="column j-center mt1" @submit.prevent>
+      <CustomInput 
+        class="mb05"
         v-model="identifier" 
+        placeholder="Użytkownik" 
+        icon="user-1"
         type="text"
-        autocomplete="on"
-        placeholder="login"
-        spellcheck="false">
-      <span class="row">
-        <input 
-          class="mb05" 
-          v-model="password" 
-          placeholder="hasło"
-          :type="revealPassword ? 'text' : 'password'"
-          autocomplete="on"
-          spellcheck="false">
-        <button 
-          class="signin__reveal-button ml05 mb05" 
-          type="button" 
-          @touchstart="revealPassword = true" 
-          @touchend="revealPassword = false">
-          <i class="flaticon-eye"></i>
-        </button>
-      </span>
-      <button class="button--primary square mb1 fs-1" @click.prevent="signIn" type="button">Zaloguj</button>
-      <p class="signin__error t-red m00 t-small t-center">{{ error }}</p>
-      <!-- <div class="column a-center">
-        <nuxt-link class="t-center t-small" to="forgotpassword" tag="button" type="button" append>Nie pamiętasz hasła?</nuxt-link>
-      </div> -->
+        :spellcheck="false"></CustomInput>
+      <CustomInput 
+        class="mb05"
+        v-model="password"
+        placeholder="Hasło" 
+        icon="lock"
+        type="password"></CustomInput>
+      <button class="button--primary mt2 b-grass" @click.prevent="signIn" type="button">Zaloguj</button>
+      <p class="login__error">{{ error }}</p>
+      <div class="login__help-buttons row j-between">
+        <nuxt-link to="/register-coach" type="button">Załóż konto</nuxt-link>
+        <nuxt-link to="forgotpassword" type="button" append>Przypomnij hasło</nuxt-link>
+      </div>
     </form>      
   </div>
 </template>
@@ -83,12 +75,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .signin__reveal-button {
-    background-color: color(inputgray);
-    border-radius: 5px;
-    padding: 0 0.5rem;
-    display: flex;
-    align-items: center;
+
+  .login__error {
+    font-size: 11px;
+    color: color(red);
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 2rem;
+  }
+
+  .login__help-buttons {
+    font-size: 11px;
+
+    a {
+      opacity: 0.7;
+      color: color(lightgray);
+    }
   }
 </style>
 

@@ -1,27 +1,37 @@
 <template>
   <div class="workouts">
-    <div>
-      <Workout :workout="homework" v-if="homework"></Workout>
+    <div v-if="!$apollo.loading">
       <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>
+      <p class="t-center" v-if="workouts.length == 0">
+        Brak treningów do wyświetlenia
+      </p>
     </div>
-    <p class="t-center" v-if="workouts.length == 0 && !homework">
-      Brak treningów do wyświetlenia
-    </p>
+    <Placeholder v-else />
   </div>
 </template>
 
 <script>
+
 import mainQuery from '~/apollo/queries/workouts/main.gql';
+
 export default {
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-      .then(({ data }) => {
+  apollo: {
+    workouts: {
+      query: mainQuery, 
+      variables() {
         return {
-          workouts: data.users[0].workouts, 
-          homework: data.users[0].homeworks[0]
+          id: this.$store.state.auth.user.id
         }
-      });
-  }
+      }, 
+      manual: true, 
+      result({ data, loading}) {
+        if (!loading) {
+          this.workouts = data.user.workouts.sort((a, b) => {
+            return b.sticky - a.sticky;
+          });
+        }
+      }
+    }
+  },
 }
 </script>

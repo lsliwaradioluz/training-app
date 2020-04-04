@@ -2,17 +2,21 @@
   <div class="workout tab column" :class="{ sticky: workout.sticky }">
   <!-- MAIN TAB -->
     <div class="row j-between a-stretch">
-      <nuxt-link class="workout__link" tag="div" :to="`/workouts/${this.workout.id}`">
+      <nuxt-link 
+        class="workout__link" 
+        tag="button"
+        :to="workout.ready ? `/workouts/${this.workout.id}` : ``"
+        @click.native="showNotification(workout.ready)">
         <div v-if="!workout.sticky">
-          <h3 class="m00">{{ workout.scheduled | reverseDate }}</h3>
+          <h5 class="m00">{{ workout.scheduled | reverseDate }}</h5>
           <p class="m00 t-small">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
         </div>
         <div v-else>
-          <h3 class="m00">Podwieszony</h3>
+          <h5 class="m00">Podwieszony</h5>
           <p class="m00 t-small">dodano {{ workout.createdAt | reverseDate }}</p>
         </div>
       </nuxt-link>
-      <div v-if="!$route.path.includes('users')">
+      <div class="row a-center" v-if="!$route.path.includes('users')">
         <nuxt-link
           class="button--primary"
           :class="{ 'button--inactive': !workout.ready }"
@@ -37,10 +41,20 @@
               type="button"
               tag="button"
               to="/users"
-              @click.native="copyWorkout">
+              @click.native="copyWorkout"
+              v-if="workout.ready">
               <i class="flaticon-paper"></i>
               Kopiuj
-              </nuxt-link>
+            </nuxt-link>
+            <nuxt-link 
+              type="button" 
+              tag="button"
+              to="/users"
+              @click.native="pairWorkout" 
+              v-if="workout.ready">
+              <i class="flaticon-double-arrow-cross-of-shuffle"></i>
+              Paruj
+            </nuxt-link>
             <button type="button" @click="deleteWorkout">
               <i class="flaticon-trash"></i>
               Usuń
@@ -54,13 +68,15 @@
 
 <script>
   import deleteWorkout from '~/apollo/mutations/deleteWorkout.gql';
-  import mainQuery from '~/apollo/queries/users/_name/main.gql';
+  import getUserQuery from '~/apollo/queries/users/_id/main.gql';
+  import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
 
   export default {
     props: ['workout', 'user'],
     data() {
       return {
         client: this.$apollo.getClient(),
+        errorModalVisible: false, 
       }
     },
     methods: {
@@ -72,6 +88,14 @@
         }
         this.showButtonsPanel = false;
         this.$store.commit('main/copyWorkout', workoutToCopy);
+      },
+      pairWorkout() {
+        const workoutToPair = {
+          id: this.workout.id,
+          user: this.user.username, 
+          scheduled: this.workout.scheduled
+        }
+        this.$store.commit('main/pairWorkout', workoutToPair);
       },
       async deleteWorkout() {
         const input = {
@@ -86,20 +110,32 @@
               input: input 
             },
             update: (cache, { data: { deleteWorkout } }) => {
-              // read data from cache for this query
-              const data = cache.readQuery({ query: mainQuery, variables: { username: this.$route.params.name } });
+              // read data from cache for chosen queries
+              const data_1 = this.client.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
+              const data_2 = this.client.readQuery({ query: getWorkoutsQuery, variables: { id: this.$route.params.id } });
+
               // find index of deleted item in cached user.workouts array 
-              const workoutIndex = data.users[0].workouts.findIndex(workout => {
-                return workout.id == deleteWorkout.workout.id;
-              });
-              // remove deleted item from cache 
-              data.users[0].workouts.splice(workoutIndex, 1);
-              // write data back to the cache
-              this.client.writeQuery({ query: mainQuery, data: data });
+              const workoutIndex_1 = data_1.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
+              const workoutIndex_2 = data_2.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
+
+              // remove deleted item from data 
+              data_1.user.workouts.splice(workoutIndex_1, 1);
+              data_2.user.workouts.splice(workoutIndex_2, 1);
+
+              //write data back to cache 
+              this.client.writeQuery({ query: getUserQuery, data: data_1 });
+              if (workoutIndex_2 != -1) {
+                this.client.writeQuery({ query: getWorkoutsQuery, data: data_2 });
+              }
             }
           })
         }
       },
+      showNotification(isWorkoutReady) {
+        if (!isWorkoutReady) {
+          this.$store.commit('main/setNotification', 'Ten trening nie ma jeszcze rozpiski.');
+        }
+      }
     }
   }
 </script>
@@ -108,11 +144,11 @@
 
   .workout__link {
     flex-basis: 100%;
+    text-align: left;
   }
 
   .sticky {
     position: relative;
-    // overflow: hidden;
     &::after {
       content: "";
       position: absolute;

@@ -1,0 +1,39 @@
+// text colors
+
+@mixin color-modifiers {
+  @each $name, $hex in $colors {
+    &-#{$name} {
+      color: $hex !important;
+    }
+  }
+}
+
+.t {
+  @include color-modifiers;
+}
+
+// background colors
+
+@mixin background-color-modifiers {
+  @each $name, $hex in $colors {
+    &-#{$name} {
+      background-color: $hex !important;
+    }
+  }
+}
+
+.b {
+  @include background-color-modifiers;
+}
+
+// font-sizes 
+
+@for $i from 1 through 100 {
+	$base: 1;
+	$fontsize: $base * $i;
+	.fs-#{$fontsize} { 
+		font-size: $fontsize + 0px;
+		}
+}
+
+

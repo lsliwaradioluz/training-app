@@ -13,7 +13,8 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/icon.png' }
+      { rel: 'icon', type: 'image/x-icon', href: '/icon.png' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap' }
     ]
   },
   /*
@@ -36,10 +37,10 @@ export default {
     '~/assets/styles/buttons.scss',
     '~/assets/styles/inputs.scss',
     '~/assets/styles/text.scss',
-    '~/assets/styles/colors.scss',
     '~/assets/styles/other.scss',
     '~/assets/styles/layout.scss',
     '~/assets/styles/animations.scss',
+    '~/assets/styles/utilities.scss',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -54,6 +55,7 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+
   ],
   /*
   ** Nuxt.js modules

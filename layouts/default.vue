@@ -12,7 +12,6 @@
 import Navigation from '~/components/Navigation';
 import WorkoutPairingTab from '~/components/WorkoutPairingTab';
 import WorkoutCopyingTab from '~/components/WorkoutCopyingTab';
-
 export default {
   middleware: 'redirect',
   components: {
@@ -24,7 +23,6 @@ export default {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;
     },
-  },
+  }
 }
 </script>
-

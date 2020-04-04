@@ -1,8 +1,7 @@
 <template>
 <div class="user tab column">
-  <!-- main view  -->
   <div class="row j-between a-stretch">
-    <nuxt-link class="user__link row a-center" tag="div" :to="user.username" append>
+    <nuxt-link class="user__link row a-center" tag="div" :to="user.id" append>
       <div class="avatar mr1" :style="{ backgroundImage: `url('${backgroundImage}')`}"></div>
       <div>
         <h3 class="m00">{{ user.username }}</h3>
@@ -15,15 +14,14 @@
           <i class="flaticon-vertical-dots t-green"></i>
         </template>
         <template v-slot:options>
-          <!-- disable delete button if user is an admin  -->
-          <button v-on="!user.admin ? { click: deleteUser } : {}">
-            <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
-            Usuń
-          </button>
           <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>
-            <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+            <i class="flaticon-writing"></i>
             Edytuj
           </nuxt-link>
+          <button v-on="!user.admin ? { click: deleteUser } : {}" v-if="!user.admin">
+            <i class="flaticon-trash"></i>
+            Usuń
+          </button>
         </template>
       </ContextMenu>
     </div>
@@ -61,7 +59,6 @@
             id: this.user.id,
           },
         }
-
         if (await this.$root.$confirm("Czy na pewno chcesz usunąć tego użytkownika?")) {
           this.client.mutate({ mutation: deleteUser, variables: { input: input }  })
             .then(() => {
@@ -77,7 +74,6 @@
 
   .user__link {
     flex-basis: 100%;
-
     h3:first-letter {
       text-transform: lowercase;
     }

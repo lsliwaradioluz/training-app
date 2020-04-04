@@ -1,9 +1,10 @@
 <template>
-  <div class="users">
+<div class="users">
+  <div v-if="!$apollo.loading">
     <Head>
       <div class="row j-between">
         <h3 class="m00">
-          <input class="input--invisible" v-model="filter" placeholder="Znajdź użytkownika..." spellcheck="false" autocomplete="off">
+          <input class="input--invisible" v-model="filter" placeholder="Szukaj..." spellcheck="false" autocomplete="off">
         </h3>
         <nuxt-link to="new" append>
           <i class="flaticon-plus ml1"></i>
@@ -13,20 +14,23 @@
     <UserTab :user="$store.state.auth.user" edit />
     <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit />
   </div>
+  <Placeholder v-else />
+</div>
 </template>
 
 <script>
 import mainQuery from '~/apollo/queries/users/main.gql';
 
 export default {
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-      .then(({ data }) => {
+  apollo: {
+    user: {
+      query: mainQuery, 
+      variables() {
         return {
-          users: data.user.users
+          id: this.$store.state.auth.user.id
         }
-      });
+      },
+    }
   },
   data() {
     return {
@@ -38,12 +42,12 @@ export default {
       let filteredUsers = [];
       let filter = this.filter.toLowerCase();
       if (filter !== '') {
-        filteredUsers = this.users.filter(user => {
+        filteredUsers = this.user.users.filter(user => {
           const username = user.username.toLowerCase();
           return username.includes(filter) || filter.includes(username);
         });
       } else {
-        filteredUsers = this.users;
+        filteredUsers = this.user.users;
       }
       return filteredUsers;
     },

@@ -3,10 +3,10 @@
   <!-- NAZWA  -->
     <Head>Nazwy ćwiczenia</Head>
     <form class="tab">
-      <label class="t-green" for="fullname">Nazwa główna</label>
+      <label class="t-green" for="fullname">Nazwa angielska</label>
       <input class="input--invisible" type="text" id="fullname" placeholder="np. pull-ups" v-model="input.name" spellcheck="false" autocomplete="off">
       <br>
-      <label class="t-green" for="username">Nazwa alternatywna</label>
+      <label class="t-green" for="username">Nazwa polska</label>
       <input class="input--invisible" type="text" id="username" placeholder="np. podciąganie na drążku" v-model="input.alias" spellcheck="false" autocomplete="off">
     </form>
   <!-- ZDJĘCIE  -->
@@ -68,6 +68,7 @@
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
   import createExercise from '~/apollo/mutations/createExercise.gql';
   import updateExercise from '~/apollo/mutations/updateExercise.gql';
+  import mainQuery from '~/apollo/queries/exercises/main.gql';
 
   export default {
     props: {
@@ -86,7 +87,6 @@
       return {
         audioSource: null,
         client: this.$apollo.getClient(),
-        showButtonsPanel: false,
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://piti-backend.herokuapp.com/upload',
         loadingImage: false,
         uploadedImage: this.exercise.image || null,
@@ -124,10 +124,23 @@
         const input = {
           data: this.input
         }
-        this.client.mutate({ mutation: createExercise, variables: { input: input } })
-          .then(res => {
-            this.$router.go(-1);
-          });
+        this.client.mutate({ 
+          mutation: createExercise, 
+          variables: { 
+            input: input 
+          }, 
+          update: (cache, { data: { createExercise } }) => {
+            // read data from cache for this query
+            const data = this.client.readQuery({ query: mainQuery });
+            // push new item to cache 
+            data.exercises.unshift(createExercise.exercise);
+            // write data back to the cache
+            this.client.writeQuery({ query: mainQuery, data: data });
+          }
+        })
+        .then(res => {
+          this.$router.go(-1);
+        });
       }, 
       updateExercise() {
         this.input.image = this.uploadedImage && this.uploadedImage.id;
@@ -143,26 +156,6 @@
             this.$router.go(-1);
           });
       },
-      async deleteExercise() {
-        if (await this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
-          const input = {
-            where: {
-              id: this.exercise.id
-            }
-          }
-
-          this.client.mutate({ mutation: deleteExercise, variables: { input: input } })
-            .then(res => {
-              this.$router.go(-1);
-            });
-        }
-      }, 
-      recordVoiceName() {
-        navigator.mediaDevices.getUserMedia({audio: true})
-        .then(mediaStreamObj => {
-          this.audioSource = mediaStreamObj;
-        });
-      }
     },
   }
 </script>
@@ -179,17 +172,6 @@
 
   .exercise-editor__buttons button {
     width: 50%;
-  }
-
-  .exercise-editor__panel {
-    border-top: 1px solid color(gray);
-    font-size: 0.7rem;
-
-    button {
-      padding: 1rem;
-      flex-basis: 50%;
-      font-size: inherit;
-    }
   }
 
 </style>

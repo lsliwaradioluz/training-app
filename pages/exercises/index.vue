@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="categories">
+    <div class="categories" v-if="!$apollo.loading">
       <Head>
         <div class="row j-between">
           <h3 class="m00">
@@ -14,6 +14,7 @@
         :key="exercise.id"
         :exercise="exercise"/>
     </div>
+    <Placeholder v-else />
   </div>
 </template>
 
@@ -21,14 +22,10 @@
   import mainQuery from '~/apollo/queries/exercises/main.gql';
 
   export default {
-    asyncData(context) {
-      const client = context.app.apolloProvider.defaultClient;
-      return client.query({ query: mainQuery }) 
-        .then(({ data }) => {
-          return {
-            exercises: data.exercises
-          }
-        }) 
+    apollo: {
+      exercises: {
+        query: mainQuery, 
+      }
     },
     data() {
       return {

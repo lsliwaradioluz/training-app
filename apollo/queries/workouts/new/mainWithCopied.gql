@@ -1,8 +1,8 @@
-query($username: String, $copiedWorkoutId: ID!) {
-  users( where: { username: $username } ) {
+query($id: ID!, $copiedWorkoutId: ID!) {
+  user(id: $id) {
     id
     username
-    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true" }) {
+    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true", ready: "true" }) {
       id
       scheduled
       sections {

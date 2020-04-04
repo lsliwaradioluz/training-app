@@ -28,7 +28,7 @@ query($id: ID!) {
     user {
       id
       fullname
-      workouts(sort: "scheduled:desc", where: { id_ne: $id, sticky_ne: "true" }) {
+      workouts(sort: "scheduled:desc", where: { id_ne: $id, sticky_ne: "true", ready: "true" }) {
         id
         scheduled
         sections {

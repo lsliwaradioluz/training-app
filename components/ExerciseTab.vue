@@ -1,5 +1,5 @@
 <template>
-  <div class="exercise-tab tab p11 column">
+  <div class="exercise-tab tab p11 mb05 column">
     <div class="row j-between a-stretch">
       <nuxt-link class="exercise-tab__link pr1" :to="exercise.id" tag="div" append>
         <h3 class="m00">{{ exercise.name }}</h3>
@@ -30,6 +30,7 @@
 
 <script>
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
+  import mainQuery from '~/apollo/queries/exercises/main.gql';
   
   export default {
     props: ['exercise'], 
@@ -47,10 +48,23 @@
             }
           }
 
-          this.client.mutate({ mutation: deleteExercise, variables: { input: input } })
-            .then(res => {
-              window.location.reload();
-            });
+          this.client.mutate({ 
+            mutation: deleteExercise, 
+            variables: { 
+              input: input 
+            }, 
+            update: (cache, { data: { deleteExercise } }) => {
+              // read data from cache for this query
+              const data = this.client.readQuery({ query: mainQuery });
+              // find index of deleted item in cached user.workouts array 
+              const exerciseIndex = data.exercises.findIndex(exercise => exercise.id == deleteExercise.exercise.id );
+              // remove deleted item from cache 
+              data.exercises.splice(exerciseIndex, 1);
+              // write data back to the cache
+              this.client.writeQuery({ query: mainQuery, data: data });
+            } 
+          })
+          
         }
       }
     }

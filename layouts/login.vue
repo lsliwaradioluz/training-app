@@ -1,6 +1,5 @@
 <template>
-  <div class="login main column j-center">
-    <h4 class="logo t-center m00">Piti</h4>
+  <div class="login-layout b-default column j-center">
     <Nuxt />
   </div>
 </template>
@@ -18,14 +17,20 @@ export default {
     font-size: 3rem;
   }
 
-  .login {
+  .login-layout {
     height: 100vh;
-    background: linear-gradient(135deg, color(black), color(lightblack));
-  }
+    padding: 3rem 1rem; 
+    position: relative;
 
-  // @media (orientation: landscape) {
-  //   .login {
-  //     height: auto;
-  //   }
-  // }
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: inherit;
+      opacity: 0.9;
+    }
+  }
 </style>

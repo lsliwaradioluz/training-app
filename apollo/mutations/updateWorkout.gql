@@ -6,6 +6,28 @@ mutation($input: updateWorkoutInput) {
       ready
       sticky
       createdAt
+      sections {
+          id
+          name
+          complexes {
+            name 
+            id
+            units {
+              id
+              sets
+              reps
+              time
+              distance
+              rest
+              remarks
+              max
+              exercise {
+                id
+                name
+              }
+            }
+          }
+        }
     }
   }
 }
