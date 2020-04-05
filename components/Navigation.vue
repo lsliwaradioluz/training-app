@@ -14,14 +14,14 @@
       <div class="navigation__fade" v-if="navToggled"></div>
     </transition>
     <div class="navigation__panel b-lightblack pt05" :class="{ toggled: navToggled }" ref="panel">
-      <UserTab :user="$store.state.auth.user" style="box-shadow: none;" />
+      <UserTab :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
       <div class="navigation__links column pt0">
         <nuxt-link to="/dashboard">
           <i class="flaticon-home"></i>
           Pulpit
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/exercises" v-if="user.admin">
+        <nuxt-link to="/exercises" v-if="user && user.admin">
           <i class="flaticon-kettlebell"></i>
           Ćwiczenia
           <i class="flaticon-right-arrow"></i>
@@ -31,7 +31,7 @@
           Treningi
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/users" v-if="user.admin">
+        <nuxt-link to="/users" v-if="user && user.admin">
           <i class="flaticon-user"></i>
           Podopieczni
           <i class="flaticon-right-arrow"></i>

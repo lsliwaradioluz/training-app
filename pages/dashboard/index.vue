@@ -13,29 +13,19 @@
 </template>
 
 <script>
-
 import mainQuery from '~/apollo/queries/dashboard/main.gql';
 
 export default {
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-      .then(({ data }) => {
+  apollo: {
+    user: {
+      query: mainQuery, 
+      variables() {
         return {
-          user: data.user
+          id: this.$store.state.auth.user.id
         }
-      });
+      }
+    }
   },
-  // apollo: {
-  //   user: {
-  //     query: mainQuery, 
-  //     variables() {
-  //       return {
-  //         id: this.$store.state.auth.user.id
-  //       }
-  //     }
-  //   }
-  // },
 }
 </script>
 

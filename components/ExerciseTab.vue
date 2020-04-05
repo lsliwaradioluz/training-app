@@ -61,7 +61,7 @@
               // remove deleted item from cache 
               data.exercises.splice(exerciseIndex, 1);
               // write data back to the cache
-              this.client.writeQuery({ query: mainQuery, data: data });
+              cache.writeQuery({ query: mainQuery, data: data });
             } 
           });
           

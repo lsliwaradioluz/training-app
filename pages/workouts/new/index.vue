@@ -8,7 +8,6 @@
 <script>
 import mainQuery from '~/apollo/queries/workouts/new/main.gql';
 import mainWithCopiedQuery from '~/apollo/queries/workouts/new/mainWithCopied.gql';
-
 export default {
   apollo: {
     user: {
@@ -39,31 +38,26 @@ export default {
         { 
           name: 'Rozgrzewka',
           complexes: [
-
           ]
         },
         { 
           name: 'Skillwork',
           complexes: [
-
           ]
         },
         { 
           name: 'Strength',
           complexes: [
-
           ]
         },
         { 
           name: 'Cardio',
           complexes: [
-
           ]
         },
         { 
           name: 'Mobility',
           complexes: [
-
           ]
         },
       ],

@@ -179,7 +179,6 @@
   import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
   import createWorkout from '~/apollo/mutations/createWorkout.gql';
   import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
-
   export default {
     props: {
       specificData: {
@@ -217,7 +216,6 @@
             });
           });
         });
-
         return sectionsClone;
       },
       dateAndTime() {
@@ -227,7 +225,6 @@
         const sectionsNotEmpty = this.sections.filter(section => {
           return section.complexes.length > 0;
         });
-
         return Boolean(sectionsNotEmpty.length);
       },
       previousWorkoutSections() {
@@ -272,7 +269,6 @@
           }
         } else {
           let rest;
-
           if (this.currentComplex != null) {
             let units = this.sections[this.currentSection].complexes[this.currentComplex].units;
             rest = units[units.length - 1].rest;
@@ -281,7 +277,6 @@
               rest = this.sections[this.currentSection].complexes[0].units[0].rest
               : rest = 90;
           }
-
           this.editedUnit = {
             exercise: {
               name: '',
@@ -370,7 +365,6 @@
       },
       uploadWorkout() {
         let input;
-
         if (this.edit == true) {
           input = {
             where: {
@@ -413,7 +407,7 @@
               data_2.user.workouts.unshift(createWorkout.workout);
               // write data back to cache 
               this.client.writeQuery({ query: getUserQuery, data: data_1 });
-              if (this.workoutRady) {
+              if (this.workoutReady) {
                 this.client.writeQuery({ query: getWorkoutsQuery, data: data_2 });
               }
             }
@@ -433,7 +427,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   .workout-editor__buttons button {
     width: 50%;
   }

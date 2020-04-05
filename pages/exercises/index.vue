@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="exercises" v-if="!$apollo.loading">
+  <div class="exercises">
+    <div v-if="!$apollo.loading">
       <Head>
         <div class="row j-between">
           <h3 class="m00">
@@ -29,6 +29,15 @@
         query: mainQuery, 
       }
     },
+    // asyncData(context) {
+    //   let client = context.app.apolloProvider.defaultClient;
+    //   return client.query({ query: mainQuery })
+    //     .then(({ data }) => {
+    //       return {
+    //         exercises: data.exercises
+    //       }
+    //     });
+    // },
     data() {
       return {
         filter: ''

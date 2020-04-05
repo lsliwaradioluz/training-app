@@ -70,7 +70,6 @@
   import deleteWorkout from '~/apollo/mutations/deleteWorkout.gql';
   import getUserQuery from '~/apollo/queries/users/_id/main.gql';
   import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
-
   export default {
     props: ['workout', 'user'],
     data() {
@@ -113,15 +112,12 @@
               // read data from cache for chosen queries
               const data_1 = cache.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
               const data_2 = cache.readQuery({ query: getWorkoutsQuery, variables: { id: this.$route.params.id } });
-
               // find index of deleted item in cached user.workouts array 
               const workoutIndex_1 = data_1.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
               const workoutIndex_2 = data_2.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
-
               // remove deleted item from data 
               data_1.user.workouts.splice(workoutIndex_1, 1);
               data_2.user.workouts.splice(workoutIndex_2, 1);
-
               //write data back to cache 
               this.client.writeQuery({ query: getUserQuery, data: data_1 });
               if (workoutIndex_2 != -1) {
@@ -141,12 +137,10 @@
 </script>
 
 <style lang="scss" scoped>
-
   .workout__link {
     flex-basis: 100%;
     text-align: left;
   }
-
   .sticky {
     position: relative;
     &::after {
