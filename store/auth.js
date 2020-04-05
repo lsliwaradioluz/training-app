@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 export const state = () => ({
-  
+  user: null,
 })
 
 export const mutations = {
@@ -17,9 +17,6 @@ export const mutations = {
 }
 
 export const getters = {  
-  // username: state => {
-  //   return state.username
-  // },
   user: state => {
     return state.user
   }

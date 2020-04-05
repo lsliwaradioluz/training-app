@@ -1,7 +1,7 @@
 <template>
 <div class="user tab column">
   <div class="row j-between a-stretch">
-    <nuxt-link class="user__link row a-center" tag="div" :to="user.id" append>
+    <nuxt-link class="user__link row a-center" tag="div" :to="user.id" :event="!edit ? '' : 'click'" append>
       <div class="avatar mr1" :style="{ backgroundImage: `url('${backgroundImage}')`}"></div>
       <div>
         <h3 class="m00">{{ user.username }}</h3>

@@ -14,7 +14,6 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/icon.png' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap' }
     ]
   },
   /*
@@ -25,7 +24,7 @@ export default {
     name: 'page'
   },
   env: {
-    endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337' : 'http://piti-backend.herokuapp.com'
+    endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337' : 'https://piti-backend.herokuapp.com'
   },
   /*
   ** Global CSS
@@ -49,7 +48,7 @@ export default {
     '~/plugins/filters',
     '~/plugins/components',
     '~/plugins/mixins',
-    // '~/plugins/auth',
+    '~/plugins/auth',
   ],
   /*
   ** Nuxt.js dev-modules

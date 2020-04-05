@@ -17,16 +17,25 @@
 import mainQuery from '~/apollo/queries/dashboard/main.gql';
 
 export default {
-  apollo: {
-    user: {
-      query: mainQuery, 
-      variables() {
+  asyncData(context) {
+    let client = context.app.apolloProvider.defaultClient;
+    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
+      .then(({ data }) => {
         return {
-          id: this.$store.state.auth.user.id
+          user: data.user
         }
-      }
-    }
+      });
   },
+  // apollo: {
+  //   user: {
+  //     query: mainQuery, 
+  //     variables() {
+  //       return {
+  //         id: this.$store.state.auth.user.id
+  //       }
+  //     }
+  //   }
+  // },
 }
 </script>
 

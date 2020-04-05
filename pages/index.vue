@@ -1,6 +1,6 @@
 <template>
   <div class="website">
-    <section class="hero main">
+    <!-- <section class="hero main">
       <h1 class="mb05 mt2">Online coaching made simple.</h1>
       <p>Z aplikacją Piti prowadzenie treningów personalnych to czysta przyjemność. Stwórz swój profil i podaruj podopiecznym klucz do świetnej formy.</p>
       <button class="button--primary" type="button">Dołącz</button>
@@ -19,13 +19,13 @@
         <h2 class="m00 mr05">3</h2>
         <p class="m00">Korzystaj z gotowej bazy ponad 100 ćwiczeń opatrzonych animacjami. Możesz też dodawać swoje!</p>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
 <script>
   export default {
-    layout: 'main',
+    // layout: 'main',
   }
 </script>
 

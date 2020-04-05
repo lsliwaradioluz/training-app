@@ -36,15 +36,15 @@
           Podopieczni
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
-        <nuxt-link to="/login" @click.native="logout">
+        <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">
           <i class="flaticon-logout"></i>
           Wyloguj
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
       </div>
     </div>
-    <!-- <PullToRefresh /> -->
-    <!-- <Notification /> -->
+    <PullToRefresh />
+    <Notification />
   </nav>
 </template>
 
@@ -80,7 +80,7 @@ export default {
       return this.$store.state.assistant.showWorkoutAssistant;
     },
     user() {
-      return this.$store.getters['auth/user'];
+      return this.$store.state.auth.user;
     }, 
     header() {
       if (this.$route.name) {
@@ -90,12 +90,7 @@ export default {
       }
       
     }
-  }, 
-  methods: {
-    ...mapMutations({
-      logout: 'auth/logout'
-    })
-  }, 
+  },
   mounted() {
     window.addEventListener('click', () => {
       if (!event.target.classList.contains('navigation__trigger')) {

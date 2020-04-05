@@ -32,7 +32,6 @@ export default {
   layout: 'login',
   data() {
     return { 
-      client: this.$apollo.getClient(),
       identifier: '',
       revealPassword: false,
       password: '',
@@ -69,7 +68,13 @@ export default {
     },
     ...mapMutations({
       setUser: 'auth/setUser',
-    })
+      logout: 'auth/logout',
+    }), 
+    mounted() {
+      setTimeout(() => {
+        this.logout();
+      }, 2000);
+    }
   }
 }
 </script>
