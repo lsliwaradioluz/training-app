@@ -1,11 +1,6 @@
 import Vue from 'vue';
 
 Vue.mixin({
-  computed: {
-    appMainColor() {
-      return this.$store.state.main.mainColor;
-    }
-  },
   methods: {
     normalizeText(string) {
       return string.replace(/ą/g, 'a').replace(/Ą/g, 'A')

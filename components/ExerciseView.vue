@@ -53,6 +53,8 @@
 </template>
 
 <script>
+  import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
+  import mainQuery from '~/apollo/queries/exercises/main.gql';
 
   export default {
     props: {
@@ -79,10 +81,25 @@
             }
           }
 
-          this.client.mutate({ mutation: deleteExercise, variables: { input: input } })
-            .then(res => {
-              this.$router.go(-1);
-            });
+          this.client.mutate({ 
+            mutation: deleteExercise, 
+            variables: { 
+              input: input 
+            }, 
+            update: (cache, { data: { deleteExercise } }) => {
+              // read data from cache for this query
+              const data = cache.readQuery({ query: mainQuery });
+              // find index of deleted item in cached user.workouts array 
+              const exerciseIndex = data.exercises.findIndex(exercise => exercise.id == deleteExercise.exercise.id );
+              // remove deleted item from cache 
+              data.exercises.splice(exerciseIndex, 1);
+              // write data back to the cache
+              this.client.writeQuery({ query: mainQuery, data: data });
+            } 
+          })
+          .then(res => {
+            this.$router.go(-1);
+          });
         }
       }, 
     },

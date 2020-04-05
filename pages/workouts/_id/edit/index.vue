@@ -5,14 +5,10 @@
 </template>
 
 <script>
-import WorkoutEditor from '~/components/WorkoutEditor';
 import mainQuery from '~/apollo/queries/workouts/_id/edit/main.gql';
 import mainWithCopiedQuery from '~/apollo/queries/workouts/_id/edit/mainWithCopied.gql';
 
 export default {
-  components: {
-    WorkoutEditor,
-  },
   asyncData(context) {
     let client = context.app.apolloProvider.defaultClient;
     let copiedWorkoutId = context.store.state.main.workoutToCopy ? context.store.state.main.workoutToCopy.id : null;

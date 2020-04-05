@@ -10,9 +10,6 @@ export const mutations = {
     Cookies.set('user', user);
   },
   async logout(state) {
-    this.$router.push({
-      path: '/login'
-    });
     state.user = null;
     Cookies.set('user', null);
     await this.$apolloHelpers.onLogout();
@@ -20,9 +17,9 @@ export const mutations = {
 }
 
 export const getters = {  
-  username: state => {
-    return state.username
-  },
+  // username: state => {
+  //   return state.username
+  // },
   user: state => {
     return state.user
   }

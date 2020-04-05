@@ -1,11 +1,14 @@
 <template>
   <div class="dashboard">
-    <UserPanel :user="user" />
-    <Head>Najnowszy trening</Head>
-    <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
-    <p class="tab mt0" v-else>
-      Brak zaplanowanych treningów.
-    </p>
+    <div v-if="!$apollo.loading">
+      <UserPanel :user="user" />
+      <Head>Najnowszy trening</Head>
+      <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
+      <p class="tab mt0" v-else>
+        Brak zaplanowanych treningów.
+      </p>
+    </div>
+    <Placeholder v-else />
   </div>  
 </template>
 
@@ -14,15 +17,15 @@
 import mainQuery from '~/apollo/queries/dashboard/main.gql';
 
 export default {
-  asyncData(context) {
-    let client = context.app.apolloProvider.defaultClient;
-    // const today = new Date().toISOString(); 
-    return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-      .then(({ data }) => {
+  apollo: {
+    user: {
+      query: mainQuery, 
+      variables() {
         return {
-          user: data.user, 
+          id: this.$store.state.auth.user.id
         }
-      });
+      }
+    }
   },
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div class="default b-black" :class="{ main: !isAssistant }">
     <Navigation :transparent="isAssistant" />
+    <!-- <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">Wyloguj</nuxt-link> -->
     <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
     <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
     <Confirm />

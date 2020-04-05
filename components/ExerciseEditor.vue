@@ -28,7 +28,7 @@
     </div>
     <div class="tab mt05 mb05 p32 column a-center j-center" v-if="edit && !uploadedImage">
       <span class="column j-center a-center" style="opacity: 0.5" v-if="!loadingImage">
-        <i class="flaticon-plus fs-2" @click="launchFileUpload" />
+        <i class="flaticon-plus fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 t-small">Na razie brak zdjęcia</p>
       </span>
       <span class="column j-center a-center" style="opacity: 0.5" v-else>
@@ -131,7 +131,7 @@
           }, 
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
-            const data = this.client.readQuery({ query: mainQuery });
+            const data = cache.readQuery({ query: mainQuery });
             // push new item to cache 
             data.exercises.unshift(createExercise.exercise);
             // write data back to the cache

@@ -17,11 +17,11 @@
 // ANIMACJA SLIDE-TO-LEFT 
 
 .slide-to-left-enter-active {
-  animation: slide-to-left 0.2s;
+  animation: slide-to-left .3s;
 }
 
 .slide-to-left-leave-active {
-  animation: slide-to-left 0.2s reverse;
+  animation: slide-to-left .3s reverse;
 }
 
 // ANIMACJA SLIDE-UP

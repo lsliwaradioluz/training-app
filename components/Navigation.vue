@@ -43,8 +43,8 @@
         </nuxt-link>
       </div>
     </div>
-    <PullToRefresh />
-    <Notification />
+    <!-- <PullToRefresh /> -->
+    <!-- <Notification /> -->
   </nav>
 </template>
 

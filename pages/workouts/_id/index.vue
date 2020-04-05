@@ -1,67 +1,70 @@
 <template>
-  <div class="workout">
-  <!-- BUTTONY  -->
-    <div v-show="!showWorkoutAssistant">
-      <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
-        <button 
-          type="button"
-          class="t-small"
-          :class="{ 't-green': index == currentWorkout }"
-          v-for="(user, index) in users" 
-          :key="index"
-          @click="setCurrentWorkout(index)">
-          {{ user | getName }}</button>
-      </div>
-      <div>
-  <!-- NAGŁÓWEK -->
-      <WorkoutPanel :workout="workoutNoEmptySections" @show-assistant="runWorkoutAssistant" />
-  <!-- ROZPISKA  --> 
-        <Head class="mt0 pt05 pb05">
-          <div class="row j-between">
-            <span>Rozpiska</span>
-            <button type="button" @click="runWorkoutAssistant" v-if="$store.state.auth.user.admin">
-              <i class="flaticon-play"></i>
-            </button>
-          </div>
-        </Head>
-        <div class="carousel-container">
-          <Carousel
-            :active="!maxEditorOpen"
-            :pagination="false"
-            :start-from-page="currentSection[currentWorkout]"
-            :key="`${showWorkoutAssistant}${currentWorkout}`"
-            @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
-            indicate>
-            <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
-              <Routine
-                :section="section"
-                @toggle-max-editor="maxEditorOpen = $event"
-                @add-max="addMax($event)" 
-                @subtract-max="subtractMax($event)"
-                @upload-workout="uploadWorkout" />
-            </div>
-          </Carousel>
+  <div>
+    <div class="workout" v-if="!$apollo.loading">
+    <!-- BUTTONY  -->
+      <div v-show="!showWorkoutAssistant">
+        <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
+          <button 
+            type="button"
+            class="t-small"
+            :class="{ 't-green': index == currentWorkout }"
+            v-for="(user, index) in users" 
+            :key="index"
+            @click="setCurrentWorkout(index)">
+            {{ user | getName }}</button>
         </div>
-        <!--  -->
+        <div>
+    <!-- NAGŁÓWEK -->
+        <WorkoutPanel :workout="workoutNoEmptySections" @show-assistant="runWorkoutAssistant" />
+    <!-- ROZPISKA  --> 
+          <Head class="mt0 pt05 pb05">
+            <div class="row j-between">
+              <span>Rozpiska</span>
+              <button type="button" @click="runWorkoutAssistant" v-if="$store.state.auth.user.admin">
+                <i class="flaticon-play"></i>
+              </button>
+            </div>
+          </Head>
+          <div class="carousel-container">
+            <Carousel
+              :active="!maxEditorOpen"
+              :pagination="false"
+              :start-from-page="currentSection[currentWorkout]"
+              :key="`${showWorkoutAssistant}${currentWorkout}`"
+              @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
+              indicate>
+              <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
+                <Routine
+                  :section="section"
+                  @toggle-max-editor="maxEditorOpen = $event"
+                  @add-max="addMax($event)" 
+                  @subtract-max="subtractMax($event)"
+                  @upload-workout="uploadWorkout" />
+              </div>
+            </Carousel>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    <!-- ASYSTENT  -->
+      <div v-if="renderWorkoutAssistant">
+        <Carousel 
+          v-show="showWorkoutAssistant" 
+          :pagination="false" 
+          :start-from-page="currentWorkout"
+          @change-page="setCurrentWorkout($event)">
+          <WorkoutAssistant
+            v-for="(workout, index) in workouts"
+            :key="workout.id"
+            :workout="workout"
+            :workout-index="index"
+            :section-index="currentSection[index]" 
+            :is-screen-divided="workouts.length > 1" 
+            @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })" />
+        </Carousel>
       </div>
     </div>
-  <!-- ASYSTENT  -->
-    <div v-if="renderWorkoutAssistant">
-      <Carousel 
-        v-show="showWorkoutAssistant" 
-        :pagination="false" 
-        :start-from-page="currentWorkout"
-        @change-page="setCurrentWorkout($event)">
-        <WorkoutAssistant
-          v-for="(workout, index) in workouts"
-          :key="workout.id"
-          :workout="workout"
-          :workout-index="index"
-          :section-index="currentSection[index]" 
-          :is-screen-divided="workouts.length > 1" 
-          @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })" />
-      </Carousel>
-    </div>
+    <Placeholder v-else />
   </div>
 </template>
 
@@ -71,22 +74,21 @@
   import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
 
   export default {
-    asyncData(context) {
-      let client = context.app.apolloProvider.defaultClient;
-      let IDs;
-
-      if (context.store.state.main.workoutToPair) {
-        IDs = [context.route.params.id, context.store.state.main.workoutToPair.id];
-      } else {
-        IDs = [context.route.params.id];
-      }
-
-      return client.query({ query: mainQuery, variables: { ids: IDs } })
-        .then(({ data }) => {
-          return {
-            workouts: data.workouts,
+    apollo: {
+      workouts: {
+        query: mainQuery, 
+        variables() {
+          let IDs;
+          if (this.$store.state.main.workoutToPair) {
+            IDs = [this.$route.params.id, this.$store.state.main.workoutToPair.id];
+          } else {
+            IDs = [this.$route.params.id];
           }
-        });
+          return {
+            ids: IDs
+          }
+        }
+      }
     },
     data() {
       return {

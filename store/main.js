@@ -4,7 +4,6 @@ export const state = () => ({
   workoutToPair: null,
   workoutToCopy: null,
   notification: null,
-  mainColor: 'b-default',
 });
 
 export const mutations = {
@@ -26,11 +25,7 @@ export const mutations = {
   },
   setNotification(state, payload) {
     state.notification = payload;
-  }, 
-  setMainColor(state, payload) {
-    state.mainColor = `b-${payload}`;
-    Cookies.set('mainColor', payload);
-  }
+  },
 }
 
 export const getters = {  

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="categories" v-if="!$apollo.loading">
+    <div class="exercises" v-if="!$apollo.loading">
       <Head>
         <div class="row j-between">
           <h3 class="m00">
@@ -9,10 +9,12 @@
           <nuxt-link class="flaticon-plus ml1" tag="i" :to="{ path: 'new' }" append></nuxt-link>
         </div>
       </Head>
-      <ExerciseTab 
-        v-for="exercise in filteredExercises" 
-        :key="exercise.id"
-        :exercise="exercise"/>
+      <transition-group name="slide-to-left">
+        <ExerciseTab 
+          v-for="exercise in filteredExercises" 
+          :key="exercise.id"
+          :exercise="exercise" />
+      </transition-group>
     </div>
     <Placeholder v-else />
   </div>

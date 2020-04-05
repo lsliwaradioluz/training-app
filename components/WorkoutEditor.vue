@@ -406,14 +406,16 @@
             variables: { input: input },
             update: (cache, { data: { createWorkout } }) => {
               // read data from cache for this query
-              const data_1 = this.client.readQuery({ query: getUserQuery, variables: { id: this.user.id } });
-              const data_2 = this.client.readQuery({ query: getWorkoutsQuery, variables: { id: this.user.id } });
+              const data_1 = cache.readQuery({ query: getUserQuery, variables: { id: this.user.id } });
+              const data_2 = cache.readQuery({ query: getWorkoutsQuery, variables: { id: this.user.id } });
               // push new item to the data read from the cache 
               data_1.user.workouts.unshift(createWorkout.workout);
               data_2.user.workouts.unshift(createWorkout.workout);
               // write data back to cache 
               this.client.writeQuery({ query: getUserQuery, data: data_1 });
-              this.client.writeQuery({ query: getWorkoutsQuery, data: data_2 });
+              if (this.workoutRady) {
+                this.client.writeQuery({ query: getWorkoutsQuery, data: data_2 });
+              }
             }
           }).then(res => {
             this.$router.go(-1);

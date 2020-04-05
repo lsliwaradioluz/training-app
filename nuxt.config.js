@@ -20,7 +20,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: false,
   layoutTransition: {
     name: 'page'
   },
@@ -49,7 +49,7 @@ export default {
     '~/plugins/filters',
     '~/plugins/components',
     '~/plugins/mixins',
-    '~/plugins/auth',
+    // '~/plugins/auth',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -68,7 +68,6 @@ export default {
   ],
   pwa: {
     meta: {
-      theme_color: '#343F68', 
       name: 'Piti'
     }, 
     manifest: {
@@ -76,6 +75,7 @@ export default {
       short_name: 'Piti',
       background_color:'#B0FE76',
       orientation: 'portrait',
+      theme_color: '#343F68', 
     },
   },
   apollo: {  

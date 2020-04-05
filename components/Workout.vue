@@ -111,8 +111,8 @@
             },
             update: (cache, { data: { deleteWorkout } }) => {
               // read data from cache for chosen queries
-              const data_1 = this.client.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
-              const data_2 = this.client.readQuery({ query: getWorkoutsQuery, variables: { id: this.$route.params.id } });
+              const data_1 = cache.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
+              const data_2 = cache.readQuery({ query: getWorkoutsQuery, variables: { id: this.$route.params.id } });
 
               // find index of deleted item in cached user.workouts array 
               const workoutIndex_1 = data_1.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );

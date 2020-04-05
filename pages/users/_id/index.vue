@@ -15,7 +15,9 @@
           </div>
         </div>
       </Head>
-      <Workout v-for="workout in workouts" :key="workout.id" :workout="workout" :user="user" />
+      <transition-group name="slide-to-left">
+        <Workout v-for="workout in workouts" :key="workout.id" :workout="workout" :user="user" />
+      </transition-group>
       <p class="tab" v-if="workouts.length == 0">
         Brak treningów do wyświetlenia
       </p>

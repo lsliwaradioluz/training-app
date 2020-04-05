@@ -55,7 +55,7 @@
             }, 
             update: (cache, { data: { deleteExercise } }) => {
               // read data from cache for this query
-              const data = this.client.readQuery({ query: mainQuery });
+              const data = cache.readQuery({ query: mainQuery });
               // find index of deleted item in cached user.workouts array 
               const exerciseIndex = data.exercises.findIndex(exercise => exercise.id == deleteExercise.exercise.id );
               // remove deleted item from cache 
@@ -63,7 +63,7 @@
               // write data back to the cache
               this.client.writeQuery({ query: mainQuery, data: data });
             } 
-          })
+          });
           
         }
       }
