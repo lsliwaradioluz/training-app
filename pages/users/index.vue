@@ -11,7 +11,6 @@
           </nuxt-link>
         </div>
       </Head>
-      <UserTab :user="$store.state.auth.user" edit />
       <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit />
     </div>
     <Placeholder v-else />
@@ -28,6 +27,12 @@ export default {
       variables() {
         return {
           id: this.$store.state.auth.user.id
+        }
+      },
+      manual: true, 
+      result ({ data, loading }) {
+        if (!loading) {
+          this.users = [this.$store.state.auth.user, ...data.user.users];
         }
       },
     }
@@ -51,12 +56,12 @@ export default {
       let filteredUsers = [];
       let filter = this.filter.toLowerCase();
       if (filter !== '') {
-        filteredUsers = this.user.users.filter(user => {
+        filteredUsers = this.users.filter(user => {
           const username = user.username.toLowerCase();
           return username.includes(filter) || filter.includes(username);
         });
       } else {
-        filteredUsers = this.user.users;
+        filteredUsers = this.users;
       }
       return filteredUsers;
     },

@@ -43,7 +43,7 @@
               to="/users"
               @click.native="copyWorkout"
               v-if="workout.ready">
-              <i class="flaticon-paper"></i>
+              <i class="flaticon-copy"></i>
               Kopiuj
             </nuxt-link>
             <nuxt-link 
