@@ -75,7 +75,7 @@ export default {
       background_color:'#B0FE76',
       orientation: 'portrait',
       theme_color: '#343F68', 
-      start_url: 'https://piti.live/dashboard'
+      start_url: 'https://www.piti.live/dashboard'
     },
   },
   apollo: {  
