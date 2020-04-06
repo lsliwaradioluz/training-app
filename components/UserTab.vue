@@ -9,18 +9,18 @@
       </div>
     </nuxt-link>
     <div class="row a-center" v-if="edit">
-      <ContextMenu>
+      <ContextMenu v-if="!user.admin">
         <template v-slot:trigger>
           <i class="flaticon-vertical-dots t-green"></i>
         </template>
         <template v-slot:options>
-          <nuxt-link :to="`${user.username}/edit`" tag="button" type="button" append>
+          <button type="button">
             <i class="flaticon-writing"></i>
-            Edytuj
-          </nuxt-link>
-          <button v-on="!user.admin ? { click: deleteUser } : {}" v-if="!user.admin">
-            <i class="flaticon-trash"></i>
-            Usuń
+            Archiwizuj
+          </button>
+          <button type="button">
+            <i class="flaticon-double-arrow-cross-of-shuffle"></i>
+            Transferuj
           </button>
         </template>
       </ContextMenu>

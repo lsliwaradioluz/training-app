@@ -1,7 +1,7 @@
 <template>
   <div class="website">
   <!-- NAV -->
-    <nav class="row j-between">
+    <nav class="row j-between" :class="{ 'nav-triggered': scroll > 0 }">
       <nuxt-link class="logo" tag="span" to="/">Piti</nuxt-link>
       <i class="flaticon-menu navigation__trigger" @click="navToggled = !navToggled"></i>
       <transition name="slide-to-right">
@@ -72,19 +72,32 @@
     data() {
       return {
         navToggled: false,
+        scroll: null,
       }
     },
+    mounted() {
+      this.scroll = window.scrollY;
+      window.addEventListener('scroll', () => {
+        this.scroll = window.scrollY;
+      });
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 
   nav {
-    position: absolute;
+    position: fixed;
+    background-color: color(lightblack);
     top: 0;
     left: 0;
     width: 100%;
     padding: 1rem;
+    transition: box-shadow 0.3s;
+  }
+
+  .nav-triggered {
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.644);
   }
 
   .navigation__trigger {

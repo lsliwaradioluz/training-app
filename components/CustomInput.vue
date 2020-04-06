@@ -9,8 +9,10 @@
         :class="`flaticon-${icon}`" 
         @touchstart="revealPassword = true" 
         @touchend="revealPassword = false"></i>
-      <em v-if="!showTick">(wymagane)</em>
-      <i class="custom-input__check flaticon-check-mark t-green" v-else></i>
+      <span v-if="showStatus">
+        <em v-if="!showTick">(wymagane)</em>
+        <i class="custom-input__check flaticon-check-mark t-green" v-else></i>
+      </span>
     </span>
     <input
       :value="value"
@@ -46,6 +48,10 @@
       spellcheck: {
         type: Boolean, 
         default: () => false
+      }, 
+      showStatus: {
+        type: Boolean, 
+        default: () => true, 
       }
     }, 
     data() {
@@ -56,7 +62,7 @@
     }, 
     methods: {
       verifyInput() {
-        this.value.length > 0 ? this.showTick = true : this.showTick = false;
+        this.value && this.value.length > 0 ? this.showTick = true : this.showTick = false;
       }
     }
   }

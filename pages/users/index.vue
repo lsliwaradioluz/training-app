@@ -6,21 +6,29 @@
           <h3 class="m00">
             <input class="input--invisible" v-model="filter" placeholder="Szukaj użytkownika..." spellcheck="false" autocomplete="off">
           </h3>
-          <nuxt-link to="new" append>
+          <button type="button" @click="inviteModalVisible = true">
             <i class="flaticon-plus ml1"></i>
-          </nuxt-link>
+          </button>
         </div>
       </Head>
       <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit />
+      <Modal :show="inviteModalVisible" transition="slide-to-right" @close="inviteModalVisible = false">
+        <InviteUser @close="inviteModalVisible = false" />
+      </Modal>
     </div>
     <Placeholder v-else />
   </div>
 </template>
 
 <script>
+import InviteUser from '~/components/InviteUser';
+
 import mainQuery from '~/apollo/queries/users/main.gql';
 
 export default {
+  components: {
+    InviteUser
+  },
   apollo: {
     user: {
       query: mainQuery, 
@@ -49,6 +57,7 @@ export default {
   data() {
     return {
       filter: '',
+      inviteModalVisible: false,
     }
   },
   computed: {

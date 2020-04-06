@@ -22,6 +22,7 @@ import Placeholder from '../components/Placeholder';
 import Notification from '../components/Notification';
 import UnitEditor from '../components/UnitEditor';
 import CustomInput from '../components/CustomInput';
+import Modal from '../components/Modal';
 
 Vue.component('Head', Head);
 Vue.component('Workout', Workout);
@@ -46,6 +47,7 @@ Vue.component('Placeholder', Placeholder);
 Vue.component('Notification', Notification);
 Vue.component('UnitEditor', UnitEditor);
 Vue.component('CustomInput', CustomInput);
+Vue.component('Modal', Modal);
 
 
 

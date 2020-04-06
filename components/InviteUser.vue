@@ -1,24 +1,28 @@
 <template>
-  <div class="create-user">
-    <Head>Nowy podopieczny</Head>
-    <form class="tab">
-      <label for="fullname">Imię i nazwisko</label>
-      <input class="input--invisible" type="text" id="fullname" placeholder="Jan Kowalski" v-model="user.fullname" spellcheck="false" autocomplete="off">
-      <br>
-      <label for="email">Email</label>
-      <input class="input--invisible" type="email" id="email" placeholder="jankowalski@gmail.com" v-model="user.email" spellcheck="false" autocomplete="off">
-    </form>
-    <div class="user-editor__buttons tab p00 row j-between t-green">
-      <button class="p11" type="button" @click="sendInvitation">Zaproś</button>
-      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
+  <div class="invite-user tab">
+    <h3 class="mt0 t-green">Zaproś użytkownika</h3>
+    <p class="mb2">Uzupełnij dane podopiecznego, aby wysłać mu zaproszenie do aplikacji Piti. Drogą mailową otrzyma link aktywacyjny, dzięki któremu dokończy rejestrację.</p>
+    <CustomInput 
+      class="mb05"
+      v-model="user.fullname"
+      placeholder="Imię i nazwisko" 
+      icon="user-1"
+      type="text"></CustomInput>
+    <CustomInput 
+      class="mb05"
+      v-model="user.email"
+      placeholder="Adres e-mail" 
+      icon="email"
+      type="email"></CustomInput>
+    <div class="user-editor__buttons p00 pt2 row j-between t-green">
+      <button type="button" @click.once="sendInvitation">Zaproś</button>
+      <button type="button" @click="$emit('close')">Wróć</button>
     </div>
   </div>
 </template>
 
 <script>
-  import mainQuery from '~/apollo/queries/users/new/main.gql';
-
-  export default {
+export default {
     data() {
       return {
         user: {
@@ -38,7 +42,8 @@
           text: `<body style=" margin: 0; padding: 0; font-family: 'Arial', sans-serif; font-weight: lighter; font-size: 90%;"> <div style="padding: 3rem 0;"> <div style=" color: white; background-color: #222E50; padding: 3rem 2rem; border-radius: 5px; max-width: 400px;"> <img src="https://res.cloudinary.com/drsgb4wld/image/upload/v1585755359/logo_dlqplz.png"> <h4 style="color: #B0FE76; margin-top: 1rem; margin-bottom: 0;"> Cześć, ${this.user.fullname}! </h4> <p style="line-height: 1.2rem;">Twój trener ${this.$store.state.auth.user.fullname} wysyła Ci zaproszenie do aplikacji Piti, która umożliwi Wam dzielenie się rozpiskami treningowymi. Klikając przycisk poniżej przeniesiesz się do formularza ustalającego hasło dla Twojego konta.</p> <a href="${link}" style=" display: inline-block; text-decoration: none; font-family: inherit; padding: .5rem 1.5rem; border: 2px solid color(green); border-radius: 5px; color: #222E50; background-color: #B0FE76; border: none; ">Dokończ rejestrację</a> </div> </div> </body>`
         })
         .then(res => {
-          this.$router.go(-1);
+          this.$store.commit('main/setNotification', 'Link aktywacyjny został wysłany na podany adres email.');
+          this.$emit('close');
         });
       },
     }
@@ -50,7 +55,15 @@
     color: color(green);
   }
 
-  .user-editor__buttons button {
-    width: 50%;
+  .user-editor__buttons {
+    button {
+      width: 50%;
+      &:nth-child(1) {
+        border-right: 1px solid rgba(230, 230, 230, 0.08);
+      }
+      &:nth-child(2) {
+        border-left: 1px solid rgba(230, 230, 230, 0.08);
+      }
+    }
   }
 </style>
