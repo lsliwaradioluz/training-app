@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 06/04/2020 08:05
+    Creation date: 06/04/2020 10:14
     */
 
     @font-face {
@@ -76,6 +76,8 @@
 .flaticon-right-arrow-1:before { content: "\f124"; }
 .flaticon-left-arrow-1:before { content: "\f125"; }
 .flaticon-copy:before { content: "\f126"; }
+.flaticon-call:before { content: "\f127"; }
+.flaticon-facebook-logo:before { content: "\f128"; }
     
     $font-Flaticon-up-arrow: "\f100";
     $font-Flaticon-down-arrow: "\f101";
@@ -116,3 +118,5 @@
     $font-Flaticon-right-arrow-1: "\f124";
     $font-Flaticon-left-arrow-1: "\f125";
     $font-Flaticon-copy: "\f126";
+    $font-Flaticon-call: "\f127";
+    $font-Flaticon-facebook-logo: "\f128";

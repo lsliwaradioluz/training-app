@@ -30,13 +30,15 @@
 }
 
 .icon-box {
-  background-color: color(blue);
-  height: 36px;
-  width: 36px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
+  background-color: color(green);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: color(lightblack);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.397);
 }
 
 .blind {
