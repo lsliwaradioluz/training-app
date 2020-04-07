@@ -6,12 +6,20 @@
           <h3 class="m00">
             <input class="input--invisible" v-model="filter" placeholder="Szukaj użytkownika..." spellcheck="false" autocomplete="off">
           </h3>
-          <button type="button" @click="inviteModalVisible = true">
+          <button type="button" @click="inviteUserVisible = true">
             <i class="flaticon-plus ml1"></i>
           </button>
         </div>
       </Head>
-      <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit />
+      <transition-group name="slide-to-left">
+        <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
+      </transition-group>
+      <Modal :show="inviteUserVisible">
+        <InviteUser @close="inviteUserVisible = false" />
+      </Modal>
+      <Modal :show="!!userToTransfer">
+        <TransferUser :user="userToTransfer" @close="userToTransfer = null" />
+      </Modal>
     </div>
     <Placeholder v-else />
   </div>
@@ -20,11 +28,13 @@
 <script>
 
 import InviteUser from '~/components/InviteUser';
+import TransferUser from '~/components/TransferUser';
 import mainQuery from '~/apollo/queries/users/main.gql';
 
 export default {
   components: {
-    InviteUser
+    InviteUser,
+    TransferUser,
   },
   apollo: {
     user: {
@@ -34,7 +44,6 @@ export default {
           id: this.$store.state.auth.user.id
         }
       },
-      manual: true, 
       result ({ data, loading }) {
         if (!loading) {
           this.users = [this.$store.state.auth.user, ...data.user.users];
@@ -53,8 +62,10 @@ export default {
   // },
   data() {
     return {
+      users: Array,
       filter: '',
-      inviteModalVisible: false,
+      inviteUserVisible: false,
+      userToTransfer: null,
     }
   },
   computed: {

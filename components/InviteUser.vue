@@ -51,9 +51,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  label {
-    color: color(green);
-  }
 
   .invite-user__buttons {
     button {
