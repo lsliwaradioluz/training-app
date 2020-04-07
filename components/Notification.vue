@@ -38,6 +38,7 @@
     left: 0;
     width: 100%;
     z-index: 1002;
+    padding: 0 1rem;
 
     p {
       background-color: rgb(160, 160, 160);

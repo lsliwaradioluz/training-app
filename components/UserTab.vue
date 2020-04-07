@@ -103,7 +103,7 @@
             }
           }
 
-          this.client.mutation({ mutation: updateUser, variables: { input: input } })
+          this.client.mutate({ mutation: updateUser, variables: { input: input } })
           .then(res => {
             this.transferModalVisible = false;
             this.$store.commit('main/setNotification', 'Transfer podopiecznego zakończony sukcesem!');
