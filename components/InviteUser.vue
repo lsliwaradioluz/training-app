@@ -14,7 +14,7 @@
       placeholder="Adres e-mail" 
       icon="email"
       type="email"></CustomInput>
-    <div class="user-editor__buttons p00 pt2 row j-between t-green">
+    <div class="invite-user__buttons p00 pt2 row j-between t-green">
       <button type="button" @click.once="sendInvitation">Zaproś</button>
       <button type="button" @click="$emit('close')">Wróć</button>
     </div>
@@ -55,7 +55,7 @@ export default {
     color: color(green);
   }
 
-  .user-editor__buttons {
+  .invite-user__buttons {
     button {
       width: 50%;
       &:nth-child(1) {

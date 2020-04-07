@@ -10,44 +10,43 @@
         <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleBlockDescription')" v-else></i>
       </span>
     </span>
-    <transition name="fade">
-      <div class="navigation__fade" v-if="navToggled"></div>
-    </transition>
-    <div class="navigation__panel b-lightblack pt05" :class="{ toggled: navToggled }" ref="panel">
-      <UserTab :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
-      <div class="navigation__links column pt0">
-        <nuxt-link to="/dashboard">
-          <i class="flaticon-home"></i>
-          Pulpit
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
-        <nuxt-link to="/exercises" v-if="user && user.admin">
-          <i class="flaticon-kettlebell"></i>
-          Ćwiczenia
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
-        <nuxt-link to="/workouts">
-          <i class="flaticon-3d"></i>
-          Treningi
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
-        <nuxt-link to="/users" v-if="user && user.admin">
-          <i class="flaticon-user"></i>
-          Podopieczni
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
-        <nuxt-link to="/settings">
-          <i class="flaticon-settings"></i>
-          Ustawienia
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
-        <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">
-          <i class="flaticon-logout"></i>
-          Wyloguj
-          <i class="flaticon-right-arrow"></i>
-        </nuxt-link>
+    <Modal :show="navToggled" transition="slide-to-right" @close="navToggled = false">
+      <div class="navigation__panel b-lightblack pt05" ref="panel">
+        <UserTab :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
+        <div class="navigation__links column pt0">
+          <nuxt-link to="/dashboard">
+            <i class="flaticon-home"></i>
+            Pulpit
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+          <nuxt-link to="/exercises" v-if="user && user.admin">
+            <i class="flaticon-kettlebell"></i>
+            Ćwiczenia
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+          <nuxt-link to="/workouts">
+            <i class="flaticon-3d"></i>
+            Treningi
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+          <nuxt-link to="/users" v-if="user && user.admin">
+            <i class="flaticon-user"></i>
+            Podopieczni
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+          <nuxt-link to="/settings">
+            <i class="flaticon-settings"></i>
+            Ustawienia
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+          <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">
+            <i class="flaticon-logout"></i>
+            Wyloguj
+            <i class="flaticon-right-arrow"></i>
+          </nuxt-link>
+        </div>
       </div>
-    </div>
+    </Modal>
     <PullToRefresh />
   </nav>
 </template>
@@ -95,13 +94,6 @@ export default {
       
     }
   },
-  mounted() {
-    window.addEventListener('click', () => {
-      if (!event.target.classList.contains('navigation__trigger')) {
-        this.navToggled = false;
-      }
-    });
-  }
 }
 </script>
 
@@ -129,26 +121,12 @@ export default {
     }
   }
 
-  .navigation__fade {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    z-index: 1000;
-    transition: opacity .15s linear;
-    background-color: rgba(0, 0, 0, 0.425);
-  }
-
   .navigation__panel {
     position: fixed; 
     top: 0;
     left: 0;
     height: 100vh; 
     width: 85%;
-    z-index: 1001;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-out;
   }
 
   .navigation__links a {
@@ -173,9 +151,5 @@ export default {
       font-size: 8px;
       color: color(green);
     }
-  }
-
-  .toggled {
-    transform: translateX(0);
   }
 </style>

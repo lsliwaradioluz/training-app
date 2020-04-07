@@ -29,6 +29,9 @@
 </script>
 
 <style scoped>
+  .modal {
+    position: absolute;
+  }
 
   .modal__shadow {
     position: fixed;

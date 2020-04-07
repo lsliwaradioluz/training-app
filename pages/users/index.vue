@@ -12,17 +12,14 @@
         </div>
       </Head>
       <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit />
-      <Modal :show="inviteModalVisible" transition="slide-to-right" @close="inviteModalVisible = false">
-        <InviteUser @close="inviteModalVisible = false" />
-      </Modal>
     </div>
     <Placeholder v-else />
   </div>
 </template>
 
 <script>
-import InviteUser from '~/components/InviteUser';
 
+import InviteUser from '~/components/InviteUser';
 import mainQuery from '~/apollo/queries/users/main.gql';
 
 export default {
