@@ -17,17 +17,8 @@ Vue.filter('englishToPolish', (value) => {
     case 'createworkout': 
       return 'Nowy trening';
       break;
-    case 'singleExerciseRest': 
-      return 'Seria';
-      break;
-    case 'pairedExerciseRest': 
-      return 'Blok';
-      break;
-    case 'afterBlockRest': 
-      return 'Sekcja';
-      break;
-    case 'warmupRest':
-      return 'Rozgrz.';
+    case 'settings':
+      return 'Ustawienia';
       break;
   }
 });

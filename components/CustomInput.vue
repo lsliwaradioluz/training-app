@@ -86,7 +86,7 @@
   em {
     font-size: 10px;
     position: absolute;
-    top: 18px;
+    top: 22px;
   }
 
   em {
@@ -108,6 +108,7 @@
     border-bottom: 1px solid rgba(230, 230, 230, 0.08);
     border-radius: 0;
     padding-left: 30px;
+    padding-bottom: 0;
     font-size: 13px;
     height: 50px;
     line-height: 50px;

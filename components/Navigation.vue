@@ -36,6 +36,11 @@
           Podopieczni
           <i class="flaticon-right-arrow"></i>
         </nuxt-link>
+        <nuxt-link to="/settings">
+          <i class="flaticon-settings"></i>
+          Ustawienia
+          <i class="flaticon-right-arrow"></i>
+        </nuxt-link>
         <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">
           <i class="flaticon-logout"></i>
           Wyloguj
@@ -44,7 +49,6 @@
       </div>
     </div>
     <PullToRefresh />
-    <Notification />
   </nav>
 </template>
 

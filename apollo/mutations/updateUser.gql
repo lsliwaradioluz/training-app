@@ -3,6 +3,12 @@ mutation($input: updateUserInput) {
     user {
       id
       username
+      fullname
+      email
+      image {
+        id
+        url 
+      }
     }
   }
 }

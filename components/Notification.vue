@@ -1,7 +1,7 @@
 <template>
   <transition name="slide-down">
-    <div class="message-tab row" v-if="notification">
-      <p class="fs-09 m00"><i class="flaticon-information fs-09 mr05"></i>{{ notification }}</p>
+    <div class="message-tab row j-center a-center" v-if="notification">
+      <p class="fs-09 tab">{{ notification }}</p>
     </div>
   </transition>
 </template>
@@ -33,13 +33,15 @@
 
 <style lang="scss" scoped>
   .message-tab {
-    position: absolute;
-    background-color: color(black);
-    top: 100%;
+    position: fixed;
+    top: 10vh;
     left: 0;
     width: 100%;
-    padding: 1rem;
-    padding-top: 0;
+    z-index: 1002;
+
+    p {
+      background-color: rgb(160, 160, 160);
+    }
   }
 
   .slide-down-enter-active {

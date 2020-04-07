@@ -4,6 +4,7 @@
     <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
     <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
     <Confirm />
+    <Notification />
     <nuxt />
   </div>
 </template>
