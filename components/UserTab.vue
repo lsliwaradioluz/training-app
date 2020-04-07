@@ -49,6 +49,7 @@
   import deleteUser from '~/apollo/mutations/deleteUser.gql';
   import updateUser from '~/apollo/mutations/updateUser.gql';
   import getUserByEmail from '~/apollo/queries/users/getUserByEmail.gql';
+  import mainQuery from '~/apollo/queries/users/main.gql';  
 
   export default {
     props: {
@@ -89,8 +90,8 @@
       transferUser() {
         this.client.query({ query: getUserByEmail, variables: { email: this.transferEmail } })
         .then(res => {
-          if (!res.data.users[0].admin) {
-            this.$store.commit('main/setNotification', 'Użytkownik o podanym adresie e-mail nie jest trenerem.');
+          if (!res.data.users[0].admin || res.data.users[0].id == this.$store.getters['auth/user'].id ) {
+            this.$store.commit('main/setNotification', 'Temu użytkownikowi nie można przekazać podopiecznego.');
             return
           }
 
@@ -103,7 +104,23 @@
             }
           }
 
-          this.client.mutate({ mutation: updateUser, variables: { input: input } })
+          this.client.mutate({ 
+            mutation: updateUser, 
+            variables: { 
+              input: input 
+            },
+            update: (cache, { data: { updateUser } }) => {
+              // read data from cache for chosen queries
+              const data = cache.readQuery({ query: mainQuery, variables: { id: this.$store.getters['auth/user'].id } });
+              console.log(data);
+              // find index of deleted item in cached user.workouts array 
+              const workoutIndex = data.user.users.findIndex(user => user.id == this.user.id );
+              // remove deleted item from data 
+              data.user.users.splice(workoutIndex, 1);
+              //write data back to cache 
+              this.client.writeQuery({ query: mainQuery, data: data });
+            }
+          })
           .then(res => {
             this.transferModalVisible = false;
             this.$store.commit('main/setNotification', 'Transfer podopiecznego zakończony sukcesem!');
