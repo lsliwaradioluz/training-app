@@ -11,7 +11,9 @@
           </button>
         </div>
       </Head>
-      <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
+      <transition-group name="animate-list">
+        <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
+      </transition-group>
       <Modal :show="inviteUserVisible">
         <InviteUser @close="inviteUserVisible = false" />
       </Modal>

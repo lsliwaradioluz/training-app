@@ -60,6 +60,17 @@
   animation: spin 1.5s linear infinite;
 }
 
+// ANIMACJA ANIMATE-LIST
+
+.animate-list-leave-active {
+  position: absolute;
+  opacity: 0;
+}
+
+.animate-list-move {
+  transition: transform 0.3s;
+}
+
 // KEYFRAMES 
 
 @keyframes spin {

@@ -9,7 +9,7 @@
           <nuxt-link class="flaticon-plus ml1" tag="i" :to="{ path: 'new' }" append></nuxt-link>
         </div>
       </Head>
-      <transition-group name="slide-to-left">
+      <transition-group name="animate-list">
         <ExerciseTab 
           v-for="exercise in filteredExercises" 
           :key="exercise.id"
