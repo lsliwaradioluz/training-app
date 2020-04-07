@@ -11,9 +11,7 @@
           </button>
         </div>
       </Head>
-      <transition-group name="slide-to-left">
-        <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
-      </transition-group>
+      <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
       <Modal :show="inviteUserVisible">
         <InviteUser @close="inviteUserVisible = false" />
       </Modal>
@@ -26,62 +24,55 @@
 </template>
 
 <script>
+  import mainQuery from '~/apollo/queries/users/main.gql';
 
-import InviteUser from '~/components/InviteUser';
-import TransferUser from '~/components/TransferUser';
-import mainQuery from '~/apollo/queries/users/main.gql';
-
-export default {
-  components: {
-    InviteUser,
-    TransferUser,
-  },
-  apollo: {
-    user: {
-      query: mainQuery, 
-      variables() {
-        return {
-          id: this.$store.state.auth.user.id
-        }
-      },
-      result ({ data, loading }) {
-        if (!loading) {
-          this.users = [this.$store.state.auth.user, ...data.user.users];
-        }
-      },
-    }
-  },
-  // asyncData(context) {
-  //   let client = context.app.apolloProvider.defaultClient;
-  //   return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-  //     .then(({ data }) => {
-  //       return {
-  //         user: data.user
-  //       }
-  //     });
-  // },
-  data() {
-    return {
-      users: Array,
-      filter: '',
-      inviteUserVisible: false,
-      userToTransfer: null,
-    }
-  },
-  computed: {
-    filteredUsers() {
-      let filteredUsers = [];
-      let filter = this.filter.toLowerCase();
-      if (filter !== '') {
-        filteredUsers = this.users.filter(user => {
-          const username = user.username.toLowerCase();
-          return username.includes(filter) || filter.includes(username);
-        });
-      } else {
-        filteredUsers = this.users;
+  export default {
+    apollo: {
+      user: {
+        query: mainQuery, 
+        variables() {
+          return {
+            id: this.$store.state.auth.user.id
+          }
+        },
+        result ({ data, loading }) {
+          if (!loading) {
+            this.users = [this.$store.state.auth.user, ...data.user.users];
+          }
+        },
       }
-      return filteredUsers;
     },
+    // asyncData(context) {
+    //   let client = context.app.apolloProvider.defaultClient;
+    //   return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
+    //     .then(({ data }) => {
+    //       return {
+    //         user: data.user
+    //       }
+    //     });
+    // },
+    data() {
+      return {
+        users: Array,
+        filter: '',
+        inviteUserVisible: false,
+        userToTransfer: null,
+      }
+    },
+    computed: {
+      filteredUsers() {
+        let filteredUsers = [];
+        let filter = this.filter.toLowerCase();
+        if (filter !== '') {
+          filteredUsers = this.users.filter(user => {
+            const username = user.username.toLowerCase();
+            return username.includes(filter) || filter.includes(username);
+          });
+        } else {
+          filteredUsers = this.users;
+        }
+        return filteredUsers;
+      },
+    }
   }
-}
 </script>

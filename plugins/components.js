@@ -23,6 +23,8 @@ import Notification from '../components/Notification';
 import UnitEditor from '../components/UnitEditor';
 import CustomInput from '../components/CustomInput';
 import Modal from '../components/Modal';
+import InviteUser from '../components/InviteUser';
+import TransferUser from '../components/TransferUser';
 
 Vue.component('Head', Head);
 Vue.component('Workout', Workout);
@@ -48,6 +50,9 @@ Vue.component('Notification', Notification);
 Vue.component('UnitEditor', UnitEditor);
 Vue.component('CustomInput', CustomInput);
 Vue.component('Modal', Modal);
+Vue.component('InviteUser', InviteUser);
+Vue.component('TransferUser', TransferUser);
+
 
 
 
