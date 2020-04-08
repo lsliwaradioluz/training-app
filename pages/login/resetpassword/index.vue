@@ -7,12 +7,14 @@
       v-model="password"
       placeholder="Nowe hasło" 
       icon="lock"
-      type="password"></CustomInput>
+      type="password"
+      autocomplete="off"></CustomInput>
     <CustomInput 
       v-model="repeatPassword"
       placeholder="Powtórz hasło" 
       icon="lock"
-      type="password"></CustomInput>
+      type="password"
+      autocomplete="off"></CustomInput>
     <button class="button--primary mt1" @click="resetPassword">Resetuj hasło</button>
     <p class="reset-password__error">{{ error }}</p>
   </form>
