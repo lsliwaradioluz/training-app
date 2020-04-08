@@ -53,6 +53,7 @@ export default {
           }, 
           data: {
             user: res.data.users[0].id,
+            active: true, 
           }
         }
 

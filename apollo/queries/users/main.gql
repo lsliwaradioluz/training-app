@@ -6,6 +6,7 @@ query($id: ID!) {
       username
       fullname
       admin
+      active
       image {
         id
         url

@@ -14,9 +14,9 @@
           <i class="flaticon-vertical-dots t-green"></i>
         </template>
         <template v-slot:options>
-          <button type="button">
+          <button type="button" @click="archiveUser">
             <i class="flaticon-writing"></i>
-            Archiwizuj
+            {{ user.active ? 'Archiwizuj' : 'Przywróć' }}
           </button>
           <button type="button" @click="$emit('transfer', user)">
             <i class="flaticon-double-arrow-cross-of-shuffle"></i>
@@ -30,7 +30,8 @@
 </template>
 
 <script>
-  import deleteUser from '~/apollo/mutations/deleteUser.gql';
+  import updateUser from '~/apollo/mutations/updateUser.gql';
+  import mainQuery from '~/apollo/queries/users/main.gql';
 
   export default {
     props: {
@@ -39,7 +40,7 @@
       }, 
       edit: {
         type: Boolean, 
-        defaukt: () => false 
+        default: () => false 
       }
     },
     data() {
@@ -52,6 +53,26 @@
         return this.user.image ? this.user.image.url : require('assets/images/user.svg');
       }
     },
+    methods: {
+      archiveUser() {
+        const input = {
+          where: {
+            id: this.user.id
+          }, 
+          data: {
+            active: this.user.active ? false : true
+          }
+        }
+
+        this.client.mutate({ mutation: updateUser, variables: { input: input }})
+        .then(res => {
+          const message = this.user.active ? 
+            'Podopieczny został przeniesiony do archiwum.' 
+            : 'Podopieczny znów jest aktywny.';
+          this.$store.commit('main/setNotification', message);
+        });
+      }
+    }
   }
 </script>
 

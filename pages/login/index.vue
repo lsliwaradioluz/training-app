@@ -53,6 +53,7 @@ export default {
             email: res.user.email, 
             image: res.user.image, 
             admin: res.user.admin,
+            active: res.user.active,
           }
 
           this.$apolloHelpers.onLogin(res.jwt, undefined, { expires: 7 })

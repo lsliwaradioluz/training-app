@@ -1,6 +1,10 @@
 <template>
   <div class="users">
     <div v-if="!$apollo.loading">
+      <div class="users__buttons row pb05 j-between">
+        <button :class="{ 't-green': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
+        <button :class="{ 't-green': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>
+      </div>
       <Head>
         <div class="row j-between">
           <h3 class="m00">
@@ -11,9 +15,10 @@
           </button>
         </div>
       </Head>
-      <transition-group name="animate-list">
+      <transition-group name="animate-list" v-if="filteredUsers.length > 0">
         <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
       </transition-group>
+      <p class="tab pt05 pb05" v-else>Brak użytkowników</p>
       <Modal :show="inviteUserVisible">
         <InviteUser @close="inviteUserVisible = false" />
       </Modal>
@@ -34,12 +39,12 @@
         query: mainQuery, 
         variables() {
           return {
-            id: this.$store.state.auth.user.id
+            id: this.$store.getters['auth/user'].id
           }
         },
         result ({ data, loading }) {
           if (!loading) {
-            this.users = [this.$store.state.auth.user, ...data.user.users];
+            this.users = [this.$store.getters['auth/user'], ...data.user.users];
           }
         },
       }
@@ -59,22 +64,31 @@
         filter: '',
         inviteUserVisible: false,
         userToTransfer: null,
+        showActiveUsers: true,
       }
     },
     computed: {
       filteredUsers() {
-        let filteredUsers = [];
         let filter = this.filter.toLowerCase();
+
         if (filter !== '') {
-          filteredUsers = this.users.filter(user => {
+          return this.users.filter(user => {
             const username = user.username.toLowerCase();
-            return username.includes(filter) || filter.includes(username);
+            return username.includes(filter) && user.active == this.showActiveUsers || filter.includes(username) && user.active == this.showActiveUsers;
           });
         } else {
-          filteredUsers = this.users;
+          return this.users.filter(user => user.active == this.showActiveUsers);
         }
-        return filteredUsers;
       },
     }
   }
 </script>
+
+<style lang="scss" scoped>
+
+  .users__buttons {
+    button {
+      width: 50%;
+    }
+  }
+</style>
