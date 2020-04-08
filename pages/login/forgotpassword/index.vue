@@ -1,18 +1,19 @@
 <template>
-  <div class="sendpassword t-white column j-center a-center">
-    <div class="sendpassword__form column j-center" @submit.prevent>
-      <p class="t-center">Podaj adres e-mail wykorzystany przy zakładaniu konta. Wyślemy na niego link do formularza zmiany hasła.</p>
-      <input class="mb05" v-model="email" placeholder="Email" type="email">
-      <button class="button--primary mt1" @click="sendPassword" type="button">Wyślij</button>
+  <form class="forgot-password tab column j-center m00 pt2" @submit.prevent>
+    <h3 class="logo t-center mt0 mb1 fs-48">Piti</h3>
+    <p class="t-center">Podaj adres e-mail wykorzystany przy zakładaniu konta. Wyślemy na niego link do formularza zmiany hasła.</p>
+    <CustomInput
+      v-model="email" 
+      placeholder="Adres e-mail" 
+      icon="email"
+      type="email"
+      :spellcheck="false"></CustomInput>
+    <button class="button--primary mt2 b-grass" @click.prevent="sendPassword" type="button" :disabled="sending">Resetuj hasło</button>
+    <p class="forgot-password__error">{{ error }}</p>
+    <div class="login__help-buttons row j-center">
+      <nuxt-link to="/login" type="button">Wróć do logowania</nuxt-link>
     </div>
-    <!-- <transition name="fade">
-      <div class="sendpassword__message column a-start j-center b-black" v-if="showMessage">
-        <h5>Sprawdź swoją skrzynkę email</h5>
-        <p>Na podany adres został wysłany link do formularza. Dokończ proces zmiany hasła.</p>
-        <button class="button--primary" @click="$router.go(-1)">Rozumiem</button>
-      </div>
-    </transition> -->
-  </div>
+  </form>   
 </template>
 
 <script>
@@ -20,21 +21,45 @@
     layout: 'login',
     data() {
       return {
-        email: '', 
-        showMessage: false
+        email: '',
+        error: '',
+        sending: false,
       }
     },
     methods: {
       sendPassword() {
+        this.sending = true;
         const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/forgot-password' : 'https://powerful-taiga-81942.herokuapp.com/auth/forgot-password';
         this.$axios.$post(endpoint, { email: this.email })
           .then(res => {
-            console.log(res);
+            this.$store.commit('main/setNotification', 'Email z instrukcją resetowania hasła został wysłany na podany adres.');
+            this.$router.go(-1);
           })
           .catch(err => {
-            console.log(err.response);
+            this.sending = false;
+            this.error = 'Podany adres jest nieprawidłowy';
           })
       }
     }
   }
 </script>
+
+<style lang="scss" scoped>
+
+  .forgot-password__error {
+    font-size: 11px;
+    color: color(red);
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 2rem;
+  }
+
+  .login__help-buttons {
+    font-size: 11px;
+
+    a {
+      opacity: 0.7;
+      color: color(lightgray);
+    }
+  }
+</style>

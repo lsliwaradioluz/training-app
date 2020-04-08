@@ -30,6 +30,6 @@ export const mutations = {
 
 export const getters = {  
   workoutToPair: state => {
-    return state.workoutToPair
+    return state.workoutToPair;
   },
 }
