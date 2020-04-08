@@ -11,8 +11,8 @@
       </span>
     </span>
     <Modal :show="navToggled" transition="slide-to-right" @close="navToggled = false">
-      <div class="navigation__panel b-lightblack pt05" ref="panel">
-        <UserTab :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
+      <div class="navigation__panel b-black pt05" ref="panel">
+        <UserTab class="b-black" :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
         <div class="navigation__links column pt0">
           <nuxt-link to="/dashboard">
             <i class="flaticon-home"></i>
