@@ -29,7 +29,7 @@
     methods: {
       sendPassword() {
         this.sending = true;
-        const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/forgot-password' : 'https://powerful-taiga-81942.herokuapp.com/auth/forgot-password';
+        const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/forgot-password' : 'https://piti-backend.herokuapp.com/auth/forgot-password';
         this.$axios.$post(endpoint, { email: this.email })
           .then(res => {
             this.$store.commit('main/setNotification', 'Email z instrukcją resetowania hasła został wysłany na podany adres.');
