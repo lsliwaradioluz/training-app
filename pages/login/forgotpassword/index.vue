@@ -29,11 +29,11 @@
     methods: {
       sendPassword() {
         this.sending = true;
-        const url = process.env.NODE_ENV == 'development' ? 'http://localhost:3000/login/resetpassword' : 'https://piti.live/login/resetpassword';
+        const url = 'https://piti.live/login/resetpassword';
         const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/forgot-password' : 'https://piti-backend.herokuapp.com/auth/forgot-password';
         this.$axios.$post(endpoint, { 
           email: this.email, 
-          url,
+          url: url,
         })
           .then(res => {
             this.$store.commit('main/setNotification', 'Email z instrukcją resetowania hasła został wysłany na podany adres.');
