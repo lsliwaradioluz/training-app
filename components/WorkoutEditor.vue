@@ -144,7 +144,7 @@
           <div v-if="user.workouts.length > 0">
             <h3 class="mb0 row j-between">
               <span>Poprzednie treningi</span>
-              <span class="row">
+              <span class="row" v-if="user.workouts.length > 1">
                 <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
                 <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
               </span>

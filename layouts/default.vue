@@ -32,8 +32,5 @@ export default {
 <style lang="scss" scoped>
   .default {
     min-height: 100vh;
-    background: linear-gradient(#3299F5, #096EC8);
   }
-  // #3299F5
-  // #096EC8
 </style>

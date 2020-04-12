@@ -132,7 +132,7 @@ export default {
     left: 0;
     height: 100vh; 
     width: 85%;
-    background: linear-gradient(color(accent), color(gradient));
+    background: linear-gradient(color(primary), color(gradient));
   }
 
   .navigation__links a {

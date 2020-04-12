@@ -31,17 +31,18 @@
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  background-color: color(green);
+  background-color: color(success);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: color(lightblack);
+  color: color(black);
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.397);
 }
 
 .blind {
   position: relative;
-  color: color(inputgray) !important;
+  opacity: 0.3;
+  transition: all 0.3s;
 }
 
 .blind::after {
