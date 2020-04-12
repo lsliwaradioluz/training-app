@@ -1,6 +1,6 @@
 <template>
   <div class="settings">
-    <div class="tab column a-center pt2 pb2">
+    <div class="column a-center pt2 pb2">
       <div 
         class="avatar"
         :class="{ 'avatar--loading': loadingImage }" 
@@ -38,7 +38,7 @@
         type="email"
         :show-status="false"></CustomInput>
     </form>
-    <div class="user-editor__buttons tab row j-between">
+    <div class="user-editor__buttons row j-between">
       <button class="button-primary" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>

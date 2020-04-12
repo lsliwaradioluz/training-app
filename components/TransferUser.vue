@@ -1,5 +1,5 @@
 <template>
-  <div class="transfer-user tab">
+  <div class="transfer-user tab b-primary">
     <h3 class="t-green mt0">Transferuj podopiecznego</h3>
     <p>Podaj adres e-mail trenera, któremu chcesz przekazać podopiecznego. Musi to być adres, którego użył przy zakładaniu konta.</p>
     <CustomInput
@@ -91,6 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .transfer-user__buttons {
     button {
       width: 49%;

@@ -1,6 +1,6 @@
 <template>
   <div class="confirm column j-center" :class="{ 'confirm--active': showConfirm, 'main': showConfirm }">
-    <div class="confirm__window tab" v-show="showConfirm">
+    <div class="confirm__window tab b-primary" v-show="showConfirm">
       <p class="t-center">{{ message }}</p>
       <div class="confirm__buttons row j-around">
         <button class="button-primary" type="button" @click="confirm">Tak</button>

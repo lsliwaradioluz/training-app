@@ -1,9 +1,9 @@
 <template>
-  <div class="workout-pairing tab row j-between a-center mb05 pt05 pb05">
-    <p class="m00 t-center t-small">
+  <div class="workout-pairing row j-between a-cente">
+    <p class="m00 t-center fs-12">
       Parujesz z {{ workout.user }} {{ workout.scheduled | reverseDate }}
     </p>
-    <button class="t-small t-green" type="button" @click="stopPairWorkout">Zakończ</button>
+    <button class="fs-12 t-error" type="button" @click="stopPairWorkout">Zakończ</button>
   </div>
 </template>
 
@@ -22,3 +22,10 @@
   }
 </script>
 
+<style lang="scss" scoped>
+  .workout-pairing {
+    padding-bottom: .2rem;
+    margin-bottom: .5rem;
+    border-bottom: 1px solid #74B9F5;
+  }
+</style>

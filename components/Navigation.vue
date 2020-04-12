@@ -1,8 +1,11 @@
 <template>
   <nav class="navigation" :class="{ 'b-black': !transparent }">
+    <h3 class="logo m00" v-if="isAssistant">Piti</h3>
     <div class="row a-center">
-      <button type="button" @click="$router.go(-1)"><i class="flaticon-left-arrow fs-14 mr05"></i></button>
-      <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
+      <div class="row" v-if="!isAssistant">
+        <button type="button" @click="$router.go(-1)"><i class="flaticon-left-arrow fs-14 mr05"></i></button>
+        <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
+      </div>
       <h3 class="m00 t-center" v-else>Asystent</h3>
     </div>
     <span class="t-right">

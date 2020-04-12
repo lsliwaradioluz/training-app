@@ -10,7 +10,7 @@
       <transition-group name="animate-list">
         <Workout v-for="workout in filteredWorkouts" :key="workout.id" :workout="workout" />
       </transition-group>
-      <p v-if="filteredWorkouts.length == 0">
+      <p class="pb05 pt05 m00" v-if="filteredWorkouts.length == 0">
         Brak treningów do wyświetlenia
       </p>
     </div>

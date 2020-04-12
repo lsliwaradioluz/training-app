@@ -1,7 +1,7 @@
 <template>
   <transition name="slide-down">
-    <div class="message-tab row j-center a-center" v-if="notification">
-      <p class="fs-09 tab">{{ notification }}</p>
+    <div class="notification row j-center a-center" v-if="notification">
+      <p class="notification__message fs-12">{{ notification }}</p>
     </div>
   </transition>
 </template>
@@ -32,17 +32,20 @@
 </script>
 
 <style lang="scss" scoped>
-  .message-tab {
+  .notification {
     position: fixed;
-    top: 10vh;
+    bottom: 10vh;
     left: 0;
     width: 100%;
     z-index: 1002;
     padding: 0 1rem;
+  }
 
-    p {
-      background-color: rgb(160, 160, 160);
-    }
+  .notification__message {
+    background-color: white;
+    color: color(gradient);
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .slide-down-enter-active {
@@ -55,7 +58,7 @@
 
   @keyframes slide-down {
     from {
-      transform: translateY(-100%);
+      transform: translateY(100%);
       opacity: 0;
     }
     to {

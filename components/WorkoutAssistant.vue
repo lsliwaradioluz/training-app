@@ -9,7 +9,7 @@
       <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
         <div 
           class="row j-between" 
-          :class="{ 't-green': controls.section == 0 ? index == controls.unit - 2 : index == controls.unit - 1 }" 
+          :class="{ 't-success': controls.section == 0 ? index == controls.unit - 2 : index == controls.unit - 1 }" 
           v-for="(unit, index) in blockDescription" 
           :key="index">
           <MovingText :key="showBlockDescription">
@@ -43,10 +43,10 @@
           :key="controls.unit"
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="row a-center j-end pl1" v-else>
-          <p class="m00 fs-2" v-if="current.reps">{{ current.reps }}</p>
-          <p class="m00 fs-2" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
-          <p class="m00 fs-2" v-if="current.time && !current.reps">{{ current.time }}s</p>
-          <p class="m00 t-right fs-2" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
+          <p class="m00 fs-32" v-if="current.reps">{{ current.reps }}</p>
+          <p class="m00 fs-32" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
+          <p class="m00 fs-32" v-if="current.time && !current.reps">{{ current.time }}s</p>
+          <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
         </div>
       </div>
       <div class="workout-assistant__indicators" >
@@ -72,11 +72,11 @@
           <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
           <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
         </span>
-        <i class="flaticon-login small" :class="{ 't-green': automaticModeOn }" @click="toggleAutomaticMode"></i>
+        <i class="flaticon-login small" :class="{ 't-success': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
+        <i class="flaticon-clock small" :class="{ 't-success': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
+        <i class="flaticon-menu small" :class="{ 't-success': showBlockDescription }" @click="toggleBlockDescription"></i>
       </div>
     </div>
   <!-- MODAL INFO  -->
