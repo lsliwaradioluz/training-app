@@ -36,4 +36,12 @@
 		}
 }
 
+@for $i from 3 through 10 {
+	$base: 1;
+	$fontweight: $base * $i;
+	.fw-#{$fontweight} { 
+		font-weight: $fontweight * 100;
+		}
+}
+
 

@@ -1,45 +1,57 @@
 <template>
   <div class="workout-editor">
+    <p>Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie nowe.</p>
   <!-- TERMIN  -->
-    <Head class="pt05 pb05">
-      <div class="row j-between">
-        <span>Termin</span>
-        <Radio :value="sticky" @change-value="sticky = $event">
-          <template v-slot:first>sticky</template>
-          <template v-slot:second>not</template>
-        </Radio>
-      </div>
-    </Head>
-    <div class="row mb05" v-if="!sticky">
-      <input class="mr05 b-lightblack" type="date" v-model="selectedDate">
-      <input class="b-lightblack" type="time" v-model="selectedTime">
+    <h3 class="row j-between a-center">
+      <span>Termin</span>
+      <span class="row a-center">
+        <label class="fs-12 mb0" :class="{ faded: !sticky }" for="checkbox">Przyklejony</label>
+        <input id="checkbox" v-model="sticky" type="checkbox">
+      </span>
+    </h3>
+    <div class="row">
+      <CustomInput 
+        class="mr1"
+        icon="clock"
+        placeholder="Data"
+        v-model="selectedDate"
+        type="date"
+        :disabled="sticky"
+        :show-status="false"
+        show-label />
+      <CustomInput 
+        placeholder="Godzina"
+        icon="clock"
+        v-model="selectedTime"
+        type="time"
+        :disabled="sticky"
+        :show-status="false" 
+        show-label />
     </div>
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
-      <Head :class="{ blind: editedUnit != null}">
-        <div class="row j-between">
-          <h3 class="m00">Sekcje</h3>
-          <ContextMenu @toggled="showUnitButtons = $event">
-            <template v-slot:trigger>
-              <i class="flaticon-vertical-dots"></i>
-            </template>
-            <template v-slot:options>
-              <button :class="{ pb05: showButtonsPanel }" @click="createSection('before')">
-                <i class="flaticon-left-arrow-1 fs-09" style="margin-right: .25rem"></i>
-                Dodaj przed
-              </button>
-              <button :class="{ pb05: showButtonsPanel }" @click="createSection('after')">
-                <i class="flaticon-right-arrow-1 fs-09" style="margin-right: .25rem" />
-                Dodaj za
-              </button>
-              <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">
-                <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
-                Usuń
-              </button>
-            </template>
-          </ContextMenu>
-        </div>
-      </Head>
+      <h3 class="mt0 row j-between" :class="{ blind: editedUnit != null}">
+        <span>Rozpiska</span>
+        <ContextMenu @toggled="showUnitButtons = $event">
+          <template v-slot:trigger>
+            <i class="flaticon-vertical-dots"></i>
+          </template>
+          <template v-slot:options>
+            <button :class="{ pb05: showButtonsPanel }" @click="createSection('before')">
+              <i class="flaticon-left-arrow-1 fs-12" style="margin-right: .25rem"></i>
+              Dodaj sekcję przed
+            </button>
+            <button :class="{ pb05: showButtonsPanel }" @click="createSection('after')">
+              <i class="flaticon-right-arrow-1 fs-12" style="margin-right: .25rem" />
+              Dodaj sekcję za
+            </button>
+            <button :class="{ pb05: showButtonsPanel }" @click="deleteSection">
+              <i class="flaticon-trash fs-12" style="margin-right: .25rem"></i>
+              Usuń
+            </button>
+          </template>
+        </ContextMenu>
+      </h3>
       <transition name="fade">
         <div v-if="!editedUnit">
           <div class="carousel-container" v-if="sections.length > 0">
@@ -52,7 +64,7 @@
               <div class="p01 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
                 <div class="tab column fg1">
                   <div class="row j-between">
-                    <h3 class="mt0" v-if="currentSection != null">
+                    <h4 class="mt0" v-if="currentSection != null">
                       <input 
                         class="input--invisible" 
                         type="text" 
@@ -60,8 +72,8 @@
                         v-model="sections[sectionindex].name"
                         spellcheck="false"
                         :ref="`input${sectionindex}`">
-                    </h3>
-                    <h3 class="mt0" v-else>{{ section.name }}</h3>
+                    </h4>
+                    <h4 class="mt0" v-else>{{ section.name }}</h4>
                     <i class="flaticon-plus" @click="openUnitEditor()"></i>
                   </div>
                   <div>
@@ -83,27 +95,27 @@
                             @toggled="showUnitButtons = $event"
                             :bottom="unitindex == complex.units.length - 1 && complexindex == section.complexes.length - 1 && section.complexes.length > 1">
                             <template v-slot:trigger>
-                              <i class="flaticon-vertical-dots fs-09"></i>
+                              <i class="flaticon-vertical-dots fs-12"></i>
                             </template>
                             <template v-slot:options>
                               <button @click="moveUnit(sectionindex, complexindex, unitindex, 'up')" v-show="unitindex != 0">
-                                <i class="flaticon-up fs-09" style="margin-right: .25rem"></i>
+                                <i class="flaticon-up fs-12" style="margin-right: .25rem"></i>
                                 Przesuń w górę
                               </button>
                               <button @click="moveUnit(sectionindex, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
-                                <i class="flaticon-down-arrow-1 fs-09" style="margin-right: .25rem"></i>
+                                <i class="flaticon-down-arrow-1 fs-12" style="margin-right: .25rem"></i>
                                 Przesuń w dół
                               </button>
                               <button @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
-                                <i class="flaticon-double-arrow-cross-of-shuffle fs-09" style="margin-right: .25rem"></i>
+                                <i class="flaticon-double-arrow-cross-of-shuffle fs-12" style="margin-right: .25rem"></i>
                                 Paruj
                               </button>
                               <button @click="openUnitEditor(unit, unitindex, complexindex)">
-                                <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
+                                <i class="flaticon-writing fs-12" style="margin-right: .25rem"></i>
                                 Edytuj
                               </button>
                               <button @click="deleteUnit(complexindex, unitindex)">
-                                <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
+                                <i class="flaticon-trash fs-12" style="margin-right: .25rem"></i>
                                 Usuń
                               </button>
                             </template>
@@ -119,7 +131,7 @@
                         </li>
                       </ul>
                     </div>
-                    <p class="m00 t-small" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
+                    <p class="fs-12 mb0" v-if="section.complexes && section.complexes.length == 0">Na razie brak ćwiczeń.</p>
                   </div>
                 </div>
               </div>
@@ -130,19 +142,22 @@
           </p>
         <!-- POPRZEDNIE TRENINGI  -->
           <div v-if="user.workouts.length > 0">
-            <div class="mb05 row j-between a-center t-gray">
-              <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
-              <span v-if="!user.workouts[currentWorkout].user">
-                {{ user.workouts[currentWorkout].scheduled | getShortDayName }}
-                {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+            <h3 class="mb0 row j-between">
+              <span>Poprzednie treningi</span>
+              <span class="row">
+                <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
+                <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
               </span>
-              <span v-else>
-                {{ user.workouts[currentWorkout].scheduled | getShortDayName }} 
-                {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
-                ({{ user.workouts[currentWorkout].user.username }})
-              </span>
-              <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
-            </div>
+            </h3>
+            <p class="fs-12 faded" v-if="!user.workouts[currentWorkout].user">
+              {{ user.workouts[currentWorkout].scheduled | getDayName }}
+              {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+            </p>
+            <p class="fs-12 faded" v-else>
+              {{ user.workouts[currentWorkout].scheduled | getDayName }} 
+              {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
+              ({{ user.workouts[currentWorkout].user.username }})
+            </p>
             <div class="carousel-container" v-if="sections.length > 0">
               <Carousel :pagination="false" :key="previousWorkoutSections.length">
                 <div class="p01 column" v-for="section in previousWorkoutSections" :key="section.id">
@@ -166,9 +181,9 @@
       </transition>
     </div>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons tab p00 row j-between t-green" :class="{ blind: editedUnit != null}">
-      <button class="p11" type="button" @click="uploadWorkout">Zapisz</button>
-      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
+    <div class="workout-editor__buttons row j-between mt1" :class="{ blind: editedUnit != null}" v-if="!editedUnit">
+      <button class="button-primary" type="button" @click="uploadWorkout">Zapisz</button>
+      <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
   </div>
 </template>
@@ -179,6 +194,7 @@
   import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
   import createWorkout from '~/apollo/mutations/createWorkout.gql';
   import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
+  
   export default {
     props: {
       specificData: {
@@ -427,7 +443,25 @@
 </script>
 
 <style lang="scss" scoped>
+
+  #checkbox {
+    appearance: none;
+    padding: 0;
+    margin: 0;
+    margin-left: 0.5rem;
+    border: 1.5px solid white;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    outline: none;
+    position: relative;
+    transition: background 0.3s;
+    &:checked {
+      background-color: white;
+    }
+  }
+
   .workout-editor__buttons button {
-    width: 50%;
+    width: 49%;
   }
 </style>

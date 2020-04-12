@@ -1,6 +1,12 @@
 <template>
   <div class="createexercise">
-    <ExerciseEditor edit />
+    <ExerciseEditor />
   </div>
 </template>
+
+<script>
+export default {
+  layout: 'exercise',
+}
+</script>
 

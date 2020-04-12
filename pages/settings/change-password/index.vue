@@ -1,22 +1,21 @@
 <template>
   <div class="change-password">
-    <Head>Zmień hasło</Head>
+    <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
     <form class="tab">
-      <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
       <CustomInput 
         v-model="password"
-        placeholder="Nowe hasło" 
         icon="lock"
+        placeholder="Nowe hasło"
         type="password"></CustomInput>
       <CustomInput 
         v-model="repeatPassword"
-        placeholder="Powtórz hasło" 
         icon="lock"
+        placeholder="Powtórz hasło"
         type="password"></CustomInput>
     </form>
     <div class="change-password__buttons tab row j-between t-green">
-        <button type="button" @click="updatePassword">Zapisz</button>
-        <button type="button" @click="$router.go(-1)">Wróć</button>
+        <button class="button-primary" type="button" @click="updatePassword">Zapisz</button>
+        <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
       </div>
   </div>
 </template>
@@ -60,9 +59,9 @@
 <style lang="scss" scoped>
 
   .change-password__buttons {
-    padding: 1rem;
+    margin-top: 1rem;
     button {
-      width: 50%;
+      width: 49%;
       color: color(green);
     }
   }

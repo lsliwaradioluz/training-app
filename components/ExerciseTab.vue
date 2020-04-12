@@ -1,16 +1,18 @@
 <template>
-  <div class="exercise-tab tab p11 mb05 column">
+  <div class="exercise-tab column pt05 pb05">
     <div class="row j-between a-stretch">
-      <nuxt-link class="exercise-tab__link pr1" :to="exercise.id" tag="div" append>
-        <h3 class="m00">{{ exercise.name }}</h3>
-        <p class="exercise-tab__description m00" v-if="exercise.alias">{{ exercise.alias }}</p>
-        <p class="exercise-tab__description m00" v-else>Brak alternatywnej nazwy</p>
+      <nuxt-link class="exercise-tab__link pr1 row" :to="exercise.id" tag="div" append>
+        <div class="avatar mr1" :style="{ backgroundImage: `url('${image}')` }"></div>
+        <div>
+          <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
+          <p class="exercise-tab__description m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
+          <p class="exercise-tab__description m00" v-else>Brak alternatywnej nazwy</p>
+        </div>
       </nuxt-link>
       <div class="row a-center">
-        <!-- <i class="flaticon-vertical-dots t-green" @click="showButtonsPanel = !showButtonsPanel"></i> -->
         <ContextMenu>
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-green"></i>
+            <i class="flaticon-vertical-dots"></i>
           </template>
           <template v-slot:options>
             <button type="button" @click="deleteExercise">
@@ -39,6 +41,11 @@
         client: this.$apollo.getClient(),
       }
     }, 
+    computed: {
+      image() {
+        return this.exercise.image ? this.exercise.image.url : require('assets/images/user.svg');
+      }
+    },
     methods: {
       async deleteExercise() {
         if (await this.$root.$confirm('Na pewno chcesz usunąć to ćwiczenie?')) {
@@ -78,6 +85,7 @@
   }
 
   .exercise-tab__description {
-    font-size: 0.7rem;
+    font-size: 12px;
+    opacity: 0.4;
   }
 </style>

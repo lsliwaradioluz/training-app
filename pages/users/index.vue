@@ -1,24 +1,19 @@
 <template>
   <div class="users">
     <div v-if="!$apollo.loading">
-      <div class="users__buttons row pb05 j-between">
-        <button :class="{ 't-green': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
-        <button :class="{ 't-green': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>
+      <p>Dotknij karty podopiecznego, by zobaczyć jego treningi. Chcesz przekazać podopiecznego innemu trenerowi? Transferuj! Skończyliście współpracę? Przenieś go do archiwum.</p>
+      <div class="row pb05">
+        <button class="button-secondary" :class="{ 'button-secondary--active': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
+        <button class="button-secondary" :class="{ 'button-secondary--active': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>
       </div>
-      <Head>
-        <div class="row j-between">
-          <h3 class="m00">
-            <input class="input--invisible" v-model="filter" placeholder="Szukaj użytkownika..." spellcheck="false" autocomplete="off">
-          </h3>
-          <button type="button" @click="inviteUserVisible = true">
-            <i class="flaticon-plus ml1"></i>
-          </button>
-        </div>
-      </Head>
+      <CustomSearch 
+        v-model="filter"
+        placeholder="Szukaj podopiecznego"
+        />
       <transition-group name="animate-list" v-if="filteredUsers.length > 0">
         <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
       </transition-group>
-      <p class="tab pt05 pb05" v-else>Brak użytkowników</p>
+      <p class="pt05 pb05" v-else>Brak użytkowników</p>
       <Modal :show="inviteUserVisible">
         <InviteUser @close="inviteUserVisible = false" />
       </Modal>
@@ -74,7 +69,14 @@
         if (filter !== '') {
           return this.users.filter(user => {
             const username = user.username.toLowerCase();
-            return username.includes(filter) && user.active == this.showActiveUsers || filter.includes(username) && user.active == this.showActiveUsers;
+            const fullname = user.fullname.toLowerCase();
+            const conditions = 
+              username.includes(filter) && user.active == this.showActiveUsers 
+              || filter.includes(username) && user.active == this.showActiveUsers 
+              || fullname.includes(filter) && user.active == this.showActiveUsers 
+              || filter.includes(fullname) && user.active == this.showActiveUsers;
+            
+            return conditions;
           });
         } else {
           return this.users.filter(user => user.active == this.showActiveUsers);
@@ -83,12 +85,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-  .users__buttons {
-    button {
-      width: 50%;
-    }
-  }
-</style>

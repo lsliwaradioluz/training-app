@@ -1,10 +1,12 @@
 <template>
   <div class="dashboard">
     <div v-if="!$apollo.loading">
-      <UserPanel :user="user" />
-      <Head>Najnowszy trening</Head>
+      <p class="header">Witaj, {{ user.fullname | getName }}. Na swoim pulpicie poznasz aktualności związane z rozwojem aplikacji, a także statystyki dotyczące dotychczasowych treningów.</p>
+      <h3 class="head">Aktualności</h3>
+      <p>Aplikacja Piti zyskała nowy design! Ciesz się odświeżonym wyglądem, dzięki któremu nawigowanie między treningami będzie jeszcze prostsze.</p>
+      <h3 class="head">Najnowszy trening</h3>
       <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
-      <p class="tab mt0" v-else>
+      <p v-else>
         Brak zaplanowanych treningów.
       </p>
     </div>
@@ -28,5 +30,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  
+</style>
 
 

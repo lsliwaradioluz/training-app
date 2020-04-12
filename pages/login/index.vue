@@ -1,9 +1,8 @@
 <template>
-  <div class="login tab column j-center m00 pt2">
-    <h3 class="logo t-center mt0 mb1 fs-48">Piti</h3>
+  <div class="login column j-center m00 pt0">
     <form class="column j-center mt1" @submit.prevent>
       <CustomInput 
-        class="mb05"
+        class="mb1"
         v-model="identifier" 
         placeholder="Użytkownik" 
         icon="user-1"
@@ -15,12 +14,10 @@
         placeholder="Hasło" 
         icon="lock"
         type="password"></CustomInput>
-      <button class="button--primary mt2 b-grass" @click.prevent="signIn" type="button">Zaloguj</button>
+      <nuxt-link class="t-right fs-12 mb1 mt1 fw-7" to="forgotpassword" type="button" append>Zapomniałeś hasła?</nuxt-link>
+      <button class="button-primary" @click.prevent="signIn" type="button">Zaloguj</button>
       <p class="login__error">{{ error }}</p>
-      <div class="login__help-buttons row j-between">
-        <nuxt-link to="/register-coach" type="button">Załóż konto</nuxt-link>
-        <nuxt-link to="forgotpassword" type="button" append>Przypomnij hasło</nuxt-link>
-      </div>
+      <nuxt-link class="t-center fs-13" to="/register-coach" type="button">Nie masz konta?</nuxt-link>
     </form>      
   </div>
 </template>
@@ -84,19 +81,8 @@ export default {
 
   .login__error {
     font-size: 11px;
-    color: color(red);
+    color: color(error);
     text-align: center;
-    margin-top: 3px;
-    margin-bottom: 2rem;
-  }
-
-  .login__help-buttons {
-    font-size: 11px;
-
-    a {
-      opacity: 0.7;
-      color: color(lightgray);
-    }
   }
 </style>
 

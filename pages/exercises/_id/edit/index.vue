@@ -16,6 +16,7 @@
             exercise: data.exercise 
           }
         }) 
-    }
+    },
+    layout: 'exercise'
   }
 </script>

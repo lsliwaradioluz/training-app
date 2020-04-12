@@ -1,19 +1,27 @@
 <template>
-  <div class="exercise-editor">
+  <div class="exercise-editor main" :style="{ backgroundImage: uploadedImage ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${uploadedImage.url}')` : 'none' }">
+    <p>Uzupełnij nazwy, opis oraz animację swojego ćwiczenia. W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9.</p>
+    <h3 class="mb0" v-if="!edit">Nowe ćwiczenie</h3>
   <!-- NAZWA  -->
-    <Head>Nazwy ćwiczenia</Head>
-    <form class="tab">
-      <label class="t-green" for="fullname">Nazwa angielska</label>
-      <input class="input--invisible" type="text" id="fullname" placeholder="np. pull-ups" v-model="input.name" spellcheck="false" autocomplete="off">
-      <br>
-      <label class="t-green" for="username">Nazwa polska</label>
-      <input class="input--invisible" type="text" id="username" placeholder="np. podciąganie na drążku" v-model="input.alias" spellcheck="false" autocomplete="off">
+    <form>
+      <CustomInput 
+        v-model="input.name"
+        placeholder="Angielska nazwa"
+        :show-status="false"
+        icon="check-mark"
+        />
+      <CustomInput 
+        v-model="input.alias"
+        placeholder="Polska nazwa"
+        :show-status="false"
+        icon="check-mark"
+        />
     </form>
   <!-- ZDJĘCIE  -->
-    <Head v-if="edit">
-      <div class="row j-between">
-        <h3 class="m00">Zdjęcie</h3>
-        <i class="flaticon-close" @click="deleteImage" v-if="edit && uploadedImage"></i>
+    <div class="tab mt05 mb05 p32 column a-center j-center">
+      <span class="column j-center a-center" v-if="!uploadedImage && !loadingImage">
+        <i class="flaticon-plus fs-32" @click="launchFileUpload" />
+        <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
         <form v-show="false">
           <input
             @change="uploadImage"
@@ -21,45 +29,28 @@
             name="files"
             type="file">
         </form>
-      </div>  
-    </Head>
-    <div class="exercise-editor__image" v-if="uploadedImage">
-      <img :src="uploadedImage.url">
-    </div>
-    <div class="tab mt05 mb05 p32 column a-center j-center" v-if="edit && !uploadedImage">
-      <span class="column j-center a-center" style="opacity: 0.5" v-if="!loadingImage">
-        <i class="flaticon-plus fs-32" @click="launchFileUpload" />
-        <p class="m00 mt05 t-small">Na razie brak zdjęcia</p>
       </span>
-      <span class="column j-center a-center" style="opacity: 0.5" v-else>
-        <i class="flaticon-counterclockwise fs-2 icon--spinning"></i>
-        <p class="m00 mt05 t-small">Wczytuję...</p>
+      <span class="column j-center a-center" style="opacity: 0.5" v-if="loadingImage">
+        <i class="flaticon-counterclockwise fs-32 icon--spinning"></i>
+        <p class="m00 mt05 fs-12">Wczytuję...</p>
+      </span>
+      <span class="column j-center a-center" v-if="uploadedImage">
+        <i class="flaticon-close fs-32" @click="deleteImage"></i>
+        <span class="t-center fs-12">Usuń wybrane zdjęcie</span>
       </span>
     </div>
   <!-- OPIS  -->
-    <div>
-      <Head>Opis</Head>
-      <div class="tab">
-        <p class="m00">
-          <span v-if="!edit">
-            <span class="m00" v-if="exercise.description">{{ exercise.description }}</span>
-            <span class="m00" style="opacity: 0.5" v-else>Na razie brak opisu</span>
-          </span>
-          <textarea 
-            class="input--invisible" 
-            placeholder="Uzupełnij instrukcję wykonania ćwiczenia" 
-            v-model="input.description" 
-            rows="5" 
-            spellcheck="false"
-            v-else></textarea>
-        </p>
-      </div>
-    </div>
+    <CustomTextarea
+      class="mt1"
+      :value="input.description"
+      icon="check-mark"
+      placeholder="Opis ćwiczenia"
+      @type="input.description = $event" />
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
-    <div class="exercise-editor__buttons tab p00 row j-between t-green" v-if="edit">
-      <button class="p11" type="button" @click="createExercise" v-if="exercise.id == null">Zapisz</button>
-      <button class="p11" type="button" @click="updateExercise" v-else>Zapisz</button>
-      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
+    <div class="exercise-editor__buttons row j-between">
+      <button class="button-primary" type="button" @click="createExercise" v-if="exercise.id == null">Zapisz</button>
+      <button class="button-primary" type="button" @click="updateExercise" v-else>Zapisz</button>
+      <button class="button-primary" type="button" @click="$router.go(-1)">Anuluj</button>
     </div>
   </div>
 </template>
@@ -162,6 +153,19 @@
 
 <style lang="scss" scoped>
 
+  .exercise-editor {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.3s;
+  }
+
+  .tab {
+    border-radius: 6px;
+    border: 1px solid #74B9F5; 
+    color: #74B9F5;
+  }
+
   .exercise-editor__image {
     height: 90%;
     img {
@@ -171,7 +175,7 @@
   }
 
   .exercise-editor__buttons button {
-    width: 50%;
+    width: 49%;
   }
 
 </style>

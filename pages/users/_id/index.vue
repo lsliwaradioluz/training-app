@@ -1,24 +1,24 @@
 <template>
 <div>
   <div class="trainee" v-if="!$apollo.loading">
-    <UserPanel :user="user" />
+    <p>Zarządzaj treningami użytkownika {{ user.fullname }}. Paruj, aby wyświetlić rozpiskę wybranego treningu w połączeniu z innym. Kopiuj, aby móc skorzystać z wybranego treningu nawet u innego użytkownika.</p>
   <!-- TRENINGI  -->
     <div>
-      <Head>
-        <div class="row j-between a-center">
-          <h3 class="m00">Treningi</h3>
-          <div>
-            <nuxt-link
-              class="flaticon-plus" 
-              :to="{ path: '/workouts/new', query: { id: $route.params.id } }" 
-              tag="i"></nuxt-link>
-          </div>
-        </div>
-      </Head>
-      <transition-group name="slide-to-left">
-        <Workout v-for="workout in workouts" :key="workout.id" :workout="workout" :user="user" />
+      <h3 class="head row j-between pr0">
+        <span>Lista treningów</span>
+        <nuxt-link
+          class="flaticon-plus" 
+          :to="{ path: '/workouts/new', query: { id: $route.params.id } }" 
+          tag="i"></nuxt-link>
+      </h3>
+      <div class="row pb05">
+        <button class="button-secondary" :class="{ 'button-secondary--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
+        <button class="button-secondary" :class="{ 'button-secondary--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>
+      </div>
+      <transition-group name="animate-list">
+        <Workout v-for="workout in filteredWorkouts" :key="workout.id" :workout="workout" :user="user" />
       </transition-group>
-      <p class="tab" v-if="workouts.length == 0">
+      <p v-if="filteredWorkouts.length == 0">
         Brak treningów do wyświetlenia
       </p>
     </div>
@@ -36,6 +36,7 @@ export default {
     return {
       user: Object, 
       workouts: Array,
+      showHomeworks: false,
     }
   },
   apollo: {
@@ -46,16 +47,20 @@ export default {
           id: this.$route.params.id
         }
       },
-      manual: true, 
-      result({ data, loading }) {
-        if (!loading) {
-          this.user = data.user;
-          this.workouts = data.user.workouts.sort((a, b) => {
-            return b.sticky - a.sticky;
-          });
-        }
-      }
     }
   },
+  computed: {
+    filteredWorkouts() {
+      if (this.showHomeworks) {
+        return this.user.workouts.filter(workout => {
+          return workout.sticky;
+        });
+      } else {
+        return this.user.workouts.filter(workout => {
+          return !workout.sticky;
+        })
+      }
+    }
+  }
 }
 </script>

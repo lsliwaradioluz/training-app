@@ -3,8 +3,8 @@
     <div class="confirm__window tab" v-show="showConfirm">
       <p class="t-center">{{ message }}</p>
       <div class="confirm__buttons row j-around">
-        <button class="button--primary pl2 pr2" type="button" @click="confirm">Tak</button>
-        <button class="button--primary pl2 pr2" type="button" @click="decline">Nie</button>
+        <button class="button-primary" type="button" @click="confirm">Tak</button>
+        <button class="button-primary" type="button" @click="decline">Nie</button>
       </div>
     </div>
   </div>
@@ -54,8 +54,12 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.514);
+    background-color: rgba(0, 0, 0, 0.678);
     z-index: 1000000;
     transition: background-color 0.5s;
+  }
+
+  .confirm__buttons button {
+    width: 49%;
   }
 </style>

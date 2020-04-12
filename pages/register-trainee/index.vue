@@ -1,6 +1,5 @@
 <template>
-  <div class="register-trainee tab column j-center pt2">
-    <h3 class="logo fs-40 fw-9 t-center mt0 mb1">Piti</h3>
+  <div class="register-trainee column">
     <form class="column j-center mt15" @submit.prevent>
       <CustomInput 
         class="mb05"
@@ -16,7 +15,7 @@
         icon="lock"
         type="password"
         :spellcheck="false"></CustomInput>
-      <button class="button--primary mt2 b-grass" @click.prevent="register" type="button">Załóż konto</button>
+      <button class="button--primary" @click.prevent="register" type="button">Załóż konto</button>
       <p class="register-trainee__error">{{ error }}</p>
     </form>      
   </div>
@@ -93,16 +92,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .register-trainee {
-    z-index: 2;
-  }
 
   .register-trainee__error {
     font-size: 11px;
-    color: color(red);
+    color: color(error);
     text-align: center;
-    margin-top: 2px;
-    margin-bottom: 2rem;
   }
 </style>
 

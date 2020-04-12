@@ -1,7 +1,6 @@
 <template>
-  <form class="reset-password tab column j-center m00 pt2 pb2" @submit.prevent>
-    <h3 class="logo t-center mt0 mb1 fs-48">Piti</h3>
-    <p class="t-center">Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
+  <form class="reset-password column" @submit.prevent>
+    <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
     <CustomInput 
       class="mb05"
       v-model="password"
@@ -15,7 +14,7 @@
       icon="lock"
       type="password"
       autocomplete="off"></CustomInput>
-    <button class="button--primary mt1" @click="resetPassword">Resetuj hasło</button>
+    <button class="button--primary" @click="resetPassword">Resetuj hasło</button>
     <p class="reset-password__error">{{ error }}</p>
   </form>
 </template>
@@ -65,9 +64,7 @@ export default {
 <style lang="scss" scoped>
   .reset-password__error {
     font-size: 11px;
-    color: color(red);
+    color: color(error);
     text-align: center;
-    margin-top: 3px;
-    margin-bottom: 2rem;
   }
 </style>

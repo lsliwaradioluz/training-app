@@ -8,9 +8,9 @@
       icon="email"
       type="email"
       :show-status="false"></CustomInput>
-    <div class="transfer-user__buttons p00 pt2 row j-between t-green">
-      <button type="button" @click="transferUser" :disabled="transferInProgress">Transferuj</button>
-      <button type="button" @click="$emit('close')" :disabled="transferInProgress">Wróć</button>
+    <div class="transfer-user__buttons mt2 row j-between t-green">
+      <button class="button-primary" type="button" @click="transferUser" :disabled="transferInProgress">Transferuj</button>
+      <button class="button-primary" type="button" @click="$emit('close')" :disabled="transferInProgress">Wróć</button>
     </div>
   </div>
 </template>
@@ -93,7 +93,7 @@ export default {
 <style lang="scss" scoped>
   .transfer-user__buttons {
     button {
-      width: 50%;
+      width: 49%;
       &:nth-child(1) {
         border-right: 1px solid rgba(230, 230, 230, 0.08);
       }

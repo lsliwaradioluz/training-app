@@ -3,14 +3,12 @@
 }
 
 $colors: (
-  black: #222E50, 
-  lightblack: #343F68,
-  green: #B0FE76, 
-  darkgreen: #007556, 
-  fontblack: #2c3038,
-  inputblack: #555a64,  
-  gray: #4C5B61, 
-  inputgray: rgba(255, 255, 255, 0.158),
-  red: #F45B69, 
-  assistantblack: #121212,
+  primary: #349DFB,
+  secondary: #5D6069,
+  accent: #4DBAF9,
+  error: #F86577,
+  success: #07CD36,
+  white: #FFFFFF,
+  black: #5D6069,
+  gradient: #076FCD,
 );

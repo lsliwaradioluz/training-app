@@ -23,6 +23,10 @@ query($id: ID!, $copiedWorkoutId: ID!) {
             exercise {
               id
               name
+              image {
+                id
+                url
+              }
             }
           }
         }
@@ -55,6 +59,10 @@ query($id: ID!, $copiedWorkoutId: ID!) {
           exercise {
             id
             name
+            image {
+              id
+              url
+            }
           }
         }
       }

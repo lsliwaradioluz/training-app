@@ -1,5 +1,5 @@
 <template>
-  <div class="head tab p11 pt05 pb05 mb05 b-green">
+  <div>
     <h3 class="m00 t-lightblack">
       <slot></slot>
     </h3>

@@ -14,37 +14,37 @@ button:disabled {
   color: color(inputgray);
 }
 
-.button--primary {
+.button-primary {
   cursor: pointer;
+  border-radius: 12px;
+  background-color: white;
+  border-color: white;
+  color: #076FCD;
   display: flex;
   height: auto;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  background-color: color(green);
   font-weight: 700;
-  color: color(lightblack);
   font-family: inherit;
   font-size: 1rem;
   line-height: 1.5;
   text-align: center;
-  border: 2px solid color(green);
-  border-radius: 25px;
   padding: .5rem 1.5rem;
   transition: all 0.3s;
   margin: 0;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.397);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.226);
 }
 
-.button--primary:hover,
-.button--primary:focus,
-.button--primary:active {
+.button-primary:hover,
+.button-primary:focus,
+.button-primary:active {
   background-color: color(darkgreen);
   border-color: color(darkgreen);
 }
 
 .button--inactive, 
-.button--primary:disabled {
+.button-primary:disabled {
   background-color: color(gray);
   border-color: color(gray);
 }
@@ -54,4 +54,21 @@ button:disabled {
 .button--inactive:active {
   background-color: color(gray);
   border-color: color(gray);
+}
+
+.button-secondary {
+  padding: 0 0.5rem 0.2rem 0.5rem;
+  font-size: 11.2px;
+  color: #74B9F5;
+  border-bottom: 1px solid #74B9F5;
+  transition: border-color 0.3s;
+}
+
+.button-secondary:first-child {
+  padding-left: 0;
+}
+
+.button-secondary--active {
+  color: white !important;
+  border-bottom: 1px solid white !important;
 }

@@ -118,6 +118,14 @@ Vue.filter('shortenSection', (value) => {
   return value.length > 15 ? `${value.slice(0, 15)}...` : value;
 });
 
+Vue.filter('shortenExercise', (value) => {
+  return value.length > 22 ? `${value.slice(0, 22)}...` : value;
+});
+
+Vue.filter('shortenAlias', (value) => {
+  return value.length > 27 ? `${value.slice(0, 27)}...` : value;
+});
+
 Vue.filter('showMinutes', (value) => {
   const minutes = Math.floor(value / 60);
   const seconds = value % 60;

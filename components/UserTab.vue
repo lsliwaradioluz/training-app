@@ -1,17 +1,17 @@
 <template>
-<div class="user tab column">
+<div class="user pt05 pb05 column">
   <div class="row j-between a-stretch">
     <nuxt-link class="user__link row a-center" tag="div" :to="user.id" :event="!edit ? '' : 'click'" append>
       <div class="avatar mr1" :style="{ backgroundImage: `url('${backgroundImage}')`}"></div>
       <div>
-        <h3 class="m00">{{ user.username }}</h3>
-        <p class="user__name mb0 t-small">{{ user.fullname }}</p>
+        <h4 class="m00">{{ user.username }}</h4>
+        <p class="user__name mb0 fs-12 faded">{{ user.fullname }}</p>
       </div>
     </nuxt-link>
     <div class="row a-center" v-if="edit">
       <ContextMenu v-if="!user.admin">
         <template v-slot:trigger>
-          <i class="flaticon-vertical-dots t-green"></i>
+          <i class="flaticon-vertical-dots"></i>
         </template>
         <template v-slot:options>
           <button type="button" @click="archiveUser">
@@ -83,5 +83,9 @@
     h3:first-letter {
       text-transform: lowercase;
     }
+  }
+
+  .user__name {
+    opacity: 0.4;
   }
 </style>

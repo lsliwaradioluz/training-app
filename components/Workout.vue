@@ -1,5 +1,5 @@
 <template>
-  <div class="workout tab column" :class="{ sticky: workout.sticky }">
+  <div class="workout column pt05 pb05" :class="{ sticky: workout.sticky }">
   <!-- MAIN TAB -->
     <div class="row j-between a-stretch">
       <nuxt-link 
@@ -8,17 +8,17 @@
         :to="workout.ready ? `/workouts/${this.workout.id}` : ``"
         @click.native="showNotification(workout.ready)">
         <div v-if="!workout.sticky">
-          <h5 class="m00">{{ workout.scheduled | reverseDate }}</h5>
-          <p class="m00 t-small">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
+          <h4 class="m00">{{ workout.scheduled | reverseDate }}</h4>
+          <p class="m00 fs-12 faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
         </div>
         <div v-else>
-          <h5 class="m00">Podwieszony</h5>
-          <p class="m00 t-small">dodano {{ workout.createdAt | reverseDate }}</p>
+          <h4 class="m00">Podwieszony</h4>
+          <p class="m00 fs-12 faded">dodano {{ workout.createdAt | reverseDate }}</p>
         </div>
       </nuxt-link>
       <div class="row a-center" v-if="!$route.path.includes('users')">
         <nuxt-link
-          class="button--primary"
+          class="button-primary"
           :class="{ 'button--inactive': !workout.ready }"
           :to="`/workouts/${this.workout.id}`" 
           tag="button"
@@ -27,7 +27,7 @@
       <div class="row a-center" v-else>
         <ContextMenu>
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-green"></i>
+            <i class="flaticon-vertical-dots"></i>
           </template>
           <template v-slot:options>
             <nuxt-link
@@ -137,22 +137,9 @@
 </script>
 
 <style lang="scss" scoped>
+
   .workout__link {
     flex-basis: 100%;
     text-align: left;
-  }
-  .sticky {
-    position: relative;
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      height: 100%;
-      width: 3px;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-      background-color: color(green);
-    }
   }
 </style>

@@ -20,32 +20,27 @@
           type="file">
       </form>
     </div>
-    <Head>Edytuj dane</Head>
-    <form class="tab">
+    <h3 class="mt0">Edytuj dane</h3>
+    <form>
       <CustomInput 
-        class="mb05"
         v-model="user.fullname"
-        placeholder="Imię i nazwisko" 
-        icon="user-1"
+        placeholder="Imię i nazwisko"
         type="text"
         :show-status="false"></CustomInput>
       <CustomInput 
-        class="mb05"
         v-model="user.username"
-        placeholder="Nazwa użytkownika" 
-        icon="user-1"
+        placeholder="Nazwa użytkownika"
         type="text"
         :show-status="false"></CustomInput>
       <CustomInput 
         v-model="user.email"
-        placeholder="Adres e-mail" 
-        icon="email"
+        placeholder="Adres e-mail"
         type="email"
         :show-status="false"></CustomInput>
     </form>
     <div class="user-editor__buttons tab row j-between">
-      <button class="p11" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
-      <button class="p11" type="button" @click="$router.go(-1)">Wróć</button>
+      <button class="button-primary" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
+      <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
   </div>  
 </template>
@@ -152,8 +147,9 @@
 
   .user-editor__buttons {
     padding: 0;
+    margin-top: 1rem;
     button {
-      width: 50%;
+      width: 49%;
       color: color(green);
     }
   }

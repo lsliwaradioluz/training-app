@@ -74,7 +74,7 @@ export default {
       short_name: 'Piti',
       background_color:'#B0FE76',
       orientation: 'portrait',
-      theme_color: '#222E50', 
+      theme_color: '#349DFB', 
       start_url: process.env.NODE_ENV == 'development' ? 'http://localhost:3000/dashboard' : 'https://www.piti.live/dashboard'
     },
   },

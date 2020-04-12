@@ -1,20 +1,22 @@
 <template>
   <div class="exercises">
     <div v-if="!$apollo.loading">
-      <Head>
-        <div class="row j-between">
-          <h3 class="m00">
-            <input class="input--invisible" v-model="filter" placeholder="Znajdź ćwiczenie..." spellcheck="false" autocomplete="off">
-          </h3>
-          <nuxt-link class="flaticon-plus ml1" tag="i" :to="{ path: 'new' }" append></nuxt-link>
-        </div>
-      </Head>
-      <transition-group name="animate-list">
+      <p>Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
+      <h3 class="row j-between mb05">
+        <span>Lista ćwiczeń</span>
+        <nuxt-link class="flaticon-plus ml1" tag="i" :to="{ path: 'new' }" append></nuxt-link>
+      </h3>
+      <CustomSearch 
+        placeholder="Szukaj ćwiczenia"
+        v-model="filter"
+        />
+      <transition-group name="animate-list" v-if="filteredExercises.length > 0">
         <ExerciseTab 
           v-for="exercise in filteredExercises" 
           :key="exercise.id"
           :exercise="exercise" />
       </transition-group>
+      <p v-else>Brak ćwiczeń</p>
     </div>
     <Placeholder v-else />
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="radio b-lightblack t-small t-green">
+  <div class="radio">
     <div class="pl05 pr05 option row a-center j-center" :class="{ 't-black': value }" @click="$emit('change-value', true)">
       <slot name="first"></slot>
     </div>
@@ -20,7 +20,8 @@
 
   .radio { 
     border-radius: 15px;
-    border: 1px solid color(lightblack);
+    font-size: 12px;
+    border: 1px solid white;
     overflow: hidden;
     position: relative;
     display: grid;

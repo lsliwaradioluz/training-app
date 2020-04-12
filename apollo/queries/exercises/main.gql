@@ -4,5 +4,9 @@ query {
     name
     alias
     description
+    image {
+      id
+      url
+    }
   }
 }

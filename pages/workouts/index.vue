@@ -1,8 +1,16 @@
 <template>
   <div class="workouts">
     <div v-if="!$apollo.loading">
-      <Workout v-for="workout in workouts" :key="workout.id" :workout="workout"></Workout>
-      <p class="t-center" v-if="workouts.length == 0">
+      <p>Poniżej znajduje się lista wszystkich Twoich treningów. Znajdziesz wśród nich zarówno regularne treningi, jak i zadania domowe do wykonywania w dni nietreningowe lub zgodnie z zaleceniami trenera.</p>
+      <h3 class="head">Lista treningów</h3>
+      <div class="row pb05">
+        <button class="button-secondary" :class="{ 'button-secondary--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
+        <button class="button-secondary" :class="{ 'button-secondary--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>
+      </div>
+      <transition-group name="animate-list">
+        <Workout v-for="workout in filteredWorkouts" :key="workout.id" :workout="workout" />
+      </transition-group>
+      <p v-if="filteredWorkouts.length == 0">
         Brak treningów do wyświetlenia
       </p>
     </div>
@@ -33,5 +41,23 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      showHomeworks: false,
+    }
+  },
+  computed: {
+    filteredWorkouts() {
+      if (this.showHomeworks) {
+        return this.workouts.filter(workout => {
+          return workout.sticky;
+        });
+      } else {
+        return this.workouts.filter(workout => {
+          return !workout.sticky;
+        })
+      }
+    }
+  }
 }
 </script>

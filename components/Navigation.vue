@@ -1,8 +1,10 @@
 <template>
   <nav class="navigation" :class="{ 'b-black': !transparent }">
-    <nuxt-link class="logo" tag="span" to="/">Piti</nuxt-link>
-    <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
-    <h3 class="m00 t-center" v-else>Asystent</h3>
+    <div class="row a-center">
+      <button type="button" @click="$router.go(-1)"><i class="flaticon-left-arrow fs-14 mr05"></i></button>
+      <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
+      <h3 class="m00 t-center" v-else>Asystent</h3>
+    </div>
     <span class="t-right">
       <i class="flaticon-menu navigation__trigger" @click="navToggled = !navToggled" v-if="!isAssistant"></i>
       <span v-else>
@@ -11,8 +13,8 @@
       </span>
     </span>
     <Modal :show="navToggled" transition="slide-to-right" @close="navToggled = false">
-      <div class="navigation__panel b-black pt05" ref="panel">
-        <UserTab class="b-black" :user="$store.state.auth.user" style="box-shadow: none;" v-if="user" />
+      <div class="navigation__panel pt05" ref="panel">
+        <UserTab class="pl1" :user="user" style="box-shadow: none;" v-if="user" />
         <div class="navigation__links column pt0">
           <nuxt-link to="/dashboard">
             <i class="flaticon-home"></i>
@@ -101,7 +103,7 @@ export default {
   
   .navigation {
     width: 100%;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 1000;
@@ -127,6 +129,7 @@ export default {
     left: 0;
     height: 100vh; 
     width: 85%;
+    background: linear-gradient(color(accent), color(gradient));
   }
 
   .navigation__links a {
@@ -134,7 +137,6 @@ export default {
     display: flex;
     align-items: center;
     position: relative;
-    border-bottom: 1px solid color(black);
     margin: 0;
       
     i:first-child {

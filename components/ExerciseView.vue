@@ -6,7 +6,7 @@
           <MovingText>
             <h3 class="m00">{{ exercise.name }}</h3>
           </MovingText>
-          <p class="m00 t-small">{{ exercise.alias }}</p>
+          <p class="m00 fs-11">{{ exercise.alias }}</p>
         </div>
         <ContextMenu v-if="$store.state.auth.user.admin" bottom>
           <template v-slot:trigger>
@@ -44,8 +44,8 @@
       </div>
       <transition name="accordion">
         <div class="mt1" v-show="showDescription">
-          <p class="m00 t-small" v-if="exercise.description">{{ exercise.description }}</p>
-          <p class="m00 t-small" v-else>To ćwiczenie nie ma jeszcze opisu. To znaczy, że Twój trener się obija i musisz go pogonić!</p>
+          <p class="m00 fs-12" v-if="exercise.description">{{ exercise.description }}</p>
+          <p class="m00 fs-12" v-else>To ćwiczenie nie ma jeszcze opisu. To znaczy, że Twój trener się obija i musisz go pogonić!</p>
         </div>
       </transition>
     </div>

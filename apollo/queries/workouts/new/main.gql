@@ -23,6 +23,10 @@ query($id: ID!) {
             exercise {
               id
               name
+              image {
+                id
+                url
+              }
             }
           }
         }

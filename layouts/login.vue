@@ -1,5 +1,6 @@
 <template>
-  <div class="login-layout b-default column j-center">
+  <div class="login-layout column j-between">
+    <h3 class="logo mt0 mb1 fs-24">Piti</h3>
     <Notification />
     <Nuxt />
   </div>
@@ -8,14 +9,13 @@
 <script>
 export default {
   middleware: 'redirect',
-  transition: 'fade',
 }
 </script>
 
 <style lang="scss" scoped>
-
+  
   .login-layout {
     height: 100vh;
-    padding: 3rem 1rem; 
+    padding: 1rem; 
   }
 </style>

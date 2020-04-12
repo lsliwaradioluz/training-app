@@ -1,49 +1,42 @@
 <template>
   <div>
     <div class="workout" v-if="!$apollo.loading">
-    <!-- BUTTONY  -->
       <div v-show="!showWorkoutAssistant">
-        <div class="workout__buttons row j-around mb05" v-if="workouts.length > 1">
+        <p>Przesuwaj palcem w lewo, by przeglądać rozpiskę treningową. Rozwiń <i class="flaticon-vertical-dots fs-10"></i> by włączyć asystenta lub dodać wyniki.</p>
+        <div class="row mb1" v-if="workouts.length > 1">
           <button 
+            class="button-secondary"
+            :class="{ 'button-secondary--active': index == currentWorkout }"
             type="button"
-            class="t-small"
-            :class="{ 't-green': index == currentWorkout }"
             v-for="(user, index) in users" 
             :key="index"
             @click="setCurrentWorkout(index)">
             {{ user | getName }}</button>
         </div>
         <div>
-    <!-- NAGŁÓWEK -->
-        <WorkoutPanel :workout="workoutNoEmptySections" @show-assistant="runWorkoutAssistant" />
-    <!-- ROZPISKA  --> 
-          <Head class="mt0 pt05 pb05">
-            <div class="row j-between">
-              <span>Rozpiska</span>
-              <button type="button" @click="runWorkoutAssistant" v-if="$store.state.auth.user.admin">
-                <i class="flaticon-play"></i>
-              </button>
-            </div>
-          </Head>
+          <WorkoutPanel 
+            :class="{ 'border-top': workouts.length == 1 }" 
+            :workout="workoutWithoutEmptySections" 
+            @show-assistant="runWorkoutAssistant"
+            @edit-score="scoreEditorOpen = true" />
           <div class="carousel-container">
             <Carousel
-              :active="!maxEditorOpen"
+              :active="!scoreEditorOpen"
               :pagination="false"
               :start-from-page="currentSection[currentWorkout]"
               :key="`${showWorkoutAssistant}${currentWorkout}`"
-              @change-page="setCurrentSection({ index: currentWorkout, section: $event })"
-              indicate>
-              <div class="p01 column" v-for="section in workoutNoEmptySections.sections" :key="section.id">
+              @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
+              <div class="p01 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
                 <Routine
                   :section="section"
-                  @toggle-max-editor="maxEditorOpen = $event"
+                  :score-editor-open="scoreEditorOpen"
+                  @close-score-editor="scoreEditorOpen = $event"
                   @add-max="addMax($event)" 
                   @subtract-max="subtractMax($event)"
                   @upload-workout="uploadWorkout" />
               </div>
             </Carousel>
           </div>
-          <!--  -->
         </div>
       </div>
     <!-- ASYSTENT  -->
@@ -93,7 +86,7 @@
     data() {
       return {
         client: this.$apollo.getClient(),
-        maxEditorOpen: false,
+        scoreEditorOpen: false,
         renderWorkoutAssistant: false,
       }
     },
@@ -103,7 +96,7 @@
         currentWorkout: 'assistant/currentWorkout',
         currentSection: 'assistant/currentSection',
       }),
-      workoutNoEmptySections() {
+      workoutWithoutEmptySections() {
         const workout = this.workouts[this.currentWorkout];
         workout.sections = workout.sections.filter(section => {
           return section.complexes.length > 0;
@@ -111,7 +104,7 @@
         return workout;
       },
       filteredSections() {
-        let sectionsClone = JSON.parse(JSON.stringify(this.workoutNoEmptySections.sections));
+        let sectionsClone = JSON.parse(JSON.stringify(this.workoutWithoutEmptySections.sections));
         sectionsClone.forEach((section, sectionindex) => {
           sectionsClone[sectionindex] = _.omit(section, '__typename', 'id');
           section.complexes.forEach((complex, complexindex) => {
@@ -141,20 +134,20 @@
       }),
       addMax({ unit, complex }) {
         const currentSection = this.currentSection[this.currentWorkout];
-        let max = this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
-        this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max++;
+        let max = this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
+        this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max++;
       },
       subtractMax({ unit, complex }) {
         const currentSection = this.currentSection[this.currentWorkout];
-        let max = this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
-        this.workoutNoEmptySections.sections[currentSection].complexes[complex].units[unit].max--;
+        let max = this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max;
+        if (max == null) this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
+        this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max--;
       }, 
       uploadWorkout() {
         let input = {
           where: {
-            id: this.workoutNoEmptySections.id,
+            id: this.workoutWithoutEmptySections.id,
           },
           data: {
             sections: this.filteredSections,

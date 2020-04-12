@@ -1,5 +1,5 @@
 <template>
-  <div class="b-black">
+  <div>
     <Navigation transparent />
     <nuxt />
     <Confirm />

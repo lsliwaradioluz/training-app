@@ -31,9 +31,9 @@
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00">{{ current.exercise.name }}</h3>
           </MovingText>
-          <p class="t-small m00" v-if="current.remarks">{{ current.remarks }}</p>
-          <p class="t-small m00" v-else>Wykonaj teraz</p>
-          <p class="t-small m00" v-if="lastSet">ostatnia seria</p>
+          <p class="fs-11 m00" v-if="current.remarks">{{ current.remarks }}</p>
+          <p class="fs-11 m00" v-else>Wykonaj teraz</p>
+          <p class="fs-11 m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
           :time="current.time"
@@ -51,10 +51,10 @@
       </div>
       <div class="workout-assistant__indicators" >
         <div class="row j-between" style="margin-bottom: 1px">
-          <p class="m00 t-small">
+          <p class="m00 fs-11">
             {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
           </p>
-          <p class="m00 t-small" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
+          <p class="m00 fs-11" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
         </div>
         <div class="row j-between">
           <span 
@@ -76,12 +76,12 @@
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
         <i class="flaticon-clock small" :class="{ 't-green': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu-1 small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
+        <i class="flaticon-menu small" :class="{ 't-green': showBlockDescription }" @click="toggleBlockDescription"></i>
       </div>
     </div>
   <!-- MODAL INFO  -->
     <transition name="slide-to-right">
-      <p class="workout-assistant__modal m00 t-small" v-show="showInfoModal">
+      <p class="workout-assistant__modal m00 fs-11" v-show="showInfoModal">
         {{ infoModalMessage }}
       </p>
     </transition>
@@ -439,7 +439,7 @@ export default {
     height: 2px;
     flex: 1;
     margin-right: 1px;
-    background: color(gray);
+    background: gray;
     position: relative;
 
     &:last-child {

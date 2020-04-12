@@ -1,6 +1,6 @@
 <template>
-  <div class="default b-black" :class="{ main: !isAssistant }">
-    <Navigation :transparent="isAssistant" />
+  <div class="default" :class="{ main: !isAssistant }">
+    <Navigation :transparent="true" />
     <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
     <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
     <Confirm />
@@ -27,3 +27,13 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+  .default {
+    min-height: 100vh;
+    background: linear-gradient(#3299F5, #096EC8);
+  }
+  // #3299F5
+  // #096EC8
+</style>

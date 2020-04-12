@@ -1,6 +1,5 @@
 <template>
-  <div class="register-coach tab column j-center pt2">
-    <h3 class="logo t-center mt0 mb1 fs-48">Piti</h3>
+  <div class="register-coach column j-center">
     <form class="column j-center mt1" @submit.prevent>
       <CustomInput 
         class="mb05"
@@ -32,9 +31,7 @@
         :spellcheck="false"></CustomInput>
       <button class="button--primary mt2 b-grass" @click.prevent="register" type="button">Załóż konto</button>
       <p class="register-coach__error">{{ error }}</p>
-      <div class="register-coach__help-buttons column a-center">
-        <nuxt-link to="/login" type="button">Masz już konto?</nuxt-link>
-      </div>
+      <nuxt-link class="t-center fs-13" to="/login" type="button">Masz już konto?</nuxt-link>
     </form>      
   </div>
 </template>
@@ -104,19 +101,8 @@ export default {
 
   .register-coach__error {
     font-size: 11px;
-    color: color(red);
+    color: color(error);
     text-align: center;
-    margin-top: 3px;
-    margin-bottom: 2rem;
-  }
-
-  .register-coach__help-buttons {
-    font-size: 11px;
-
-    a {
-      opacity: 0.7;
-      color: color(lightgray);
-    }
   }
 </style>
 

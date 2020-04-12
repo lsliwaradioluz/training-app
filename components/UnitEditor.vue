@@ -1,46 +1,43 @@
 <template>
-  <div class="unit-editor">
-    <div class="tab p11">
-      <div class="row j-between t-green mb05">
-        <h3 class="m00" v-if="editedUnit.name != ''">Edytuj ćwiczenie</h3>
-        <h3 class="m00" v-else>Nowe ćwiczenie</h3>
-      </div>
-      <form>
-        <div>
-          <input 
-            class="mb0" 
-            :class="{ rounded: filteredExercises.length > 0 }" 
-            type="text" 
-            spellcheck="false"
-            placeholder="Nazwa ćwiczenia"
-            @keydown="unit.exercise.id = ''"
-            v-model="unit.exercise.name">
-          <ul class="exercise__list">
-            <li v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
-          </ul>
-        </div>
-        <div class="exercise__repetitions row j-between">
-          <div class="p10 t-center" v-for="(number, key) in unit.numbers" :key="key">
-            <p>{{ key | shorten }}</p>
-            <i class="flaticon-up-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] += 100 : unit.numbers[key]++"></i>
-            <p class="m00"><input class="input--invisible t-center" type="number" v-model="unit.numbers[key]"></p>
-            <i class="flaticon-down-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] -= 100 : unit.numbers[key]--"></i>
-          </div>
-        </div>
-        <div>
-          <textarea
-            class="mb0"
-            type="text" 
-            spellcheck="false"
-            placeholder="Uwagi"
-            v-model="unit.remarks"></textarea>
-        </div>
-        <div class="row j-between mt15">
-          <button class="button--primary ml05" type="button" @click="addUnit" :disabled="disableAddUnitButton">Zapisz</button>
-          <button class="button--primary mr05" type="button" @click="$emit('cancel')">Anuluj</button>
-        </div>
-      </form>
+  <div 
+    class="unit-editor tab p11" 
+    :style="{ backgroundImage: backgroundImage }">
+    <div class="row j-between t-green mb05">
+      <h3 class="m00" v-if="editedUnit.exercise.name != ''">Edytuj ćwiczenie</h3>
+      <h3 class="m00" v-else>Nowe ćwiczenie</h3>
     </div>
+    <form>
+      <div>
+        <CustomInput 
+          placeholder="Nazwa ćwiczenia"
+          v-model="unit.exercise.name"
+          @input="unit.exercise.id = ''" 
+          :show-status="false"/>
+        <ul class="exercise__list">
+          <transition-group name="animate-list">
+            <li v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
+          </transition-group>
+        </ul>
+      </div>
+      <div class="exercise__repetitions row j-between">
+        <div class="p10 t-center" v-for="(number, key) in unit.numbers" :key="key">
+          <p>{{ key | shorten }}</p>
+          <i class="flaticon-up-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] += 100 : unit.numbers[key]++"></i>
+          <p class="m00"><input class="input--invisible t-center" type="number" v-model="unit.numbers[key]"></p>
+          <i class="flaticon-down-arrow small t-green" @click="key == 'distance' ? unit.numbers[key] -= 100 : unit.numbers[key]--"></i>
+        </div>
+      </div>
+      <div>
+        <CustomTextarea
+          placeholder="Uwagi do ćwiczenia" 
+          :value="unit.remarks"
+          @type="unit.remarks = $event" />
+      </div>
+      <div class="unit-editor__buttons row j-between mt2">
+        <button class="button-primary" type="button" @click="addUnit" :disabled="disableAddUnitButton">Zapisz</button>
+        <button class="button-primary" type="button" @click="$emit('cancel')">Anuluj</button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -57,13 +54,19 @@
       }
     }, 
     computed: {
+      backgroundImage() {
+        return this.unit.exercise.image ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.unit.exercise.image.url}')` : 'none'
+      },
       filteredExercises() {
         let filteredExercises = [];
         const filter = this.unit.exercise.name.toLowerCase();
         if (filter !== '') {
           filteredExercises = this.exercises.filter(exercise => {
             const exerciseName = exercise.name.toLowerCase();
-            return exerciseName.includes(filter) == true && this.unit.exercise.id == '';
+            const conditions = 
+              exerciseName.includes(filter) && this.unit.exercise.id == ''
+              || filter.includes(exerciseName) && this.unit.exercise.id == '';
+            return conditions;
           });
         } else {
           filteredExercises = [];
@@ -116,16 +119,30 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .unit-editor {
+    background-size: cover;
+    background-position: center;
+  }
+
   .exercise__list {
     max-height: 15vh;
     overflow-y: scroll;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    background-color: color(inputgray);
+    transition: all 0.3s;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: white;
+      width: 1px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: white;
+      width: 1px;
+    }
     
     li {
       border: none;
-      padding-left: 0.5rem;
+      padding-left: 0;
     }
   }
 
@@ -139,9 +156,7 @@
     }
   }
 
-  .rounded {
-    border-radius: 0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+  .unit-editor__buttons button {
+    width: 49%;
   }
 </style>
