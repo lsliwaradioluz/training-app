@@ -34,19 +34,24 @@
     i {
       position: absolute;
       top: 18px;
-      color: #74B9F5;
+      color: color(faded);
     }
   }
 
   input {
     background-color: transparent;
-    border-bottom: 1px solid #74B9F5; 
+    border-bottom: 1px solid color(faded);
     border-radius: 0;
     margin-bottom: 1rem;
     font-size: 13px;
     height: 50px;
     line-height: 50px;
+    padding-top: .5rem;
     padding-bottom: 0;
-    padding-left: 0;
+    transition: border-color 0.3s;
+  }
+
+  input:focus {
+    border-bottom: 1px solid color(headers);
   }
 </style>

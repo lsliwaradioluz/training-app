@@ -43,7 +43,7 @@
 
   .notification__message {
     background-color: white;
-    color: color(gradient);
+    color: black;
     padding: 1rem;
     border-radius: 12px;
   }

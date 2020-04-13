@@ -1,37 +1,36 @@
 <template>
   <div class="register-coach column j-center">
+    <h1 class="mt0 mb2">Zarejestruj się</h1>
     <form class="column j-center mt1" @submit.prevent>
       <CustomInput 
         class="mb05"
         v-model="user.fullname" 
-        placeholder="Imię i nazwisko" 
-        icon="user-1"
+        placeholder="Imię i nazwisko"
         type="text"
         :spellcheck="false"></CustomInput>
       <CustomInput 
         class="mb05"
         v-model="user.email" 
-        placeholder="Adres e-mail" 
-        icon="email"
+        placeholder="Adres e-mail"
         type="email"
         :spellcheck="false"></CustomInput>
       <CustomInput 
         class="mb05"
         v-model="user.password" 
-        placeholder="Hasło" 
-        icon="lock"
+        placeholder="Hasło"
         type="password"
         :spellcheck="false"></CustomInput>
       <CustomInput 
-        class="mb05"
         v-model="user.repeatPassword" 
-        placeholder="Powtórz hasło" 
-        icon="lock"
+        placeholder="Powtórz hasło"
         type="password"
         :spellcheck="false"></CustomInput>
-      <button class="button--primary mt2 b-grass" @click.prevent="register" type="button">Załóż konto</button>
+      <button class="button-primary mt1" @click.prevent="register" type="button">Załóż konto</button>
       <p class="register-coach__error">{{ error }}</p>
-      <nuxt-link class="t-center fs-13" to="/login" type="button">Masz już konto?</nuxt-link>
+      <div class="register-coach__help-buttons row j-center">
+        <span class="t-faded">Masz już konto?&nbsp;</span>
+        <nuxt-link to="/login">Zaloguj się</nuxt-link>
+      </div>
     </form>      
   </div>
 </template>
@@ -103,6 +102,16 @@ export default {
     font-size: 11px;
     color: color(error);
     text-align: center;
+  }
+
+  .register-coach__help-buttons {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem; 
+    padding-top: 1rem;
+    font-size: 12px;
   }
 </style>
 

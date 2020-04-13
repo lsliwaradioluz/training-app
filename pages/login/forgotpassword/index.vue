@@ -1,15 +1,17 @@
 <template>
   <form class="forgot-password column" @submit.prevent>
-    <p>Podaj adres e-mail wykorzystany przy zakładaniu konta. Wyślemy na niego link do formularza zmiany hasła.</p>
+    <h1 class="mt0">Przypomnij hasło</h1>
+    <p class="mb2">Podaj adres e-mail wykorzystany przy zakładaniu konta. Wyślemy na niego link do formularza zmiany hasła.</p>
     <CustomInput
       v-model="email" 
-      placeholder="Adres e-mail" 
-      icon="email"
+      placeholder="Adres e-mail"
       type="email"
       :spellcheck="false"></CustomInput>
-    <button class="button--primary mt2 b-grass" @click.prevent="sendPassword" type="button" :disabled="sending">Resetuj hasło</button>
+    <button class="button-primary mt1" @click.prevent="sendPassword" type="button" :disabled="sending">Resetuj hasło</button>
     <p class="forgot-password__error">{{ error }}</p>
-    <nuxt-link class="t-center fs-13" to="/login" type="button">Wróć do logowania</nuxt-link>
+    <div class="forgot-pasword__help-buttons row j-center">
+      <nuxt-link to="/login" type="button">Wróć do logowania</nuxt-link>
+    </div>
   </form>   
 </template>
 
@@ -51,5 +53,15 @@
     font-size: 11px;
     color: color(error);
     text-align: center;
+  }
+
+  .forgot-pasword__help-buttons {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem; 
+    padding-top: 1rem;
+    font-size: 12px;
   }
 </style>

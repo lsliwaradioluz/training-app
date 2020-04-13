@@ -1,57 +1,37 @@
 <template>
-  <nav class="navigation" :class="{ 'b-black': !transparent }">
-    <h3 class="logo m00" v-if="isAssistant">Piti</h3>
-    <div class="row a-center">
-      <div class="row" v-if="!isAssistant">
-        <button type="button" @click="$router.go(-1)"><i class="flaticon-left-arrow fs-14 mr05"></i></button>
-        <h3 class="m00 t-center" v-if="!isAssistant">{{ header | englishToPolish }}</h3>
-      </div>
-      <h3 class="m00 t-center" v-else>Asystent</h3>
+  <nav class="navigation">
+    <div class="row j-between a-center">
+      <button @click="$router.go(-1)">
+        <i class="flaticon-left-arrow mr05"></i>
+      </button> 
+      <!-- <h4 class="navigation__header">{{ header | englishToPolish }}</h4> -->
     </div>
-    <span class="t-right">
-      <i class="flaticon-menu navigation__trigger" @click="navToggled = !navToggled" v-if="!isAssistant"></i>
-      <span v-else>
-        <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleWorkoutAssistant')" v-if="!$store.state.assistant.showBlockDescription"></i>
-        <i class="flaticon-cancel small" @click="$store.commit('assistant/toggleBlockDescription')" v-else></i>
-      </span>
-    </span>
-    <Modal :show="navToggled" transition="slide-to-right" @close="navToggled = false">
-      <div class="navigation__panel pt05" ref="panel">
-        <UserTab class="pl1" :user="user" style="box-shadow: none;" v-if="user" />
-        <div class="navigation__links column pt0">
-          <nuxt-link to="/dashboard">
-            <i class="flaticon-home"></i>
-            Pulpit
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-          <nuxt-link to="/exercises" v-if="user && user.admin">
-            <i class="flaticon-kettlebell"></i>
-            Ćwiczenia
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-          <nuxt-link to="/workouts">
-            <i class="flaticon-3d"></i>
-            Treningi
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-          <nuxt-link to="/users" v-if="user && user.admin">
-            <i class="flaticon-user"></i>
-            Podopieczni
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-          <nuxt-link to="/settings">
-            <i class="flaticon-settings"></i>
-            Ustawienia
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-          <nuxt-link to="/login" @click.native="$store.commit('auth/logout')">
-            <i class="flaticon-logout"></i>
-            Wyloguj
-            <i class="flaticon-right-arrow"></i>
-          </nuxt-link>
-        </div>
+    <!-- side navigation -->
+    <div class="navigation__links" v-if="!isAssistant">
+      <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
+      <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
+      <div class="row">
+        <nuxt-link tag="button" to="/dashboard">
+          <i class="flaticon-home"></i>
+        </nuxt-link>
+        <nuxt-link tag="button" to="/exercises" v-if="user && user.admin">
+          <i class="flaticon-gymnast"></i>
+        </nuxt-link>
+        <nuxt-link tag="button" to="/workouts">
+          <i class="flaticon-menu"></i>
+        </nuxt-link>
+        <nuxt-link tag="button" to="/users" v-if="user && user.admin">
+          <i class="flaticon-user-1"></i>
+        </nuxt-link>
+        <nuxt-link tag="button" to="/settings">
+          <i class="flaticon-settings"></i>
+        </nuxt-link>
+        <nuxt-link tag="button" to="/login" @click.native="$store.commit('auth/logout')">
+          <i class="flaticon-logout"></i>
+        </nuxt-link>
       </div>
-    </Modal>
+    </div>
+    <!-- pull to refresh for ios -->
     <PullToRefresh />
   </nav>
 </template>
@@ -73,6 +53,7 @@ export default {
   data() {
     return {
       navToggled: false,
+      scroll: 0,
     }
   },
   watch: {
@@ -90,71 +71,63 @@ export default {
     user() {
       return this.$store.state.auth.user;
     }, 
+    backgroundImage() {
+      return this.user.image ? this.user.image.url : require('assets/images/user.svg');
+    },
     header() {
       if (this.$route.name) {
         return this.$route.name.split('-')[0];
       } else {
         return '';
       }
-      
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
-  
+
   .navigation {
-    width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1000;
-    transition: all 0.3s;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-
-    span {
-      width: 20%;
-    }
-
-    h3:first-letter {
-      text-transform: uppercase;
-    }
+    z-index: 2;
+    width: 100%;
+    padding: 1rem;
   }
 
-  .navigation__panel {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    height: 100vh; 
-    width: 85%;
-    background: linear-gradient(color(primary), color(gradient));
-  }
-
-  .navigation__links a {
-    padding: 1rem 1rem 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    position: relative;
+  .navigation__header {
     margin: 0;
-      
-    i:first-child {
-      margin-right: 0.5rem;
+    color: white;
+    &:first-letter {
+      text-transform: uppercase;
+      font-weight: 400;
     }
+  }
 
-    &:last-child {
-      border: none;
+  .navigation__links {
+    position: fixed; 
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: color(secondary);
+    color: color(faded);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.205);
+    button {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      text-align: center;
+      width: 20%;
+      i {
+        font-weight: 600;
+        font-size: 16px;
+      }
     }
+  }
 
-    .flaticon-right-arrow {
-      position: absolute;
-      right: 1rem;
-      font-size: 8px;
-      color: color(green);
-    }
+  .nuxt-link-active {
+    color: color(headers);
   }
 </style>

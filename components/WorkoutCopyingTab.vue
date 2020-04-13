@@ -1,9 +1,9 @@
 <template>
-  <div class="workout-pairing row j-between a-center">
-    <p class="m00 t-center fs-12">
+  <div class="workout-copying row j-between a-center pl1 pb05 pr1 pt05">
+    <p class="m00 fs-12">
       Kopiujesz {{ workout.user }} {{ workout.scheduled | reverseDate }}
     </p>
-    <button class="fs-12 t-error" type="button" @click="stopCopyWorkout">Zakończ</button>
+    <button class="t-headers" type="button" @click="stopCopyWorkout">Zakończ</button>
   </div>
 </template>
 
@@ -23,10 +23,8 @@
 </script>
 
 <style lang="scss" scoped>
-  .workout-pairing {
-    padding-bottom: .2rem;
-    margin-bottom: .5rem;
-    border-bottom: 1px solid #74B9F5;
+  .workout-copying {
+    border-bottom: 1px solid color(faded);
   }
 </style>
 

@@ -2,17 +2,10 @@
   <div class="workout-editor">
     <p>Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie nowe.</p>
   <!-- TERMIN  -->
-    <h3 class="row j-between a-center">
-      <span>Termin</span>
-      <span class="row a-center">
-        <label class="fs-12 mb0" :class="{ faded: !sticky }" for="checkbox">Przyklejony</label>
-        <input id="checkbox" v-model="sticky" type="checkbox">
-      </span>
-    </h3>
+    <h3 class="row j-between a-center">Termin</h3>
     <div class="row">
       <CustomInput 
-        class="mr1"
-        icon="clock"
+        class="mr05"
         placeholder="Data"
         v-model="selectedDate"
         type="date"
@@ -20,17 +13,21 @@
         :show-status="false"
         show-label />
       <CustomInput 
+        class="mr05"
         placeholder="Godzina"
-        icon="clock"
         v-model="selectedTime"
         type="time"
         :disabled="sticky"
         :show-status="false" 
         show-label />
+      <CustomCheckbox 
+        label="Przyklejony"
+        v-model="sticky"
+        type="checkbox"/>
     </div>
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
-      <h3 class="mt0 row j-between" :class="{ blind: editedUnit != null}">
+      <h3 class="mt1 row j-between" :class="{ blind: editedUnit != null}">
         <span>Rozpiska</span>
         <ContextMenu @toggled="showUnitButtons = $event">
           <template v-slot:trigger>
@@ -64,29 +61,29 @@
               <div class="p01 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
                 <div class="tab column fg1">
                   <div class="row j-between">
-                    <h4 class="mt0" v-if="currentSection != null">
-                      <input 
-                        class="input--invisible" 
+                    <h3 class="mt0" v-if="currentSection != null">
+                      <input
+                        class="p00"
                         type="text" 
                         placeholder="Nazwa sekcji"
                         v-model="sections[sectionindex].name"
                         spellcheck="false"
                         :ref="`input${sectionindex}`">
-                    </h4>
-                    <h4 class="mt0" v-else>{{ section.name }}</h4>
-                    <i class="flaticon-plus" @click="openUnitEditor()"></i>
+                    </h3>
+                    <h3 class="mt0" v-else>{{ section.name }}</h3>
+                    <i class="flaticon-plus-1" @click="openUnitEditor()"></i>
                   </div>
                   <div>
                     <div 
-                      class="mb05"
+                      class="mb1"
                       :class="{ 'blind': currentComplex != null && currentComplex != complexindex }" 
                       v-for="(complex, complexindex) in section.complexes" 
                       :key="complexindex"
                       draggable="true">
-                      <h4 class="mt0 mb05 row j-between" :class="{ 't-green': currentComplex == null || currentComplex == complexindex }" v-if="complex.units.length > 1 || currentComplex == complexindex">
-                        <input class="input--invisible" v-model="section.complexes[complexindex].name">
-                        <i class="flaticon-plus small" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
-                        <i class="flaticon-accept small" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
+                      <h4 class="mt0 mb05 row j-between" v-if="complex.units.length > 1 || currentComplex == complexindex">
+                        <input v-model="section.complexes[complexindex].name">
+                        <i class="flaticon-plus fs-12" @click="currentComplex = complexindex" v-show="currentSection != null && currentComplex != complexindex"></i>
+                        <i class="flaticon-check-mark fs-12" @click="currentComplex = null" v-show="currentSection != null && currentComplex == complexindex"></i>
                       </h4>
                       <ul class="mb05" v-for="(unit, unitindex) in complex.units" :key="unitindex" :class="{ 'pl05': complex.units.length > 1 || currentComplex == complexindex }">
                         <div class="row j-between">
@@ -127,7 +124,7 @@
                         </li>
                         <li>{{ unit.remarks.toLowerCase() }}</li>
                         <li>
-                          <span class="t-gray">przerwy {{ unit.rest }}s</span>
+                          <span class="t-faded">przerwa {{ unit.rest }}s</span>
                         </li>
                       </ul>
                     </div>
@@ -142,22 +139,19 @@
           </p>
         <!-- POPRZEDNIE TRENINGI  -->
           <div v-if="user.workouts.length > 0">
-            <h3 class="mb0 row j-between">
-              <span>Poprzednie treningi</span>
-              <span class="row" v-if="user.workouts.length > 1">
-                <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
-                <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
-              </span>
-            </h3>
-            <p class="fs-12 faded" v-if="!user.workouts[currentWorkout].user">
-              {{ user.workouts[currentWorkout].scheduled | getDayName }}
-              {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
-            </p>
-            <p class="fs-12 faded" v-else>
-              {{ user.workouts[currentWorkout].scheduled | getDayName }} 
-              {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
-              ({{ user.workouts[currentWorkout].user.username }})
-            </p>
+            <div class="row j-between a-center pt05 pb05 t-faded">
+              <i class="flaticon-left-arrow" @click="showPreviousWorkout"></i>
+              <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
+                {{ user.workouts[currentWorkout].scheduled | getDayName }}
+                {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+              </h4>
+              <h4 class="mb0 t-faded" v-else>
+                {{ user.workouts[currentWorkout].scheduled | getDayName }} 
+                {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
+                ({{ user.workouts[currentWorkout].user.username }})
+              </h4>
+              <i class="flaticon-right-arrow" @click="showNextWorkout"></i>
+            </div>
             <div class="carousel-container" v-if="sections.length > 0">
               <Carousel :pagination="false" :key="previousWorkoutSections.length">
                 <div class="p01 column" v-for="section in previousWorkoutSections" :key="section.id">
@@ -443,23 +437,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  #checkbox {
-    appearance: none;
-    padding: 0;
-    margin: 0;
-    margin-left: 0.5rem;
-    border: 1.5px solid white;
-    border-radius: 50%;
-    height: 10px;
-    width: 10px;
-    outline: none;
-    position: relative;
-    transition: background 0.3s;
-    &:checked {
-      background-color: white;
-    }
-  }
 
   .workout-editor__buttons button {
     width: 49%;

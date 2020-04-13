@@ -1,12 +1,12 @@
 <template>
   <div class="settings">
-    <div class="column a-center pt2 pb2">
+    <div class="column a-center pb2">
       <div 
-        class="avatar"
+        class="avatar mb1"
         :class="{ 'avatar--loading': loadingImage }" 
         :style="{ backgroundImage: `url(${user.image ? user.image.url : require('assets/images/user.svg') })` }">
       </div>
-      <h3 class="mt05 mb05">{{ user.fullname }}</h3>
+      <h3 class="mb05">{{ user.fullname }}</h3>
       <div class="settings__panel-buttons row j-between">
         <button type="button" @click="launchFileUpload">Zmień awatar</button>
         <button type="button" @click="user.image = null">Usuń awatar</button>
@@ -38,7 +38,7 @@
         type="email"
         :show-status="false"></CustomInput>
     </form>
-    <div class="user-editor__buttons row j-between">
+    <div class="user-editor__buttons row j-between mt2">
       <button class="button-primary" type="button" @click="user ? updateUser() : createUser()">Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
@@ -126,6 +126,8 @@
   .avatar {
     height: 80px;
     width: 80px;
+    border-radius: 50%;
+    border: 2px solid white;
     position: relative;
   }
 

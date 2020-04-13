@@ -1,5 +1,5 @@
 <template>
-  <div class="workout column pt05 pb05" :class="{ sticky: workout.sticky }">
+  <div class="workout column" :class="{ sticky: workout.sticky }">
   <!-- MAIN TAB -->
     <div class="row j-between a-stretch">
       <nuxt-link 
@@ -18,7 +18,7 @@
       </nuxt-link>
       <div class="row a-center" v-if="!$route.path.includes('users')">
         <nuxt-link
-          class="button-primary"
+          class="button-primary b-headers button--rounded"
           :class="{ 'button--inactive': !workout.ready }"
           :to="`/workouts/${this.workout.id}`" 
           tag="button"
@@ -27,7 +27,7 @@
       <div class="row a-center" v-else>
         <ContextMenu>
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots"></i>
+            <i class="flaticon-vertical-dots t-headers"></i>
           </template>
           <template v-slot:options>
             <nuxt-link
@@ -137,6 +137,14 @@
 </script>
 
 <style lang="scss" scoped>
+
+  .workout {
+    padding: 0.5rem 0;
+  }
+
+  h4 {
+    color: white;
+  }
 
   .workout__link {
     flex-basis: 100%;

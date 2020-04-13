@@ -79,7 +79,7 @@
     top: -3px;
     font-weight: 500;
     font-size: 10px;
-    color: #74B9F5;
+    color: color(faded);
   }
 
   .custom-textarea__icon {
@@ -89,22 +89,25 @@
   }
 
   .custom-textarea__placeholder {
-    opacity: .3;
-    font-size: 13px;
+    color: color(faded);
+    font-size: 14px;
     position: absolute;
     top: 22px;
     z-index: 0;
+    font-weight: 400;
   }
 
   p {
-    border-bottom: 1px solid #74B9F5; 
+    border-bottom: 1px solid color(faded); 
     padding-bottom: 12px;
     padding-top: 20px;
-    font-size: 13px;
+    font-size: 14px;
+    color: white;
+    font-weight: 400;
   }
 
   p:focus {
     outline: none;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid color(headers);
   }
 </style>

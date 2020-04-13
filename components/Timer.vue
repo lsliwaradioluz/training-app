@@ -1,6 +1,6 @@
 <template>
   <div class="timer pl1">
-    <p class="m00 t-right fs-32 t-success" :class="{ 't-error': timeleft <= 10 }">
+    <p class="m00 t-right fs-32 t-headers" :class="{ 't-error': timeleft <= 10 }">
       {{ timeleft | showMinutes }}
     </p>
   </div>

@@ -5,18 +5,16 @@
     <CustomInput 
       class="mb05"
       v-model="user.fullname"
-      placeholder="Imię i nazwisko" 
-      icon="user-1"
+      placeholder="Imię i nazwisko"
       type="text"></CustomInput>
     <CustomInput 
       class="mb05"
       v-model="user.email"
-      placeholder="Adres e-mail" 
-      icon="email"
+      placeholder="Adres e-mail"
       type="email"></CustomInput>
     <div class="invite-user__buttons p00 pt2 row j-between t-green">
-      <button type="button" @click.once="sendInvitation">Zaproś</button>
-      <button type="button" @click="$emit('close')">Wróć</button>
+      <button class="button-primary" type="button" @click.once="sendInvitation">Zaproś</button>
+      <button class="button-primary" type="button" @click="$emit('close')">Wróć</button>
     </div>
   </div>
 </template>
@@ -54,13 +52,7 @@ export default {
 
   .invite-user__buttons {
     button {
-      width: 50%;
-      &:nth-child(1) {
-        border-right: 1px solid rgba(230, 230, 230, 0.08);
-      }
-      &:nth-child(2) {
-        border-left: 1px solid rgba(230, 230, 230, 0.08);
-      }
+      width: 49%;
     }
   }
 </style>

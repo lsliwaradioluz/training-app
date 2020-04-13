@@ -1,19 +1,17 @@
 <template>
   <div class="change-password">
-    <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
-    <form class="tab">
+    <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy.</p>
+    <form>
       <CustomInput 
         v-model="password"
-        icon="lock"
         placeholder="Nowe hasło"
         type="password"></CustomInput>
       <CustomInput 
         v-model="repeatPassword"
-        icon="lock"
         placeholder="Powtórz hasło"
         type="password"></CustomInput>
     </form>
-    <div class="change-password__buttons tab row j-between t-green">
+    <div class="change-password__buttons row j-between mt2">
         <button class="button-primary" type="button" @click="updatePassword">Zapisz</button>
         <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
       </div>

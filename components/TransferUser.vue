@@ -4,8 +4,7 @@
     <p>Podaj adres e-mail trenera, któremu chcesz przekazać podopiecznego. Musi to być adres, którego użył przy zakładaniu konta.</p>
     <CustomInput
       v-model="transferEmail"
-      placeholder="Adres email" 
-      icon="email"
+      placeholder="Adres email"
       type="email"
       :show-status="false"></CustomInput>
     <div class="transfer-user__buttons mt2 row j-between t-green">

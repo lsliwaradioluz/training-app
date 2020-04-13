@@ -9,6 +9,7 @@ import ExerciseView from '../components/ExerciseView';
 import Routine from '../components/Routine';
 import WorkoutPanel from '../components/WorkoutPanel';
 import WorkoutPairingTab from '../components/WorkoutPairingTab';
+import WorkoutCopyingTab from '../components/WorkoutCopyingTab';
 import WorkoutAssistant from '../components/WorkoutAssistant';
 import WorkoutEditor from '../components/WorkoutEditor';
 import Timer from '../components/Timer';
@@ -22,9 +23,11 @@ import UnitEditor from '../components/UnitEditor';
 import CustomInput from '../components/CustomInput';
 import CustomSearch from '../components/CustomSearch';
 import CustomTextarea from '../components/CustomTextarea';
+import CustomCheckbox from '../components/CustomCheckbox';
 import Modal from '../components/Modal';
 import InviteUser from '../components/InviteUser';
 import TransferUser from '../components/TransferUser';
+import Slider from '../components/Slider';
 
 Vue.component('Workout', Workout);
 Vue.component('UserTab', UserTab);
@@ -36,6 +39,7 @@ Vue.component('ExerciseView', ExerciseView);
 Vue.component('Routine', Routine);
 Vue.component('WorkoutPanel', WorkoutPanel);
 Vue.component('WorkoutPairingTab', WorkoutPairingTab);
+Vue.component('WorkoutCopyingTab', WorkoutCopyingTab);
 Vue.component('WorkoutAssistant', WorkoutAssistant);
 Vue.component('WorkoutEditor', WorkoutEditor);
 Vue.component('Timer', Timer);
@@ -49,9 +53,12 @@ Vue.component('UnitEditor', UnitEditor);
 Vue.component('CustomInput', CustomInput);
 Vue.component('CustomSearch', CustomSearch);
 Vue.component('CustomTextarea', CustomTextarea);
+Vue.component('CustomCheckbox', CustomCheckbox);
 Vue.component('Modal', Modal);
 Vue.component('InviteUser', InviteUser);
 Vue.component('TransferUser', TransferUser);
+Vue.component('Slider', Slider);
+
 
 
 

@@ -1,23 +1,23 @@
 <template>
-  <div class="login column j-center m00 pt0">
-    <form class="column j-center mt1" @submit.prevent>
-      <CustomInput 
-        class="mb1"
+  <div class="login column j-center">
+    <h1 class="mt0 mb2">Zaloguj się</h1>
+    <form class="column j-center" @submit.prevent>
+      <CustomInput
         v-model="identifier" 
-        placeholder="Użytkownik" 
-        icon="user-1"
+        placeholder="Twój email"
         type="text"
         :spellcheck="false"></CustomInput>
-      <CustomInput 
-        class="mb05"
+      <CustomInput
         v-model="password"
-        placeholder="Hasło" 
-        icon="lock"
+        placeholder="Password"
         type="password"></CustomInput>
-      <nuxt-link class="t-right fs-12 mb1 mt1 fw-7" to="forgotpassword" type="button" append>Zapomniałeś hasła?</nuxt-link>
-      <button class="button-primary" @click.prevent="signIn" type="button">Zaloguj</button>
+      <nuxt-link class="t-right fs-12" to="forgotpassword" type="button" append>Zapomniałeś hasła?</nuxt-link>
+      <button class="button-primary b-headers mt2" @click.prevent="signIn" type="button">Zaloguj</button>
       <p class="login__error">{{ error }}</p>
-      <nuxt-link class="t-center fs-13" to="/register-coach" type="button">Nie masz konta?</nuxt-link>
+      <div class="login__help-buttons row j-center">
+        <span class="t-faded">Nie masz konta?&nbsp;</span>
+        <nuxt-link to="/register-coach">Zarejestruj się</nuxt-link>
+      </div>
     </form>      
   </div>
 </template>
@@ -83,6 +83,16 @@ export default {
     font-size: 11px;
     color: color(error);
     text-align: center;
+  }
+
+  .login__help-buttons {
+    font-size: 12px;
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem; 
+    padding-top: 1rem;
   }
 </style>
 

@@ -1,5 +1,8 @@
 <template>
-  <div class="exercise-view column j-end" :style="{ backgroundImage: exercise.image ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` : 'none' }">
+  <div class="exercise-view columnfa">
+    <div
+      class="exercise-view__image" 
+      :style="{ backgroundImage: exercise.image ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` : 'none' }"></div>
     <div class="p11">
       <div class="row j-between a-center">
         <div class="dupa">
@@ -13,16 +16,6 @@
             <i class="flaticon-vertical-dots"></i>
           </template>
           <template v-slot:options>
-            <span>
-              <button type="button" @click="showDescription = true" v-show="!showDescription">
-                <i class="flaticon-up fs-09" style="margin-right: .25rem" />
-                Rozwiń opis
-              </button>
-              <button type="button" @click="showDescription = false" v-show="showDescription">
-                <i class="flaticon-down-arrow-1 fs-09" style="margin-right: .25rem" />
-                Zwiń opis
-              </button>
-            </span>
             <nuxt-link tag="button" type="button" to="edit" append>
               <i class="flaticon-writing fs-09" style="margin-right: .25rem" />
               Edytuj
@@ -33,14 +26,6 @@
             </button>
           </template>
         </ContextMenu>
-        <button 
-          class="exercise-view__arrow-button ml1" 
-          :class="{ rotation: showDescription }" 
-          type="button" 
-          @click="showDescription = !showDescription"
-          v-else>
-          <i class="flaticon-down-arrow" />
-        </button>
       </div>
       <transition name="accordion">
         <div class="mt1" v-show="showDescription">
@@ -108,11 +93,11 @@
 
 <style lang="scss" scoped>
 
-  .exercise-view {
-    height: 100vh;
-    overflow: hidden;
+  .exercise-view__image {
     background-size: cover;
     background-position: center;
+    height: 70vh;
+    border-bottom: 2px solid color(headers);
   }
 
   .exercise-view__arrow-button {

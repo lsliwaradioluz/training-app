@@ -1,20 +1,19 @@
 <template>
   <form class="reset-password column" @submit.prevent>
-    <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
+    <h1 class="mt0">Przypomnij hasło</h1>
+    <p class="mb2">Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy. Jeżeli chcesz sprawdzić, czy podane hasła są takie same, dotknij ikony kłódki, aby je podejrzeć.</p>
     <CustomInput 
       class="mb05"
       v-model="password"
-      placeholder="Nowe hasło" 
-      icon="lock"
+      placeholder="Nowe hasło"
       type="password"
       autocomplete="off"></CustomInput>
     <CustomInput 
       v-model="repeatPassword"
-      placeholder="Powtórz hasło" 
-      icon="lock"
+      placeholder="Powtórz hasło"
       type="password"
       autocomplete="off"></CustomInput>
-    <button class="button--primary" @click="resetPassword">Resetuj hasło</button>
+    <button class="button-primary mt1" @click="resetPassword">Resetuj hasło</button>
     <p class="reset-password__error">{{ error }}</p>
   </form>
 </template>

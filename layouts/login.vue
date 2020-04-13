@@ -1,6 +1,8 @@
 <template>
-  <div class="login-layout column j-between">
-    <h3 class="logo mt0 mb1 fs-24">Piti</h3>
+  <div class="login-layout">
+    <button class="m10 t-faded" @click="goBack">
+      <i class="flaticon-left-arrow"></i>
+    </button>
     <Notification />
     <Nuxt />
   </div>
@@ -9,13 +11,18 @@
 <script>
 export default {
   middleware: 'redirect',
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   
   .login-layout {
-    height: 100vh;
+    min-height: 100vh;
     padding: 1rem; 
   }
 </style>

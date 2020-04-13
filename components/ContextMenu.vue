@@ -108,7 +108,7 @@
   .context-menu__panel button,
   .context-menu__panel a {
     text-align: left;
-    padding: 0.5rem;
+    padding: 0.25rem;
     font-size: .75rem;
   }
 

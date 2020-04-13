@@ -1,8 +1,6 @@
 <template>
   <div class="default" :class="{ main: !isAssistant }">
-    <Navigation :transparent="true" />
-    <WorkoutPairingTab v-if="$store.state.main.workoutToPair && $route.path.includes('users') &&!$route.params.id" />
-    <WorkoutCopyingTab v-if="$store.state.main.workoutToCopy && $route.path.includes('users') &&!$route.params.id" />
+    <Navigation v-if="!isAssistant" />
     <Confirm />
     <Notification />
     <nuxt />
@@ -31,6 +29,7 @@ export default {
 
 <style lang="scss" scoped>
   .default {
+    position: relative;
     min-height: 100vh;
   }
 </style>

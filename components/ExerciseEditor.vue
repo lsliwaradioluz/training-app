@@ -1,26 +1,25 @@
 <template>
-  <div class="exercise-editor main" :style="{ backgroundImage: uploadedImage ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${uploadedImage.url}')` : 'none' }">
+  <div class="exercise-editor main">
     <p>Uzupełnij nazwy, opis oraz animację swojego ćwiczenia. W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9.</p>
-    <h3 class="mb0" v-if="!edit">Nowe ćwiczenie</h3>
+    <h3 class="mb1" v-if="!edit">Nowe ćwiczenie</h3>
+    <h3 class="mb1" v-else>{{ exercise.name }}</h3>
   <!-- NAZWA  -->
     <form>
       <CustomInput 
         v-model="input.name"
         placeholder="Angielska nazwa"
         :show-status="false"
-        icon="check-mark"
         />
       <CustomInput 
         v-model="input.alias"
         placeholder="Polska nazwa"
         :show-status="false"
-        icon="check-mark"
         />
     </form>
   <!-- ZDJĘCIE  -->
-    <div class="tab mt05 mb05 p32 column a-center j-center">
+    <div class="exercise-editor__image-upload p32 column a-center j-center" v-if="!uploadedImage">
       <span class="column j-center a-center" v-if="!uploadedImage && !loadingImage">
-        <i class="flaticon-plus fs-32" @click="launchFileUpload" />
+        <i class="flaticon-plus-1 fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
         <form v-show="false">
           <input
@@ -34,20 +33,19 @@
         <i class="flaticon-counterclockwise fs-32 icon--spinning"></i>
         <p class="m00 mt05 fs-12">Wczytuję...</p>
       </span>
-      <span class="column j-center a-center" v-if="uploadedImage">
-        <i class="flaticon-close fs-32" @click="deleteImage"></i>
-        <span class="t-center fs-12">Usuń wybrane zdjęcie</span>
-      </span>
+    </div>
+    <div class="exercise-editor__image column a-center" v-else>
+      <img :src="uploadedImage.url" alt="exercise image">
+      <button class="button-secondary mt05" type="button" @click="deleteImage">Usuń zdjęcie</button>
     </div>
   <!-- OPIS  -->
     <CustomTextarea
       class="mt1"
       :value="input.description"
-      icon="check-mark"
       placeholder="Opis ćwiczenia"
       @type="input.description = $event" />
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
-    <div class="exercise-editor__buttons row j-between">
+    <div class="exercise-editor__buttons row j-between mt2">
       <button class="button-primary" type="button" @click="createExercise" v-if="exercise.id == null">Zapisz</button>
       <button class="button-primary" type="button" @click="updateExercise" v-else>Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Anuluj</button>
@@ -160,18 +158,16 @@
     transition: background-image 0.3s;
   }
 
-  .tab {
+  .exercise-editor__image-upload {
+    border: 1px solid color(faded);
+    color: color(faded);
     border-radius: 6px;
-    border: 1px solid #74B9F5; 
-    color: #74B9F5;
+    margin-top: 2rem;
+    margin-bottom: 0;
   }
 
-  .exercise-editor__image {
-    height: 90%;
-    img {
-      border-radius: 5px;
-      width: 100%;
-    }
+  img {
+    width: 100%;
   }
 
   .exercise-editor__buttons button {

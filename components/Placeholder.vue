@@ -1,6 +1,6 @@
 <template>
   <div class="placeholder">
-    <div v-for="n in 7" :key="n"></div>   
+    <div class="tab" v-for="n in 7" :key="n"></div>   
   </div>
 </template>
 
@@ -12,11 +12,11 @@
 
 <style lang="scss" scoped>
   .placeholder {
-    opacity: 0.3;
+    opacity: 0.7;
     animation: blink 1s infinite;
     div {
       height: 5rem;
-      background-color: rgba(255, 255, 255, 0.527);
+      background-color: color(secondary);
       margin-bottom: 0.5rem;
       &:first-child {
         height: 10rem;
@@ -29,13 +29,13 @@
 
   @keyframes blink {
     0% {
-      opacity: 0.3;
+      opacity: 0.7;
     }
     50% {
-      opacity: 0.2;
+      opacity: 0.4;
     }
     100% {
-      opacity: 0.3;
+      opacity: 0.7;
     }
   }
 </style>

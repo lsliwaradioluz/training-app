@@ -1,21 +1,20 @@
 <template>
   <div class="register-trainee column">
+    <h1 class="mt0 mb2">Zarejestruj się</h1>
     <form class="column j-center mt15" @submit.prevent>
       <CustomInput 
         class="mb05"
         v-model="user.password" 
-        placeholder="Hasło" 
-        icon="lock"
+        placeholder="Hasło"
         type="password"
         :spellcheck="false"></CustomInput>
       <CustomInput 
         class="mb05"
         v-model="user.repeatPassword" 
-        placeholder="Powtórz hasło" 
-        icon="lock"
+        placeholder="Powtórz hasło"
         type="password"
         :spellcheck="false"></CustomInput>
-      <button class="button--primary" @click.prevent="register" type="button">Załóż konto</button>
+      <button class="button-primary mt1" @click.prevent="register" type="button">Załóż konto</button>
       <p class="register-trainee__error">{{ error }}</p>
     </form>      
   </div>
@@ -94,9 +93,12 @@ export default {
 <style lang="scss" scoped>
 
   .register-trainee__error {
-    font-size: 11px;
-    color: color(error);
-    text-align: center;
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem; 
+    padding-top: 1rem;
   }
 </style>
 

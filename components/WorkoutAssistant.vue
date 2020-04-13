@@ -4,23 +4,6 @@
     :style="{ backgroundImage: image }"
     @click.self="nextUnit">
     <div>
-  <!-- OPIS BLOKU -->
-    <transition name="slide-to-right">
-      <div class="workout-assistant__block-description main pb05" v-show="showBlockDescription">
-        <div 
-          class="row j-between" 
-          :class="{ 't-success': controls.section == 0 ? index == controls.unit - 2 : index == controls.unit - 1 }" 
-          v-for="(unit, index) in blockDescription" 
-          :key="index">
-          <MovingText :key="showBlockDescription">
-            <p class="m00">{{ unit.exercise.name }}</p>
-          </MovingText>
-          <p class="m00 ml1">
-            <span v-if="unit.reps">{{ unit.reps }}</span><span v-if="unit.time"><span v-if="unit.reps">x</span>{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span>
-          </p>
-        </div>
-      </div>
-    </transition>
   <!-- STOPER -->
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
@@ -44,9 +27,9 @@
           v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
         <div class="row a-center j-end pl1" v-else>
           <p class="m00 fs-32" v-if="current.reps">{{ current.reps }}</p>
-          <p class="m00 fs-32" v-if="current.reps && current.time"><span class="fs-15">x</span>{{ current.time }}<span class="fs-15">s</span></p>
+          <p class="m00 fs-32" v-if="current.reps && current.time"><span class="fs-22">x</span>{{ current.time }}<span class="fs-22">s</span></p>
           <p class="m00 fs-32" v-if="current.time && !current.reps">{{ current.time }}s</p>
-          <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-15">m</span></p>
+          <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-22">m</span></p>
         </div>
       </div>
       <div class="workout-assistant__indicators" >
@@ -66,25 +49,19 @@
         </div>
       </div>
   <!-- PANEL STEROWANIA -->
-      <div class="row j-between a-center pt1 pb1" style="z-index: 300">
+      <div class="workout-assistant__panel row j-between a-center" style="z-index: 300">
         <span>
-          <i class="flaticon-sound small" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
-          <i class="flaticon-speaker small" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
-          <i class="flaticon-mute small" @click="voiceAssistantMode = 'on'" v-else></i>
+          <i class="flaticon-sound" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
+          <i class="flaticon-speaker" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
+          <i class="flaticon-mute" @click="voiceAssistantMode = 'on'" v-else></i>
         </span>
-        <i class="flaticon-login small" :class="{ 't-success': automaticModeOn }" @click="toggleAutomaticMode"></i>
+        <i class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></i>
         <i class="flaticon-previous-track-button" @click="previousUnit"></i>
         <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-clock small" :class="{ 't-success': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-menu small" :class="{ 't-success': showBlockDescription }" @click="toggleBlockDescription"></i>
+        <i class="flaticon-counterclockwise" :class="{ 't-headers': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
+        <i class="flaticon-cancel" @click="$store.commit('assistant/toggleWorkoutAssistant')"></i>
       </div>
     </div>
-  <!-- MODAL INFO  -->
-    <transition name="slide-to-right">
-      <p class="workout-assistant__modal m00 fs-11" v-show="showInfoModal">
-        {{ infoModalMessage }}
-      </p>
-    </transition>
   </div>
 </template>
 
@@ -415,16 +392,6 @@ export default {
     overflow: hidden;
   }
 
-  .workout-assistant__block-description {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: black;
-    height: 100%;
-    width: 100%;
-    z-index: 2;
-  }
-
   .workout-assistant__exercise div {
     &:first-child {
       flex-basis: 1;
@@ -447,11 +414,10 @@ export default {
     }
   }
 
-  .workout-assistant__modal {
-    position: absolute;
-    top: 5rem;
-    background-color: color(gray);
-    padding: 0.5rem;
-    border-radius: 5px;
+  .workout-assistant__panel {
+    padding: 1rem 0;
+    i {
+      font-size: 16px;
+    }
   }
 </style>

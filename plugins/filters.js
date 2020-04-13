@@ -119,11 +119,11 @@ Vue.filter('shortenSection', (value) => {
 });
 
 Vue.filter('shortenExercise', (value) => {
-  return value.length > 22 ? `${value.slice(0, 22)}...` : value;
+  return value.length > 30 ? `${value.slice(0, 30)}...` : value;
 });
 
 Vue.filter('shortenAlias', (value) => {
-  return value.length > 27 ? `${value.slice(0, 27)}...` : value;
+  return value.length > 35 ? `${value.slice(0, 35)}...` : value;
 });
 
 Vue.filter('showMinutes', (value) => {

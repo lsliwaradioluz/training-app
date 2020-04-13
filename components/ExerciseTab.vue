@@ -1,8 +1,8 @@
 <template>
   <div class="exercise-tab column pt05 pb05">
-    <div class="row j-between a-stretch">
+    <div class="row j-between">
       <nuxt-link class="exercise-tab__link pr1 row" :to="exercise.id" tag="div" append>
-        <div class="avatar mr1" :style="{ backgroundImage: `url('${image}')` }"></div>
+        <div class="exercise-avatar mr05" :style="{ backgroundImage: `url('${image}')` }"></div>
         <div>
           <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
           <p class="exercise-tab__description m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
@@ -12,7 +12,7 @@
       <div class="row a-center">
         <ContextMenu>
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots"></i>
+            <i class="flaticon-vertical-dots t-headers"></i>
           </template>
           <template v-slot:options>
             <button type="button" @click="deleteExercise">
@@ -43,7 +43,7 @@
     }, 
     computed: {
       image() {
-        return this.exercise.image ? this.exercise.image.url : require('assets/images/user.svg');
+        return this.exercise.image ? this.exercise.image.url : require('assets/images/exercise.jpg');
       }
     },
     methods: {
@@ -79,6 +79,10 @@
 </script>
 
 <style lang="scss" scoped>
+
+  h4 {
+    color: white;
+  }
 
   .exercise-tab__link {
     flex-basis: 100%;

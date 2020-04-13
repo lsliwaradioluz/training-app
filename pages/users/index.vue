@@ -2,9 +2,13 @@
   <div class="users">
     <div v-if="!$apollo.loading">
       <p>Dotknij karty podopiecznego, by zobaczyć jego treningi. Chcesz przekazać podopiecznego innemu trenerowi? Transferuj! Skończyliście współpracę? Przenieś go do archiwum.</p>
-      <div class="row pb05">
-        <button class="button-secondary" :class="{ 'button-secondary--active': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
-        <button class="button-secondary" :class="{ 'button-secondary--active': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>
+      <h3 class="row j-between a-center">
+        <span>Użytkownicy</span>
+        <i class="flaticon-plus-1 t-white" @click="inviteUserVisible = true"></i>
+      </h3>
+      <div class="row">
+        <button class="button-switch" :class="{ 'button-switch--active': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
+        <button class="button-switch" :class="{ 'button-switch--active': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>
       </div>
       <CustomSearch 
         v-model="filter"

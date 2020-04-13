@@ -1,14 +1,10 @@
 <template>
   <div class="dashboard">
     <div v-if="!$apollo.loading">
-      <p class="header">Witaj, {{ user.fullname | getName }}. Na swoim pulpicie poznasz aktualności związane z rozwojem aplikacji, a także statystyki dotyczące dotychczasowych treningów.</p>
-      <h3 class="head">Aktualności</h3>
-      <p>Aplikacja Piti zyskała nowy design! Ciesz się odświeżonym wyglądem, dzięki któremu nawigowanie między treningami będzie jeszcze prostsze.</p>
-      <h3 class="head">Najnowszy trening</h3>
-      <Workout :workout="user.workouts[0]" v-if="user.workouts.length > 0" />
-      <p v-else>
-        Brak zaplanowanych treningów.
-      </p>
+      <h1 class="mt0 mb2">Pulpit</h1>
+      <!-- <Slider :slides="slides" /> -->
+      <!-- <h3 class="t-white mb05">Najnowszy trening</h3>
+      <Workout :workout="user.workouts[0]" /> -->
     </div>
     <Placeholder v-else />
   </div>  
@@ -23,9 +19,30 @@ export default {
       query: mainQuery, 
       variables() {
         return {
-          id: this.$store.state.auth.user.id
+          id: this.$store.state.auth.user.id, 
         }
       }
+    }
+  },
+  data() {
+    return {
+      slides: [
+        { 
+          header: 'Wszystkie ćwiczenia w jednym miejscu', 
+          caption: 'Baza aplikacji Piti zawiera ponad 100 ćwiczeń, z których można ułożyć trening. Każde z nich opatrzone jest opisem oraz animacją poglądową.', 
+          image: 'https://images.unsplash.com/photo-1583454155184-870a1f63aebc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+        },
+        { 
+          header: 'Asystent na każde wezwanie', 
+          caption: 'Nie możesz rozczytać rozpiski od trenera? Skorzystaj z pomocy cyfrowego asystenta treningu.', 
+          image: 'https://images.unsplash.com/photo-1536659272167-0a78858abb46?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+        },
+        { 
+          header: 'Układaj treningi w tempie błyskawicy', 
+          caption: 'Z rewolucyjnym edytorem treningów przygotowywanie planów dla podopiecznych jeszcze nigdy nie było tak proste!', 
+          image: 'https://images.unsplash.com/photo-1575859694244-0b337bf58e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
+        },
+      ],
     }
   },
 }
@@ -33,6 +50,8 @@ export default {
 
 <style lang="scss" scoped>
   
+
+
 </style>
 
 

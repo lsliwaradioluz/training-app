@@ -3,9 +3,9 @@
     <div v-if="!$apollo.loading">
       <p>Poniżej znajduje się lista wszystkich Twoich treningów. Znajdziesz wśród nich zarówno regularne treningi, jak i zadania domowe do wykonywania w dni nietreningowe lub zgodnie z zaleceniami trenera.</p>
       <h3 class="head">Lista treningów</h3>
-      <div class="row pb05">
-        <button class="button-secondary" :class="{ 'button-secondary--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
-        <button class="button-secondary" :class="{ 'button-secondary--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>
+      <div class="row mb1">
+        <button class="button-switch" :class="{ 'button-switch--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
+        <button class="button-switch" :class="{ 'button-switch--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>
       </div>
       <transition-group name="animate-list">
         <Workout v-for="workout in filteredWorkouts" :key="workout.id" :workout="workout" />

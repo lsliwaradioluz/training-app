@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-input" :class="{ mt1: value && value.length > 0 && type != 'time' && type != 'date' }">
+  <div class="custom-input">
     <transition name="slide-to-left">
       <label v-show="value && value.length > 0 || showLabel">{{ placeholder }}</label>
     </transition>
@@ -9,10 +9,7 @@
       @touchstart="revealPassword = true" 
       @touchend="revealPassword = false"
       v-if="icon"></i>
-    <span class="custom-input__status" v-if="showStatus">
-      <em v-if="!showTick">(wymagane)</em>
-      <i class="flaticon-check-mark" v-else></i>
-    </span>
+    <i class="custom-input__status flaticon-check-mark" v-if="showStatus && showTick"></i>
     <input
       :class="{ pl15: icon, faded: disabled }"
       :value="value"
@@ -83,12 +80,13 @@
     position: relative;
     margin-bottom: 1rem;
     transition: margin 0.3s;
+    color: color(text);
     label {
       position: absolute;
       top: -3px;
       font-weight: 500;
       font-size: 10px;
-      color: #74B9F5;
+      color: color(faded);
     }
   }
 
@@ -99,36 +97,28 @@
   }
 
   .custom-input__status {
-    font-size: 10px;
+    font-size: 8px;
     position: absolute;
     top: 22px;
     right: 0;
-    em {
-      color: #74B9F5;
-    }
-    i {
-      font-size: 10px;
-    }
+    color: white;
   }
 
   input {
-    background-color: transparent;
-    border: none;
-    outline: 0;
     display: block;
     width: 100%;
-    border-bottom: 1px solid #74B9F5; 
-    border-radius: 0;
+    padding-top: .5rem;
     padding-bottom: 0;
-    padding-left: 0;
-    font-size: 13px;
+    font-size: 14px;
     height: 50px;
     line-height: 50px;
     transition: all .25s ease;
+    color: color(text);
+    border-bottom: 1px solid color(faded);
   }
 
   input:focus {
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid color(headers);
   }
 
   input:-webkit-autofill,
