@@ -87,7 +87,7 @@ export default {
 
   .login__help-buttons {
     font-size: 12px;
-    position: absolute;
+    position: fixed;
     bottom: 1rem;
     left: 0;
     width: 100%;
