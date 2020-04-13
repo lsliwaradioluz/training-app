@@ -56,12 +56,6 @@
   }
 
   .forgot-pasword__help-buttons {
-    position: absolute;
-    bottom: 1rem;
-    left: 0;
-    width: 100%;
-    margin-top: 1rem; 
-    padding-top: 1rem;
     font-size: 12px;
   }
 </style>
