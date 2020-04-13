@@ -1,5 +1,6 @@
 <template>
-  <div class="change-password">
+  <div class="change-password column">
+    <h1 class="mt0 mb1">Zmień hasło</h1>
     <p>Ze względów bezpieczeńtwa, wprowadź nowe hasło dwa razy.</p>
     <form>
       <CustomInput 
@@ -12,9 +13,9 @@
         type="password"></CustomInput>
     </form>
     <div class="change-password__buttons row j-between mt2">
-        <button class="button-primary" type="button" @click="updatePassword">Zapisz</button>
-        <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
-      </div>
+      <button class="button-primary" type="button" @click="updatePassword">Zapisz</button>
+      <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
+    </div>
   </div>
 </template>
 

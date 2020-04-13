@@ -1,11 +1,11 @@
 <template>
   <div class="users">
     <div v-if="!$apollo.loading">
-      <p>Dotknij karty podopiecznego, by zobaczyć jego treningi. Chcesz przekazać podopiecznego innemu trenerowi? Transferuj! Skończyliście współpracę? Przenieś go do archiwum.</p>
-      <h3 class="row j-between a-center">
-        <span>Użytkownicy</span>
+      <h1 class="mt0 mb1 row j-between a-center">
+        <span>Podopieczni</span>
         <i class="flaticon-plus-1 t-white" @click="inviteUserVisible = true"></i>
-      </h3>
+      </h1>
+      <p>Dotknij karty podopiecznego, by zobaczyć jego treningi. Chcesz przekazać podopiecznego innemu trenerowi? Transferuj! Skończyliście współpracę? Przenieś go do archiwum.</p>
       <div class="row">
         <button class="button-switch" :class="{ 'button-switch--active': showActiveUsers }" type="button" @click="showActiveUsers = true">Aktywni</button>
         <button class="button-switch" :class="{ 'button-switch--active': !showActiveUsers }" type="button" @click="showActiveUsers = false">Archiwum</button>

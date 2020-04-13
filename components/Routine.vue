@@ -28,7 +28,7 @@
         <nuxt-link
           :to="`/exercises/${unit.exercise.id}`" 
           tag="div"
-          class="exercise-avatar"
+          class="exercise-avatar ml05"
           :style="{ backgroundImage: `url('${unit.exercise.image ? unit.exercise.image.url : require('assets/images/exercise.jpg')}')` }"
           v-else></nuxt-link>
       </ul>

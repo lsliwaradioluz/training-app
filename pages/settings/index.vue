@@ -1,18 +1,18 @@
 <template>
-  <div class="settings">
-    <div class="column a-center pb2">
+  <div class="settings column">
+    <h1 class="mt0 mb1">Ustawienia</h1>
+    <div class="column a-start mb1">
       <div 
         class="avatar mb1"
         :class="{ 'avatar--loading': loadingImage }" 
         :style="{ backgroundImage: `url(${user.image ? user.image.url : require('assets/images/user.svg') })` }">
       </div>
-      <h3 class="mb05">{{ user.fullname }}</h3>
-      <div class="settings__panel-buttons row j-between">
-        <button type="button" @click="launchFileUpload">Zmień awatar</button>
-        <button type="button" @click="user.image = null">Usuń awatar</button>
-        <nuxt-link type="button" tag="button" to="change-password" append>Zmień hasło</nuxt-link>
+      <div class="row">
+        <button class="button-secondary mr05" type="button" @click="launchFileUpload">Zmień awatar</button>
+        <button class="button-secondary mr05" type="button" @click="user.image = null">Usuń awatar</button>
+        <nuxt-link class="button-secondary" type="button" tag="button" to="change-password" append>Zmień hasło</nuxt-link>
       </div>
-      <form v-show="false">
+      <form style="display: none">
         <input
           @change="uploadImage"
           ref="input"
@@ -101,33 +101,9 @@
 
 <style lang="scss" scoped>
 
-  .settings__panel-buttons {
-    button {
-      color: color(green);
-      font-size: 10px;
-    }
-
-    button:nth-child(1) {
-      padding-right: 5px;
-      border-right: 1px solid rgba(230, 230, 230, 0.08); 
-    }
-
-    button:nth-child(2) {
-      padding: 0 5px;
-      border-left: 1px solid rgba(230, 230, 230, 0.08);
-      border-right: 1px solid rgba(230, 230, 230, 0.08); 
-    }
-
-    button:nth-child(3) {
-      padding-left: 5px;
-      border-left: 1px solid rgba(230, 230, 230, 0.08);
-    }
-  }
   .avatar {
     height: 80px;
     width: 80px;
-    border-radius: 50%;
-    border: 2px solid white;
     position: relative;
   }
 
@@ -147,12 +123,16 @@
     animation: spin 1.5s linear infinite;
   }
 
+  .button-secondary {
+    padding: 0.3rem;
+    font-size: 12px;
+    border-color: white;
+    color: white;
+  }
+
   .user-editor__buttons {
-    padding: 0;
-    margin-top: 1rem;
     button {
       width: 49%;
-      color: color(green);
     }
   }
   

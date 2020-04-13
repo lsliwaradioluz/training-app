@@ -1,11 +1,12 @@
 <template>
   <div class="exercises">
     <div v-if="!$apollo.loading">
-      <p>Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
-      <h3 class="row j-between a-center mb0">
-        <span>Lista ćwiczeń</span>
+      <h1 class="mt0 mb1 row j-between a-center">
+        <span>Ćwiczenia</span>
+        <!-- <nuxt-link class="button-secondary" :to="{ path: 'new' }" append>Dodaj</nuxt-link> -->
         <nuxt-link class="flaticon-plus-1 ml1 t-white" tag="i" :to="{ path: 'new' }" append></nuxt-link>
-      </h3>
+      </h1>
+      <p class="mb0">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
       <CustomSearch 
         placeholder="Szukaj ćwiczenia"
         v-model="filter"

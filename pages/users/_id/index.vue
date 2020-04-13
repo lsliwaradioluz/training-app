@@ -1,7 +1,8 @@
 <template>
 <div>
   <div class="trainee" v-if="!$apollo.loading">
-    <p>Zarządzaj treningami użytkownika {{ user.fullname }}. Paruj, aby wyświetlić rozpiskę wybranego treningu w połączeniu z innym. Kopiuj, aby móc skorzystać z wybranego treningu nawet u innego użytkownika.</p>
+    <h1 class="mt0 mb1">{{ user.fullname }}</h1>
+    <p>Paruj, aby wyświetlić rozpiskę wybranego treningu w połączeniu z innym. Kopiuj, aby móc skorzystać z wybranego treningu nawet u innego użytkownika.</p>
   <!-- TRENINGI  -->
     <div>
       <h3 class="head row j-between a-center pr0">

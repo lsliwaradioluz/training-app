@@ -33,7 +33,7 @@
             <nuxt-link
               tag="button"
               type="button" 
-              :to="{ path: `/workouts/${workout.id}/edit`, query: { scheduled: workout.scheduled } }">
+              :to="{ path: `/workouts/${workout.id}/edit`, query: { user: user.id } }">
               <i class="flaticon-writing"></i>
               Edytuj
               </nuxt-link>

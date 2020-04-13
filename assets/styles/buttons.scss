@@ -5,7 +5,6 @@ button {
   outline: none;
   display: block;
   color: inherit;
-  font-family: 'Nunito', sans-serif !important;
   font-size: inherit;
   position: relative;
   white-space: nowrap;
@@ -27,7 +26,7 @@ button:disabled {
   justify-content: center;
   white-space: nowrap;
   font-weight: 700;
-  font-family: inherit;
+  font-family: 'Roboto Condensed', sans-serif;
   font-size: 14px;
   line-height: 1.5;
   text-align: center;
@@ -61,6 +60,7 @@ button:disabled {
   background-color: transparent;
   color: color(headers);
   border: 1px solid color(headers);
+  font-weight: 500;
 }
 
 .button-switch {
@@ -68,7 +68,8 @@ button:disabled {
   color: color(faded);
   padding: 0 1rem 0.2rem 0;
   transition: all 0.3s;
-  font-size: 12px;
+  font-size: 13px;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .button-switch--active {

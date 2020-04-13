@@ -2,7 +2,7 @@
   <nav class="navigation">
     <div class="row j-between a-center">
       <button @click="$router.go(-1)">
-        <i class="flaticon-left-arrow mr05"></i>
+        <i class="flaticon-left-arrow mr05 t-faded"></i>
       </button> 
       <!-- <h4 class="navigation__header">{{ header | englishToPolish }}</h4> -->
     </div>

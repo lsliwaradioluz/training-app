@@ -1,5 +1,5 @@
 <template>
-  <div class="workout-panel row j-between a-center">
+  <div class="workout-panel row j-between a-center mb2">
     <div class="row">
       <div class="avatar mr05" :style="{ backgroundImage: `url('${workout.user.image ? workout.user.image.url : require('assets/images/user.jpg')}')` }"></div>
       <div class="column a-start">
@@ -12,13 +12,13 @@
         <div v-else>
           <h4 class="m00 t-white">{{ workout.user.fullname }}</h4>
           <p class="m00 fs-12 faded" v-if="workout.sticky">Podwieszony</p>
-          <p class="m00 fs-12 faded" v-else>{{ workout.scheduled | reverseDate }}</p>
+          <p class="m00 fs-12 faded" v-else>{{ workout.scheduled | getDayName }} {{ workout.scheduled | reverseDate }}</p>
         </div>
       </div>
     </div>
     <ContextMenu>
       <template v-slot:trigger>
-        <i class="flaticon-vertical-dots t-headers"></i>
+        <i class="flaticon-vertical-dots"></i>
       </template>
       <template v-slot:options>
         <button

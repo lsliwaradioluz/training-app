@@ -1,6 +1,9 @@
 <template>
   <div class="create-workout">
-    <WorkoutEditor :specific-data="$data" v-if="!$apollo.loading" />
+    <div v-if="!$apollo.loading">
+      <h1 class="mt0 mb1">Nowy trening</h1>
+      <WorkoutEditor :specific-data="$data" />
+    </div>
     <Placeholder v-else />
   </div>
 </template>

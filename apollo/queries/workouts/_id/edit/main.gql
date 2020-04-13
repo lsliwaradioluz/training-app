@@ -1,5 +1,5 @@
-query($id: ID!) {
-  workout(id: $id) {
+query($workoutid: ID!, $userid: ID!) {
+  workout(id: $workoutid) {
     id
     scheduled
     sticky
@@ -29,39 +29,39 @@ query($id: ID!) {
         }
       }
     }
-    user {
+  }
+  user(id: $userid) {
+    id
+    fullname
+    workouts(sort: "scheduled:desc", where: { id_ne: $workoutid, sticky_ne: "true", ready: "true" }) {
       id
-      fullname
-      workouts(sort: "scheduled:desc", where: { id_ne: $id, sticky_ne: "true", ready: "true" }) {
+      scheduled
+      sections {
         id
-        scheduled
-        sections {
+        name
+        complexes {
+          name 
           id
-          name
-          complexes {
-            name 
+          units {
             id
-            units {
+            sets
+            reps
+            time
+            distance
+            rest
+            remarks
+            max
+            exercise {
               id
-              sets
-              reps
-              time
-              distance
-              rest
-              remarks
-              max
-              exercise {
+              name
+              image {
                 id
-                name
-                image {
-                  id
-                  url
-                }
+                url
               }
             }
           }
         }
       }
-    } 
-  }
+    }
+  } 
 }

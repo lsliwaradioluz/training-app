@@ -1,8 +1,8 @@
 <template>
   <div class="workouts">
     <div v-if="!$apollo.loading">
+      <h1 class="mt0 mb1 row j-between a-center">Twoje treningi</h1>
       <p>Poniżej znajduje się lista wszystkich Twoich treningów. Znajdziesz wśród nich zarówno regularne treningi, jak i zadania domowe do wykonywania w dni nietreningowe lub zgodnie z zaleceniami trenera.</p>
-      <h3 class="head">Lista treningów</h3>
       <div class="row mb1">
         <button class="button-switch" :class="{ 'button-switch--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
         <button class="button-switch" :class="{ 'button-switch--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>

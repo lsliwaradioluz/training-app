@@ -12,7 +12,7 @@
       <div class="workout-assistant__exercise pt1 pb1 row a-start j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
-            <h3 class="m00">{{ current.exercise.name }}</h3>
+            <h3 class="m00 t-white">{{ current.exercise.name }}</h3>
           </MovingText>
           <p class="fs-11 m00" v-if="current.remarks">{{ current.remarks }}</p>
           <p class="fs-11 m00" v-else>Wykonaj teraz</p>

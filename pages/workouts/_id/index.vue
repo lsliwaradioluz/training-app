@@ -2,7 +2,13 @@
   <div>
     <div class="workout" v-if="!$apollo.loading">
       <div v-show="!showWorkoutAssistant">
-        <p>Przesuwaj palcem w lewo, by przeglądać rozpiskę treningową. Rozwiń <i class="flaticon-vertical-dots fs-10"></i> by włączyć asystenta lub dodać wyniki.</p>
+        <h1 class="mt0 mb1">Trening</h1>
+        <!-- <p class="t-faded">{{ workoutWithoutEmptySections.scheduled | getDayName }} {{ workoutWithoutEmptySections.scheduled | reverseDate }}</p> -->
+        <!-- <p>Przesuwaj palcem w lewo, by przeglądać rozpiskę treningową. Rozwiń <i class="flaticon-vertical-dots fs-10"></i> by włączyć asystenta lub dodać wyniki.</p> -->
+        <WorkoutPanel
+          :workout="workoutWithoutEmptySections" 
+          @show-assistant="runWorkoutAssistant"
+          @edit-score="scoreEditorOpen = true" />
         <div class="row mb1" v-if="workouts.length > 1">
           <button 
             class="button-secondary"
@@ -14,11 +20,6 @@
             {{ user | getName }}</button>
         </div>
         <div>
-          <WorkoutPanel 
-            :class="{ 'border-top': workouts.length == 1 }" 
-            :workout="workoutWithoutEmptySections" 
-            @show-assistant="runWorkoutAssistant"
-            @edit-score="scoreEditorOpen = true" />
           <div class="carousel-container">
             <Carousel
               :active="!scoreEditorOpen"

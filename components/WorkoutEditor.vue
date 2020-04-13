@@ -27,7 +27,7 @@
     </div>
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
-      <h3 class="mt1 row j-between" :class="{ blind: editedUnit != null}">
+      <h3 class="mt1 row j-between">
         <span>Rozpiska</span>
         <ContextMenu @toggled="showUnitButtons = $event">
           <template v-slot:trigger>
@@ -49,8 +49,7 @@
           </template>
         </ContextMenu>
       </h3>
-      <transition name="fade">
-        <div v-if="!editedUnit">
+        <div>
           <div class="carousel-container" v-if="sections.length > 0">
             <Carousel 
               :pagination="false" 
@@ -166,16 +165,16 @@
             </div>
           </div>
         </div>
-        <UnitEditor 
-          :exercises="exercises"
-          :editedUnit="editedUnit" 
-          @add-unit="addUnit($event)"
-          @cancel="closeUnitEditor"
-          v-else />
-      </transition>
     </div>
+    <Modal :show="Boolean(editedUnit)" @close="closeUnitEditor">
+      <UnitEditor 
+        :exercises="exercises"
+        :editedUnit="editedUnit" 
+        @add-unit="addUnit($event)"
+        @cancel="closeUnitEditor"/>
+    </Modal>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons row j-between mt1" :class="{ blind: editedUnit != null}" v-if="!editedUnit">
+    <div class="workout-editor__buttons row j-between mt1">
       <button class="button-primary" type="button" @click="uploadWorkout">Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
@@ -202,7 +201,6 @@
       return {
         client: this.$apollo.getClient(),
         ...this.specificData,
-        showUnitEditor: false,
         showButtonsPanel: false,
         showUnitButtons: null,
         currentWorkout: 0,
@@ -325,7 +323,6 @@
         }
       },
       closeUnitEditor() {
-        this.showUnitEditor = false;
         this.editedUnit = null;
         this.currentComplex = null;
         this.currentUnit = null;
