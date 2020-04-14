@@ -1,6 +1,7 @@
 <template>
-  <div class="exercises">
-    <div v-if="!$apollo.loading">
+<div>
+  <LazyWrapper :loading="$apollo.loading">
+    <div class="exercises">
       <h1 class="mt0 mb1 row j-between a-center">
         <span>Ćwiczenia</span>
         <!-- <nuxt-link class="button-secondary" :to="{ path: 'new' }" append>Dodaj</nuxt-link> -->
@@ -11,16 +12,19 @@
         placeholder="Szukaj ćwiczenia"
         v-model="filter"
         />
-      <transition-group name="animate-list" v-if="filteredExercises.length > 0">
-        <ExerciseTab 
-          v-for="exercise in filteredExercises" 
-          :key="exercise.id"
-          :exercise="exercise" />
-      </transition-group>
+      <template v-if="filteredExercises.length > 0">
+        <transition-group name="animate-list">
+          <ExerciseTab 
+            v-for="exercise in filteredExercises" 
+            :key="exercise.id"
+            :exercise="exercise" />
+        </transition-group>
+      </template>
       <p v-else>Brak ćwiczeń</p>
     </div>
-    <Placeholder v-else />
-  </div>
+  </LazyWrapper>
+</div>
+  
 </template>
 
 <script>
@@ -32,18 +36,10 @@
         query: mainQuery, 
       }
     },
-    // asyncData(context) {
-    //   let client = context.app.apolloProvider.defaultClient;
-    //   return client.query({ query: mainQuery })
-    //     .then(({ data }) => {
-    //       return {
-    //         exercises: data.exercises
-    //       }
-    //     });
-    // },
     data() {
       return {
-        filter: ''
+        filter: '',
+        exercises: [],
       }
     }, 
     computed: {
@@ -52,8 +48,12 @@
         let filter = this.filter.toLowerCase();
         if (filter !== '') {
           filteredExercises = this.exercises.filter(exercise => {
-            const exerciseName = exercise.name.toLowerCase();
-            return exerciseName.includes(filter) || filter.includes(exerciseName);
+            const alias = exercise.alias ? exercise.alias : '';
+            const exerciseName = exercise.name.toLowerCase() + alias.toLowerCase();
+            const conditions = 
+              exerciseName.includes(filter) 
+              || filter.includes(exerciseName);
+            return conditions;
           });
         } else {
           filteredExercises = this.exercises;

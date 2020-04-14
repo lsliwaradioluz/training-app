@@ -8,6 +8,11 @@ button {
   font-size: inherit;
   position: relative;
   white-space: nowrap;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: -.3px;
 }
 
 button:disabled {
@@ -25,7 +30,7 @@ button:disabled {
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  font-weight: 700;
+  font-weight: 400;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 14px;
   line-height: 1.5;
@@ -60,7 +65,7 @@ button:disabled {
   background-color: transparent;
   color: color(headers);
   border: 1px solid color(headers);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .button-switch {

@@ -1,6 +1,6 @@
 <template>
-  <div class="users">
-    <div v-if="!$apollo.loading">
+  <LazyWrapper :loading="$apollo.loading">
+    <div class="users">
       <h1 class="mt0 mb1 row j-between a-center">
         <span>Podopieczni</span>
         <i class="flaticon-plus-1 t-white" @click="inviteUserVisible = true"></i>
@@ -25,8 +25,7 @@
         <TransferUser :user="userToTransfer" @close="userToTransfer = null" />
       </Modal>
     </div>
-    <Placeholder v-else />
-  </div>
+  </LazyWrapper>
 </template>
 
 <script>
@@ -48,18 +47,10 @@
         },
       }
     },
-    // asyncData(context) {
-    //   let client = context.app.apolloProvider.defaultClient;
-    //   return client.query({ query: mainQuery, variables: { id: context.store.state.auth.user.id } })
-    //     .then(({ data }) => {
-    //       return {
-    //         user: data.user
-    //       }
-    //     });
-    // },
     data() {
       return {
-        users: Array,
+        user: {},
+        users: [],
         filter: '',
         inviteUserVisible: false,
         userToTransfer: null,

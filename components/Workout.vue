@@ -9,11 +9,11 @@
         @click.native="showNotification(workout.ready)">
         <div v-if="!workout.sticky">
           <h4 class="m00">{{ workout.scheduled | reverseDate }}</h4>
-          <p class="m00 fs-12 faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
+          <p class="m00 t-medium t-faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
         </div>
         <div v-else>
           <h4 class="m00">Podwieszony</h4>
-          <p class="m00 fs-12 faded">dodano {{ workout.createdAt | reverseDate }}</p>
+          <p class="m00 t-medium t-faded">dodano {{ workout.createdAt | reverseDate }}</p>
         </div>
       </nuxt-link>
       <div class="row a-center" v-if="!$route.path.includes('users')">

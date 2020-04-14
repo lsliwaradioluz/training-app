@@ -2,11 +2,7 @@
   <div class="settings column">
     <h1 class="mt0 mb1">Ustawienia</h1>
     <div class="column a-start mb1">
-      <div 
-        class="avatar mb1"
-        :class="{ 'avatar--loading': loadingImage }" 
-        :style="{ backgroundImage: `url(${user.image ? user.image.url : require('assets/images/user.svg') })` }">
-      </div>
+      <Avatar class="mb1" :class="{ 'avatar--loading': loadingImage }" :image="user.image ? user.image.url : null" :size="80" />
       <div class="row">
         <button class="button-secondary mr05" type="button" @click="launchFileUpload">Zmień awatar</button>
         <button class="button-secondary mr05" type="button" @click="user.image = null">Usuń awatar</button>
@@ -101,26 +97,22 @@
 
 <style lang="scss" scoped>
 
-  .avatar {
-    height: 80px;
-    width: 80px;
-    position: relative;
-  }
-
-  .avatar--loading::after {
-    content: "⭮";
-    color: gray;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.589);
-    border-radius: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: spin 1.5s linear infinite;
+  .avatar--loading {
+    &::after {
+      content: "⭮";
+      color: gray;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.589);
+      border-radius: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spin 1.5s linear infinite;
+    }
   }
 
   .button-secondary {

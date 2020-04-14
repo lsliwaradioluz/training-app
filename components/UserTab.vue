@@ -2,10 +2,10 @@
 <div class="user pt05 pb05 column">
   <div class="row j-between a-stretch">
     <nuxt-link class="user__link row" tag="div" :to="user.id" :event="!edit ? '' : 'click'" append>
-      <div class="avatar mr05" :style="{ backgroundImage: `url('${backgroundImage}')`}"></div>
+      <Avatar class="mr05" :image="user.image ? user.image.url : null" />
       <div>
         <h4 class="m00 t-white">{{ user.username }}</h4>
-        <p class="user__name mb0 fs-12 faded">{{ user.fullname }}</p>
+        <p class="user__name mb0 t-medium t-faded">{{ user.fullname }}</p>
       </div>
     </nuxt-link>
     <div class="row a-center" v-if="edit">
@@ -50,7 +50,7 @@
     },
     computed: {
       backgroundImage() {
-        return this.user.image ? this.user.image.url : require('assets/images/user.jpg');
+        return this.user.image ? this.user.image.url : require('assets/images/user.svg');
       }
     },
     methods: {
@@ -83,9 +83,5 @@
     h3:first-letter {
       text-transform: lowercase;
     }
-  }
-
-  .user__name {
-    opacity: 0.4;
   }
 </style>

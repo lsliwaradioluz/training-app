@@ -2,11 +2,11 @@
   <div class="exercise-tab column pt05 pb05">
     <div class="row j-between">
       <nuxt-link class="exercise-tab__link pr1 row" :to="exercise.id" tag="div" append>
-        <div class="exercise-avatar mr05" :style="{ backgroundImage: `url('${image}')` }"></div>
+        <!-- <div class="exercise-avatar mr05" :style="{ backgroundImage: `url('${image}')` }"></div> -->
         <div>
           <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
-          <p class="exercise-tab__description m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
-          <p class="exercise-tab__description m00" v-else>Brak alternatywnej nazwy</p>
+          <p class="exercise-tab__description t-medium t-faded m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
+          <p class="exercise-tab__description t-medium t-faded m00" v-else>Brak alternatywnej nazwy</p>
         </div>
       </nuxt-link>
       <div class="row a-center">
@@ -86,10 +86,5 @@
 
   .exercise-tab__link {
     flex-basis: 100%;
-  }
-
-  .exercise-tab__description {
-    font-size: 12px;
-    opacity: 0.4;
   }
 </style>

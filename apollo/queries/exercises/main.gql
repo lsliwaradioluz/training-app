@@ -3,10 +3,5 @@ query {
     id
     name
     alias
-    description
-    image {
-      id
-      url
-    }
   }
 }

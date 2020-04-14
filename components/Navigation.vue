@@ -1,5 +1,5 @@
 <template>
-  <nav class="navigation">
+  <nav class="navigation" role="navigation">
     <div class="row j-between a-center">
       <button @click="$router.go(-1)">
         <i class="flaticon-left-arrow mr05 t-faded"></i>

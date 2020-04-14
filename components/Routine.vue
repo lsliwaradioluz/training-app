@@ -25,12 +25,12 @@
           </li>
         </div>
         <i class="flaticon-plus-1 fs-10" @click="$emit('copy-unit', unit)" v-if="edit"></i>
-        <nuxt-link
+        <!-- <nuxt-link
           :to="`/exercises/${unit.exercise.id}`" 
           tag="div"
           class="exercise-avatar ml05"
           :style="{ backgroundImage: `url('${unit.exercise.image ? unit.exercise.image.url : require('assets/images/exercise.jpg')}')` }"
-          v-else></nuxt-link>
+          v-else></nuxt-link> -->
       </ul>
     </div>
   </div>

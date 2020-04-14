@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Navigation transparent />
+  <div class="exercise-layout">
+    <Navigation />
     <nuxt />
     <Confirm />
   </div>
@@ -16,3 +16,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  .exercise-layout {
+    padding-bottom: 4.5rem;
+  }
+</style>

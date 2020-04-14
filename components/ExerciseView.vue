@@ -2,14 +2,14 @@
   <div class="exercise-view columnfa">
     <div
       class="exercise-view__image" 
-      :style="{ backgroundImage: exercise.image ? `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${exercise.image.url}')` : 'none' }"></div>
+      :style="{ backgroundImage: exercise.image ? `url('${exercise.image.url}')` : 'none' }"></div>
     <div class="p11">
       <div class="row j-between a-center">
         <div class="dupa">
           <MovingText>
             <h3 class="m00">{{ exercise.name }}</h3>
           </MovingText>
-          <p class="m00 fs-11">{{ exercise.alias }}</p>
+          <p class="m00 t-small t-faded">{{ exercise.alias }}</p>
         </div>
         <ContextMenu v-if="$store.state.auth.user.admin" bottom>
           <template v-slot:trigger>
@@ -98,14 +98,6 @@
     background-position: center;
     height: 70vh;
     border-bottom: 2px solid color(headers);
-  }
-
-  .exercise-view__arrow-button {
-    transition: transform 0.3s;
-  }
-
-  .rotation {
-    transform: rotate(180deg);
   }
 
   .dupa {
