@@ -67,12 +67,7 @@ export default {
     ...mapMutations({
       setUser: 'auth/setUser',
       logout: 'auth/logout',
-    }), 
-    mounted() {
-      setTimeout(() => {
-        this.logout();
-      }, 2000);
-    }
+    }),
   }
 }
 </script>

@@ -79,6 +79,7 @@ export default {
     },
   },
   apollo: {  
+    tokenName: 'piti-token', 
     clientConfigs: {
       default: {
         httpEndpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/graphql' : 'https://piti-backend.herokuapp.com/graphql',
