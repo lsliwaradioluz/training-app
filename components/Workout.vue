@@ -1,67 +1,64 @@
 <template>
-  <div class="workout column" :class="{ sticky: workout.sticky }">
+  <div class="workout row j-between a-center" :class="{ sticky: workout.sticky }">
   <!-- MAIN TAB -->
-    <div class="row j-between a-stretch">
-      <nuxt-link 
-        class="workout__link" 
-        tag="button"
-        :to="workout.ready ? `/workouts/${this.workout.id}` : ``"
-        @click.native="showNotification(workout.ready)">
-        <div v-if="!workout.sticky">
-          <h4 class="m00">{{ workout.scheduled | reverseDate }}</h4>
-          <p class="m00 t-medium t-faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
-        </div>
-        <div v-else>
-          <h4 class="m00">Podwieszony</h4>
-          <p class="m00 t-medium t-faded">dodano {{ workout.createdAt | reverseDate }}</p>
-        </div>
-      </nuxt-link>
-      <div class="row a-center" v-if="!$route.path.includes('users')">
-        <nuxt-link
-          class="button-primary b-headers button--rounded"
-          :class="{ 'button--inactive': !workout.ready }"
-          :to="`/workouts/${this.workout.id}`" 
-          tag="button"
-          :disabled="!workout.ready">Plan</nuxt-link>
+    <nuxt-link 
+      class="workout__link" 
+      tag="button"
+      :to="workout.ready ? `/workouts/${this.workout.id}` : ``"
+      @click.native="showNotification(workout.ready)">
+      <div v-if="!workout.sticky">
+        <h4 class="m00">{{ workout.scheduled | reverseDate }}</h4>
+        <p class="m00 t-medium t-faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
       </div>
-      <div class="row a-center" v-else>
-        <ContextMenu>
-          <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-headers"></i>
-          </template>
-          <template v-slot:options>
-            <nuxt-link
-              tag="button"
-              type="button" 
-              :to="{ path: `/workouts/${workout.id}/edit`, query: { user: user.id } }">
-              <i class="flaticon-writing"></i>
-              Edytuj
-              </nuxt-link>
-            <nuxt-link
-              type="button"
-              tag="button"
-              to="/users"
-              @click.native="copyWorkout"
-              v-if="workout.ready">
-              <i class="flaticon-copy"></i>
-              Kopiuj
-            </nuxt-link>
-            <nuxt-link 
-              type="button" 
-              tag="button"
-              to="/users"
-              @click.native="pairWorkout" 
-              v-if="workout.ready">
-              <i class="flaticon-double-arrow-cross-of-shuffle"></i>
-              Paruj
-            </nuxt-link>
-            <button type="button" @click="deleteWorkout">
-              <i class="flaticon-trash"></i>
-              Usuń
-            </button>
-          </template>
-        </ContextMenu>
+      <div v-else>
+        <h4 class="m00">Podwieszony</h4>
+        <p class="m00 t-medium t-faded">dodano {{ workout.createdAt | reverseDate }}</p>
       </div>
+    </nuxt-link>
+    <span
+      class="flaticon-right-arrow t-faded"
+      :class="{ 't-headers': workout.ready }"
+      tag="button"
+      :disabled="!workout.ready"
+      v-if="!$route.path.includes('users')">
+    </span>
+    <div class="row a-center" v-else>
+      <ContextMenu>
+        <template v-slot:trigger>
+          <i class="flaticon-vertical-dots t-headers"></i>
+        </template>
+        <template v-slot:options>
+          <nuxt-link
+            tag="button"
+            type="button" 
+            :to="{ path: `/workouts/${workout.id}/edit`, query: { user: user.id } }">
+            <i class="flaticon-pencil"></i>
+            Edytuj
+            </nuxt-link>
+          <nuxt-link
+            type="button"
+            tag="button"
+            to="/users"
+            @click.native="copyWorkout"
+            v-if="workout.ready">
+            <i class="flaticon-copy"></i>
+            Kopiuj
+          </nuxt-link>
+          <nuxt-link 
+            type="button" 
+            tag="button"
+            to="/users"
+            @click.native="pairWorkout" 
+            v-if="workout.ready">
+            <i class="flaticon-double-arrow-cross-of-shuffle"></i>
+            Paruj
+          </nuxt-link>
+          <button type="button" @click="deleteWorkout">
+            <i class="flaticon-trash"></i>
+            Usuń
+          </button>
+        </template>
+      </ContextMenu>
     </div>
   </div>
 </template>

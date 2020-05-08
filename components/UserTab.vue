@@ -15,7 +15,7 @@
         </template>
         <template v-slot:options>
           <button type="button" @click="archiveUser">
-            <i class="flaticon-writing"></i>
+            <i class="flaticon-pencil"></i>
             {{ user.active ? 'Archiwizuj' : 'Przywróć' }}
           </button>
           <button type="button" @click="$emit('transfer', user)">

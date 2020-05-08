@@ -34,7 +34,7 @@ export default {
   ** Global CSS
   */
   css: [
-    '~/assets/icons/final/flaticon.css',
+    '~/assets/icons/font/flaticon.css',
     './assets/styles/icons.css',
     '~/assets/styles/general.scss',
     '~/assets/styles/buttons.scss',

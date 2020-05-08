@@ -9,15 +9,10 @@
 
 <script>
 import Navigation from '~/components/Navigation';
-import WorkoutPairingTab from '~/components/WorkoutPairingTab';
-import WorkoutCopyingTab from '~/components/WorkoutCopyingTab';
+
 export default {
   middleware: 'redirect',
-  components: {
-    Navigation, 
-    WorkoutPairingTab,
-    WorkoutCopyingTab, 
-  },
+  components: { Navigation },
   computed: {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant;

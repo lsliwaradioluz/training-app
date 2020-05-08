@@ -60,7 +60,7 @@
               <template v-slot:complex-buttons="{ complexindex }">
                 <div>
                   <button class="flaticon-plus-1 fs-12" type="button" @click="currentComplex = complexindex" v-show="currentComplex != complexindex"></button>
-                  <button class="flaticon-check-mark fs-12" type="button" @click="currentComplex = null" v-show="currentComplex == complexindex"></button>
+                  <button class="flaticon-tick fs-12" type="button" @click="currentComplex = null" v-show="currentComplex == complexindex"></button>
                 </div>
               </template>
               <template v-slot:unit-buttons="{ unit, unitindex, complex, complexindex }">

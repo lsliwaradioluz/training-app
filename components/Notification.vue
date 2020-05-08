@@ -1,6 +1,6 @@
 <template>
-  <transition name="slide-down">
-    <p class="notification" v-if="notification">{{ notification }}</p>
+  <transition name="slide-up">
+    <p class="notification m00" v-if="notification">{{ notification }}</p>
   </transition>
 </template>
 
@@ -32,7 +32,7 @@
 <style lang="scss" scoped>
   .notification {
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
     z-index: 1002;
@@ -42,17 +42,17 @@
     color: color(primary);
   }
 
-  .slide-down-enter-active {
-    animation: slide-down 0.3s;
+  .slide-up-enter-active {
+    animation: slide-up 0.3s;
   }
 
-  .slide-down-leave-active {
-    animation: slide-down 0.3s reverse;
+  .slide-up-leave-active {
+    animation: slide-up 0.3s reverse;
   }
 
-  @keyframes slide-down {
+  @keyframes slide-up {
     from {
-      transform: translateY(-100%);
+      transform: translateY(100%);
       opacity: 0;
     }
     to {

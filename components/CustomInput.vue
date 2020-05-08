@@ -10,7 +10,7 @@
       @touchend="revealPassword = false"
       v-if="icon">
     </span>
-    <span class="custom-input__status flaticon-check-mark" v-if="showStatus && showTick"></span>
+    <span class="custom-input__status flaticon-tick" v-if="showStatus && showTick"></span>
     <input
       :class="{ pl15: icon, blind: disabled }"
       :value="value"

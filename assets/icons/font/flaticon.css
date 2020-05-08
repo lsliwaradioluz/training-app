@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 12/04/2020 23:32
+  	Creation date: 08/05/2020 23:33
   	*/
 
 @font-face {
@@ -22,17 +22,12 @@
   }
 }
 
-[class^="flaticon-"] {
-  font-size: 18px;
-  font-weight: 300;
-}
-
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
 [class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
   font-family: Flaticon;
-  font-size: inherit;
-  font-style: normal;
-  font-weight: inherit;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
 }
 
 .flaticon-up-arrow:before { content: "\f100"; }
@@ -53,20 +48,18 @@
 .flaticon-trash:before { content: "\f10f"; }
 .flaticon-up:before { content: "\f110"; }
 .flaticon-down-arrow-1:before { content: "\f111"; }
-.flaticon-writing:before { content: "\f112"; }
-.flaticon-double-arrow-cross-of-shuffle:before { content: "\f113"; }
-.flaticon-email:before { content: "\f114"; }
-.flaticon-lock:before { content: "\f115"; }
-.flaticon-user:before { content: "\f116"; }
-.flaticon-check-mark:before { content: "\f117"; }
-.flaticon-right-arrow-1:before { content: "\f118"; }
-.flaticon-left-arrow-1:before { content: "\f119"; }
-.flaticon-copy:before { content: "\f11a"; }
-.flaticon-call:before { content: "\f11b"; }
-.flaticon-search:before { content: "\f11c"; }
-.flaticon-home:before { content: "\f11d"; }
-.flaticon-gymnast:before { content: "\f11e"; }
-.flaticon-settings:before { content: "\f11f"; }
-.flaticon-user-1:before { content: "\f120"; }
-.flaticon-logout:before { content: "\f121"; }
-.flaticon-plus-1:before { content: "\f122"; }
+.flaticon-double-arrow-cross-of-shuffle:before { content: "\f112"; }
+.flaticon-right-arrow-1:before { content: "\f113"; }
+.flaticon-left-arrow-1:before { content: "\f114"; }
+.flaticon-copy:before { content: "\f115"; }
+.flaticon-search:before { content: "\f116"; }
+.flaticon-home:before { content: "\f117"; }
+.flaticon-gymnast:before { content: "\f118"; }
+.flaticon-settings:before { content: "\f119"; }
+.flaticon-user:before { content: "\f11a"; }
+.flaticon-logout:before { content: "\f11b"; }
+.flaticon-plus-1:before { content: "\f11c"; }
+.flaticon-bell:before { content: "\f11d"; }
+.flaticon-continuous:before { content: "\f11e"; }
+.flaticon-tick:before { content: "\f11f"; }
+.flaticon-pencil:before { content: "\f120"; }
