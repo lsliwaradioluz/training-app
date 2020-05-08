@@ -134,7 +134,7 @@
         @cancel="closeUnitEditor"/>
     </Modal>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons row j-between mt1 b-secondary">
+    <div class="workout-editor__buttons">
       <button class="button-primary" type="button" @click="uploadWorkout">Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
     </div>
@@ -404,7 +404,17 @@
     background-color: color(secondary);
   }
 
-  .workout-editor__buttons button {
-    width: 49%;
+  .workout-editor__buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-left: -1rem;
+    margin-bottom: -3rem;
+    padding: 1rem;
+    padding-bottom: 3rem;
+    width: 100vw;
+    background-color: color(secondary);
+    button {
+      width: 49%;
+    }
   }
 </style>

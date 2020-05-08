@@ -53,7 +53,7 @@ export default {
     color: color(faded);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.205);
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.753);
     a {
       padding-top: 1rem;
       padding-bottom: 1rem;

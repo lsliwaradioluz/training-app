@@ -45,7 +45,6 @@
     margin-bottom: 1rem;
     font-size: 13px;
     height: 50px;
-    line-height: 50px;
     padding-top: .5rem;
     padding-bottom: 0;
     transition: border-color 0.3s;

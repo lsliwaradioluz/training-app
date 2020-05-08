@@ -1,6 +1,6 @@
 <template>
   <div class="editworkout">
-    <h1 class="mt0 mb1">Edytuj trening</h1>
+    <Header>Edytuj trening</Header>
     <WorkoutEditor :specific-data="$data" edit />
   </div>
 </template>
