@@ -14,12 +14,12 @@
       </li>
     </ul>
     <ul class="links row">
-      <li><nuxt-link class="flaticon-home" to="/dashboard"></nuxt-link></li>
-      <li><nuxt-link class="flaticon-gymnast" to="/exercises" v-if="user && user.admin"></nuxt-link></li>
-      <li><nuxt-link class="flaticon-menu" to="/workouts"></nuxt-link></li>
-      <li><nuxt-link class="flaticon-user" to="/users" v-if="user && user.admin"></nuxt-link></li>
-      <li><nuxt-link class="flaticon-settings" to="/settings"></nuxt-link></li>
-      <li><nuxt-link class="flaticon-logout" to="/login" @click.native="$store.commit('auth/logout')"></nuxt-link></li>
+      <nuxt-link class="flaticon-home" tag="li" to="/dashboard"></nuxt-link>
+      <nuxt-link class="flaticon-gymnast" tag="li" to="/exercises" v-if="user && user.admin"></nuxt-link>
+      <nuxt-link class="flaticon-menu" tag="li" to="/workouts"></nuxt-link>
+      <nuxt-link class="flaticon-user" tag="li" to="/users" v-if="user && user.admin"></nuxt-link>
+      <nuxt-link class="flaticon-settings" tag="li" to="/settings"></nuxt-link>
+      <nuxt-link class="flaticon-logout" tag="li" to="/login" @click.native="$store.commit('auth/logout')"></nuxt-link>
     </ul>
     <Modal :show="showCopyPair" @close="showCopyPair = false">
       <div class="copy-pair">
@@ -119,8 +119,6 @@ export default {
       text-align: center;
       width: 20%;
       font-size: 16px;
-    }
-    a {
       font-weight: 600;
     }
   }
