@@ -27,9 +27,9 @@ import CustomCheckbox from '../components/CustomCheckbox';
 import Modal from '../components/Modal';
 import InviteUser from '../components/InviteUser';
 import TransferUser from '../components/TransferUser';
-import Slider from '../components/Slider';
 import Avatar from '../components/Avatar';
 import LazyWrapper from '../components/LazyWrapper';
+import Header from '../components/Header';
 
 Vue.component('Workout', Workout);
 Vue.component('UserTab', UserTab);
@@ -59,9 +59,9 @@ Vue.component('CustomCheckbox', CustomCheckbox);
 Vue.component('Modal', Modal);
 Vue.component('InviteUser', InviteUser);
 Vue.component('TransferUser', TransferUser);
-Vue.component('Slider', Slider);
 Vue.component('Avatar', Avatar);
 Vue.component('LazyWrapper', LazyWrapper);
+Vue.component('Header', Header);
 
 
 

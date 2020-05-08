@@ -129,7 +129,7 @@
       },
       showNotification(isWorkoutReady) {
         if (!isWorkoutReady) {
-          this.$store.commit('main/setNotification', 'Ten trening nie ma jeszcze rozpiski.');
+          this.$store.commit('main/setNotification', 'Ten trening nie ma jeszcze rozpiski');
         }
       }
     }

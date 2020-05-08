@@ -1,16 +1,16 @@
 <template>
   <div class="create-workout">
-    <div v-if="!$apollo.loading">
-      <h1 class="mt0 mb1">Nowy trening</h1>
+    <LazyWrapper :loading="$apollo.loading">
+      <Header>Nowy trening</Header>
       <WorkoutEditor :specific-data="$data" />
-    </div>
-    <Placeholder v-else />
+    </LazyWrapper>
   </div>
 </template>
 
 <script>
 import mainQuery from '~/apollo/queries/workouts/new/main.gql';
 import mainWithCopiedQuery from '~/apollo/queries/workouts/new/mainWithCopied.gql';
+
 export default {
   apollo: {
     user: {

@@ -1,5 +1,6 @@
 <template>
   <div class="editexercise">
+    <Header>Edytuj ćwiczenie</Header>
     <ExerciseEditor :exercise="exercise" edit />
   </div>
 </template>
@@ -17,6 +18,5 @@
           }
         }) 
     },
-    layout: 'exercise'
   }
 </script>

@@ -14,6 +14,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/icon.png' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito:400,600,700,800,900&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Teko:300,400,500,600,700&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap' },
+      // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap' },
     ]
   },
   /*
@@ -30,8 +34,8 @@ export default {
   ** Global CSS
   */
   css: [
-    '~/assets/styles/fonts.css',
     '~/assets/icons/final/flaticon.css',
+    './assets/styles/icons.css',
     '~/assets/styles/general.scss',
     '~/assets/styles/buttons.scss',
     '~/assets/styles/inputs.scss',
@@ -48,13 +52,12 @@ export default {
     '~/plugins/filters',
     '~/plugins/components',
     '~/plugins/mixins',
-    '~/plugins/auth',
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
-
+    '@nuxtjs/style-resources',
   ],
   /*
   ** Nuxt.js modules
@@ -62,7 +65,6 @@ export default {
   modules: [
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources',
     '@nuxtjs/pwa',
   ],
   pwa: {

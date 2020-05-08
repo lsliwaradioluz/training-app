@@ -20,7 +20,8 @@ button:disabled {
 }
 
 .button-primary, 
-.button-secondary {
+.button-secondary,
+.button-tertiary {
   cursor: pointer;
   border-radius: 6px;
   background-color: color(headers);
@@ -61,11 +62,17 @@ button:disabled {
   border-color: color(gray);
 }
 
-.button-secondary {
+.button-secondary,
+.button-tertiary {
   background-color: transparent;
   color: color(headers);
   border: 1px solid color(headers);
   font-weight: 400;
+}
+
+.button-tertiary {
+  border-color: white;
+  color: white;
 }
 
 .button-switch {

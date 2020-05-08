@@ -1,8 +1,6 @@
 <template>
-  <div class="exercise-editor main">
+  <div class="exercise-editor">
     <p>Uzupełnij nazwy, opis oraz animację swojego ćwiczenia. W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9.</p>
-    <h3 class="mb1" v-if="!edit">Nowe ćwiczenie</h3>
-    <h3 class="mb1" v-else>{{ exercise.name }}</h3>
   <!-- NAZWA  -->
     <form>
       <CustomInput 
@@ -152,7 +150,6 @@
 <style lang="scss" scoped>
 
   .exercise-editor {
-    min-height: 100vh;
     background-size: cover;
     background-position: center;
     transition: background-image 0.3s;

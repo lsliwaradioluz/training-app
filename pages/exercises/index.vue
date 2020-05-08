@@ -1,30 +1,28 @@
 <template>
-<div>
-  <LazyWrapper :loading="$apollo.loading">
-    <div class="exercises">
-      <h1 class="mt0 mb1 row j-between a-center">
-        <span>Ćwiczenia</span>
-        <!-- <nuxt-link class="button-secondary" :to="{ path: 'new' }" append>Dodaj</nuxt-link> -->
-        <nuxt-link class="flaticon-plus-1 ml1 t-white" tag="i" :to="{ path: 'new' }" append></nuxt-link>
-      </h1>
-      <p class="mb0">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
-      <CustomSearch 
-        placeholder="Szukaj ćwiczenia"
-        v-model="filter"
-        />
-      <template v-if="filteredExercises.length > 0">
-        <transition-group name="animate-list">
-          <ExerciseTab 
-            v-for="exercise in filteredExercises" 
-            :key="exercise.id"
-            :exercise="exercise" />
-        </transition-group>
-      </template>
-      <p v-else>Brak ćwiczeń</p>
-    </div>
-  </LazyWrapper>
-</div>
-  
+  <div>
+    <LazyWrapper :loading="$apollo.loading">
+      <div class="exercises">
+        <Header>
+          <span>Ćwiczenia</span>
+          <nuxt-link class="flaticon-plus-1 ml1 t-white" :to="{ path: 'new' }" append></nuxt-link>
+        </Header>
+        <p class="mb0">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
+        <CustomSearch 
+          placeholder="Szukaj ćwiczenia"
+          v-model="filter">
+        </CustomSearch>
+        <template v-if="filteredExercises.length > 0">
+          <transition-group name="animate-list">
+            <ExerciseTab 
+              v-for="exercise in filteredExercises" 
+              :key="exercise.id"
+              :exercise="exercise" />
+          </transition-group>
+        </template>
+        <p v-else>Brak ćwiczeń</p>
+      </div>
+    </LazyWrapper>
+  </div>
 </template>
 
 <script>

@@ -3,15 +3,16 @@
     <transition name="slide-to-left">
       <label v-show="value && value.length > 0 || showLabel">{{ placeholder }}</label>
     </transition>
-    <i 
+    <span 
       class="custom-input__icon" 
-      :class="[`flaticon-${icon}`, { faded: disabled }]" 
+      :class="[`flaticon-${icon}`, { blind: disabled }]" 
       @touchstart="revealPassword = true" 
       @touchend="revealPassword = false"
-      v-if="icon"></i>
-    <i class="custom-input__status flaticon-check-mark" v-if="showStatus && showTick"></i>
+      v-if="icon">
+    </span>
+    <span class="custom-input__status flaticon-check-mark" v-if="showStatus && showTick"></span>
     <input
-      :class="{ pl15: icon, faded: disabled }"
+      :class="{ pl15: icon, blind: disabled }"
       :value="value"
       :placeholder="placeholder"
       :type="revealPassword && type == 'password' ? 'text' : type" 
@@ -107,11 +108,10 @@
   input {
     display: block;
     width: 100%;
-    padding-top: .5rem;
+    padding-top: 1rem;
     padding-bottom: 0;
     font-size: 14px;
-    height: 50px;
-    line-height: 50px;
+    height: 45px;
     transition: all .25s ease;
     color: color(text);
     border-bottom: 1px solid color(faded);

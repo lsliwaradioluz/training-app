@@ -1,28 +1,5 @@
 import Vue from 'vue';
 
-Vue.filter('englishToPolish', (value) => {
-  switch (value) {
-    case 'exercises': 
-      return 'ćwiczenia';
-      break;
-    case 'dashboard': 
-      return 'pulpit';
-      break;
-    case 'workouts': 
-      return 'treningi';
-      break;
-    case 'users': 
-      return 'Podopieczni';
-      break;
-    case 'createworkout': 
-      return 'Nowy trening';
-      break;
-    case 'settings':
-      return 'Ustawienia';
-      break;
-  }
-});
-
 Vue.filter('getDayName', (value) => {
   const date = new Date(value);
   const weekDay = date.getDay();

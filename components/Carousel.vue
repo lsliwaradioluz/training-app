@@ -1,7 +1,7 @@
 <template>
   <div 
     class="carousel" 
-    v-on="isActive && active && length > 1 ? { 
+    v-on="isActive && !blocked && numberOfPages > 1 ? { 
       touchstart: onTouchStart, 
       touchmove: onTouchMove, 
       touchend: onTouchEnd, 
@@ -9,11 +9,14 @@
       mousemove: onTouchMove, 
       mouseup: onTouchEnd 
     } : {}">
-    <div class="carousel-navdots" v-if="isActive" v-show="pagination && length > 1">
+    <div class="carousel-navdots" v-if="isActive" v-show="showPagination && length > 1">
       <div 
         class="carousel-navdot"
-        :class="`navdot--${navdotsSettings.shape}`"
-        :style="{ backgroundColor: n == currentPage + 1 ? navdotsSettings.activeColor : 'gray' }"
+        :style="[ navdotStyle, { 
+          backgroundColor: n != currentPage + 1 ? 'gray' : paginationConfig.activeColor ? 
+            paginationConfig.activeColor 
+            : 'green'
+        }]"
         v-for="n in numberOfPages" 
         v-show="numberOfPages > 1"
         :key="n"
@@ -22,39 +25,45 @@
     </div>
     <div 
       class="carousel-wrapper a-stretch"
-      :class="{ 'inactive': !isActive }"
+      :class="{ 'inactive': !isActive || numberOfPages == 1 }"
       :style="{ transform: `translateX(${translate}px)` }"
       ref="wrapper">
         <slot></slot>
     </div>
-    <transition name="fade-arrows">
-      <div v-show="indicate && length > 1 && !moveStart">
-        <div class="carousel__indicator-left">‹</div>
-        <div class="carousel__indicator-right">›</div>
-      </div>
-    </transition>
   </div>
 </template>
 
 <script>
   export default {
     props: {
-      active: {
-        type: Boolean, 
-        default: () => true
-      },
-      activeOnViewport: { 
+      active: { 
         type: Array,
         default: () => [[1, true]]
+      },
+      blocked: {
+        type: Boolean, 
+        default: () => false,
       },
       columns: { 
         type: Array,
         default: () => [[1, 1]]
       }, 
-      pagination: {
+      showPagination: {
         type: Boolean, 
         default: () => true
-      }, 
+      },
+      paginationConfig: {
+        type: Object, 
+        default: () => {
+          return {
+            borderRadius: '50%', 
+            activeColor: 'green', 
+            height: '10px', 
+            width: '10px', 
+            margin: '5px',
+          }
+        }
+      },
       sensitivity: {
         type: Number, 
         default: () => 40
@@ -71,29 +80,14 @@
         type: Number, 
         default: () => 5
       },
-      navdotsSettings: {
-        type: Object, 
-        default() { 
-          return {
-            activeColor: "#05AA19", 
-            shape: "round"
-          }
-        }
-      },
-      indicate: {
-        type: Boolean, 
-        default: () => false,
-      }
     },
     data() {
       return {
         currentPage: this.startFromPage,
         numberOfColumns: 1,
         moveStart: null, 
-        move: null, 
-        currentTranslate: 0,
-        viewportColumnsMatched: null, 
-        isActive: null, 
+        move: null,
+        isActive: true, 
         mousedown: false,
         elementWidth: 0, 
         autoplayInterval: null, 
@@ -101,6 +95,14 @@
       }
     },
     computed: {
+      navdotStyle() {        
+        return { 
+          height: this.paginationConfig.height ? this.paginationConfig.height : '10px', 
+          width: this.paginationConfig.width ? this.paginationConfig.width : '10px', 
+          margin: this.paginationConfig.margin ? this.paginationConfig.margin : '0 5px', 
+          borderRadius: this.paginationConfig.borderRadius ? this.paginationConfig.borderRadius : '50%',
+        }
+      },
       length() {
         const slot = this.$slots.default;
         const filteredSlot = [];
@@ -113,25 +115,16 @@
         return this.currentPage == 0;
       },
       maxScrollRight() {
-        const lastElementVisible = this.currentPage + this.numberOfColumns;
-        return lastElementVisible >= this.length;
+        // const lastElementVisible = this.currentPage + this.numberOfColumns;
+        // return lastElementVisible >= this.length;
+        return this.currentPage + 1 == this.numberOfPages;
       },
       numberOfPages() {
-        if (this.length >= this.numberOfColumns) {
+        if (this.length > this.numberOfColumns) {
           return this.length - this.numberOfColumns + 1;
         } else {
-          return 0;
+          return 1;
         }
-      },
-      sortedColumns() {
-        return this.columns.sort((a, b) => {
-          return a[0] - b[0];
-        });
-      }, 
-      sortedActive() {
-        return this.activeOnViewport.sort((a, b) => {
-          return a[0] - b[0];
-        })
       },
       translate() {
         return -this.elementWidth * this.currentPage
@@ -155,12 +148,9 @@
       },
       scrollWithNavdots(index) {
         this.currentPage = index - 1;
-        this.currentTranslate = parseFloat(this.$refs.wrapper.style.transform.slice(11, -3));
       },
       onTouchStart() {
         clearInterval(this.autoplayInterval);
-        if (this.revealCarousel) this.revealCarousel = false;
-        
         if (event.type == 'touchstart') {
           this.moveStart = event.touches[0].screenX
         } else {
@@ -202,37 +192,34 @@
         this.moveStart = null;
         this.move = null;
       },
-      setColumns() {
-        this.viewportColumnsMatched = false;
-        this.sortedColumns.forEach(cur => {
+      setActive() {
+        this.active.forEach(cur => {
           if (window.matchMedia(`(min-width: ${cur[0]}px)`).matches) {
-            this.viewportColumnsMatched = true;
+            this.isActive = cur[1];
+          }
+        });
+      },
+      setColumns() {
+        this.columns.forEach(cur => {
+          if (window.matchMedia(`(min-width: ${cur[0]}px)`).matches) {
             this.numberOfColumns = cur[1];
             this.$refs.wrapper.childNodes.forEach(cur => {
               if (cur.nodeName != '#text') {
                 cur.style.width = `${100/this.numberOfColumns}%`;
+                this.currentPage = 0;
               }
             });
           }
         });
 
-        if (!this.viewportColumnsMatched) { 
-          this.numberOfColumns = 1;
-          this.$refs.wrapper.childNodes.forEach(cur => {
-            cur.style.width = '100%';
-          });
-        }
         setTimeout(() => {
           this.elementWidth = this.$slots.default[0].elm.offsetWidth;
         });
-      },
-      setActive() {
-        this.sortedActive.forEach(cur => {
-          if (window.matchMedia(`(min-width: ${cur[0]}px)`).matches) {
-            this.isActive = cur[1];
-          }
-        });
       }, 
+      setCarousel() {
+        this.setActive();
+        this.setColumns();
+      },
       runCarousel() {
         if (this.autoplay) {
           this.autoplayInterval = setInterval(() => {
@@ -243,17 +230,14 @@
       }, 
     },
     mounted() {
-      this.setColumns();
-      this.setActive();
+      this.setCarousel();
       this.runCarousel();
-      window.addEventListener('resize', () => {
-        this.setColumns();
-        this.setActive();
-      });
+      window.addEventListener('resize', this.setCarousel);
     },
     destroyed() {
       clearInterval(this.autoplayInterval);
       clearTimeout(this.animateTimeout);
+      window.removeEventListener('resize', this.setCarousel);
     }
   }
 </script>
@@ -282,40 +266,18 @@
     cursor: pointer;
   }
 
-  .navdot--round {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    margin: 0 5px;
-  }
-
-  .navdot--square {
-    height: 10px;
-    width: 10px;
-    margin: 0 5px;
-  }
-
-  .navdot--flat {
-    height: 1px;
-    width: 15px;
-    margin: 0 1px;
-  }
-
   .carousel-wrapper {
     display: flex;
     align-items: stretch;
+    /* z-index: 10; */
     cursor: grab;
-    z-index: 10;
   }
 
   .carousel-wrapper:active {
     cursor: grabbing;
   }
 
-  .carousel-wrapper > div, 
-  .carousel-wrapper > p,
-  .carousel-wrapper > span, 
-  .carousel-wrapper > ul {
+  .carousel-wrapper > * {
     width: 100%;
     flex-shrink: 0;
     position: relative;
@@ -326,45 +288,10 @@
   }
 
   .inactive {
-    flex-direction: column;
-  }
-
-  .carousel__indicator-left,
-  .carousel__indicator-right {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 1rem;
-    text-align: center;
-    opacity: 0.2;
-    font-size: 2rem;
-  }
-
-  .carousel__indicator-right {
-    left: initial;
-    right: 0;
-  }
-
-  @media (min-width: 1024px) {
-    .inactive {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-    }
-  }
-
-  .fade-arrows-enter-active {
-    animation: fade-arrows 0.5s reverse;
-  }
-
-  @keyframes fade-arrows {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    cursor: default !important;
   }
   
 </style>

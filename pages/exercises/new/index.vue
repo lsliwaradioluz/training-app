@@ -1,12 +1,7 @@
 <template>
   <div class="createexercise">
+    <Header>Nowe ćwiczenie</Header>
     <ExerciseEditor />
   </div>
 </template>
-
-<script>
-export default {
-  layout: 'exercise',
-}
-</script>
 

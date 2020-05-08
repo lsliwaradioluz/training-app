@@ -96,11 +96,9 @@
   .context-menu__panel {
     background-color: white;
     color: rgba(0, 0, 0, 0.774);
-    border-radius: 5px;
     position: absolute;
     top: 0;
-    padding: .125rem;
-    padding-right: 3rem;
+    padding-right: 2rem;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.233);
     z-index: 1000;
   }

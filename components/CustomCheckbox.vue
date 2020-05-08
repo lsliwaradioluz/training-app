@@ -44,15 +44,32 @@
   }
 
   input {
+    box-sizing: content-box;
     margin-bottom: 0;
     appearance: none;
     height: 20px;
-    width: 20px;
+    width: 40px;
     border: 2px solid color(headers);
-    transition: all 0.3s;
+    border-radius: 15px;
+    transition: all 0.5s;
+    position: relative;
+    &::after {
+      content:"";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 20px;
+      width: 20px;
+      background-color: white;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
   }
 
   input:checked {
     background-color: color(headers);
+    &::after {
+      left: 20px;
+    }
   }
 </style>

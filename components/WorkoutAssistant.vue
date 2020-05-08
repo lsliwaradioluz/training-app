@@ -4,19 +4,17 @@
     :style="{ backgroundImage: image }"
     @click.self="nextUnit">
     <div>
-  <!-- STOPER -->
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-  <!-- ĆWICZENIE -->
       <div class="workout-assistant__exercise pt1 pb1 row a-start j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00 t-white">{{ current.exercise.name }}</h3>
           </MovingText>
-          <p class="fs-11 m00" v-if="current.remarks">{{ current.remarks }}</p>
-          <p class="fs-11 m00" v-else>Wykonaj teraz</p>
-          <p class="fs-11 m00" v-if="lastSet">ostatnia seria</p>
+          <p class="fs-12 m00" v-if="current.remarks">{{ current.remarks }}</p>
+          <p class="fs-12 m00" v-else>Wykonaj teraz</p>
+          <p class="fs-12 m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
           :time="current.time"
@@ -34,10 +32,10 @@
       </div>
       <div class="workout-assistant__indicators" >
         <div class="row j-between" style="margin-bottom: 1px">
-          <p class="m00 fs-11">
+          <p class="m00 fs-12">
             {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
           </p>
-          <p class="m00 fs-11" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
+          <p class="m00 fs-12" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
         </div>
         <div class="row j-between">
           <span 
@@ -97,32 +95,24 @@ export default {
       showStopwatch: false,
       automaticModeOn: false,
       voiceAssistantMode: 'off',
-      voiceAssistantSpeaking: false, 
-      showInfoModal: false,
-      infoModalMessage: null,
-      infoModalTimeout: null,
+      voiceAssistantSpeaking: false,
     }
   },
   watch: {
     voiceAssistantMode() {
-      clearTimeout(this.infoModalTimeout);
-      this.showInfoModal = true;
       switch (this.voiceAssistantMode) {
         case 'on':
-          this.infoModalMessage = 'Asystent głosowy: włączony';
           this.playAudio(this.soundname);
+          this.setNotification('Asystent głosowy włączony');
           break;
         case 'half-on':
-          this.infoModalMessage = 'Asystent głosowy: tylko dźwięki timera';
+          this.setNotification('Asystent głosowy: tylko dźwięki timera');
           if (this.voiceAssistantSpeaking) this.audio.pause();
           break;
         case 'off':
-          this.infoModalMessage = 'Asystent głosowy: wyłączony'; 
+          this.setNotification('Asystent głosowy wyłączony');
           this.audio.pause();
       }
-      this.infoModalTimeout = setTimeout(() => {
-        this.showInfoModal = false;
-      }, 2000);
     },
     currentUnit() {
       this.$emit('set-current-section', this.controls.section);
@@ -147,6 +137,7 @@ export default {
   methods: {
     ...mapMutations({
       toggleBlockDescription: 'assistant/toggleBlockDescription',
+      setNotification: 'main/setNotification',
     }),
     nextUnit() {
       this.controls.unit++;
@@ -199,17 +190,12 @@ export default {
       }
     },
     toggleAutomaticMode() {
-      clearTimeout(this.infoModalTimeout);
       this.automaticModeOn = !this.automaticModeOn;
-      this.showInfoModal = true;
       if (this.automaticModeOn) {
-        this.infoModalMessage = 'Tryb automatyczny włączony';
+        this.setNotification('Tryb automatyczny włączony');
       } else {
-        this.infoModalMessage = 'Tryb automatyczny wyłączony';
+        this.setNotification('Tryb automatyczny wyłączony');
       }
-      this.infoModalTimeout = setTimeout(() => {
-        this.showInfoModal = false;
-      }, 2000);
     },
     playAudio(audio) {
       if (!this.audio) this.audio = new Audio();

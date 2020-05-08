@@ -25,8 +25,7 @@
         placeholder="Powtórz hasło"
         type="password"
         :spellcheck="false"></CustomInput>
-      <button class="button-primary mt1" @click.prevent="register" type="button">Załóż konto</button>
-      <p class="register-coach__error">{{ error }}</p>
+      <button class="button-primary mt1 mb1" @click.prevent="register" type="button">Załóż konto</button>
       <div class="register-coach__help-buttons row j-center">
         <span class="t-faded">Masz już konto?&nbsp;</span>
         <nuxt-link to="/login">Zaloguj się</nuxt-link>
@@ -49,13 +48,17 @@ export default {
         password: null, 
         repeatPassword: null, 
       },
-      error: ''
     }
   },
   methods: {
     register() {
+      if (!this.user.fullname || !this.user.email || !this.user.password || !this.user.repeatPassword) {
+        this.setNotification('Wszystkie pola muszą być wypełnione');
+        return
+      } 
+
       if (this.user.password != this.user.repeatPassword) {
-        this.error = 'Podane hasła nie są takie same';
+        this.setNotification('Podane hasła nie są takie same');
         return
       }
       
@@ -86,23 +89,18 @@ export default {
           });
         })
         .catch(err => {
-          this.error = 'Nie można zarejestrować';
+          this.setNotification('Nieprawidłowy login lub hasło');
         })
     },
     ...mapMutations({
       setUser: 'auth/setUser',
+      setNotification: 'main/setNotification',
     })
   }, 
 }
 </script>
 
 <style lang="scss" scoped>
-
-  .register-coach__error {
-    font-size: 11px;
-    color: color(error);
-    text-align: center;
-  }
 
   .register-coach__help-buttons {
     font-size: 12px;

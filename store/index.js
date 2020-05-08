@@ -2,7 +2,6 @@ import cookieparser from 'cookieparser';
 
 export const actions = {  
   nuxtServerInit({ commit }, { req }) {
-    console.log('nuxt init');
     let user = null;
     let workoutToPair = null;
     let workoutToCopy = null;

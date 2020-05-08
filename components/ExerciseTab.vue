@@ -2,7 +2,6 @@
   <div class="exercise-tab column pt05 pb05">
     <div class="row j-between">
       <nuxt-link class="exercise-tab__link pr1 row" :to="exercise.id" tag="div" append>
-        <!-- <div class="exercise-avatar mr05" :style="{ backgroundImage: `url('${image}')` }"></div> -->
         <div>
           <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
           <p class="exercise-tab__description t-medium t-faded m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
@@ -12,17 +11,11 @@
       <div class="row a-center">
         <ContextMenu>
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-headers"></i>
+            <i class="flaticon-vertical-dots t-headers mr0"></i>
           </template>
           <template v-slot:options>
-            <button type="button" @click="deleteExercise">
-              <i class="flaticon-trash fs-09" style="margin-right: .25rem"></i>
-              Usuń
-            </button>
-            <nuxt-link tag="button" type="button" :to="`${exercise.id}/edit`" append>
-              <i class="flaticon-writing fs-09" style="margin-right: .25rem"></i>
-              Edytuj
-            </nuxt-link>
+            <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
+            <nuxt-link class="flaticon-writing mr05" tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
           </template>
         </ContextMenu>
       </div>

@@ -2,13 +2,10 @@
   <div>
     <div class="workout" v-if="!$apollo.loading">
       <div v-show="!showWorkoutAssistant">
-        <h1 class="mt0 mb1">Trening</h1>
-        <!-- <p class="t-faded">{{ workoutWithoutEmptySections.scheduled | getDayName }} {{ workoutWithoutEmptySections.scheduled | reverseDate }}</p> -->
-        <!-- <p>Przesuwaj palcem w lewo, by przeglądać rozpiskę treningową. Rozwiń <i class="flaticon-vertical-dots fs-10"></i> by włączyć asystenta lub dodać wyniki.</p> -->
         <WorkoutPanel
           :workout="workoutWithoutEmptySections" 
-          @show-assistant="runWorkoutAssistant"
-          @edit-score="scoreEditorOpen = true" />
+          @show-assistant="runWorkoutAssistant">
+        </WorkoutPanel>
         <div class="row mb1" v-if="workouts.length > 1">
           <button 
             class="button-secondary"
@@ -22,19 +19,19 @@
         <div>
           <div class="carousel-container">
             <Carousel
-              :active="!scoreEditorOpen"
-              :pagination="false"
+              :pagination-config="{ 
+                activeColor: '#FDDCBD', 
+                margin: '0 4px 12px 4px',
+              }"
               :start-from-page="currentSection[currentWorkout]"
               :key="`${showWorkoutAssistant}${currentWorkout}`"
               @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
               <div class="p01 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
                 <Routine
                   :section="section"
-                  :score-editor-open="scoreEditorOpen"
-                  @close-score-editor="scoreEditorOpen = $event"
-                  @add-max="addMax($event)" 
-                  @subtract-max="subtractMax($event)"
-                  @upload-workout="uploadWorkout" />
+                  @upload-workout="uploadWorkout"
+                  view>
+                </Routine>
               </div>
             </Carousel>
           </div>
@@ -87,7 +84,6 @@
     data() {
       return {
         client: this.$apollo.getClient(),
-        scoreEditorOpen: false,
         renderWorkoutAssistant: false,
       }
     },
@@ -132,19 +128,7 @@
         toggleWorkoutAssistant: 'assistant/toggleWorkoutAssistant', 
         clearAssistantState: 'assistant/clearAssistantState',
         setCurrentSection: 'assistant/setCurrentSection',
-      }),
-      addMax({ unit, complex }) {
-        const currentSection = this.currentSection[this.currentWorkout];
-        let max = this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
-        this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max++;
-      },
-      subtractMax({ unit, complex }) {
-        const currentSection = this.currentSection[this.currentWorkout];
-        let max = this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max;
-        if (max == null) this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max = 0;
-        this.workoutWithoutEmptySections.sections[currentSection].complexes[complex].units[unit].max--;
-      }, 
+      }), 
       uploadWorkout() {
         let input = {
           where: {

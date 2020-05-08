@@ -1,8 +1,8 @@
 <template>
   <div class="confirm column j-center" :class="{ 'confirm--active': showConfirm, 'main': showConfirm }">
-    <div class="confirm__window tab b-primary" v-show="showConfirm">
+    <div class="window tab b-primary" v-show="showConfirm">
       <p class="t-center">{{ message }}</p>
-      <div class="confirm__buttons row j-around">
+      <div class="buttons row j-between">
         <button class="button-primary" type="button" @click="confirm">Tak</button>
         <button class="button-primary" type="button" @click="decline">Nie</button>
       </div>
@@ -48,6 +48,10 @@
 
 <style lang="scss" scoped>
 
+  .window {
+    border-radius: 0;
+  }
+
   .confirm--active {
     position: fixed;
     top: 0;
@@ -59,7 +63,7 @@
     transition: background-color 0.5s;
   }
 
-  .confirm__buttons button {
+  .buttons button {
     width: 49%;
   }
 </style>

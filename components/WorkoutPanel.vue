@@ -1,61 +1,37 @@
 <template>
-  <div class="workout-panel row j-between a-center mb2">
-    <div class="row">
-      <div class="avatar mr05" :style="{ backgroundImage: `url('${workout.user.image ? workout.user.image.url : require('assets/images/user.jpg')}')` }"></div>
-      <div class="column a-start">
-        <div v-if="!$store.state.auth.user.admin">
-          <h4 class="m00 t-white" v-if="workout.sticky">Podwieszony</h4>
-          <h4 class="m00" v-else>{{ workout.scheduled | reverseDate }}</h4>
-          <p class="m00 fs-12 faded" v-if="workout.sticky">dodano {{ workout.createdAt | reverseDate }}</p>
-          <p class="m00 fs-12 faded" v-else>{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
-        </div>
-        <div v-else>
-          <h4 class="m00 t-white">{{ workout.user.fullname }}</h4>
-          <p class="m00 fs-12 faded" v-if="workout.sticky">Podwieszony</p>
-          <p class="m00 fs-12 faded" v-else>{{ workout.scheduled | getDayName }} {{ workout.scheduled | reverseDate }}</p>
-        </div>
-      </div>
+  <div class="workout-panel column">
+    <Header>
+      <span>Trening</span>
+      <Date :date="workout.scheduled"></Date>
+    </Header>
+    <p v-if="isAdmin">Wyświetlasz trening użytkownika {{ workout.user.fullname }}. Przesuwaj palcem w lewo lub prawo, by przeglądać rozpiskę treningową.</p>
+    <p v-else>Przesuwaj palcem w lewo lub prawo, by przeglądać rozpiskę treningową. Nie wiesz, jak wygląda ćwiczenie? Dotknij jego nazwy, by wyświetlić szczegóły.</p>
+    <div class="buttons row j-between">
+      <button class="button-tertiary" type="button" @click="$emit('show-assistant')">Asystent</button>
+      <nuxt-link 
+        class="button-tertiary mr05 ml05" 
+        tag="button" 
+        type="button" 
+        @click.native="pairWorkout" 
+        to="/users">
+        Paruj
+      </nuxt-link>
+      <button class="button-tertiary" type="button">Notatki</button>
     </div>
-    <ContextMenu>
-      <template v-slot:trigger>
-        <i class="flaticon-vertical-dots"></i>
-      </template>
-      <template v-slot:options>
-        <button
-          type="button" 
-          @click="$emit('show-assistant')">
-          <i class="flaticon-play-and-pause-button"></i>
-          Włącz asystenta
-        </button>
-        <nuxt-link 
-          type="button" 
-          tag="button"
-          to="/users"
-          @click.native="pairWorkout"
-          v-if="$store.state.auth.user.admin">
-          <i class="flaticon-double-arrow-cross-of-shuffle"></i>
-          Paruj
-        </nuxt-link>
-        <button
-          type="button" 
-          @click="$emit('edit-score')">
-          <i class="flaticon-writing"></i>
-          Dodaj wyniki
-        </button>
-      </template>
-    </ContextMenu>
   </div>
 </template>
 
 <script>
+  import Date from '~/components/Date';
 
   export default {
+    components: { Date },
     props: ['workout'], 
-    data() {
-      return {
-        showButton: false,
+    computed: {
+      isAdmin() {
+        return this.$store.state.auth.user.admin;
       }
-    }, 
+    },
     methods: {
       pairWorkout() {
         const workoutToPair = {
@@ -72,7 +48,14 @@
 <style lang="scss" scoped>
 
   .workout-panel {
-    padding-bottom: .5rem;
+    padding-bottom: 1rem;
     margin-bottom: 1rem;
+  }
+
+  .buttons {
+    button {
+      flex-basis: 49%;
+      flex-shrink: 1;
+    }
   }
 </style>
