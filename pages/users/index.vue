@@ -12,8 +12,8 @@
       </div>
       <CustomSearch 
         v-model="filter"
-        placeholder="Szukaj podopiecznego"
-        />
+        placeholder="Szukaj podopiecznego">
+      </CustomSearch>
       <transition-group name="animate-list" v-if="filteredUsers.length > 0">
         <UserTab v-for="user in filteredUsers" :key="user.id" :user="user" edit @transfer="userToTransfer = $event" />
       </transition-group>

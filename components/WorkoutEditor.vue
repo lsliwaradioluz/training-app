@@ -27,7 +27,7 @@
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
       <h4 class="row j-between a-center t-faded m00 pt1 pb05">
-        <span>Rozpiska</span>
+        <span>Rozpiska i już</span>
         <ContextMenu @toggled="showUnitButtons = $event">
           <template v-slot:trigger>
             <button class="flaticon-vertical-dots" type="button"></button>
