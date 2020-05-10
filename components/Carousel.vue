@@ -9,12 +9,12 @@
       mousemove: onTouchMove, 
       mouseup: onTouchEnd 
     } : {}">
-    <div class="carousel-navdots" v-if="isActive" v-show="showPagination && length > 1">
+    <div class="carousel-navdots" v-if="isActive" v-show="showNavigation && length > 1">
       <div 
         class="carousel-navdot"
         :style="[ navdotStyle, { 
-          backgroundColor: n != currentPage + 1 ? 'gray' : paginationConfig.activeColor ? 
-            paginationConfig.activeColor 
+          backgroundColor: n != currentPage + 1 ? 'gray' : navigationConfig.activeColor ? 
+            navigationConfig.activeColor 
             : 'green'
         }]"
         v-for="n in numberOfPages" 
@@ -48,11 +48,11 @@
         type: Array,
         default: () => [[1, 1]]
       }, 
-      showPagination: {
+      showNavigation: {
         type: Boolean, 
         default: () => true
       },
-      paginationConfig: {
+      navigationConfig: {
         type: Object, 
         default: () => {
           return {
@@ -61,6 +61,7 @@
             height: '10px', 
             width: '10px', 
             margin: '5px',
+            fullWidth: false, 
           }
         }
       },
@@ -92,24 +93,21 @@
         elementWidth: 0, 
         autoplayInterval: null, 
         animateTimeout: null,
+        length: 0, 
       }
     },
     computed: {
       navdotStyle() {        
         return { 
-          height: this.paginationConfig.height ? this.paginationConfig.height : '10px', 
-          width: this.paginationConfig.width ? this.paginationConfig.width : '10px', 
-          margin: this.paginationConfig.margin ? this.paginationConfig.margin : '0 5px', 
-          borderRadius: this.paginationConfig.borderRadius ? this.paginationConfig.borderRadius : '50%',
+          height: this.navigationConfig.height ? this.navigationConfig.height : '10px', 
+          width: this.navigationConfig.width ? this.navigationConfig.width : '10px',
+          flexBasis: this.navigationConfig.width ? this.navigationConfig.width : '5px', 
+          flexGrow: this.navigationConfig.fullWidth ? 1 : 0,
+          margin: this.navigationConfig.margin ? this.navigationConfig.margin : '0 5px', 
+          borderRadius: this.navigationConfig.borderRadius ? this.navigationConfig.borderRadius : '50%',
+          transition: 'all 0.5s',
+          cursor: 'pointer',
         }
-      },
-      length() {
-        const slot = this.$slots.default;
-        const filteredSlot = [];
-        for (let key in slot) {
-          if (slot[key].tag != undefined) filteredSlot.push(slot[key]);
-        }
-        return filteredSlot.length;
       },
       maxScrollLeft() {
         return this.currentPage == 0;
@@ -192,12 +190,8 @@
         this.moveStart = null;
         this.move = null;
       },
-      setActive() {
-        this.active.forEach(cur => {
-          if (window.matchMedia(`(min-width: ${cur[0]}px)`).matches) {
-            this.isActive = cur[1];
-          }
-        });
+      setLength() {
+        this.length = this.$slots.default.length;
       },
       setColumns() {
         this.columns.forEach(cur => {
@@ -206,7 +200,7 @@
             this.$refs.wrapper.childNodes.forEach(cur => {
               if (cur.nodeName != '#text') {
                 cur.style.width = `${100/this.numberOfColumns}%`;
-                this.currentPage = 0;
+                if (this.currentPage + 1 > this.numberOfPages) this.currentPage = 0;
               }
             });
           }
@@ -215,16 +209,23 @@
         setTimeout(() => {
           this.elementWidth = this.$slots.default[0].elm.offsetWidth;
         });
-      }, 
+      },
+      setActive() {
+        this.active.forEach(cur => {
+          if (window.matchMedia(`(min-width: ${cur[0]}px)`).matches) {
+            this.isActive = cur[1];
+          }
+        });
+      },
       setCarousel() {
-        this.setActive();
+        this.setLength();
         this.setColumns();
+        this.setActive();
       },
       runCarousel() {
         if (this.autoplay) {
           this.autoplayInterval = setInterval(() => {
-            this.currentPage++ 
-            if (this.currentPage == this.numberOfPages) this.currentPage = 0;
+            this.currentPage != this.numberOfPages ? this.currentPage++ : this.currentPage = 0;
           }, this.autoplaySpeed * 1000);
         }
       }, 
@@ -233,6 +234,9 @@
       this.setCarousel();
       this.runCarousel();
       window.addEventListener('resize', this.setCarousel);
+    },
+    updated() {
+      this.setCarousel();
     },
     destroyed() {
       clearInterval(this.autoplayInterval);
@@ -258,18 +262,11 @@
   .carousel-navdots {
     display: flex;
     justify-content: center;
-    padding-bottom: 0.5rem;
-  }
-
-  .carousel-navdot {
-    transition: all 0.5s;
-    cursor: pointer;
   }
 
   .carousel-wrapper {
     display: flex;
     align-items: stretch;
-    /* z-index: 10; */
     cursor: grab;
   }
 

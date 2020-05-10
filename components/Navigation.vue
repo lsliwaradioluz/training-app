@@ -113,7 +113,7 @@ export default {
     width: 100%;
     background-color: color(secondary);
     color: color(faded);
-    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.753);
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.466);
     li {
       padding: 1rem 0;
       text-align: center;

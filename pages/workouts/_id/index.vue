@@ -6,7 +6,7 @@
           :workout="workoutWithoutEmptySections" 
           @show-assistant="runWorkoutAssistant">
         </WorkoutPanel>
-        <div class="row mb1" v-if="workouts.length > 1">
+        <div class="row" v-if="workouts.length > 1">
           <button 
             class="button-secondary"
             :class="{ 'button-secondary--active': index == currentWorkout }"
@@ -17,16 +17,19 @@
             {{ user | getName }}</button>
         </div>
         <div>
-          <div class="carousel-container">
+          <div class="carousel-container b-secondary">
             <Carousel
-              :pagination-config="{ 
-                activeColor: '#FDDCBD', 
-                margin: '0 4px 12px 4px',
+              :navigation-config="{
+                height: '2px',
+                margin: '0',
+                borderRadius: '0',
+                activeColor: '#FDDCBD',
+                fullWidth: true,
               }"
               :start-from-page="currentSection[currentWorkout]"
               :key="`${showWorkoutAssistant}${currentWorkout}`"
               @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
-              <div class="p01 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
+              <div class="p11 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
                 <Routine
                   :section="section"
                   @upload-workout="uploadWorkout"

@@ -26,32 +26,41 @@
     </div>
   <!-- ROZPISKA  -->
     <div class="workout-editor__routine">
-      <h4 class="row j-between a-center t-faded m00 pt1 pb05">
-        <span>Rozpiska i już</span>
-        <ContextMenu @toggled="showUnitButtons = $event">
+      <div class="row j-between a-center t-faded pt1 pb05">
+        <h4 class="m00 t-faded">Sekcje</h4>
+        <ContextMenu @toggled="carouselBlocked = $event">
           <template v-slot:trigger>
-            <button class="flaticon-vertical-dots" type="button"></button>
+            <span class="flaticon-vertical-dots"></span>
           </template>
           <template v-slot:options>
-            <button class="flaticon-left-arrow-1 fs-12 mr05" @click="createSection('before')">
-              Dodaj sekcję przed
+            <button class="flaticon-pencil fs-12 mr05" @click="createSection">
+              Dodaj
             </button>
-            <button class="flaticon-right-arrow-1 fs-12 mr05" @click="createSection('after')">
-              Dodaj sekcję za
+            <button class="flaticon-left-arrow-1 fs-12 mr05" @click="moveSection('left')" v-show="currentSection > 0">
+              Przesuń w lewo
+            </button>
+            <button class="flaticon-right-arrow-1 fs-12 mr05" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
+              Przesuń w prawo
             </button>
             <button class="flaticon-trash fs-12 mr05" @click="deleteSection">
               Usuń
             </button>
           </template>
         </ContextMenu>
-      </h4>
-      <div class="carousel-container b-secondary" v-if="sections.length > 0">
-        <Carousel 
-          :show-pagination="false" 
-          :blocked="showButtonsPanel || currentComplex != null || showUnitButtons" 
-          :start-from-page="currentSection" 
-          :key="sections.length"
-          @change-page="currentSection = $event">
+      </div>
+      <div class="carousel-container b-secondary">
+        <Carousel
+          :navigation-config="{
+            height: '2px',
+            margin: '0',
+            borderRadius: '0',
+            activeColor: '#FDDCBD',
+            fullWidth: true,
+          }"
+          :blocked="carouselBlocked || currentComplex != null" 
+          :start-from-page="currentSection"
+          @change-page="currentSection = $event"
+          v-if="sections.length > 0">
           <div class="p11 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
             <Routine class="pb2" :section="section" :current-complex="currentComplex">
               <template v-slot:section-buttons>
@@ -64,9 +73,9 @@
                 </div>
               </template>
               <template v-slot:unit-buttons="{ unit, unitindex, complex, complexindex }">
-                <ContextMenu @toggled="showUnitButtons = $event">
+                <ContextMenu @toggled="carouselBlocked = $event">
                   <template v-slot:trigger>
-                    <button class="flaticon-vertical-dots fs-12" type="button"></button>
+                    <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
                   <template v-slot:options>
                     <button class="flaticon-up fs-12 mr05" @click="moveUnit(currentSection, complexindex, unitindex, 'up')" v-show="unitindex != 0">
@@ -78,7 +87,7 @@
                     <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
                       Paruj
                     </button>
-                    <button class="flaticon-writing fs-12 mr05" @click="openUnitEditor(unit, unitindex, complexindex)">
+                    <button class="flaticon-pencil fs-12 mr05" @click="openUnitEditor(unit, unitindex, complexindex)">
                       Edytuj
                     </button>
                     <button class="flaticon-trash fs-12 mr05" @click="deleteUnit(complexindex, unitindex)">
@@ -90,10 +99,10 @@
             </Routine>
           </div>
         </Carousel>
+        <p class="m00 p11" v-else>
+          Na razie nie dodałeś żadnych sekcji.
+        </p>
       </div>
-      <p class="m00 tab" v-else>
-        Na razie nie dodałeś żadnych sekcji.
-      </p>
     <!-- POPRZEDNIE TRENINGI  -->
       <div v-if="user.workouts.length > 0">
         <div class="row j-between a-center pt1 pb05 t-faded">
@@ -111,9 +120,17 @@
             <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
           </div>
         </div>
-        <div class="carousel-container" v-if="sections.length > 0">
-          <Carousel :show-pagination="false" :key="previousWorkoutSections.length">
-            <div class="p11 column b-secondary" v-for="section in previousWorkoutSections" :key="section.id">
+        <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
+          <Carousel 
+            :navigation-config="{
+              height: '2px',
+              margin: '0',
+              borderRadius: '0',
+              activeColor: '#FDDCBD',
+              fullWidth: true,
+            }" 
+            :key="previousWorkoutSections.length">
+            <div class="p11 column" v-for="section in previousWorkoutSections" :key="section.id">
               <Routine
                 :section="section" 
                 @copy-unit="addUnit($event)"
@@ -131,7 +148,8 @@
         :exercises="exercises"
         :editedUnit="editedUnit" 
         @add-unit="addUnit($event)"
-        @cancel="closeUnitEditor"/>
+        @cancel="closeUnitEditor">
+      </UnitEditor>
     </Modal>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
     <div class="workout-editor__buttons">
@@ -161,8 +179,7 @@
       return {
         client: this.$apollo.getClient(),
         ...this.specificData,
-        showButtonsPanel: false,
-        showUnitButtons: null,
+        carouselBlocked: false,
         currentWorkout: 0,
         currentSection: 0, 
         currentComplex: null,
@@ -208,18 +225,18 @@
           name: 'Nowa sekcja',
           complexes: [],
         };
-        const newIndex = index == 'before' ? this.currentSection : this.currentSection + 1;
-        this.sections.splice(newIndex, 0, newSection);
+        this.sections.push(newSection);
+        this.currentSection = this.sections.length - 1;
+      },
+      moveSection(direction) {
+        let sectionToMove = this.sections[this.currentSection];
+        let newIndex = direction == 'left' ? this.currentSection - 1 : this.currentSection + 1;
+        this.sections.splice(this.currentSection, 1);
+        this.sections.splice(newIndex, 0, sectionToMove);
         this.currentSection = newIndex;
-        this.showButtonsPanel = false;
-        setTimeout(() => {
-          let input = `input${newIndex}`;
-          this.$refs[input][0].focus();
-        }, 700);
       },
       deleteSection() {
         this.sections.splice(this.currentSection, 1);
-        this.showButtonsPanel = false;
         this.currentSection = this.currentSection == 0 ? 0 : this.currentSection - 1;
       },
       populateUnitEditor(unit) {
