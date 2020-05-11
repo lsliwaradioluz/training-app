@@ -3,7 +3,7 @@
     <section class="header">
       <h3>{{ section.name }}</h3>
       <aside>
-        <button class="flaticon-plus-1" type="button" @click="$emit('copy-section', section)" v-if="copy"></button>
+        <button class="flaticon-plus" type="button" @click="$emit('copy-section', section)" v-if="copy"></button>
         <slot name="section-buttons"></slot>
       </aside>      
     </section>
@@ -14,7 +14,7 @@
       <div class="complex" v-if="complex.units.length > 1 || currentComplex == complexindex">
         <h4>{{ complex.name }}</h4>
         <aside>
-          <button class="flaticon-plus-1" type="button" @click="$emit('copy-complex', complex)" v-if="copy"></button>
+          <button class="flaticon-plus" type="button" @click="$emit('copy-complex', complex)" v-if="copy"></button>
           <slot name="complex-buttons" :complexindex="complexindex"></slot>
         </aside>
       </div>
@@ -22,7 +22,7 @@
         <div class="unit-header">
           <p>{{ unit.exercise.name }}</p>
           <aside>
-            <button class="flaticon-plus-1" type="button" @click="$emit('copy-unit', unit)" v-if="copy"></button>
+            <button class="flaticon-plus" type="button" @click="$emit('copy-unit', unit)" v-if="copy"></button>
             <nuxt-link class="flaticon-vertical-dots" :to="`/exercises/${unit.exercise.id}`" v-if="view"></nuxt-link>
             <slot name="unit-buttons" :unit="unit" :unitindex="unitindex" :complex="complex" :complexindex="complexindex"></slot>
           </aside>
@@ -70,6 +70,7 @@
     display: flex; 
     flex-direction: column;
     flex-grow: 1;
+    min-height: 200px;
   }
 
   .header {
@@ -80,6 +81,8 @@
     }
     button {
       margin-left: 1rem;
+    }
+    * {
       color: color(headers);
     }
   }

@@ -7,8 +7,7 @@
       placeholder="Adres e-mail"
       type="email"
       :spellcheck="false"></CustomInput>
-    <button class="button-primary mt1" @click.prevent="sendPassword" type="button" :disabled="sending">Resetuj hasło</button>
-    <p class="forgot-password__error">{{ error }}</p>
+    <button class="button-primary mt1 mb1" @click.prevent="sendPassword" type="button" :disabled="sending">Resetuj hasło</button>
     <div class="forgot-pasword__help-buttons row j-center">
       <nuxt-link to="/login" type="button">Wróć do logowania</nuxt-link>
     </div>
@@ -21,7 +20,6 @@
     data() {
       return {
         email: '',
-        error: '',
         sending: false,
       }
     },
@@ -40,7 +38,7 @@
           })
           .catch(err => {
             this.sending = false;
-            this.error = 'Podany adres jest nieprawidłowy';
+            this.$store.commit('main/setNotification', 'Podany adres jest nieprawidłowy.');
           })
       }
     }
@@ -48,12 +46,6 @@
 </script>
 
 <style lang="scss" scoped>
-
-  .forgot-password__error {
-    font-size: 11px;
-    color: color(error);
-    text-align: center;
-  }
 
   .forgot-pasword__help-buttons {
     font-size: 12px;

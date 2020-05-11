@@ -25,10 +25,6 @@
 <script>
   export default {
     props: {
-      fromBottom: {
-        type: Boolean, 
-        default: () => true, 
-      },
       left: {
         type: Boolean, 
         default: () => true, 
@@ -65,11 +61,6 @@
         this.$emit('toggled', value);
       }
     },
-    methods: {
-      showEvent() {
-        console.log(event);
-      }
-    },
     mounted() {
       window.addEventListener('click', () => {
         // if you click an element other than trigger button with given randomID, close the panel
@@ -97,7 +88,7 @@
     background-color: white;
     color: rgba(0, 0, 0, 0.774);
     position: absolute;
-    top: 0;
+    top: 1rem;
     padding-right: 2rem;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.233);
     z-index: 1000;

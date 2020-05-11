@@ -2,7 +2,7 @@
   <nav class="navigation" role="navigation">
     <ul class="row j-between a-center">
       <li>
-        <button class="flaticon-left-arrow mr05 t-faded" @click="$router.go(-1)"></button>
+        <button class="flaticon-left-arrow-2 mr05 t-faded" @click="$router.go(-1)"></button>
       </li>
       <li class="row">
         <button class="flaticon-continuous t-faded" @click="reloadPage"></button>

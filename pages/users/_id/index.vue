@@ -8,7 +8,7 @@
       <h3 class="head row j-between a-center pr0">
         <span>Lista treningów</span>
         <nuxt-link
-          class="flaticon-plus-1 t-white" 
+          class="flaticon-plus t-white" 
           :to="{ path: '/workouts/new', query: { id: $route.params.id } }" 
           tag="i"></nuxt-link>
       </h3>

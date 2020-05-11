@@ -4,7 +4,7 @@
     :style="{ backgroundImage: backgroundImage }">
     <div class="row j-between t-green mb05">
       <h3 class="m00" v-if="editedUnit.exercise.name != ''">Edytuj ćwiczenie</h3>
-      <h3 class="m00" v-else>Nowe ćwiczenie</h3>
+      <h3 class="m00" v-else>Dodaj ćwiczenie</h3>
     </div>
     <form>
       <div>
@@ -31,7 +31,9 @@
         <CustomTextarea
           placeholder="Uwagi do ćwiczenia" 
           :value="unit.remarks"
-          @type="unit.remarks = $event" />
+          v-model="unit.remarks"
+          :show-status="false">
+        </CustomTextarea>
       </div>
       <div class="unit-editor__buttons row j-between mt2">
         <button class="button-primary" type="button" @click="addUnit" :disabled="disableAddUnitButton">Zapisz</button>

@@ -14,7 +14,6 @@
       type="password"
       autocomplete="off"></CustomInput>
     <button class="button-primary mt1" @click="resetPassword">Resetuj hasło</button>
-    <p class="reset-password__error">{{ error }}</p>
   </form>
 </template>
 
@@ -27,7 +26,6 @@ export default {
     return {
       password: '', 
       repeatPassword: '',
-      error: ''
     }
   }, 
   methods: {
@@ -47,23 +45,16 @@ export default {
           });
         })
         .catch(err => {
-          this.error = 'Coś poszło nie tak. Spróbuj jeszcze raz';
+          this.setNotification('Coś poszło nie tak. Spróbuj jeszcze raz');
         });
       } else {
-        this.error = 'Podane hasła nie są takie same'
+        this.setNotification('Podane hasła nie są takie same');
       }
     }, 
     ...mapMutations({
-      setUser: 'auth/setUser'
+      setUser: 'auth/setUser',
+      setNotification: 'main/setNotification',
     })
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .reset-password__error {
-    font-size: 11px;
-    color: color(error);
-    text-align: center;
-  }
-</style>

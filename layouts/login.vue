@@ -1,7 +1,7 @@
 <template>
   <div class="login-layout">
     <button class="m10 t-faded" @click="goBack">
-      <i class="flaticon-left-arrow"></i>
+      <i class="flaticon-left-arrow-2"></i>
     </button>
     <Notification />
     <Nuxt />

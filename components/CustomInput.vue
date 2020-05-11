@@ -13,6 +13,7 @@
     <span class="custom-input__status flaticon-tick" v-if="showStatus && showTick"></span>
     <input
       :class="{ pl15: icon, blind: disabled }"
+      ref="input"
       :value="value"
       :placeholder="placeholder"
       :type="revealPassword && type == 'password' ? 'text' : type" 
@@ -68,6 +69,9 @@
       }
     }, 
     methods: {
+      focus() {
+        this.$refs.input.focus();
+      },
       verifyInput() {
         this.value && this.value.length > 0 ? this.showTick = true : this.showTick = false;
       }
@@ -115,6 +119,7 @@
     transition: all .25s ease;
     color: color(text);
     border-bottom: 1px solid color(faded);
+    word-break: break-word;
   }
 
   input:focus {

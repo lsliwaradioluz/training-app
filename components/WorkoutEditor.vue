@@ -1,7 +1,6 @@
 <template>
   <div class="workout-editor">
     <p class="mb0">Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie nowe.</p>
-  <!-- TERMIN  -->
     <h4 class="t-faded m00 pt1 pb05">Termin</h4>
     <div class="inputs">
       <CustomInput 
@@ -28,52 +27,73 @@
     <div class="workout-editor__routine">
       <div class="row j-between a-center t-faded pt1 pb05">
         <h4 class="m00 t-faded">Sekcje</h4>
-        <ContextMenu @toggled="carouselBlocked = $event">
-          <template v-slot:trigger>
-            <span class="flaticon-vertical-dots"></span>
-          </template>
-          <template v-slot:options>
-            <button class="flaticon-pencil fs-12 mr05" @click="createSection">
-              Dodaj
-            </button>
-            <button class="flaticon-left-arrow-1 fs-12 mr05" @click="moveSection('left')" v-show="currentSection > 0">
-              Przesuń w lewo
-            </button>
-            <button class="flaticon-right-arrow-1 fs-12 mr05" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
-              Przesuń w prawo
-            </button>
-            <button class="flaticon-trash fs-12 mr05" @click="deleteSection">
-              Usuń
-            </button>
-          </template>
-        </ContextMenu>
+        <button class="flaticon-plus" type="button" @click="createSection"></button>
       </div>
       <div class="carousel-container b-secondary">
         <Carousel
-          :navigation-config="{
-            height: '2px',
-            margin: '0',
-            borderRadius: '0',
-            activeColor: '#FDDCBD',
-            fullWidth: true,
-          }"
-          :blocked="carouselBlocked || currentComplex != null" 
+          :navigation-config="carouselNavConfig"
+          :blocked="currentComplex != null" 
           :start-from-page="currentSection"
           @change-page="currentSection = $event"
           v-if="sections.length > 0">
           <div class="p11 column" v-for="(section, sectionindex) in sections" :key="sectionindex">
-            <Routine class="pb2" :section="section" :current-complex="currentComplex">
+            <Routine :section="section" :current-complex="currentComplex">
               <template v-slot:section-buttons>
-                <button class="flaticon-plus-1" type="button" @click="openUnitEditor()"></button>
+                <ContextMenu>
+                  <template v-slot:trigger>
+                    <span class="flaticon-vertical-dots"></span>
+                  </template>
+                  <template v-slot:options>
+                    <button class="flaticon-add-button fs-12 mr05" @click="openUnitEditor()">
+                      Dodaj ćwiczenie
+                    </button>
+                    <button class="flaticon-pencil fs-12 mr05" @click="openNameEditor()">
+                      Zmień nazwę
+                    </button>
+                    <button class="flaticon-left-arrow-2 fs-12 mr05" @click="moveSection('left')" v-show="currentSection > 0">
+                      Przesuń w lewo
+                    </button>
+                    <button class="flaticon-right-arrow-2 fs-12 mr05" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
+                      Przesuń w prawo
+                    </button>
+                    <button class="flaticon-trash fs-12 mr05" @click="deleteSection">
+                      Usuń
+                    </button>
+                  </template>
+                </ContextMenu>
               </template>
               <template v-slot:complex-buttons="{ complexindex }">
-                <div>
-                  <button class="flaticon-plus-1 fs-12" type="button" @click="currentComplex = complexindex" v-show="currentComplex != complexindex"></button>
-                  <button class="flaticon-tick fs-12" type="button" @click="currentComplex = null" v-show="currentComplex == complexindex"></button>
-                </div>
+                <ContextMenu
+                  v-show="currentComplex != complexindex">
+                  <template v-slot:trigger>
+                    <span class="flaticon-vertical-dots fs-12"></span>
+                  </template>
+                  <template v-slot:options>
+                    <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex">
+                      Edytuj
+                    </button>
+                    <button class="flaticon-pencil fs-12 mr05" @click="openNameEditor(complexindex)">
+                      Zmień nazwę
+                    </button>
+                    <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
+                      Przesuń w górę
+                    </button>
+                    <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
+                      Przesuń w dół
+                    </button>
+                    <button class="flaticon-trash fs-12 mr05" @click="deleteComplex(complexindex)">
+                      Usuń
+                    </button>
+                  </template>
+                </ContextMenu>
+                <button class="flaticon-tick fs-12" type="button" @click="currentComplex = null" v-show="currentComplex == complexindex"></button>
               </template>
               <template v-slot:unit-buttons="{ unit, unitindex, complex, complexindex }">
-                <ContextMenu @toggled="carouselBlocked = $event">
+                <ContextMenu 
+                  :bottom="
+                    unitindex == complex.units.length - 1
+                    && complexindex == section.complexes.length - 1
+                    && unitindex + complexindex > 0">
                   <template v-slot:trigger>
                     <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
@@ -82,6 +102,12 @@
                       Przesuń w górę
                     </button>
                     <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveUnit(currentSection, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
+                      Przesuń w dół
+                    </button>
+                    <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
+                      Przesuń w górę
+                    </button>
+                    <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
                       Przesuń w dół
                     </button>
                     <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
@@ -122,13 +148,7 @@
         </div>
         <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
           <Carousel 
-            :navigation-config="{
-              height: '2px',
-              margin: '0',
-              borderRadius: '0',
-              activeColor: '#FDDCBD',
-              fullWidth: true,
-            }" 
+            :navigation-config="carouselNavConfig" 
             :key="previousWorkoutSections.length">
             <div class="p11 column" v-for="section in previousWorkoutSections" :key="section.id">
               <Routine
@@ -151,6 +171,13 @@
         @cancel="closeUnitEditor">
       </UnitEditor>
     </Modal>
+    <Modal :show="nameEditorVisible" @close="nameEditorVisible = false">
+      <NameEditor 
+        :name="currentComplex == null ? sections[currentSection].name : sections[currentSection].complexes[currentComplex].name"
+        @name-edited="closeNameEditor($event)"
+        @close="closeNameEditor">
+      </NameEditor>
+    </Modal>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
     <div class="workout-editor__buttons">
       <button class="button-primary" type="button" @click="uploadWorkout">Zapisz</button>
@@ -160,6 +187,7 @@
 </template>
 
 <script>
+  import NameEditor from '~/components/NameEditor.vue';
   import exercisesQuery from '~/apollo/queries/users/_id/exercises.gql';
   import getUserQuery from '~/apollo/queries/users/_id/main.gql';
   import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
@@ -167,6 +195,7 @@
   import updateWorkout from '~/apollo/mutations/updateWorkout.gql';
   
   export default {
+    components: { NameEditor },
     props: {
       specificData: {
         type: Object
@@ -179,13 +208,13 @@
       return {
         client: this.$apollo.getClient(),
         ...this.specificData,
-        carouselBlocked: false,
-        currentWorkout: 0,
         currentSection: 0, 
         currentComplex: null,
         currentUnit: null,
+        currentWorkout: 0,
         exercises: null,
         editedUnit: null, 
+        nameEditorVisible: false,
       }
     },
     computed: {
@@ -217,6 +246,15 @@
           return section.complexes.length > 0;
         });
         return previousWorkoutSections;
+      },
+      carouselNavConfig() {
+        return {
+          height: '2px',
+          margin: '0',
+          borderRadius: '0',
+          activeColor: '#FDDCBD',
+          fullWidth: true,
+        }
       }
     },
     methods: {
@@ -238,6 +276,61 @@
       deleteSection() {
         this.sections.splice(this.currentSection, 1);
         this.currentSection = this.currentSection == 0 ? 0 : this.currentSection - 1;
+      },
+      copySection(section) {
+        const sectionClone = JSON.parse(JSON.stringify(section));
+        this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
+        this.sections[this.currentSection].name = sectionClone.name;
+      },
+      moveComplex(sectionindex, complexindex, direction) {
+        let currentComplexes = this.sections[sectionindex].complexes;
+        let complexToMove = currentComplexes[complexindex];
+        let newIndex = direction == 'up' ? complexindex - 1 : complexindex + 1;
+        
+        currentComplexes.splice(complexindex, 1);
+        currentComplexes.splice(newIndex, 0, complexToMove);
+      },  
+      deleteComplex(complexindex) {
+        this.sections[this.currentSection].complexes.splice(complexindex, 1);
+        this.currentComplex = null;
+      },
+      copyComplex(complex) {
+        const complexClone = JSON.parse(JSON.stringify(complex));
+        this.sections[this.currentSection].complexes.push(complexClone);
+      },
+      addUnit(unit) {
+        const unitClone = JSON.parse(JSON.stringify(unit));
+        if (this.currentComplex == null && this.currentUnit == null) {
+          const newComplex = {
+            name: "Blok", 
+            units: [
+              unitClone
+            ]
+          }
+          this.sections[this.currentSection].complexes.push(newComplex);
+        } else if (this.currentComplex != null && this.currentUnit == null) {
+          this.sections[this.currentSection].complexes[this.currentComplex].units.push(unitClone);
+        } else {
+          this.sections[this.currentSection].complexes[this.currentComplex].units[this.currentUnit] = unitClone;
+          this.currentComplex = null;
+          this.currentUnit = null;
+        }
+        this.editedUnit = null;
+      },
+      deleteUnit(complex, unit) {
+        this.sections[this.currentSection].complexes[complex].units.splice(unit, 1);
+        if (this.sections[this.currentSection].complexes[complex].units.length == 0) { 
+          this.sections[this.currentSection].complexes.splice(complex, 1);
+          this.currentComplex = null;
+        }
+      },
+      moveUnit(sectionindex, complexindex, unitindex, direction) {
+        let currentUnits = this.sections[sectionindex].complexes[complexindex].units;
+        let unitToMove = currentUnits[unitindex];
+        let newIndex = direction == 'up' ? unitindex - 1 : unitindex + 1;
+        
+        currentUnits.splice(unitindex, 1);
+        currentUnits.splice(newIndex, 0, unitToMove);
       },
       populateUnitEditor(unit) {
         if (unit != undefined) {
@@ -304,48 +397,18 @@
         this.currentComplex = null;
         this.currentUnit = null;
       },
-      addUnit(unit) {
-        const unitClone = JSON.parse(JSON.stringify(unit));
-        if (this.currentComplex == null && this.currentUnit == null) {
-          const newComplex = {
-            name: "Blok", 
-            units: [
-              unitClone
-            ]
-          }
-          this.sections[this.currentSection].complexes.push(newComplex);
-        } else if (this.currentComplex != null && this.currentUnit == null) {
-          this.sections[this.currentSection].complexes[this.currentComplex].units.push(unitClone);
-        } else {
-          this.sections[this.currentSection].complexes[this.currentComplex].units[this.currentUnit] = unitClone;
+      openNameEditor(complex) {
+        if (complex != undefined) this.currentComplex = complex; 
+        this.nameEditorVisible = true;
+      },
+      closeNameEditor(name) {
+        if (this.currentComplex != null && name) {
+          this.sections[this.currentSection].complexes[this.currentComplex].name = name;
           this.currentComplex = null;
-          this.currentUnit = null;
+        } else if (!this.currentComplex && name) {
+          this.sections[this.currentSection].name = name;
         }
-        this.editedUnit = null;
-      },
-      deleteUnit(complex, unit) {
-        this.sections[this.currentSection].complexes[complex].units.splice(unit, 1);
-        if (this.sections[this.currentSection].complexes[complex].units.length == 0) { 
-          this.sections[this.currentSection].complexes.splice(complex, 1);
-          this.currentComplex = null;
-        }
-      },
-      moveUnit(sectionindex, complexindex, unitindex, direction) {
-        let currentUnits = this.sections[sectionindex].complexes[complexindex].units;
-        let unitToMove = currentUnits[unitindex];
-        let newIndex = direction == 'up' ? unitindex - 1 : unitindex + 1;
-        
-        currentUnits.splice(unitindex, 1);
-        currentUnits.splice(newIndex, 0, unitToMove);
-      },
-      copySection(section) {
-        const sectionClone = JSON.parse(JSON.stringify(section));
-        this.sections[this.currentSection].complexes.push(...sectionClone.complexes);
-        this.sections[this.currentSection].name = sectionClone.name;
-      },
-      copyComplex(complex) {
-        const complexClone = JSON.parse(JSON.stringify(complex));
-        this.sections[this.currentSection].complexes.push(complexClone);
+        this.nameEditorVisible = false;
       },
       uploadWorkout() {
         let input;
@@ -406,7 +469,7 @@
       showNextWorkout() {
         this.currentWorkout == this.user.workouts.length - 1 ? this.currentWorkout = this.user.workouts.length - 1 : this.currentWorkout++
       }, 
-    }, 
+    },
   }
 </script>
 
