@@ -29,32 +29,31 @@
         </template>
         <template v-slot:options>
           <nuxt-link
+            class="flaticon-pencil mr05"
             tag="button"
             type="button" 
             :to="{ path: `/workouts/${workout.id}/edit`, query: { user: user.id } }">
-            <i class="flaticon-pencil"></i>
             Edytuj
-            </nuxt-link>
+          </nuxt-link>
           <nuxt-link
+            class="flaticon-copy mr05"
             type="button"
             tag="button"
             to="/users"
             @click.native="copyWorkout"
             v-if="workout.ready">
-            <i class="flaticon-copy"></i>
             Kopiuj
           </nuxt-link>
           <nuxt-link 
+            class="flaticon-double-arrow-cross-of-shuffle mr05"
             type="button" 
             tag="button"
             to="/users"
             @click.native="pairWorkout" 
             v-if="workout.ready">
-            <i class="flaticon-double-arrow-cross-of-shuffle"></i>
             Paruj
           </nuxt-link>
-          <button type="button" @click="deleteWorkout">
-            <i class="flaticon-trash"></i>
+          <button class="flaticon-trash mr05" type="button" @click="deleteWorkout">
             Usuń
           </button>
         </template>
@@ -66,7 +65,7 @@
 <script>
   import deleteWorkout from '~/apollo/mutations/deleteWorkout.gql';
   import getUserQuery from '~/apollo/queries/users/_id/main.gql';
-  import getWorkoutsQuery from '~/apollo/queries/workouts/new/main.gql';
+
   export default {
     props: ['workout', 'user'],
     data() {
@@ -107,19 +106,13 @@
             },
             update: (cache, { data: { deleteWorkout } }) => {
               // read data from cache for chosen queries
-              const data_1 = cache.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
-              const data_2 = cache.readQuery({ query: getWorkoutsQuery, variables: { id: this.$route.params.id } });
+              const data = cache.readQuery({ query: getUserQuery, variables: { id: this.$route.params.id } });
               // find index of deleted item in cached user.workouts array 
-              const workoutIndex_1 = data_1.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
-              const workoutIndex_2 = data_2.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
+              const workoutIndex = data.user.workouts.findIndex(workout => workout.id == deleteWorkout.workout.id );
               // remove deleted item from data 
-              data_1.user.workouts.splice(workoutIndex_1, 1);
-              data_2.user.workouts.splice(workoutIndex_2, 1);
+              data.user.workouts.splice(workoutIndex, 1);
               //write data back to cache 
-              this.client.writeQuery({ query: getUserQuery, data: data_1 });
-              if (workoutIndex_2 != -1) {
-                this.client.writeQuery({ query: getWorkoutsQuery, data: data_2 });
-              }
+              this.client.writeQuery({ query: getUserQuery, data: data });
             }
           })
         }
