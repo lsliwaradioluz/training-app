@@ -15,7 +15,7 @@
           </template>
           <template v-slot:options>
             <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
-            <nuxt-link class="flaticon-writing mr05" tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
+            <nuxt-link class="flaticon-pencil mr05" tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
           </template>
         </ContextMenu>
       </div>

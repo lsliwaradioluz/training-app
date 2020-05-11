@@ -1,7 +1,8 @@
 import cookieparser from 'cookieparser';
+import exercisesQuery from '~/apollo/queries/exercises/main.gql';
 
 export const actions = {  
-  nuxtServerInit({ commit }, { req }) {
+  async nuxtServerInit({ commit }, { req, app }) {
     let user = null;
     let workoutToPair = null;
     let workoutToCopy = null;

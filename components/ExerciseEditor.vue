@@ -17,7 +17,7 @@
   <!-- ZDJĘCIE  -->
     <div class="exercise-editor__image-upload p32 column a-center j-center" v-if="!uploadedImage">
       <span class="column j-center a-center" v-if="!uploadedImage && !loadingImage">
-        <i class="flaticon-plus-1 fs-32" @click="launchFileUpload" />
+        <i class="flaticon-plus fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
         <form v-show="false">
           <input

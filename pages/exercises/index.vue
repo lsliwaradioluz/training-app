@@ -4,7 +4,7 @@
       <div class="exercises">
         <Header>
           <span>Ćwiczenia</span>
-          <nuxt-link class="flaticon-plus-1 ml1 t-white" :to="{ path: 'new' }" append></nuxt-link>
+          <nuxt-link class="flaticon-plus ml1 t-white" :to="{ path: 'new' }" append></nuxt-link>
         </Header>
         <p class="mb0">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
         <CustomSearch 
