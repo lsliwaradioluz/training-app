@@ -1,13 +1,16 @@
 <template>
   <div 
-    class="workout-assistant main column j-end pb0"
-    :style="{ backgroundImage: image }"
-    @click.self="nextUnit">
+    class="workout-assistant column j-end"
+    :style="{ backgroundImage: image }">
+    <div class="controls row">
+      <button @click="previousUnit"></button>
+      <button @click="nextUnit"></button>
+    </div>
     <div>
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-      <div class="workout-assistant__exercise pt1 pb1 row a-start j-between">
+      <div class="exercise pt1 pb1 row a-start j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00 t-white">{{ current.exercise.name }}</h3>
@@ -30,7 +33,7 @@
           <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-22">m</span></p>
         </div>
       </div>
-      <div class="workout-assistant__indicators" >
+      <div class="indicators" >
         <div class="row j-between" style="margin-bottom: 1px">
           <p class="m00 fs-12">
             {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
@@ -39,7 +42,7 @@
         </div>
         <div class="row j-between">
           <span 
-            class="workout-assistant__indicators-bar t-center"
+            class="indicators-bar t-center"
             :class="{ 'b-white': index <= controls.unit }"
             v-for="(unit, index) in units" 
             :key="index" 
@@ -47,17 +50,15 @@
         </div>
       </div>
   <!-- PANEL STEROWANIA -->
-      <div class="workout-assistant__panel row j-between a-center" style="z-index: 300">
-        <span>
-          <i class="flaticon-sound" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></i>
-          <i class="flaticon-speaker" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></i>
-          <i class="flaticon-mute" @click="voiceAssistantMode = 'on'" v-else></i>
-        </span>
-        <i class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></i>
-        <i class="flaticon-previous-track-button" @click="previousUnit"></i>
-        <i class="flaticon-play-and-pause-button" @click="nextUnit"></i>
-        <i class="flaticon-counterclockwise" :class="{ 't-headers': showStopwatch }" @click="showStopwatch = !showStopwatch"></i>
-        <i class="flaticon-cancel" @click="$store.commit('assistant/toggleWorkoutAssistant')"></i>
+      <div class="panel row j-between a-center">
+        <button class="flaticon-sound" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></button>
+        <button class="flaticon-speaker" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></button>
+        <button class="flaticon-mute" @click="voiceAssistantMode = 'on'" v-else></button>
+        <button class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></button>
+        <button class="flaticon-previous-track-button" @click="previousUnit"></button>
+        <button class="flaticon-play-and-pause-button" @click="nextUnit"></button>
+        <button class="flaticon-counterclockwise" :class="{ 't-headers': showStopwatch }" @click="showStopwatch = !showStopwatch"></button>
+        <button class="flaticon-cancel" @click="$store.commit('assistant/toggleWorkoutAssistant')"></button>
       </div>
     </div>
   </div>
@@ -317,31 +318,17 @@ export default {
             remarks: remarks,
             soundname: 'luz.mp3'
           });
-        } else if (rest > 0 && i == units.length - 1) {
-          let name, remarks, soundname; 
-
-          if (this.controls.complex < this.sections[this.controls.section].complexes.length - 1) {
-            name = 'Ukończyłeś blok';
-            remarks = 'Odpocznij i przejdź do kolejnego';
-            soundname = 'blok-zakonczony.mp3';
-          } else if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section < this.sections.length - 1) {
-            name = 'Ukończyłeś sekcję';
-            remarks = 'Odpocznij i przejdź do kolejnej';
-            soundname = 'sekcja-zakończona.mp3';
-          } else if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section == this.sections.length - 1) {
-            name = 'Ukończyłeś trening';
-            remarks = 'Daj znać trenerowi, jak poszło!';
-            soundname = 'trening-zakończony.mp3';
-          }
-
-          units.splice(i+1, 0, { 
-            exercise: { 
-              name: name,
-            },
-            remarks: remarks,
-            soundname: soundname,
-          });
         }
+      }
+
+      if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section == this.sections.length - 1) {
+        units.push({ 
+          exercise: { 
+            name: 'Ukończyłeś trening',
+          },
+          remarks: 'Daj znać trenerowi, jak poszło!',
+          soundname: 'trening-zakończony.mp3',
+        });
       }
 
       units.unshift({ 
@@ -372,13 +359,23 @@ export default {
 
   .workout-assistant {
     height: 100vh;
+    padding: 0 1rem;
     background-size: cover;
     background-position: center;
     position: relative;
     overflow: hidden;
   }
 
-  .workout-assistant__exercise div {
+  .controls {
+    margin-left: -1rem;
+    width: 100vw;
+    height: 100%;
+    button {
+      width: 100%;
+    }
+  }
+
+  .exercise div {
     &:first-child {
       flex-basis: 1;
       overflow: hidden;
@@ -388,21 +385,20 @@ export default {
     }
   }
 
-  .workout-assistant__indicators-bar {
+  .indicators-bar {
     height: 2px;
     flex: 1;
     margin-right: 1px;
     background: gray;
-    position: relative;
 
     &:last-child {
       margin: 0;
     }
   }
 
-  .workout-assistant__panel {
+  .panel {
     padding: 1rem 0;
-    i {
+    button {
       font-size: 16px;
     }
   }

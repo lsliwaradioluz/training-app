@@ -1,11 +1,11 @@
 <template>
   <div class="workout-panel column">
     <Header>
-      <span>Trening</span>
+      <span v-if="user.admin && user.username != workout.user.username">{{ workout.user.username }}</span>
+      <span v-else>Trening</span>
       <Date :date="workout.scheduled"></Date>
     </Header>
-    <p v-if="isAdmin">Wyświetlasz trening użytkownika {{ workout.user.fullname }}. Przesuwaj palcem w lewo lub prawo, by przeglądać rozpiskę treningową.</p>
-    <p v-else>Przesuwaj palcem w lewo lub prawo, by przeglądać rozpiskę treningową. Nie wiesz, jak wygląda ćwiczenie? Dotknij jego nazwy, by wyświetlić szczegóły.</p>
+    <p>Zapoznaj się z rozpiską, przesuwając palcem w lewo lub w prawo. Skorzystaj z Cyfrowego Asystenta, który przeprowadzi Cię przez Twój trening krok po kroku. Po zakończonej sesji dodaj komentarz dla trenera.</p>
     <div class="buttons row j-between">
       <button class="button-tertiary" type="button" @click="$emit('show-assistant')">Asystent</button>
       <nuxt-link 
@@ -13,7 +13,8 @@
         tag="button" 
         type="button" 
         @click.native="pairWorkout" 
-        to="/users">
+        to="/users"
+        v-if="user.admin && !isPairing">
         Paruj
       </nuxt-link>
       <button class="button-tertiary" type="button">Notatki</button>
@@ -28,8 +29,11 @@
     components: { Date },
     props: ['workout'], 
     computed: {
-      isAdmin() {
-        return this.$store.state.auth.user.admin;
+      user() {
+        return this.$store.state.auth.user;
+      }, 
+      isPairing() {
+        return this.$store.state.main.workoutToPair;
       }
     },
     methods: {

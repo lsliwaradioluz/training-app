@@ -104,12 +104,14 @@
                     <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveUnit(currentSection, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
                       Przesuń w dół
                     </button>
-                    <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
-                      Przesuń w górę
-                    </button>
-                    <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
-                      Przesuń w dół
-                    </button>
+                    <template v-if="complex.units.length == 1">
+                      <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
+                        Przesuń w górę
+                      </button>
+                      <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
+                        Przesuń w dół
+                      </button>
+                    </template>
                     <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
                       Paruj
                     </button>

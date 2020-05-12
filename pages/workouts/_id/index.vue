@@ -2,51 +2,42 @@
   <div>
     <div class="workout" v-if="!$apollo.loading">
       <div v-show="!showWorkoutAssistant">
+        <button type="button" @click="setCurrentWorkout" style="font-family: 'Teko', sans-serif">
+          {{ currentWorkout == 0 ? users[1] : users[0] }}
+        </button>
         <WorkoutPanel
           :workout="workoutWithoutEmptySections" 
           @show-assistant="runWorkoutAssistant">
         </WorkoutPanel>
-        <div class="row" v-if="workouts.length > 1">
-          <button 
-            class="button-secondary"
-            :class="{ 'button-secondary--active': index == currentWorkout }"
-            type="button"
-            v-for="(user, index) in users" 
-            :key="index"
-            @click="setCurrentWorkout(index)">
-            {{ user | getName }}</button>
-        </div>
-        <div>
-          <div class="carousel-container b-secondary">
-            <Carousel
-              :navigation-config="{
-                height: '2px',
-                margin: '0',
-                borderRadius: '0',
-                activeColor: '#FDDCBD',
-                fullWidth: true,
-              }"
-              :start-from-page="currentSection[currentWorkout]"
-              :key="`${showWorkoutAssistant}${currentWorkout}`"
-              @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
-              <div class="p11 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
-                <Routine
-                  :section="section"
-                  @upload-workout="uploadWorkout"
-                  view>
-                </Routine>
-              </div>
-            </Carousel>
-          </div>
+        <div class="carousel-container b-secondary">
+          <Carousel
+            :navigation-config="{
+              height: '2px',
+              margin: '0',
+              borderRadius: '0',
+              activeColor: '#FDDCBD',
+              fullWidth: true,
+            }"
+            :start-from-page="currentSection[currentWorkout]"
+            :key="`${showWorkoutAssistant}${currentWorkout}`"
+            @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
+            <div class="p11 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
+              <Routine
+                :section="section"
+                @upload-workout="uploadWorkout"
+                view>
+              </Routine>
+            </div>
+          </Carousel>
         </div>
       </div>
     <!-- ASYSTENT  -->
       <div v-if="renderWorkoutAssistant">
         <Carousel 
           v-show="showWorkoutAssistant" 
-          :pagination="false" 
+          :navigation-config="carouselNavConfig" 
           :start-from-page="currentWorkout"
-          @change-page="setCurrentWorkout($event)">
+          @change-page="setCurrentWorkout">
           <WorkoutAssistant
             v-for="(workout, index) in workouts"
             :key="workout.id"
@@ -120,10 +111,19 @@
       users() {
         let users = [];
         this.workouts.forEach(cur => {
-          users.push(cur.user.fullname);
+          users.push(cur.user.username);
         });
         return users;
       },
+      carouselNavConfig() {
+        return {
+          height: '2px',
+          margin: '0',
+          borderRadius: '0',
+          activeColor: '#FDDCBD',
+          fullWidth: true,
+        }
+      }
     }, 
     methods: {
       ...mapMutations({

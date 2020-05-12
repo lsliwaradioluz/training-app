@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-up">
-    <p class="notification m00" v-if="notification">{{ notification }}</p>
+    <p class="notification m00" v-if="notification" @click="unsetNotification">{{ notification }}</p>
   </transition>
 </template>
 
@@ -19,11 +19,17 @@
             this.$store.commit('main/setNotification', null);
           }, 2000);
         }
-      }
+      },
     },
     computed: {
       notification() {
         return this.$store.state.main.notification;
+      }
+    },
+    methods: {
+      unsetNotification() {
+        clearTimeout(this.timeout);
+        this.$store.commit('main/setNotification', null);
       }
     }
   }

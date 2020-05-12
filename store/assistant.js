@@ -12,8 +12,8 @@ export const mutations = {
   toggleWorkoutAssistant(state) {
     state.showWorkoutAssistant = !state.showWorkoutAssistant;
   }, 
-  setCurrentWorkout(state, payload) {
-    state.currentWorkout = payload;
+  setCurrentWorkout(state) {
+    state.currentWorkout == 0 ? state.currentWorkout = 1 : state.currentWorkout = 0;
   },
   setCurrentSection(state, payload) {
     if (payload) {

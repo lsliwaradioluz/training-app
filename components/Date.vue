@@ -35,6 +35,9 @@
     display: flex;
     overflow: hidden;
     position: relative;
+    flex-shrink: 0;
+    margin-left: 1rem;
+    align-self: flex-start;
     &::after {
         content: "";
         position: absolute;
