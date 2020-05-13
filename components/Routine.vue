@@ -112,7 +112,6 @@
       margin: 0;
     }
     button, a {
-      // margin-left: 1rem;
       font-size: 14px;
     }
   }

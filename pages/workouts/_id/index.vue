@@ -2,12 +2,13 @@
   <div>
     <div class="workout" v-if="!$apollo.loading">
       <div v-show="!showWorkoutAssistant">
-        <button type="button" @click="setCurrentWorkout" style="font-family: 'Teko', sans-serif">
-          {{ currentWorkout == 0 ? users[1] : users[0] }}
+        <button type="button" @click="setCurrentWorkout">
+          <h5 class="m00 t-white">{{ currentWorkout == 0 ? users[1] : users[0] }}</h5>
         </button>
         <WorkoutPanel
           :workout="workoutWithoutEmptySections" 
-          @show-assistant="runWorkoutAssistant">
+          @show-assistant="runWorkoutAssistant"
+          @edit-feedback="editingFeedback = true">
         </WorkoutPanel>
         <div class="carousel-container b-secondary">
           <Carousel
@@ -22,11 +23,7 @@
             :key="`${showWorkoutAssistant}${currentWorkout}`"
             @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
             <div class="p11 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
-              <Routine
-                :section="section"
-                @upload-workout="uploadWorkout"
-                view>
-              </Routine>
+              <Routine :section="section" view />
             </div>
           </Carousel>
         </div>
@@ -45,9 +42,17 @@
             :workout-index="index"
             :section-index="currentSection[index]" 
             :is-screen-divided="workouts.length > 1" 
-            @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })" />
+            @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })"
+            @edit-feedback="editingFeedback = true" />
         </Carousel>
       </div>
+      <Modal :show="editingFeedback" @close="editingFeedback = false">
+        <FeedbackEditor 
+          :feedback="workouts[currentWorkout].feedback"
+          @feedback-edited="saveFeedback($event)"
+          @close="editingFeedback = false">
+        </FeedbackEditor>
+      </Modal>
     </div>
     <Placeholder v-else />
   </div>
@@ -79,6 +84,7 @@
       return {
         client: this.$apollo.getClient(),
         renderWorkoutAssistant: false,
+        editingFeedback: false,
       }
     },
     computed: {
@@ -131,18 +137,20 @@
         toggleWorkoutAssistant: 'assistant/toggleWorkoutAssistant', 
         clearAssistantState: 'assistant/clearAssistantState',
         setCurrentSection: 'assistant/setCurrentSection',
+        setNotification: 'main/setNotification',
       }), 
-      uploadWorkout() {
-        let input = {
-          where: {
-            id: this.workoutWithoutEmptySections.id,
-          },
-          data: {
-            sections: this.filteredSections,
-          }
+      async saveFeedback(feedback) {
+        this.workouts[this.currentWorkout].feedback = feedback;
+        this.editingFeedback = false;
+        let input = { 
+          where: { id: this.workoutWithoutEmptySections.id }, 
+          data: { feedback },
         }
-
-        this.client.mutate({ mutation: updateWorkout, variables: { input: input }  })
+        try {
+          await this.client.mutate({ mutation: updateWorkout, variables: { input: input }  });
+        } catch (err) {
+          this.setNotification('Nie udało się zapisać notatki. Sprawdź połączenie z Internetem');
+        }
       }, 
       runWorkoutAssistant() {
         if (!this.renderWorkoutAssistant) {

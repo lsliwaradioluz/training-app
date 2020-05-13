@@ -5,6 +5,7 @@ query($id: ID!) {
     workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true", ready: "true" }) {
       id
       scheduled
+      feedback
       sections {
         id
         name
@@ -17,8 +18,7 @@ query($id: ID!) {
             reps
             time
             distance
-            rest
-            max 
+            rest 
             remarks
             exercise {
               id

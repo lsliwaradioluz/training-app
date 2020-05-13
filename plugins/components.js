@@ -28,6 +28,7 @@ import TransferUser from '../components/TransferUser';
 import Avatar from '../components/Avatar';
 import LazyWrapper from '../components/LazyWrapper';
 import Header from '../components/Header';
+import FeedbackEditor from '../components/FeedbackEditor';
 
 Vue.component('Workout', Workout);
 Vue.component('UserTab', UserTab);
@@ -58,6 +59,7 @@ Vue.component('TransferUser', TransferUser);
 Vue.component('Avatar', Avatar);
 Vue.component('LazyWrapper', LazyWrapper);
 Vue.component('Header', Header);
+Vue.component('FeedbackEditor', FeedbackEditor);
 
 
 

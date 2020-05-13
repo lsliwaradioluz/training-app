@@ -1,7 +1,7 @@
 <template>
   <div class="custom-textarea">
     <transition name="slide-to-left">
-      <p class="custom-textarea__label" v-show="value && value.length > 0">{{ placeholder }}</p>
+      <p class="custom-textarea__label" v-show="value && value.length > 0 && showLabel">{{ placeholder }}</p>
     </transition>
     <span 
       class="custom-textarea__icon" 
@@ -12,7 +12,7 @@
     </span>
     <textarea
       :class="{ pl15: icon}"
-      rows="2"
+      :rows="rows"
       ref="textarea"
       :placeholder="placeholder"
       spellcheck="false"
@@ -42,7 +42,20 @@
         type: Boolean, 
         default: () => true, 
       },
+      showLabel: {
+        type: Boolean, 
+        default: () => true,
+      },
+      rows: {
+        type: Number, 
+        default: () => 3,
+      }
     },
+    methods: {
+      focus() {
+        this.$refs.textarea.focus();
+      },
+    }
   }
 </script>
 

@@ -1,16 +1,20 @@
 <template>
-  <div 
-    class="workout-assistant column j-end"
-    :style="{ backgroundImage: image }">
+  <div class="workout-assistant column j-end">
+    <div class="navigation">
+      <button class="close-button flaticon-left-arrow-2" @click="$store.commit('assistant/toggleWorkoutAssistant')"></button>
+    </div>
+    <div class="images">
+      <div v-for="(image, index) in images" :key="index" :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }"></div>
+    </div>
     <div class="controls row">
       <button @click="previousUnit"></button>
       <button @click="nextUnit"></button>
     </div>
-    <div>
+    <div class="panel">
       <transition name="slide-to-right">
         <Stopwatch v-if="showStopwatch" />
       </transition>
-      <div class="exercise pt1 pb1 row a-start j-between">
+      <div class="panel-exercise pt1 pb1 row a-start j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00 t-white">{{ current.exercise.name }}</h3>
@@ -33,7 +37,7 @@
           <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-22">m</span></p>
         </div>
       </div>
-      <div class="indicators" >
+      <div class="panel-indicators" >
         <div class="row j-between" style="margin-bottom: 1px">
           <p class="m00 fs-12">
             {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
@@ -50,7 +54,7 @@
         </div>
       </div>
   <!-- PANEL STEROWANIA -->
-      <div class="panel row j-between a-center">
+      <div class="panel-buttons row j-between a-center">
         <button class="flaticon-sound" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></button>
         <button class="flaticon-speaker" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></button>
         <button class="flaticon-mute" @click="voiceAssistantMode = 'on'" v-else></button>
@@ -58,7 +62,7 @@
         <button class="flaticon-previous-track-button" @click="previousUnit"></button>
         <button class="flaticon-play-and-pause-button" @click="nextUnit"></button>
         <button class="flaticon-counterclockwise" :class="{ 't-headers': showStopwatch }" @click="showStopwatch = !showStopwatch"></button>
-        <button class="flaticon-cancel" @click="$store.commit('assistant/toggleWorkoutAssistant')"></button>
+        <button class="flaticon-menu" @click="$emit('edit-feedback')"></button>
       </div>
     </div>
   </div>
@@ -225,20 +229,6 @@ export default {
         return 'dzialaj.mp3';
       }
     },
-    image() {
-      let image; 
-      if (this.current.exercise.name == 'Odpocznij') {
-        image = this.next.exercise.image ? this.next.exercise.image.url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
-      } else if (this.current.exercise.name == 'Rozpoczynasz nowy blok' || this.current.exercise.name == 'Witaj w cyfrowym asystencie treningu!') {
-        image = 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
-      } else if (this.current.exercise.name == 'Ukończyłeś blok' || this.current.exercise.name == 'Ukończyłeś sekcję' || this.current.exercise.name == 'Ukończyłeś trening') {
-        image = 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
-      } else {
-        image = this.current.exercise.image ? this.current.exercise.image.url : 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
-      }
-
-      return `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')`;
-    },
     current() {
       return this.units[this.controls.unit];
     },
@@ -260,6 +250,28 @@ export default {
         return unit.sets || unit.time;
       });
       return this.units;
+    },
+    images() {
+      let images = [];
+
+      if (this.current.exercise.name == 'Rozpoczynasz nowy blok') {
+        this.units.forEach(unit => {
+          if (unit.sets && unit.exercise.image && images.indexOf(unit.exercise.image.url) == -1) {
+            images.push(unit.exercise.image.url);
+          }
+        });
+      } else if (this.current.exercise.name == 'Witaj w cyfrowym asystencie treningu!') {
+        const image = 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
+        images.push(image);
+      } else if (this.current.exercise.name == 'Odpocznij') {
+        const image = this.next.exercise.image ? this.next.exercise.image.url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
+        images.push(image);
+      } else {
+        const image = this.current.exercise.image ? this.current.exercise.image.url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
+        images.push(image);
+      }
+
+      return images;
     },
     units() {
       let units = [];
@@ -366,16 +378,53 @@ export default {
     overflow: hidden;
   }
 
+  .navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    z-index: 2;
+  }
+
+  .images {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+      min-height: 140px;
+      flex-basis: 50%;
+      flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    div:first-child {
+      flex-grow: 1;
+    }
+  }
+
   .controls {
     margin-left: -1rem;
     width: 100vw;
     height: 100%;
     button {
       width: 100%;
+      &:active {
+        // give some styles to a button once it's clicked, for example moving arrow like in youtube
+      }
     }
   }
 
-  .exercise div {
+  .panel {
+    z-index: 2;
+  }
+
+  .panel-exercise div {
     &:first-child {
       flex-basis: 1;
       overflow: hidden;
@@ -396,7 +445,7 @@ export default {
     }
   }
 
-  .panel {
+  .panel-buttons {
     padding: 1rem 0;
     button {
       font-size: 16px;

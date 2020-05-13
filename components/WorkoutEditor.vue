@@ -143,11 +143,13 @@
             {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
             ({{ user.workouts[currentWorkout].user.username }})
           </h4>
+          <!-- <button type="button" @click="feedbackVisible = !feedbackVisible">notatka</button> -->
           <div class="row">
-            <button class="flaticon-left-arrow mr05" type="button" @click="showPreviousWorkout"></button>
+            <button class="flaticon-left-arrow" type="button" @click="showPreviousWorkout"></button>
             <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
           </div>
         </div>
+        <p class="t-faded" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
         <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
           <Carousel 
             :navigation-config="carouselNavConfig" 
@@ -217,6 +219,7 @@
         exercises: null,
         editedUnit: null, 
         nameEditorVisible: false,
+        feedbackVisible: false,
       }
     },
     computed: {

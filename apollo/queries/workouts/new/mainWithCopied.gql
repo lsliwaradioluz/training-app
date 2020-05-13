@@ -5,6 +5,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true", ready: "true" }) {
       id
       scheduled
+      feedback
       sections {
         id
         name
@@ -18,7 +19,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
             time
             distance
             rest
-            max 
             remarks
             exercise {
               id
@@ -37,6 +37,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     id
     scheduled
     sticky
+    feedback
     user {
       id
       username
@@ -55,7 +56,6 @@ query($id: ID!, $copiedWorkoutId: ID!) {
           distance
           rest
           remarks
-          max
           exercise {
             id
             name

@@ -24,7 +24,6 @@ query($ids: [ID]!) {
           distance 
           rest
           remarks
-          max
           exercise {
             id
             name
