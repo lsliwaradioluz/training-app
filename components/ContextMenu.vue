@@ -1,12 +1,12 @@
 <template>
   <div class="context-menu">
-    <div class="wrapper">
+    <div class="context-menu__wrapper">
       <button :id="[`trigger-button_${randomID}`]" type="button"  @click="showButtons = !showButtons">
         <slot name="trigger"></slot>
       </button>
       <transition name="roll">
         <div 
-          class="panel column"
+          class="context-menu__panel column"
           :style="{
             top: top && !bottom ? '0' : 'initial', 
             bottom: bottom ? '0' : 'initial',
@@ -63,7 +63,7 @@
     },
     mounted() {
       window.addEventListener('click', () => {
-        // if you click an element other than trigger button with given randomID, close the panel
+        // if you click an element other than trigger button with given randomID, close the context-menu__panel
         if (!event.target.offsetParent || event.target.offsetParent.id != `trigger-button_${this.randomID}`) {
           this.showButtons = false;
         }
@@ -72,7 +72,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style>
   
   .context-menu {
     margin-left: 1rem;
@@ -80,11 +80,11 @@
     align-items: flex-start;
   }
 
-  .wrapper {
+  .context-menu__wrapper {
     position: relative;
   }
 
-  .panel {
+  .context-menu__panel {
     background-color: white;
     color: rgba(0, 0, 0, 0.774);
     position: absolute;
@@ -94,15 +94,15 @@
     z-index: 1000;
   }
 
-  .panel button,
-  .panel a {
+  .context-menu__panel button,
+  .context-menu__panel a {
     text-align: left;
     padding: 0.5rem;
     margin-right: .5rem;
     font-size: 12px;
   }
 
-  .panel i {
+  .context-menu__panel i {
     font-size: .75rem;
     margin-right: .25rem;
   }
