@@ -23,7 +23,11 @@
             :key="`${showWorkoutAssistant}${currentWorkout}`"
             @change-page="setCurrentSection({ index: currentWorkout, section: $event })">
             <div class="p11 column" v-for="section in workoutWithoutEmptySections.sections" :key="section.id">
-              <Routine :section="section" view />
+              <Routine :section="section">
+                <template v-slot:unit-buttons="{ unit }">
+                  <nuxt-link class="flaticon-right-arrow t-faded" :to="`/exercises/${unit.exercise.id}`"></nuxt-link>
+                </template>
+              </Routine>
             </div>
           </Carousel>
         </div>

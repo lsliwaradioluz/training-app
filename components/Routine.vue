@@ -3,7 +3,6 @@
     <section class="header">
       <h3>{{ section.name }}</h3>
       <aside>
-        <button class="flaticon-plus" type="button" @click="$emit('copy-section', section)" v-if="copy"></button>
         <slot name="section-buttons"></slot>
       </aside>      
     </section>
@@ -14,16 +13,13 @@
       <div class="complex" v-if="complex.units.length > 1 || currentComplex == complexindex">
         <h4>{{ complex.name }}</h4>
         <aside>
-          <button class="flaticon-plus" type="button" @click="$emit('copy-complex', complex)" v-if="copy"></button>
-          <slot name="complex-buttons" :complexindex="complexindex"></slot>
+          <slot name="complex-buttons" :complex="complex" :complexindex="complexindex"></slot>
         </aside>
       </div>
       <div class="unit" :class="{ pl05: complex.units.length > 1}" v-for="(unit, unitindex) in complex.units" :key="unitindex">
         <div class="unit-header">
           <p>{{ unit.exercise.name }}</p>
           <aside>
-            <button class="flaticon-plus" type="button" @click="$emit('copy-unit', unit)" v-if="copy"></button>
-            <nuxt-link class="flaticon-vertical-dots" :to="`/exercises/${unit.exercise.id}`" v-if="view"></nuxt-link>
             <slot name="unit-buttons" :unit="unit" :unitindex="unitindex" :complex="complex" :complexindex="complexindex"></slot>
           </aside>
         </div>
@@ -48,18 +44,6 @@
       },
       currentComplex: {
         type: Number, 
-      },
-      view: {
-        type: Boolean, 
-        default: () => false,
-      },
-      edit: {
-        type: Boolean, 
-        default: () => false,
-      },
-      copy: {
-        type: Boolean, 
-        default: () => false,
       },
     },
   }

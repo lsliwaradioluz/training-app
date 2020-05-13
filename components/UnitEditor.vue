@@ -45,6 +45,7 @@
 
 <script>
   import createExercise from '~/apollo/mutations/createExercise.gql';
+  import exercisesQuery from '~/apollo/queries/users/_id/exercises.gql';
 
   export default {
     props: ['editedUnit', 'exercises'],
@@ -81,18 +82,31 @@
         this.unit.exercise = {...exercise};
       },
       createExercise() {
-        const input = {
-          data: {
-            name: this.unit.exercise.name
+        const input = { data: { name: this.unit.exercise.name } }
+        return this.client.mutate({ 
+          mutation: createExercise, 
+          variables: { input }, 
+          update: (cache, { data: { createExercise } }) => {
+            // read data from cache for this query
+            const data = cache.readQuery({ query: exercisesQuery });
+            // push new item to cache 
+            data.exercises.unshift(createExercise.exercise);
+            // write data back to the cache
+            this.client.writeQuery({ query: exercisesQuery, data: data });
           }
-        }
-        return this.client.mutate({ mutation: createExercise, variables: { input: input } });
+        });
       }, 
       createUnit() {
         for (let key in this.unit.numbers) {
           // inputs (even type number) always return string. We simply use + to convert string to number 
           this.unit.numbers[key] = +this.unit.numbers[key];
         }
+
+        const { sets, reps, time, distance } = this.unit.numbers;
+        if (sets == 0 || reps + time + distance == 0) {
+          this.$store.commit('main/setNotification', 'Musisz określić liczbę serii i liczbę powtórzeń');
+          return
+        } 
 
         const newUnit = {
           ...this.unit.numbers,

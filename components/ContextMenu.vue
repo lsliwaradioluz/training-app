@@ -1,12 +1,12 @@
 <template>
   <div class="context-menu">
-    <div class="context-menu-wrapper">
+    <div class="wrapper">
       <button :id="[`trigger-button_${randomID}`]" type="button"  @click="showButtons = !showButtons">
         <slot name="trigger"></slot>
       </button>
       <transition name="roll">
         <div 
-          class="context-menu__panel column"
+          class="panel column"
           :style="{
             top: top && !bottom ? '0' : 'initial', 
             bottom: bottom ? '0' : 'initial',
@@ -80,11 +80,11 @@
     align-items: flex-start;
   }
 
-  .context-menu-wrapper {
+  .wrapper {
     position: relative;
   }
 
-  .context-menu__panel {
+  .panel {
     background-color: white;
     color: rgba(0, 0, 0, 0.774);
     position: absolute;
@@ -94,14 +94,15 @@
     z-index: 1000;
   }
 
-  .context-menu__panel button,
-  .context-menu__panel a {
+  .panel button,
+  .panel a {
     text-align: left;
     padding: 0.5rem;
-    font-size: .75rem;
+    margin-right: .5rem;
+    font-size: 12px;
   }
 
-  .context-menu__panel i {
+  .panel i {
     font-size: .75rem;
     margin-right: .25rem;
   }

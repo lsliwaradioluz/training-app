@@ -1,7 +1,7 @@
 <template>
-  <h1 class="row j-between a-center">
-    <slot></slot>
-  </h1>  
+  <header class="row j-between a-center">
+    <h1><slot></slot></h1>
+  </header>  
 </template>
 
 <script>

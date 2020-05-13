@@ -38,31 +38,11 @@ export default {
     return {
       user: Object,
       sections: [
-        { 
-          name: 'Rozgrzewka',
-          complexes: [
-          ]
-        },
-        { 
-          name: 'Skillwork',
-          complexes: [
-          ]
-        },
-        { 
-          name: 'Strength',
-          complexes: [
-          ]
-        },
-        { 
-          name: 'Cardio',
-          complexes: [
-          ]
-        },
-        { 
-          name: 'Mobility',
-          complexes: [
-          ]
-        },
+        { name: 'Rozgrzewka', complexes: [] },
+        { name: 'Skillwork', complexes: [] },
+        { name: 'Strength', complexes: [] },
+        { name: 'Cardio', complexes: [] },
+        { name: 'Mobility', complexes: [] },
       ],
       showSticky: false,
       sticky: false,

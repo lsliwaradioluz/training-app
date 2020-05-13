@@ -1,34 +1,37 @@
 <template>
-  <div class="workout-editor">
+  <article class="workout-editor">
     <p class="mb0">Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie nowe.</p>
-    <h4 class="t-faded m00 pt1 pb05">Termin</h4>
-    <div class="inputs">
-      <CustomInput 
-        class="mr05"
-        placeholder="Data"
-        v-model="selectedDate"
-        type="date"
-        :disabled="sticky"
-        :show-status="false"
-        show-label />
-      <CustomInput 
-        class="mr05"
-        placeholder="Godzina"
-        v-model="selectedTime"
-        type="time"
-        :disabled="sticky"
-        :show-status="false" 
-        show-label />
-      <CustomCheckbox 
-        label="Przyklejony"
-        v-model="sticky" />
-    </div>
-  <!-- ROZPISKA  -->
-    <div class="workout-editor__routine">
-      <div class="row j-between a-center t-faded pt1 pb05">
+    <section> 
+      <header>
+        <h4 class="t-faded m00 pt1 pb05">Termin</h4>
+      </header>
+      <div class="inputs">
+        <CustomInput 
+          class="mr05"
+          placeholder="Data"
+          v-model="selectedDate"
+          type="date"
+          :disabled="sticky"
+          :show-status="false"
+          show-label />
+        <CustomInput 
+          class="mr05"
+          placeholder="Godzina"
+          v-model="selectedTime"
+          type="time"
+          :disabled="sticky"
+          :show-status="false" 
+          show-label />
+        <CustomCheckbox 
+          label="Przyklejony"
+          v-model="sticky" />
+      </div>
+    </section>
+    <section>
+      <header class="row j-between a-center t-faded pt1 pb05">
         <h4 class="m00 t-faded">Sekcje</h4>
         <button class="flaticon-plus" type="button" @click="createSection"></button>
-      </div>
+      </header>
       <div class="carousel-container b-secondary">
         <Carousel
           :navigation-config="carouselNavConfig"
@@ -44,19 +47,19 @@
                     <span class="flaticon-vertical-dots"></span>
                   </template>
                   <template v-slot:options>
-                    <button class="flaticon-add-button fs-12 mr05" @click="openUnitEditor()">
+                    <button class="flaticon-add-button" @click="openUnitEditor()">
                       Dodaj ćwiczenie
                     </button>
-                    <button class="flaticon-pencil fs-12 mr05" @click="openNameEditor()">
-                      Zmień nazwę
-                    </button>
-                    <button class="flaticon-left-arrow-2 fs-12 mr05" @click="moveSection('left')" v-show="currentSection > 0">
+                    <button class="flaticon-left-arrow-2" @click="moveSection('left')" v-show="currentSection > 0">
                       Przesuń w lewo
                     </button>
-                    <button class="flaticon-right-arrow-2 fs-12 mr05" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
+                    <button class="flaticon-right-arrow-2" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
                       Przesuń w prawo
                     </button>
-                    <button class="flaticon-trash fs-12 mr05" @click="deleteSection">
+                    <button class="flaticon-pencil" @click="openNameEditor()">
+                      Zmień nazwę
+                    </button>
+                    <button class="flaticon-trash" @click="deleteSection">
                       Usuń
                     </button>
                   </template>
@@ -69,19 +72,22 @@
                     <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
                   <template v-slot:options>
-                    <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex">
-                      Edytuj
+                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex">
+                      Kopiuj ćwiczenie
                     </button>
-                    <button class="flaticon-pencil fs-12 mr05" @click="openNameEditor(complexindex)">
-                      Zmień nazwę
+                    <button class="flaticon-add-button" @click="openUnitEditor()">
+                      Dodaj ćwiczenie
                     </button>
-                    <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
+                    <button class="flaticon-up" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
                       Przesuń w górę
                     </button>
-                    <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
+                    <button class="flaticon-down-arrow-1" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
                       Przesuń w dół
                     </button>
-                    <button class="flaticon-trash fs-12 mr05" @click="deleteComplex(complexindex)">
+                    <button class="flaticon-pencil" @click="openNameEditor(complexindex)">
+                      Zmień nazwę
+                    </button>
+                    <button class="flaticon-trash" @click="deleteComplex(complexindex)">
                       Usuń
                     </button>
                   </template>
@@ -98,27 +104,27 @@
                     <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
                   <template v-slot:options>
-                    <button class="flaticon-up fs-12 mr05" @click="moveUnit(currentSection, complexindex, unitindex, 'up')" v-show="unitindex != 0">
+                    <button class="flaticon-up" @click="moveUnit(currentSection, complexindex, unitindex, 'up')" v-show="unitindex != 0">
                       Przesuń w górę
                     </button>
-                    <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveUnit(currentSection, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
+                    <button class="flaticon-down-arrow-1" @click="moveUnit(currentSection, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
                       Przesuń w dół
                     </button>
                     <template v-if="complex.units.length == 1">
-                      <button class="flaticon-up fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
+                      <button class="flaticon-up" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
                         Przesuń w górę
                       </button>
-                      <button class="flaticon-down-arrow-1 fs-12 mr05" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
+                      <button class="flaticon-down-arrow-1" @click="moveComplex(currentSection, complexindex, 'down')" v-show="complexindex != section.complexes.length - 1">
                         Przesuń w dół
                       </button>
                     </template>
-                    <button class="flaticon-double-arrow-cross-of-shuffle fs-12 mr05" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
+                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
                       Paruj
                     </button>
-                    <button class="flaticon-pencil fs-12 mr05" @click="openUnitEditor(unit, unitindex, complexindex)">
+                    <button class="flaticon-pencil" @click="openUnitEditor(unit, unitindex, complexindex)">
                       Edytuj
                     </button>
-                    <button class="flaticon-trash fs-12 mr05" @click="deleteUnit(complexindex, unitindex)">
+                    <button class="flaticon-trash" @click="deleteUnit(complexindex, unitindex)">
                       Usuń
                     </button>
                   </template>
@@ -131,42 +137,46 @@
           Na razie nie dodałeś żadnych sekcji.
         </p>
       </div>
+    </section>
     <!-- POPRZEDNIE TRENINGI  -->
-      <div v-if="user.workouts.length > 0">
-        <div class="row j-between a-center pt1 t-faded" :class="{ pb05: !user.workouts[currentWorkout].feedback }">
-          <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
-            {{ user.workouts[currentWorkout].scheduled | getDayName }}
-            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
-          </h4>
-          <h4 class="mb0 t-faded" v-else>
-            {{ user.workouts[currentWorkout].scheduled | getDayName }} 
-            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
-            ({{ user.workouts[currentWorkout].user.username }})
-          </h4>
-          <!-- <button type="button" @click="feedbackVisible = !feedbackVisible">notatka</button> -->
-          <div class="row">
-            <button class="flaticon-left-arrow" type="button" @click="showPreviousWorkout"></button>
-            <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
+    <section v-if="user.workouts.length > 0">
+      <header class="row j-between a-center pt1 t-faded" :class="{ pb05: !user.workouts[currentWorkout].feedback }">
+        <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
+          {{ user.workouts[currentWorkout].scheduled | getDayName }}
+          {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+        </h4>
+        <h4 class="mb0 t-faded" v-else>
+          {{ user.workouts[currentWorkout].scheduled | getDayName }} 
+          {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
+          ({{ user.workouts[currentWorkout].user.username }})
+        </h4>
+        <!-- <button type="button" @click="feedbackVisible = !feedbackVisible">notatka</button> -->
+        <div class="row">
+          <button class="flaticon-left-arrow" type="button" @click="showPreviousWorkout"></button>
+          <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
+        </div>
+      </header>
+      <p class="t-faded fs-13 mb05" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
+      <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
+        <Carousel 
+          :navigation-config="carouselNavConfig" 
+          :key="previousWorkoutSections.length">
+          <div class="p11 column" v-for="section in previousWorkoutSections" :key="section.id">
+            <Routine :section="section">
+              <template v-slot:section-buttons>
+                <button class="flaticon-plus" type="button" @click="copySection(section)"></button>
+              </template>
+              <template v-slot:complex-buttons="{ complex }">
+                <button class="flaticon-plus" type="button" @click="copyComplex(complex)"></button>
+              </template>
+              <template v-slot:unit-buttons="{ unit }">
+                <button class="flaticon-plus" type="button" @click="addUnit(unit)"></button>
+              </template>
+            </Routine>
           </div>
-        </div>
-        <p class="t-faded fs-13 mb05" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
-        <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
-          <Carousel 
-            :navigation-config="carouselNavConfig" 
-            :key="previousWorkoutSections.length">
-            <div class="p11 column" v-for="section in previousWorkoutSections" :key="section.id">
-              <Routine
-                :section="section" 
-                @copy-unit="addUnit($event)"
-                @copy-section="copySection($event)"
-                @copy-complex="copyComplex($event)" 
-                copy>
-              </Routine>
-            </div>
-          </Carousel>
-        </div>
+        </Carousel>
       </div>
-    </div>
+    </section>
     <Modal :show="Boolean(editedUnit)" @close="closeUnitEditor">
       <UnitEditor 
         :exercises="exercises"
@@ -183,11 +193,11 @@
       </NameEditor>
     </Modal>
   <!-- BUTTONY ZAPISZ ODRZUĆ -->
-    <div class="workout-editor__buttons">
+    <section class="buttons">
       <button class="button-primary" type="button" @click="uploadWorkout">Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Wróć</button>
-    </div>
-  </div>
+    </section>
+  </article>
 </template>
 
 <script>
@@ -489,7 +499,7 @@
     background-color: color(secondary);
   }
 
-  .workout-editor__buttons {
+  .buttons {
     display: flex;
     justify-content: space-between;
     margin-left: -1rem;
