@@ -1,7 +1,7 @@
 <template>
   <div class="register-trainee column">
     <h1 class="mt0 mb2">Zarejestruj się</h1>
-    <form class="column j-center mt15" @submit.prevent>
+    <form class="column j-center" @submit.prevent>
       <CustomInput 
         class="mb05"
         v-model="user.password" 
