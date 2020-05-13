@@ -12,7 +12,7 @@
     </div>
     <div class="panel">
       <transition name="slide-to-right">
-        <Stopwatch v-if="showStopwatch" />
+        <Stopwatch v-if="stopwatchOn" />
       </transition>
       <div class="panel-exercise pt1 pb1 row a-start j-between">
         <div>
@@ -25,7 +25,7 @@
         </div>
         <Timer 
           :time="current.time"
-          :mute="voiceAssistantSpeaking || voiceAssistantMode == 'off'"
+          :mute="!voiceAssistantOn"
           @countdown-over="nextUnit" 
           @beep="playAudio($event)"
           :key="controls.unit"
@@ -55,13 +55,12 @@
       </div>
   <!-- PANEL STEROWANIA -->
       <div class="panel-buttons row j-between a-center">
-        <button class="flaticon-sound" @click="voiceAssistantMode = 'half-on'" v-if="voiceAssistantMode == 'on'"></button>
-        <button class="flaticon-speaker" @click="voiceAssistantMode = 'off'" v-else-if="voiceAssistantMode == 'half-on'"></button>
-        <button class="flaticon-mute" @click="voiceAssistantMode = 'on'" v-else></button>
+        <button class="flaticon-sound" @click="voiceAssistantOn = false" v-if="voiceAssistantOn"></button>
+        <button class="flaticon-mute" @click="voiceAssistantOn = true" v-else></button>
         <button class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></button>
         <button class="flaticon-previous-track-button" @click="previousUnit"></button>
         <button class="flaticon-play-and-pause-button" @click="nextUnit"></button>
-        <button class="flaticon-counterclockwise" :class="{ 't-headers': showStopwatch }" @click="showStopwatch = !showStopwatch"></button>
+        <button class="flaticon-counterclockwise" :class="{ 't-headers': stopwatchOn }" @click="stopwatchOn = !stopwatchOn"></button>
         <button class="flaticon-menu" @click="$emit('edit-feedback')"></button>
       </div>
     </div>
@@ -97,37 +96,22 @@ export default {
         complex: 0, 
         unit: 0,
       }, 
-      showStopwatch: false,
+      stopwatchOn: false,
       automaticModeOn: false,
-      voiceAssistantMode: 'off',
-      voiceAssistantSpeaking: false,
+      voiceAssistantOn: true,
     }
   },
   watch: {
-    voiceAssistantMode() {
-      switch (this.voiceAssistantMode) {
-        case 'on':
-          this.playAudio(this.soundname);
-          this.setNotification('Asystent głosowy włączony');
-          break;
-        case 'half-on':
-          this.setNotification('Asystent głosowy: tylko dźwięki timera');
-          if (this.voiceAssistantSpeaking) this.audio.pause();
-          break;
-        case 'off':
-          this.setNotification('Asystent głosowy wyłączony');
-          this.audio.pause();
-      }
-    },
     currentUnit() {
       this.$emit('set-current-section', this.controls.section);
-      if (this.voiceAssistantMode == 'on') this.playAudio(this.soundname);
+      if (!this.voiceAssistantOn) return 
+      if (this.current.exercise.name == 'Odpocznij') {
+        this.playAudio('luz.mp3');
+      } else if (this.current.reps || this.current.time || this.current.distance) {
+        this.playAudio(this.lastSet ? 'ostatniaseria.mp3' : 'dzialaj.mp3');
+      }
     },
     async showWorkoutAssistant(value) {
-      if (!value) {
-        if (this.voiceAssistantSpeaking) this.audio.pause();
-      }
-
       if (value && this.controls.section != this.sectionIndex) {
         if (await this.$root.$confirm("Wznowić asystenta?")) {
           this.$emit('set-current-section', this.controls.section);
@@ -141,7 +125,6 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggleBlockDescription: 'assistant/toggleBlockDescription',
       setNotification: 'main/setNotification',
     }),
     nextUnit() {
@@ -204,10 +187,6 @@ export default {
     },
     playAudio(audio) {
       if (!this.audio) this.audio = new Audio();
-      if (audio == this.soundname) this.voiceAssistantSpeaking = true;
-      this.audio.addEventListener('ended', () => {
-        this.voiceAssistantSpeaking = false;
-      });
       this.audio.src = require(`@/assets/sounds/${audio}`);
       this.audio.play();
     },
@@ -215,41 +194,22 @@ export default {
   computed: {
     ...mapGetters({
       showWorkoutAssistant: 'assistant/showWorkoutAssistant',
-      showBlockDescription: 'assistant/showBlockDescription',
     }),
     currentUnit() {
       return this.controls.unit;
-    },
-    soundname() {
-      if (this.current.soundname) {
-        return this.current.soundname;
-      } else if (!this.current.soundname && this.lastSet) {
-        return 'ostatniaseria.mp3';
-      } else {
-        return 'dzialaj.mp3';
-      }
     },
     current() {
       return this.units[this.controls.unit];
     },
     lastSet() {
       const lastIndex = this.units.lastIndexOf(this.units[this.controls.unit]);
-      if (lastIndex == this.controls.unit && this.units[this.controls.unit].exercise.name != 'Za chwilę:' && this.units[this.controls.unit].sets > 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return lastIndex == this.controls.unit && this.units[this.controls.unit].sets > 1 ? true : false;
     },
     next() {
-      let next = this.units[this.controls.unit + 1];
-      if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
-      return next;
-    },
-    blockDescription() {
-      return this.units.filter(unit => {
-        return unit.sets || unit.time;
-      });
-      return this.units;
+      // let next = this.units[this.controls.unit + 1];
+      // if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
+      // return next;
+      return this.units[this.controls.unit + 1];
     },
     images() {
       let images = [];
@@ -323,42 +283,23 @@ export default {
           }
 
           units.splice(i+1, 0, { 
-            exercise: { 
-              name: 'Odpocznij' 
-            }, 
+            exercise: { name: 'Odpocznij' }, 
             time: rest, 
             remarks: remarks,
-            soundname: 'luz.mp3'
           });
         }
       }
 
-      if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section == this.sections.length - 1) {
-        units.push({ 
-          exercise: { 
-            name: 'Ukończyłeś trening',
-          },
-          remarks: 'Daj znać trenerowi, jak poszło!',
-          soundname: 'trening-zakończony.mp3',
-        });
-      }
-
       units.unshift({ 
-        exercise: { 
-          name: 'Rozpoczynasz nowy blok' 
-        },
-        remarks: 'Zapoznaj się z rozpiską i przygotuj sprzęt', 
-        soundname: 'rozpoczynaszblok.mp3'
+        exercise: { name: 'Rozpoczynasz nowy blok' },
+        remarks: 'Kolejne ćwiczenia widoczne są na ekranie',
       });
 
-      if (this.controls.section == 0 && this.controls.complex == 0) {
-        units.unshift({
-          exercise: {
-            name: 'Witaj w cyfrowym asystencie treningu!',
-          }, 
-          remarks: 'Włącz lub wyłącz dźwięk ikoną głośnika', 
-          soundname: 'witaj-w-asystencie.mp3'
-        })
+      if (this.controls.complex == this.sections[this.controls.section].complexes.length - 1 && this.controls.section == this.sections.length - 1) {
+        units.push({ 
+          exercise: { name: 'Ukończyłeś trening' },
+          remarks: 'Daj znać trenerowi, jak poszło!',
+        });
       }
 
       return units;
