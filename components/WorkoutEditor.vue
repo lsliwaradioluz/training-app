@@ -133,7 +133,7 @@
       </div>
     <!-- POPRZEDNIE TRENINGI  -->
       <div v-if="user.workouts.length > 0">
-        <div class="row j-between a-center pt1 pb05 t-faded">
+        <div class="row j-between a-center pt1 t-faded" :class="{ pb05: !user.workouts[currentWorkout].feedback }">
           <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
             {{ user.workouts[currentWorkout].scheduled | getDayName }}
             {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
@@ -149,7 +149,7 @@
             <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
           </div>
         </div>
-        <p class="t-faded" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
+        <p class="t-faded fs-13 mb05" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
         <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
           <Carousel 
             :navigation-config="carouselNavConfig" 
