@@ -72,7 +72,7 @@
   }
 </script>
 
-<style>
+<style lang="scss" scoped>
   
   .context-menu {
     margin-left: 1rem;

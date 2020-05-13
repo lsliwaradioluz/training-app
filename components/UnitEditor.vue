@@ -9,13 +9,14 @@
     <form>
       <div>
         <CustomInput 
+          class="mb0"
           placeholder="Nazwa ćwiczenia"
           v-model="unit.exercise.name"
           @input="unit.exercise.id = ''" 
           :show-status="false"/>
-        <ul class="exercise__list">
+        <ul class="exercise__list pt05">
           <transition-group name="animate-list">
-            <li v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
+            <li class="fs-15" v-for="exercise in filteredExercises" :key="exercise.id" @click="passExercise(exercise)">{{ exercise.name }}</li>
           </transition-group>
         </ul>
       </div>
