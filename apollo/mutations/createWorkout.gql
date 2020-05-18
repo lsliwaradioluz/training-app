@@ -6,6 +6,7 @@ mutation($input: createWorkoutInput) {
       feedback
       ready
       sticky
+      name
       createdAt
       sections {
           id

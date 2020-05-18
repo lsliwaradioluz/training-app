@@ -6,6 +6,7 @@ query($id: ID!) {
       scheduled
       ready
       sticky
+      name
       createdAt
     }
   }

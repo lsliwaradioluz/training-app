@@ -77,16 +77,15 @@ button:disabled {
 .button-switch {
   border-bottom: 1px solid color(faded);
   color: color(faded);
-  padding: 0 1rem 0.2rem 0;
+  flex-basis: 100%;
+  flex-shrink: 1;
+  padding-bottom: .4rem;
   transition: all 0.3s;
+  font-size: 14px;
   font-family: 'Roboto Condensed', sans-serif;
 }
 
 .button-switch--active {
   color: color(headers) !important;
   border-bottom: 1px solid color(headers) !important;
-}
-
-.button--rounded {
-  border-radius: 25px;
 }

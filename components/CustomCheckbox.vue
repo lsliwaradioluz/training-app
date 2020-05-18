@@ -3,6 +3,7 @@
     <label>{{ label }}</label>
     <input
       :value="value"
+      :checked="value"
       type="checkbox"
       @input="$emit('input', $event.target.checked)">
   </div>

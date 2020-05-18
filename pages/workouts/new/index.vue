@@ -46,6 +46,7 @@ export default {
       ],
       showSticky: false,
       sticky: false,
+      name: '',
       selectedDate: new Date().toISOString().split('T')[0], 
       selectedTime: "18:00:00",
     }

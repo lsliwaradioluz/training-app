@@ -5,6 +5,7 @@ mutation($input: deleteWorkoutInput) {
       scheduled 
       ready
       sticky
+      name
       createdAt
     }
   }

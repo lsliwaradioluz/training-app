@@ -11,7 +11,8 @@
         <p class="m00 t-medium t-faded">{{ workout.scheduled | getDayName }} {{ workout.scheduled | getTime }}</p>
       </div>
       <div v-else>
-        <h4 class="m00">Podwieszony</h4>
+        <h4 class="m00" v-if="workout.name">{{ workout.name }}</h4>
+        <h4 class="m00" v-else>Podwieszony</h4>
         <p class="m00 t-medium t-faded">dodano {{ workout.createdAt | reverseDate }}</p>
       </div>
     </nuxt-link>

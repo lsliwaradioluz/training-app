@@ -13,8 +13,8 @@
           tag="i"></nuxt-link>
       </h3>
       <div class="row pb05">
-        <button class="button-switch" :class="{ 'button-switch--active': !showHomeworks }" type="button" @click="showHomeworks = false">Treningi</button>
-        <button class="button-switch" :class="{ 'button-switch--active': showHomeworks }" type="button" @click="showHomeworks = true">Zadania domowe</button>
+        <button class="button-switch" :class="{ 'button-switch--active': !showHomeworks }" type="button" @click="showHomeworks = false">Jednorazowe</button>
+        <button class="button-switch" :class="{ 'button-switch--active': showHomeworks }" type="button" @click="showHomeworks = true">Wielorazowe</button>
       </div>
       <transition-group name="animate-list">
         <Workout v-for="workout in filteredWorkouts" :key="workout.id" :workout="workout" :user="user" />

@@ -3,6 +3,7 @@ query($id: ID!, $copiedWorkoutId: ID!) {
     id
     scheduled
     sticky
+    name
     feedback
     sections {
       id

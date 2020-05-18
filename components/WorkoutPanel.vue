@@ -1,9 +1,13 @@
 <template>
   <div class="workout-panel column">
-    <Header>
+    <Header v-if="!workout.sticky">
       <span v-if="user.admin && user.username != workout.user.username">{{ workout.user.username }}</span>
       <span v-else>Trening</span>
       <Date :date="workout.scheduled"></Date>
+    </Header>
+    <Header v-else>
+      <span v-if="workout.name">{{ workout.name }}</span>
+      <span v-else>Trening</span>
     </Header>
     <p>Zapoznaj się z rozpiską, przesuwając palcem w lewo lub w prawo. Skorzystaj z Cyfrowego Asystenta, który przeprowadzi Cię przez Twój trening krok po kroku. Po zakończonej sesji dodaj komentarz dla trenera.</p>
     <div class="buttons row j-between">

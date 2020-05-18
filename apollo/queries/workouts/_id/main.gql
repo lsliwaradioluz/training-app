@@ -4,6 +4,7 @@ query($ids: [ID]!) {
     createdAt
     scheduled
     sticky
+    name
     feedback
     user {
       id

@@ -16,14 +16,8 @@
             <i class="flaticon-vertical-dots"></i>
           </template>
           <template v-slot:options>
-            <nuxt-link tag="button" type="button" to="edit" append>
-              <i class="flaticon-writing fs-09" style="margin-right: .25rem" />
-              Edytuj
-            </nuxt-link>
-            <button type="button" @click="deleteExercise">
-              <i class="flaticon-trash fs-09" style="margin-right: .25rem" />
-              Usuń
-            </button>
+            <nuxt-link class="flaticon-pencil" tag="button" type="button" to="edit" append>Edytuj</nuxt-link>
+            <button class="flaticon-trash" type="button" @click="deleteExercise">Usuń</button>
           </template>
         </ContextMenu>
       </div>

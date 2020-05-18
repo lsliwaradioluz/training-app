@@ -6,25 +6,33 @@
         <h4 class="t-faded m00 pt1 pb05">Termin</h4>
       </header>
       <div class="inputs">
+        <div class="row">
+          <CustomInput 
+            class="mr05"
+            placeholder="Data"
+            v-model="selectedDate"
+            type="date"
+            :disabled="sticky"
+            :show-status="false"
+            show-label />
+          <CustomInput 
+            class="mr05"
+            placeholder="Godzina"
+            v-model="selectedTime"
+            type="time"
+            :disabled="sticky"
+            :show-status="false" 
+            show-label />
+          <CustomCheckbox 
+            label="Przyklejony"
+            v-model="sticky" />
+        </div>
         <CustomInput 
-          class="mr05"
-          placeholder="Data"
-          v-model="selectedDate"
-          type="date"
-          :disabled="sticky"
+          placeholder="Nazwa treningu"
+          v-model="name"
+          type="text"
           :show-status="false"
-          show-label />
-        <CustomInput 
-          class="mr05"
-          placeholder="Godzina"
-          v-model="selectedTime"
-          type="time"
-          :disabled="sticky"
-          :show-status="false" 
-          show-label />
-        <CustomCheckbox 
-          label="Przyklejony"
-          v-model="sticky" />
+          v-show="sticky" />
       </div>
     </section>
     <section>
@@ -435,6 +443,7 @@
             data: {
               scheduled: this.dateAndTime,
               sticky: this.sticky,
+              name: this.name,
               ready: this.workoutReady, 
               sections: this.filteredSections,
             }
@@ -445,6 +454,7 @@
               user: this.user.id,
               scheduled: this.dateAndTime,
               sticky: this.sticky,
+              name: this.name,
               ready: this.workoutReady, 
               sections: this.filteredSections,
             }
@@ -491,7 +501,6 @@
 <style lang="scss" scoped>
 
   .inputs {
-    display: flex;
     width: 100vw;
     margin-left: -1rem;
     padding: 1rem;

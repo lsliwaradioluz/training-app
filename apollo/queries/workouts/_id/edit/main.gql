@@ -3,6 +3,7 @@ query($workoutid: ID!, $userid: ID!) {
     id
     scheduled
     sticky
+    name
     feedback
     sections {
       id
