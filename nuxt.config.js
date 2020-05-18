@@ -64,21 +64,21 @@ export default {
   modules: [
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
-    // '@nuxtjs/pwa',
+    '@nuxtjs/pwa',
   ],
-  // pwa: {
-  //   meta: {
-  //     name: 'Piti'
-  //   }, 
-  //   manifest: {
-  //     name: 'Piti',
-  //     short_name: 'Piti',
-  //     background_color:'#FDDCBD',
-  //     orientation: 'portrait',
-  //     display: 'fullscreen',
-  //     start_url: process.env.NODE_ENV == 'development' ? 'http://localhost:3000/dashboard' : 'https://www.piti.live/dashboard'
-  //   },
-  // },
+  pwa: {
+    meta: {
+      name: 'Piti'
+    }, 
+    manifest: {
+      name: 'Piti',
+      short_name: 'Piti',
+      background_color:'#FDDCBD',
+      orientation: 'portrait',
+      display: 'fullscreen',
+      start_url: process.env.NODE_ENV == 'development' ? 'http://localhost:3000/dashboard' : 'https://www.piti.live/dashboard'
+    },
+  },
   apollo: {  
     tokenName: 'piti-token', 
     clientConfigs: {
