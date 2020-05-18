@@ -62,7 +62,7 @@
       exercise: {
         type: Object,
         default: () => {
-          return { name: '', technique: '' }
+          return { name: '', alias: '', description: '' }
         }
       },
       edit: {
@@ -72,7 +72,6 @@
     },
     data() {
       return {
-        audioSource: null,
         client: this.$apollo.getClient(),
         endpoint: process.env.NODE_ENV == 'development' ? 'http://localhost:1337/upload' : 'https://piti-backend.herokuapp.com/upload',
         loadingImage: false,
@@ -102,6 +101,10 @@
             this.loadingImage = false;
           });
         })
+        .catch(err => {
+          this.loadingImage = false;
+          this.$store.commit('main/setNotification', 'Nie udało się załadować pliku. Upewnij się, że wybrany plik nie waży więcej niż 10MB.');
+        });
       },
       deleteImage() {
         this.uploadedImage = null;
