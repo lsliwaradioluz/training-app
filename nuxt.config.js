@@ -17,7 +17,6 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito:400,600,700,800,900&display=swap' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Teko:300,400,500,600,700&display=swap' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap' },
-      // { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap' },
     ]
   },
   /*
@@ -65,21 +64,21 @@ export default {
   modules: [
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
   ],
-  pwa: {
-    meta: {
-      name: 'Piti'
-    }, 
-    manifest: {
-      name: 'Piti',
-      short_name: 'Piti',
-      background_color:'#FDDCBD',
-      orientation: 'portrait',
-      display: 'fullscreen',
-      start_url: process.env.NODE_ENV == 'development' ? 'http://localhost:3000/dashboard' : 'https://www.piti.live/dashboard'
-    },
-  },
+  // pwa: {
+  //   meta: {
+  //     name: 'Piti'
+  //   }, 
+  //   manifest: {
+  //     name: 'Piti',
+  //     short_name: 'Piti',
+  //     background_color:'#FDDCBD',
+  //     orientation: 'portrait',
+  //     display: 'fullscreen',
+  //     start_url: process.env.NODE_ENV == 'development' ? 'http://localhost:3000/dashboard' : 'https://www.piti.live/dashboard'
+  //   },
+  // },
   apollo: {  
     tokenName: 'piti-token', 
     clientConfigs: {
