@@ -1,6 +1,6 @@
 <template>
   <div class="exercise-editor">
-    <p>Uzupełnij nazwy, opis oraz animację swojego ćwiczenia. W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9.</p>
+    <p>W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9. Przesłany plik nie może ważyć więcej niż 10 megabajtów.</p>
   <!-- NAZWA  -->
     <form>
       <CustomInput 
