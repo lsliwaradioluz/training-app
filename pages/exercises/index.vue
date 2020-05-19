@@ -4,9 +4,10 @@
       <div class="exercises">
         <Header>
           <span>Ćwiczenia</span>
-          <nuxt-link class="flaticon-plus ml1 t-white" :to="{ path: 'new' }" append></nuxt-link>
+          <nuxt-link class="flaticon-plus ml1 t-white" :to="{ path: 'new' }" append v-if="user.admin"></nuxt-link>
         </Header>
-        <p class="mb0">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
+        <p class="mb0" v-if="user.admin">Dotknij karty ćwiczenia, aby wyświetlić szczegóły. Dodaj nowe, dotykając ikony plusa. Edytuj lub usuń ćwiczenie, rozwijająć menu kontekstowe przy jego karcie.</p>
+        <p class="mb0" v-else>Baza Piti zawiera blisko sto ćwiczeń. Wyszukuj je po nazwie polskiej lub angielskiej. Możesz także przeglądać wybrane kategorie.</p>
         <CustomSearch 
           placeholder="Szukaj ćwiczenia"
           v-model="filter">
@@ -41,6 +42,9 @@
       }
     }, 
     computed: {
+      user() {
+        return this.$store.getters['auth/user'];
+      },
       filteredExercises() {
         let filteredExercises = [];
         let filter = this.filter.toLowerCase();

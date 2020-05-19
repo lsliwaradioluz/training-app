@@ -19,8 +19,6 @@
     <span
       class="flaticon-right-arrow t-faded"
       :class="{ 't-headers': workout.ready }"
-      tag="button"
-      :disabled="!workout.ready"
       v-if="!$route.path.includes('users')">
     </span>
     <div class="row a-center" v-else>

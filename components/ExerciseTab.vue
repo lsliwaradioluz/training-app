@@ -9,7 +9,7 @@
         </div>
       </nuxt-link>
       <div class="row a-center">
-        <ContextMenu>
+        <ContextMenu v-if="user.admin">
           <template v-slot:trigger>
             <i class="flaticon-vertical-dots t-headers mr0"></i>
           </template>
@@ -18,6 +18,8 @@
             <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
           </template>
         </ContextMenu>
+        <span class="flaticon-right-arrow t-headers" v-else>
+        </span>
       </div>
     </div>
   </div>
@@ -37,7 +39,10 @@
     computed: {
       image() {
         return this.exercise.image ? this.exercise.image.url : require('assets/images/exercise.jpg');
-      }
+      },
+      user() {
+        return this.$store.getters['auth/user'];
+      },
     },
     methods: {
       async deleteExercise() {

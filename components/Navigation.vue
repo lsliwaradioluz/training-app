@@ -13,9 +13,9 @@
         </button>
       </li>
     </ul>
-    <ul class="links row">
+    <ul class="links row j-between">
       <nuxt-link class="flaticon-home" tag="li" to="/dashboard"></nuxt-link>
-      <nuxt-link class="flaticon-gymnast" tag="li" to="/exercises" v-if="user && user.admin"></nuxt-link>
+      <nuxt-link class="flaticon-gymnast" tag="li" to="/exercises"></nuxt-link>
       <nuxt-link class="flaticon-menu" tag="li" to="/workouts"></nuxt-link>
       <nuxt-link class="flaticon-user" tag="li" to="/users" v-if="user && user.admin"></nuxt-link>
       <nuxt-link class="flaticon-settings" tag="li" to="/settings"></nuxt-link>
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.auth.user;
+      return this.$store.getters['auth/user'];
     },
     workoutToPair() {
       return this.$store.state.main.workoutToPair;
