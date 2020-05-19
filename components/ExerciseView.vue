@@ -1,9 +1,10 @@
 <template>
-  <div class="exercise-view columnfa">
+  <div class="exercise-view column">
     <div
-      class="exercise-view__image" 
-      :style="{ backgroundImage: exercise.image ? `url('${exercise.image.url}')` : 'none' }"></div>
-    <div class="p11">
+      class="image" 
+      :style="{ backgroundImage: exercise.image ? `url('${exercise.image.url}')` : 'none' }">
+    </div>
+    <div class="text p11">
       <div class="row j-between a-center">
         <div class="dupa">
           <MovingText>
@@ -21,19 +22,13 @@
           </template>
         </ContextMenu>
       </div>
-      <transition name="accordion">
-        <div class="mt1" v-show="showDescription">
-          <p class="m00 fs-12" v-if="exercise.description">{{ exercise.description }}</p>
-          <p class="m00 fs-12" v-else>To ćwiczenie nie ma jeszcze opisu. To znaczy, że Twój trener się obija i musisz go pogonić!</p>
-        </div>
-      </transition>
     </div>
   </div>
 </template>
 
 <script>
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
-  import mainQuery from '~/apollo/queries/exercises/main.gql';
+  import getAllExercises from '~/apollo/queries/getAllExercises.gql';
 
   export default {
     props: {
@@ -67,13 +62,13 @@
             }, 
             update: (cache, { data: { deleteExercise } }) => {
               // read data from cache for this query
-              const data = cache.readQuery({ query: mainQuery });
+              const data = cache.readQuery({ query: getAllExercises });
               // find index of deleted item in cached user.workouts array 
               const exerciseIndex = data.exercises.findIndex(exercise => exercise.id == deleteExercise.exercise.id );
               // remove deleted item from cache 
               data.exercises.splice(exerciseIndex, 1);
               // write data back to the cache
-              // this.client.writeQuery({ query: mainQuery, data: data });
+              // this.client.writeQuery({ query: getAllExercises, data: data });
             } 
           })
           .then(res => {
@@ -87,11 +82,21 @@
 
 <style lang="scss" scoped>
 
-  .exercise-view__image {
+  .exercise-view {
+    height: 100vh;
+  }
+
+  .image {
     background-size: cover;
     background-position: center;
-    height: 70vh;
+    flex-basis: 90%;
+    flex-shrink: 1;
     border-bottom: 2px solid color(headers);
+  }
+
+  .text {
+    flex-basis: 10%;
+    flex-grow: 1;
   }
 
   .dupa {

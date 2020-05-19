@@ -14,8 +14,8 @@
             <i class="flaticon-vertical-dots t-headers mr0"></i>
           </template>
           <template v-slot:options>
-            <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
             <nuxt-link class="flaticon-pencil mr05" tag="button" type="button" :to="`${exercise.id}/edit`" append>Edytuj</nuxt-link>
+            <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
           </template>
         </ContextMenu>
       </div>
@@ -25,7 +25,7 @@
 
 <script>
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
-  import mainQuery from '~/apollo/queries/exercises/main.gql';
+  import getAllExercises from '~/apollo/queries/getAllExercises.gql';
   
   export default {
     props: ['exercise'], 
@@ -55,13 +55,13 @@
             }, 
             update: (cache, { data: { deleteExercise } }) => {
               // read data from cache for this query
-              const data = cache.readQuery({ query: mainQuery });
+              const data = cache.readQuery({ query: getAllExercises });
               // find index of deleted item in cached user.workouts array 
               const exerciseIndex = data.exercises.findIndex(exercise => exercise.id == deleteExercise.exercise.id );
               // remove deleted item from cache 
               data.exercises.splice(exerciseIndex, 1);
               // write data back to the cache
-              cache.writeQuery({ query: mainQuery, data: data });
+              cache.writeQuery({ query: getAllExercises, data: data });
             } 
           });
           

@@ -46,7 +46,7 @@
 
 <script>
   import createExercise from '~/apollo/mutations/createExercise.gql';
-  import exercisesQuery from '~/apollo/queries/users/_id/exercises.gql';
+  import getAllExercises from '~/apollo/queries/getAllExercises.gql';
 
   export default {
     props: ['editedUnit', 'exercises'],
@@ -89,11 +89,11 @@
           variables: { input }, 
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
-            const data = cache.readQuery({ query: exercisesQuery });
+            const data = cache.readQuery({ query: getAllExercises });
             // push new item to cache 
             data.exercises.unshift(createExercise.exercise);
             // write data back to the cache
-            this.client.writeQuery({ query: exercisesQuery, data: data });
+            this.client.writeQuery({ query: getAllExercises, data: data });
           }
         });
       }, 

@@ -1,6 +1,8 @@
 <template>
   <div class="exercise-editor">
-    <p>W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o rozdzielczości 16:9. Przesłany plik nie może ważyć więcej niż 10 megabajtów.</p>
+    <Header v-if="edit">Edytuj ćwiczenie</Header>
+    <Header v-else>Nowe ćwiczenie</Header>
+    <p>W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o przybliżonej rozdzielczości 16:9. Przesłany plik nie może ważyć więcej niż 10 megabajtów.</p>
   <!-- NAZWA  -->
     <form>
       <CustomInput 
@@ -15,7 +17,7 @@
         />
     </form>
   <!-- ZDJĘCIE  -->
-    <div class="exercise-editor__image-upload p32 column a-center j-center" v-if="!uploadedImage">
+    <div class="image-upload p32 column a-center j-center" v-if="!uploadedImage">
       <span class="column j-center a-center" v-if="!uploadedImage && !loadingImage">
         <i class="flaticon-plus fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
@@ -32,18 +34,18 @@
         <p class="m00 mt05 fs-12">Wczytuję...</p>
       </span>
     </div>
-    <div class="exercise-editor__image column a-center" v-else>
+    <div class="image column" v-else>
       <img :src="uploadedImage.url" alt="exercise image">
       <button class="button-secondary mt05" type="button" @click="deleteImage">Usuń zdjęcie</button>
     </div>
   <!-- OPIS  -->
-    <CustomTextarea
+    <!-- <CustomTextarea
       class="mt1"
       :value="input.description"
       placeholder="Opis ćwiczenia"
-      @type="input.description = $event" />
+      @type="input.description = $event" /> -->
   <!-- BUTTONY ZAPISZ ODRZUĆ  -->
-    <div class="exercise-editor__buttons row j-between mt2">
+    <div class="buttons row j-between mt2">
       <button class="button-primary" type="button" @click="createExercise" v-if="exercise.id == null">Zapisz</button>
       <button class="button-primary" type="button" @click="updateExercise" v-else>Zapisz</button>
       <button class="button-primary" type="button" @click="$router.go(-1)">Anuluj</button>
@@ -55,7 +57,7 @@
   import deleteExercise from '~/apollo/mutations/deleteExercise.gql';
   import createExercise from '~/apollo/mutations/createExercise.gql';
   import updateExercise from '~/apollo/mutations/updateExercise.gql';
-  import mainQuery from '~/apollo/queries/exercises/main.gql';
+  import getAllExercises from '~/apollo/queries/getAllExercises.gql';
 
   export default {
     props: {
@@ -79,7 +81,7 @@
         input: {
           name: this.exercise.name,
           alias: this.exercise.alias,
-          description: this.exercise.description,
+          // description: this.exercise.description,
         }
       }
     },
@@ -121,11 +123,11 @@
           }, 
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
-            const data = cache.readQuery({ query: mainQuery });
+            const data = cache.readQuery({ query: getAllExercises });
             // push new item to cache 
             data.exercises.unshift(createExercise.exercise);
             // write data back to the cache
-            this.client.writeQuery({ query: mainQuery, data: data });
+            this.client.writeQuery({ query: getAllExercises, data: data });
           }
         })
         .then(res => {
@@ -133,7 +135,7 @@
         });
       }, 
       updateExercise() {
-        this.input.image = this.uploadedImage && this.uploadedImage.id;
+        if (this.uploadedImage) this.input.image = this.uploadedImage.id;
         const input = {
           where: {
             id: this.exercise.id
@@ -142,9 +144,7 @@
         }
 
         this.client.mutate({ mutation: updateExercise, variables: { input: input } })
-          .then(res => {
-            this.$router.go(-1);
-          });
+        this.$router.go(-1);
       },
     },
   }
@@ -158,7 +158,7 @@
     transition: background-image 0.3s;
   }
 
-  .exercise-editor__image-upload {
+  .image-upload {
     border: 1px solid color(faded);
     color: color(faded);
     border-radius: 6px;
@@ -170,7 +170,7 @@
     width: 100%;
   }
 
-  .exercise-editor__buttons button {
+  .buttons button {
     width: 49%;
   }
 

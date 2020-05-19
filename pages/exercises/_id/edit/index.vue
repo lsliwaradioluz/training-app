@@ -1,17 +1,16 @@
 <template>
   <div class="editexercise">
-    <Header>Edytuj ćwiczenie</Header>
     <ExerciseEditor :exercise="exercise" edit />
   </div>
 </template>
 
 <script>
-  import mainQuery from '~/apollo/queries/exercises/_id/edit/main.gql';
+  import getSingleExercise from '~/apollo/queries/getSingleExercise.gql';
   
   export default {
     asyncData(context) {
       const client = context.app.apolloProvider.defaultClient;
-      return client.query({ query: mainQuery, variables: { id: context.route.params.id } }) 
+      return client.query({ query: getSingleExercise, variables: { id: context.route.params.id } }) 
         .then(({ data }) => {
           return {
             exercise: data.exercise 

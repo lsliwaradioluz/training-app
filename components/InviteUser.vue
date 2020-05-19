@@ -24,8 +24,8 @@ export default {
     data() {
       return {
         user: {
-          fullname: null, 
-          email: null,
+          fullname: 'Łukasz Plum', 
+          email: 'lukasz.mateusz.sliwa@gmail.com',
         }
       }
     },
@@ -36,8 +36,60 @@ export default {
         this.$axios.$post(endpoint, {
           from: this.$store.state.auth.user.email,
           to: this.user.email, 
-          subject: 'Piti: Trener Łukasz Śliwa zaprasza się do wspólnego trenowania!', 
-          text: `<body style=" margin: 0; padding: 0; font-family: 'Arial', sans-serif; font-weight: lighter; font-size: 90%;"> <div style="padding: 3rem 0;"> <div style=" color: white; background-color: #222E50; padding: 3rem 2rem; border-radius: 5px; max-width: 400px;"> <img src="https://res.cloudinary.com/drsgb4wld/image/upload/v1585755359/logo_dlqplz.png"> <h4 style="color: #B0FE76; margin-top: 1rem; margin-bottom: 0;"> Cześć, ${this.user.fullname}! </h4> <p style="line-height: 1.2rem;">Twój trener ${this.$store.state.auth.user.fullname} wysyła Ci zaproszenie do aplikacji Piti, która umożliwi Wam dzielenie się rozpiskami treningowymi. Klikając przycisk poniżej przeniesiesz się do formularza ustalającego hasło dla Twojego konta.</p> <a href="${link}" style=" display: inline-block; text-decoration: none; font-family: inherit; padding: .5rem 1.5rem; border: 2px solid color(green); border-radius: 5px; color: #222E50; background-color: #B0FE76; border: none; ">Dokończ rejestrację</a> </div> </div> </body>`
+          subject: `Piti: Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`, 
+          html: 
+          `<!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Email template</title>
+            </head> 
+            <body 
+              style="
+                margin: 0;
+                padding: 0; 
+                font-family: 'Helvetica Neue', sans-serif; 
+                background-color: #F9F9F9;
+                font-size: 90%;"> 
+              <div style="padding: 3rem 0;">
+                <div style="
+                  color: white;
+                  background-color: #23283C; 
+                  padding: 3rem 2rem; 
+                  margin: 0 auto; 
+                  max-width: 400px;">
+                  <img style="width: 100%;" src="https://images.unsplash.com/photo-1580086229554-1c2a34000456?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=994&q=80">
+                  <h2 
+                    style="
+                      color: #FDDCBD; 
+                      margin-top: 1rem; 
+                      margin-bottom: 0;
+                      font-weight: 500;"> 
+                      Cześć, ${this.user.fullname}! 
+                  </h2> 
+                  <p style="line-height: 1.4;">
+                    Twój trener ${this.$store.state.auth.user.fullname} wysyła Ci zaproszenie do aplikacji Piti, która umożliwi Wam dzielenie się rozpiskami treningowymi. Klikając przycisk poniżej przeniesiesz się do formularza ustalającego hasło dla Twojego konta.
+                  </p> 
+                  <a 
+                    href="${link}" 
+                    style="
+                      display: inline-block; 
+                      text-decoration: none;
+                      padding: .5rem 1.5rem; 
+                      border-radius: 6px; 
+                      color: #222E50; 
+                      background-color: #FDDCBD; 
+                      border: none; 
+                      font-weight: 400; 
+                      font-size: 14px; 
+                      line-height: 1.5;"> 
+                      Dokończ rejestrację 
+                  </a> 
+                </div> 
+              </div> 
+            </body>
+          </html>`
         })
         .then(res => {
           this.$store.commit('main/setNotification', 'Link aktywacyjny został wysłany na podany adres email.');

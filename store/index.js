@@ -1,5 +1,4 @@
 import cookieparser from 'cookieparser';
-import exercisesQuery from '~/apollo/queries/exercises/main.gql';
 
 export const actions = {  
   async nuxtServerInit({ commit }, { req, app }) {

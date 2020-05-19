@@ -26,12 +26,12 @@
 </template>
 
 <script>
-  import mainQuery from '~/apollo/queries/exercises/main.gql';
+  import getAllExercises from '~/apollo/queries/getAllExercises.gql';
 
   export default {
     apollo: {
       exercises: {
-        query: mainQuery, 
+        query: getAllExercises, 
       }
     },
     data() {
