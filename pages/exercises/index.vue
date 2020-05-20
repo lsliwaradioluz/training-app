@@ -20,7 +20,7 @@
             tag="button" 
             type="button" 
             :to="{ query: { category: 'strength' } }">
-            Strength
+            Siła
           </nuxt-link>
           <nuxt-link 
             class="button-switch" 
@@ -28,7 +28,7 @@
             tag="button" 
             type="button" 
             :to="{ query: { category: 'conditioning' } }">
-            Cardio
+            Kondycja
           </nuxt-link>
           <nuxt-link 
             class="button-switch" 
@@ -36,7 +36,7 @@
             tag="button"
             type="button"
             :to="{ query: { category: 'mobility' } }">
-            Mobility
+            Mobilność
           </nuxt-link>
         </div>
         <template v-if="filteredExercises.length > 0">
