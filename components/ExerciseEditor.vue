@@ -3,18 +3,20 @@
     <Header v-if="edit">Edytuj ćwiczenie</Header>
     <Header v-else>Nowe ćwiczenie</Header>
     <p>W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o przybliżonej rozdzielczości 16:9. Przesłany plik nie może ważyć więcej niż 10 megabajtów.</p>
-  <!-- NAZWA  -->
+  <!-- NAZWA I KATEGORIA -->
     <form>
       <CustomInput 
         v-model="input.name"
         placeholder="Angielska nazwa"
-        :show-status="false"
-        />
+        :show-status="false" />
       <CustomInput 
         v-model="input.alias"
         placeholder="Polska nazwa"
-        :show-status="false"
-        />
+        :show-status="false" />
+      <CustomSelect 
+        v-model="input.category"
+        placeholder="Kategoria"
+        :options="['Strength', 'Conditioning', 'Mobility']" />
     </form>
   <!-- ZDJĘCIE  -->
     <div class="image-upload p32 column a-center j-center" v-if="!uploadedImage">
@@ -64,7 +66,7 @@
       exercise: {
         type: Object,
         default: () => {
-          return { name: '', alias: '', description: '' }
+          return { name: '', alias: '', category: null, description: '' }
         }
       },
       edit: {
@@ -81,6 +83,7 @@
         input: {
           name: this.exercise.name,
           alias: this.exercise.alias,
+          category: this.exercise.category,
           // description: this.exercise.description,
         }
       }
@@ -118,9 +121,7 @@
         }
         this.client.mutate({ 
           mutation: createExercise, 
-          variables: { 
-            input: input 
-          }, 
+          variables: { input }, 
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
             const data = cache.readQuery({ query: getAllExercises });

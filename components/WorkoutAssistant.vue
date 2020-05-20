@@ -220,9 +220,6 @@ export default {
             images.push(unit.exercise.image.url);
           }
         });
-      } else if (this.current.exercise.name == 'Witaj w cyfrowym asystencie treningu!') {
-        const image = 'https://media.giphy.com/media/e2nYWcTk0s8TK/giphy.gif';
-        images.push(image);
       } else if (this.current.exercise.name == 'Odpocznij') {
         const image = this.next.exercise.image ? this.next.exercise.image.url : 'https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif';
         images.push(image);

@@ -3,5 +3,10 @@ query {
     id
     name
     alias
+    category
+    image {
+      id
+      url
+    }
   }
 }

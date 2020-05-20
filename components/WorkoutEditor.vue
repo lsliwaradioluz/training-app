@@ -58,7 +58,7 @@
                     <button class="flaticon-add-button" @click="openUnitEditor()">
                       Dodaj ćwiczenie
                     </button>
-                    <button class="flaticon-left-arrow-2" @click="moveSection('left')" v-show="currentSection > 0">
+                    <button class="flaticon-left-arrow-1" @click="moveSection('left')" v-show="currentSection > 0">
                       Przesuń w lewo
                     </button>
                     <button class="flaticon-right-arrow-2" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
@@ -80,10 +80,10 @@
                     <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
                   <template v-slot:options>
-                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex">
+                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-if="user.workouts.length > 1">
                       Kopiuj ćwiczenie
                     </button>
-                    <button class="flaticon-add-button" @click="openUnitEditor()">
+                    <button class="flaticon-add-button" @click="addExerciseToComplex(complexindex)">
                       Dodaj ćwiczenie
                     </button>
                     <button class="flaticon-up" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
@@ -118,7 +118,7 @@
                     <button class="flaticon-down-arrow-1" @click="moveUnit(currentSection, complexindex, unitindex, 'down')" v-show="unitindex != complex.units.length - 1">
                       Przesuń w dół
                     </button>
-                    <template v-if="complex.units.length == 1">
+                    <template v-show="complex.units.length == 1">
                       <button class="flaticon-up" @click="moveComplex(currentSection, complexindex, 'up')" v-show="complexindex != 0">
                         Przesuń w górę
                       </button>
@@ -126,9 +126,14 @@
                         Przesuń w dół
                       </button>
                     </template>
-                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-show="currentComplex == null && complex.units.length < 2">
-                      Paruj
-                    </button>
+                    <template v-if="currentComplex == null && complex.units.length < 2">
+                      <button class="flaticon-add-button" @click="addExerciseToComplex(complexindex)">
+                        Dodaj ćwiczenie
+                      </button>
+                      <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-if="user.workouts.length > 0">
+                        Paruj
+                      </button>
+                    </template>
                     <button class="flaticon-pencil" @click="openUnitEditor(unit, unitindex, complexindex)">
                       Edytuj
                     </button>
@@ -320,6 +325,10 @@
       copyComplex(complex) {
         const complexClone = JSON.parse(JSON.stringify(complex));
         this.sections[this.currentSection].complexes.push(complexClone);
+      },
+      addExerciseToComplex(complexindex) {
+        this.currentComplex = complexindex;
+        this.openUnitEditor();
       },
       addUnit(unit) {
         const unitClone = JSON.parse(JSON.stringify(unit));

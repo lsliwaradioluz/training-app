@@ -1,7 +1,7 @@
 <template>
   <div class="exercise-layout">
     <div class="navigation">
-      <nuxt-link class="close-button flaticon-left-arrow-2 mr05" tag="button" type="button" to="/exercises"></nuxt-link>
+      <button class="back-button flaticon-left-arrow-2 mr05" type="button" @click="goBack"></button>
     </div>
     <nuxt />
     <Confirm />
@@ -12,6 +12,11 @@
 
 export default {
   middleware: 'redirect',
+  methods: {
+    goBack() {
+      this.$router.go(-1);
+    }
+  }
 }
 </script>
 

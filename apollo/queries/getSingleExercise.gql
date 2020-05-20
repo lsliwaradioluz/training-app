@@ -4,6 +4,7 @@ query($id: ID!) {
     name
     alias
     description
+    category
     image {
       id
       url

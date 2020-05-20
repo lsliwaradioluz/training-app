@@ -1,8 +1,6 @@
 <template>
   <LazyWrapper :loading="$apollo.loading">
-    <div>
-      <ExerciseView :exercise="exercise" />
-    </div>
+    <ExerciseView :exercise="exercise" />
   </LazyWrapper>
 </template>
 

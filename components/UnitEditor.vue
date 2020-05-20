@@ -83,7 +83,7 @@
         this.unit.exercise = {...exercise};
       },
       createExercise() {
-        const input = { data: { name: this.unit.exercise.name } }
+        const input = { data: { name: this.unit.exercise.name, category: 'strength' } }
         return this.client.mutate({ 
           mutation: createExercise, 
           variables: { input }, 

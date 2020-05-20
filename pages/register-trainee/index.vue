@@ -41,20 +41,23 @@ export default {
   methods: {
     register() {
       if (this.user.password != this.user.repeatPassword) {
-        this.error = 'Podane hasła nie są takie same';
+        this.setNotification('Podane hasła nie są takie same');
         return
       }
 
       const username = this.generateUsername(this.user.fullname);
       const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/auth/local/register' : 'https://piti-backend.herokuapp.com/auth/local/register';
-      this.$axios.$post(endpoint, {
+      const userObject = {
         username: username, 
         fullname: this.user.fullname,
         email: this.user.email, 
         password: this.user.password,
         user: this.user.coach,
         admin: false, 
-      })
+      };
+
+      
+      this.$axios.$post(endpoint, userObject)
         .then(res => {
           let user = {
             id: res.user.id,
@@ -73,11 +76,12 @@ export default {
           });
         })
         .catch(err => {
-          this.error = 'Nie można zarejestrować';
+          this.setNotification('Nie można zarejestrować');
         })
     },
     ...mapMutations({
       setUser: 'auth/setUser',
+      setNotification: 'main/setNotification',
     })
   },
   beforeRouteEnter(from, to, next) {

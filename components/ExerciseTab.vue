@@ -1,7 +1,12 @@
 <template>
   <div class="exercise-tab column pt05 pb05">
     <div class="row j-between">
-      <nuxt-link class="exercise-tab__link pr1 row" :to="exercise.id" tag="div" append>
+      <nuxt-link 
+        class="exercise-tab__link pr1 row" 
+        :to="exercise.image ? `/exercises/${exercise.id}` : ``"
+        tag="div" 
+        @click.native="showNotification"
+        append>
         <div>
           <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
           <p class="exercise-tab__description t-medium t-faded m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
@@ -18,7 +23,7 @@
             <button class="flaticon-trash fs-09 mr05" type="button" @click="deleteExercise">Usuń</button>
           </template>
         </ContextMenu>
-        <span class="flaticon-right-arrow t-headers" v-else>
+        <span class="flaticon-right-arrow t-faded" :class="{ 't-headers': exercise.image }" v-else>
         </span>
       </div>
     </div>
@@ -70,6 +75,11 @@
             } 
           });
           
+        }
+      },
+      showNotification() {
+        if (!this.exercise.image) {
+          this.$store.commit('main/setNotification', 'To ćwiczenie nie ma jeszcze zdjęcia.');
         }
       }
     }

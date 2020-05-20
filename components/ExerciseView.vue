@@ -2,7 +2,7 @@
   <div class="exercise-view column">
     <div
       class="image" 
-      :style="{ backgroundImage: exercise.image ? `url('${exercise.image.url}')` : 'none' }">
+      :style="{ backgroundImage }">
     </div>
     <div class="text p11">
       <div class="row j-between a-center">
@@ -44,6 +44,15 @@
         client: this.$apollo.getClient(),
         showButtonsPanel: false,
         showDescription: true,
+      }
+    },
+    computed: {
+      backgroundImage() {
+        if (this.exercise.image) {
+          return `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${this.exercise.image.url}')`;
+        } else {
+          return 'none';
+        }
       }
     },
     methods: {
