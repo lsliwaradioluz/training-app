@@ -1,7 +1,10 @@
 // ANIMACJA STRONY 
+.page-leave-active {
+  animation: fade 0.2s reverse;
+}
 
 .page-enter-active {
-  animation: slide-to-right 0.2s;
+  animation: fade 0.2s;
 }
 
 // ANIMACJA slide-to-right

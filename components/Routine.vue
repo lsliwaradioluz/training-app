@@ -17,17 +17,17 @@
         </aside>
       </div>
       <div class="unit" :class="{ pl05: complex.units.length > 1}" v-for="(unit, unitindex) in complex.units" :key="unitindex">
-        <div class="unit-header">
+        <div>
           <p>{{ unit.exercise.name }}</p>
-          <aside>
-            <slot name="unit-buttons" :unit="unit" :unitindex="unitindex" :complex="complex" :complexindex="complexindex"></slot>
-          </aside>
+          <ul>
+            <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
+            <li v-if="unit.remarks">{{ unit.remarks }}</li>
+            <li class="t-faded">przerwa {{ unit.rest }}s</li>
+          </ul>
         </div>
-        <ul>
-          <li><span v-if="unit.sets">{{ unit.sets }}</span><span v-if="unit.reps">x{{ unit.reps }}</span><span v-if="unit.time">x{{ unit.time }}s</span><span v-if="unit.distance">x{{ unit.distance }}m</span></li>
-          <li v-if="unit.remarks">{{ unit.remarks }}</li>
-          <li class="t-faded">przerwa {{ unit.rest }}s</li>
-        </ul>
+        <aside>
+          <slot name="unit-buttons" :unit="unit" :unitindex="unitindex" :complex="complex" :complexindex="complexindex"></slot>
+        </aside>
       </div>
     </section>
     <section v-if="section.complexes.length == 0">
@@ -87,16 +87,16 @@
 
   .unit {
     margin-bottom: .5rem;
-  }
-
-  .unit-header {
     display: flex;
     justify-content: space-between;
     p {
       margin: 0;
     }
-    button, a {
-      font-size: 14px;
+    aside {
+      button, a {
+        font-size: 14px;
+        margin-left: 1rem;
+      }
     }
   }
 </style>

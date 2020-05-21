@@ -3,14 +3,16 @@
     <h1 class="mt0 mb2">Zaloguj się</h1>
     <form class="column j-center" @submit.prevent>
       <CustomInput
+        id="login"
         v-model="identifier" 
-        placeholder="Twój email"
+        placeholder="Email lub nazwa użytkownika"
         type="text"
         :spellcheck="false">
       </CustomInput>
       <CustomInput
+        id="login"
         v-model="password"
-        placeholder="Password"
+        placeholder="Hasło"
         type="password">
       </CustomInput>
       <nuxt-link class="t-right fs-12" to="forgotpassword" type="button" append>Zapomniałeś hasła?</nuxt-link>

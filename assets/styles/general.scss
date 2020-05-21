@@ -3,14 +3,29 @@
   max-height: 1000000px;
   // ^ fix for font boosting
 }
+
 body {
   margin: 0;
   overflow-x: hidden;
   color: white;
-  background: #1B1E31;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 15px;
   line-height: 1.4;
   font-weight: 400;
   letter-spacing: -.3px;
+  background-color: color(primary);
+}
+
+@media (min-width: 401px) {
+  body {
+    background-color: white;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    cursor: url('../images/cursor.png'), auto !important;
+  }
 }

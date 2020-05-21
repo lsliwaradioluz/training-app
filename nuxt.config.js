@@ -49,7 +49,7 @@ export default {
   */
   plugins: [
     '~/plugins/filters',
-    '~/plugins/components',
+    '~/plugins/components.js',
     '~/plugins/mixins',
   ],
   /*

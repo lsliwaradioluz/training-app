@@ -92,7 +92,7 @@
 <style lang="scss" scoped>
 
   .exercise-view {
-    height: 100vh;
+    height: 100%;
   }
 
   .image {

@@ -1,18 +1,13 @@
 <template>
   <div class="exercise-tab column pt05 pb05">
     <div class="row j-between">
-      <nuxt-link 
-        class="exercise-tab__link pr1 row" 
-        :to="exercise.image ? `/exercises/${exercise.id}` : ``"
-        tag="div" 
-        @click.native="showNotification"
-        append>
+      <button class="link pr1 row" @click="navigate">
         <div>
           <h4 class="m00">{{ exercise.name | shortenExercise }}</h4>
-          <p class="exercise-tab__description t-medium t-faded m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
-          <p class="exercise-tab__description t-medium t-faded m00" v-else>Brak alternatywnej nazwy</p>
+          <p class="description t-medium t-faded m00" v-if="exercise.alias">{{ exercise.alias | shortenAlias }}</p>
+          <p class="description t-medium t-faded m00" v-else>Brak alternatywnej nazwy</p>
         </div>
-      </nuxt-link>
+      </button>
       <div class="row a-center">
         <ContextMenu v-if="user.admin">
           <template v-slot:trigger>
@@ -77,8 +72,10 @@
           
         }
       },
-      showNotification() {
-        if (!this.exercise.image) {
+      navigate() {
+        if (this.exercise.image) {
+          this.$router.push(`/exercises/${this.exercise.id}`);
+        } else {
           this.$store.commit('main/setNotification', 'To ćwiczenie nie ma jeszcze zdjęcia.');
         }
       }
@@ -92,7 +89,8 @@
     color: white;
   }
 
-  .exercise-tab__link {
+  .link {
     flex-basis: 100%;
+    text-align: left;
   }
 </style>

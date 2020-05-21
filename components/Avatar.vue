@@ -33,7 +33,6 @@
   .avatar {
     background-size: cover;
     background-position: center;
-    // border-radius: 6px;
     box-shadow: 0 15px 30px 0 rgba(0,0,0,.21),0 0 15px 0 rgba(0,0,0,.18);
     flex-shrink: 0;
   }

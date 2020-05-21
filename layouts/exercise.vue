@@ -21,6 +21,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .exercise-layout {
+    background-color: color(primary);
+    position: relative;
+    height: 100vh;
+  }
+
   .navigation {
     position: absolute;
     top: 0;
@@ -28,5 +34,23 @@ export default {
     width: 100%;
     padding: 1rem;
     z-index: 2;
+  }
+
+  @media (min-width: 401px) {
+    
+    .exercise-layout {
+      max-width: 400px;
+      min-height: 0;
+      height: 90vh;
+      overflow: hidden;
+      margin: 5vh auto;
+      border-radius: 15px;
+      box-shadow: 0 0 0 5px black;
+    }
+
+    .navigation {
+      max-width: 400px;
+      margin: 0 auto;
+    }
   }
 </style>
