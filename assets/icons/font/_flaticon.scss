@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 11/05/2020 09:51
+    Creation date: 22/05/2020 20:54
     */
 
     @font-face {
@@ -55,7 +55,7 @@
 .flaticon-up:before { content: "\f10f"; }
 .flaticon-down-arrow-1:before { content: "\f110"; }
 .flaticon-double-arrow-cross-of-shuffle:before { content: "\f111"; }
-.flaticon-right-arrow-2:before { content: "\f112"; }
+.flaticon-right-arrow-1:before { content: "\f112"; }
 .flaticon-left-arrow-1:before { content: "\f113"; }
 .flaticon-copy:before { content: "\f114"; }
 .flaticon-search:before { content: "\f115"; }
@@ -68,10 +68,13 @@
 .flaticon-bell:before { content: "\f11c"; }
 .flaticon-continuous:before { content: "\f11d"; }
 .flaticon-tick:before { content: "\f11e"; }
-.flaticon-right-arrow-1:before { content: "\f11f"; }
+.flaticon-right-arrow-2:before { content: "\f11f"; }
 .flaticon-left-arrow-2:before { content: "\f120"; }
 .flaticon-pencil:before { content: "\f121"; }
 .flaticon-add-button:before { content: "\f122"; }
+.flaticon-play:before { content: "\f123"; }
+.flaticon-stop:before { content: "\f124"; }
+.flaticon-pause:before { content: "\f125"; }
     
     $font-Flaticon-up-arrow: "\f100";
     $font-Flaticon-down-arrow: "\f101";
@@ -91,7 +94,7 @@
     $font-Flaticon-up: "\f10f";
     $font-Flaticon-down-arrow-1: "\f110";
     $font-Flaticon-double-arrow-cross-of-shuffle: "\f111";
-    $font-Flaticon-right-arrow-2: "\f112";
+    $font-Flaticon-right-arrow-1: "\f112";
     $font-Flaticon-left-arrow-1: "\f113";
     $font-Flaticon-copy: "\f114";
     $font-Flaticon-search: "\f115";
@@ -104,7 +107,10 @@
     $font-Flaticon-bell: "\f11c";
     $font-Flaticon-continuous: "\f11d";
     $font-Flaticon-tick: "\f11e";
-    $font-Flaticon-right-arrow-1: "\f11f";
+    $font-Flaticon-right-arrow-2: "\f11f";
     $font-Flaticon-left-arrow-2: "\f120";
     $font-Flaticon-pencil: "\f121";
     $font-Flaticon-add-button: "\f122";
+    $font-Flaticon-play: "\f123";
+    $font-Flaticon-stop: "\f124";
+    $font-Flaticon-pause: "\f125";

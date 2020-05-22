@@ -37,9 +37,6 @@
       }
     }, 
     computed: {
-      image() {
-        return this.exercise.image ? this.exercise.image.url : require('assets/images/exercise.jpg');
-      },
       user() {
         return this.$store.getters['auth/user'];
       },

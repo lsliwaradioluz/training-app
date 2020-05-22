@@ -34,9 +34,7 @@
     props: {
       exercise: {
         type: Object,
-        default: () => {
-          return { name: '', technique: '' }
-        }
+        required: true, 
       },
     },
     data() {

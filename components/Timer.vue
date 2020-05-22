@@ -1,5 +1,10 @@
 <template>
   <div class="timer pl1">
+    <div class="buttons">
+      <button @click="start" v-show="!countDownInterval">start</button>
+      <button @click="stop" v-show="countDownInterval">stop</button>
+      <button @click="reset" v-show="!countDownInterval && timeleft !== time">reset</button>
+    </div>
     <p class="m00 t-right fs-32 t-headers">
       {{ timeleft | showMinutes }}
     </p>
@@ -42,7 +47,7 @@
       }
     },
     methods: {
-      countDown() {
+      start() {
         this.countDownInterval = setInterval(() => {
           this.timeleft--;
           if (this.timeleft == -1) {
@@ -52,9 +57,36 @@
           };
         }, 1000);
       }, 
+      stop() {
+        clearInterval(this.countDownInterval);
+        this.countDownInterval = null;
+      }, 
+      reset() {
+        this.timeleft = this.time;
+      }
     }, 
     mounted() {
-      this.countDown();
+      this.start();
     },
   }
 </script> 
+
+<style lang="scss" scoped>
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    button {
+      font-size: 12px;
+      color: color(faded);
+    }
+  }
+
+  .play-button {
+    margin-right: 2px;
+  }
+
+  p {
+    line-height: 1;
+  }
+</style>

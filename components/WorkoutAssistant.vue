@@ -14,7 +14,7 @@
       <transition name="slide-to-right">
         <Stopwatch v-if="stopwatchOn" />
       </transition>
-      <div class="panel-exercise pt1 pb1 row a-start j-between">
+      <div class="panel-exercise pt1 pb1 row a-end j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00 t-white">{{ current.exercise.name }}</h3>

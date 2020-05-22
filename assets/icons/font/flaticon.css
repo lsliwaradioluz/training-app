@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 11/05/2020 09:51
+  	Creation date: 22/05/2020 20:54
   	*/
 
 @font-face {
@@ -48,7 +48,7 @@ margin-left: 20px;
 .flaticon-up:before { content: "\f10f"; }
 .flaticon-down-arrow-1:before { content: "\f110"; }
 .flaticon-double-arrow-cross-of-shuffle:before { content: "\f111"; }
-.flaticon-right-arrow-2:before { content: "\f112"; }
+.flaticon-right-arrow-1:before { content: "\f112"; }
 .flaticon-left-arrow-1:before { content: "\f113"; }
 .flaticon-copy:before { content: "\f114"; }
 .flaticon-search:before { content: "\f115"; }
@@ -61,7 +61,10 @@ margin-left: 20px;
 .flaticon-bell:before { content: "\f11c"; }
 .flaticon-continuous:before { content: "\f11d"; }
 .flaticon-tick:before { content: "\f11e"; }
-.flaticon-right-arrow-1:before { content: "\f11f"; }
+.flaticon-right-arrow-2:before { content: "\f11f"; }
 .flaticon-left-arrow-2:before { content: "\f120"; }
 .flaticon-pencil:before { content: "\f121"; }
 .flaticon-add-button:before { content: "\f122"; }
+.flaticon-play:before { content: "\f123"; }
+.flaticon-stop:before { content: "\f124"; }
+.flaticon-pause:before { content: "\f125"; }

@@ -80,7 +80,7 @@
                     <span class="flaticon-vertical-dots fs-12"></span>
                   </template>
                   <template v-slot:options>
-                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-if="user.workouts.length > 1">
+                    <button class="flaticon-double-arrow-cross-of-shuffle" @click="currentComplex = complexindex" v-if="user.workouts.length > 0">
                       Kopiuj ćwiczenie
                     </button>
                     <button class="flaticon-add-button" @click="addExerciseToComplex(complexindex)">
@@ -153,23 +153,24 @@
     </section>
     <!-- POPRZEDNIE TRENINGI  -->
     <section v-if="user.workouts.length > 0">
-      <header class="row j-between a-center pt1 t-faded" :class="{ pb05: !user.workouts[currentWorkout].feedback }">
-        <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
-          {{ user.workouts[currentWorkout].scheduled | getDayName }}
-          {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
-        </h4>
-        <h4 class="mb0 t-faded" v-else>
-          {{ user.workouts[currentWorkout].scheduled | getDayName }} 
-          {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
-          ({{ user.workouts[currentWorkout].user.username }})
-        </h4>
-        <!-- <button type="button" @click="feedbackVisible = !feedbackVisible">notatka</button> -->
-        <div class="row">
+      <header class="row j-between a-start pt1 t-faded" :class="{ pb05: !user.workouts[currentWorkout].feedback }">
+        <div class="column">
+          <h4 class="mb0 t-faded" v-if="!user.workouts[currentWorkout].user">
+            {{ user.workouts[currentWorkout].scheduled | getDayName }}
+            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+          </h4>
+          <h4 class="mb0 t-faded" v-else>
+            {{ user.workouts[currentWorkout].scheduled | getDayName }} 
+            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }} 
+            ({{ user.workouts[currentWorkout].user.username }})
+          </h4>
+          <p class="t-faded fs-13 mb05" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
+        </div>
+        <div class="row ml05">
           <button class="flaticon-left-arrow" type="button" @click="showPreviousWorkout"></button>
           <button class="flaticon-right-arrow" type="button" @click="showNextWorkout"></button>
         </div>
       </header>
-      <p class="t-faded fs-13 mb05" v-show="user.workouts[currentWorkout].feedback">{{ user.workouts[currentWorkout].feedback}}</p>
       <div class="carousel-container b-secondary" v-if="previousWorkoutSections.length > 0">
         <Carousel 
           :navigation-config="carouselNavConfig" 
@@ -242,7 +243,6 @@
         exercises: null,
         editedUnit: null, 
         nameEditorVisible: false,
-        feedbackVisible: false,
       }
     },
     computed: {

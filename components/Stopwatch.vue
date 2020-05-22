@@ -2,10 +2,10 @@
   <div class="stopwatch row j-between a-center pb05 pt05">
     <div class="stopwatch__panel">
       <div class="row" v-if="stopwatchInterval == null">
-        <button class="mr05" @click="startTime">start</button>
-        <button @click="resetTime" v-if="time > 0">reset</button>
+        <button class="flaticon-play mr05" @click="startTime"></button>
+        <button class="flaticon-stop" @click="resetTime" v-if="time > 0"></button>
       </div>
-      <button @click="stopTime" v-else>stop</button>
+      <button class="flaticon-pause" @click="stopTime" v-else></button>
     </div>
     <p class="m00 row j-center">{{ time | filterStopwatchTime }}</p>
   </div>
@@ -45,5 +45,11 @@ export default {
 
   button {
     text-transform: uppercase;
+    font-size: 14px;
+  }
+
+  p {
+    line-height: 1;
+    font-size: 28px;
   }
 </style>
