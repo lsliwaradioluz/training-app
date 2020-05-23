@@ -1,27 +1,31 @@
 <template>
-  <div class="workout-assistant column j-end">
-    <div class="navigation">
-      <button class="close-button flaticon-left-arrow-2" @click="$store.commit('assistant/toggleWorkoutAssistant')"></button>
-    </div>
-    <div class="images">
-      <div v-for="(image, index) in images" :key="index" :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }"></div>
-    </div>
-    <div class="controls row">
+  <article class="workout-assistant column j-end">
+    <section class="navigation row j-between a-center">
+      <button class="flaticon-left-arrow-2" @click="$store.commit('assistant/toggleWorkoutAssistant')"></button>
+      <p v-if="lastSet">ostatnia seria!</p>
+    </section>
+    <section class="images">
+      <div 
+        v-for="(image, index) in images" 
+        :key="index" 
+        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }">
+      </div>
+    </section>
+    <section class="controls row">
       <button @click="previousUnit"></button>
       <button @click="nextUnit"></button>
-    </div>
-    <div class="panel">
+    </section>
+    <section class="panel">
       <transition name="slide-to-right">
         <Stopwatch v-if="stopwatchOn" />
       </transition>
-      <div class="panel-exercise pt1 pb1 row a-end j-between">
+      <div class="panel__exercise row a-end j-between">
         <div>
           <MovingText :key="current.exercise.name" v-if="showWorkoutAssistant">
             <h3 class="m00 t-white">{{ current.exercise.name }}</h3>
           </MovingText>
           <p class="fs-12 m00" v-if="current.remarks">{{ current.remarks }}</p>
           <p class="fs-12 m00" v-else>Wykonaj teraz</p>
-          <p class="fs-12 m00" v-if="lastSet">ostatnia seria</p>
         </div>
         <Timer 
           :time="current.time"
@@ -29,42 +33,42 @@
           @countdown-over="nextUnit" 
           @beep="playAudio($event)"
           :key="controls.unit"
-          v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps" />
-        <div class="row a-center j-end pl1" v-else>
+          v-if="!current.sets && current.time || automaticModeOn && current.time && !current.reps">
+        </Timer>
+        <div class="panel__exercise__repetitions row a-center j-end pl1" v-else>
           <p class="m00 fs-32" v-if="current.reps">{{ current.reps }}</p>
           <p class="m00 fs-32" v-if="current.reps && current.time"><span class="fs-22">x</span>{{ current.time }}<span class="fs-22">s</span></p>
           <p class="m00 fs-32" v-if="current.time && !current.reps">{{ current.time }}s</p>
           <p class="m00 t-right fs-32" v-if="current.distance">{{ current.distance }}<span class="fs-22">m</span></p>
         </div>
       </div>
-      <div class="panel-indicators" >
-        <div class="row j-between" style="margin-bottom: 1px">
-          <p class="m00 fs-12">
-            {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
-          </p>
-          <p class="m00 fs-12" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
-        </div>
-        <div class="row j-between">
-          <span 
-            class="indicators-bar t-center"
-            :class="{ 'b-white': index <= controls.unit }"
-            v-for="(unit, index) in units" 
-            :key="index" 
-            @click="controls.unit = index"></span>
-        </div>
+    </section>
+    <section class="progress">
+      <div class="progress-data row j-between">
+        <p class="m00 fs-12">
+          {{ `${sections[controls.section].name} ${controls.complex + 1 }/${ sections[controls.section].complexes.length}` }}
+        </p>
+        <p class="m00 fs-12" v-if="isScreenDivided">{{ workout.user.fullname | getName }}</p>
       </div>
-  <!-- PANEL STEROWANIA -->
-      <div class="panel-buttons row j-between a-center">
-        <button class="flaticon-sound" @click="voiceAssistantOn = false" v-if="voiceAssistantOn"></button>
-        <button class="flaticon-mute" @click="voiceAssistantOn = true" v-else></button>
-        <button class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></button>
-        <button class="flaticon-previous-track-button" @click="previousUnit"></button>
-        <button class="flaticon-play-and-pause-button" @click="nextUnit"></button>
-        <button class="flaticon-counterclockwise" :class="{ 't-headers': stopwatchOn }" @click="stopwatchOn = !stopwatchOn"></button>
-        <button class="flaticon-menu" @click="$emit('edit-feedback')"></button>
+      <div class="progress-bars row j-between">
+        <span
+          :class="{ 'b-white': index <= controls.unit }"
+          v-for="(unit, index) in units" 
+          :key="index" 
+          @click="controls.unit = index">
+        </span>
       </div>
-    </div>
-  </div>
+    </section>
+    <section class="buttons">
+      <button class="flaticon-sound" @click="voiceAssistantOn = false" v-if="voiceAssistantOn"></button>
+      <button class="flaticon-mute" @click="voiceAssistantOn = true" v-else></button>
+      <button class="flaticon-login" :class="{ 't-headers': automaticModeOn }" @click="toggleAutomaticMode"></button>
+      <button class="flaticon-previous-track-button" @click="previousUnit"></button>
+      <button class="flaticon-play-and-pause-button" @click="nextUnit"></button>
+      <button class="flaticon-counterclockwise" :class="{ 't-headers': stopwatchOn }" @click="stopwatchOn = !stopwatchOn"></button>
+      <button class="flaticon-menu" @click="$emit('edit-feedback')"></button>
+    </section>
+  </article>
 </template>
 
 <script>
@@ -323,6 +327,11 @@ export default {
     width: 100%;
     padding: 1rem;
     z-index: 2;
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: color(headers);
+    }
   }
 
   .images {
@@ -333,7 +342,6 @@ export default {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-
     div {
       min-height: 140px;
       flex-basis: 50%;
@@ -362,29 +370,43 @@ export default {
     z-index: 2;
   }
 
-  .panel-exercise div {
-    &:first-child {
-      flex-basis: 1;
-      overflow: hidden;
-    } 
-    &:nth-child(2) {
-      flex-basis: 1;
-    }
-  }
-
-  .indicators-bar {
-    height: 2px;
-    flex: 1;
-    margin-right: 1px;
-    background: gray;
-
-    &:last-child {
-      margin: 0;
-    }
-  }
-
-  .panel-buttons {
+  .panel__exercise {
     padding: 1rem 0;
+    div:first-child {
+      overflow: hidden;
+    }
+  }
+
+  .panel__exercise__repetitions p {
+    line-height: 1;
+  }
+
+  .progress {
+    z-index: 2;
+  }
+
+  .progress-data {
+    margin-bottom: 1px;
+  }
+
+  .progress-bars {
+    span {
+      height: 2px;
+      flex: 1;
+      margin-right: 1px;
+      background: gray;
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  .buttons {
+    padding: 1rem 0;
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     button {
       font-size: 16px;
     }
