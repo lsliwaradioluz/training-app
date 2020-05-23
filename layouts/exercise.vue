@@ -36,7 +36,7 @@ export default {
     z-index: 2;
   }
 
-  @media (min-width: 401px) {
+  @media (min-width: 768px) {
     
     .exercise-layout {
       max-width: 400px;

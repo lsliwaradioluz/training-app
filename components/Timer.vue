@@ -3,7 +3,7 @@
     <div class="buttons">
       <button @click="start" v-show="!countDownInterval">start</button>
       <button @click="stop" v-show="countDownInterval">stop</button>
-      <button @click="reset" v-show="!countDownInterval && timeleft !== time">reset</button>
+      <button class="reset-button" @click="reset" v-show="!countDownInterval && timeleft !== time">reset</button>
     </div>
     <p class="m00 t-right fs-32 t-headers">
       {{ timeleft | showMinutes }}
@@ -77,13 +77,13 @@
     display: flex;
     justify-content: space-around;
     button {
-      font-size: 12px;
+      font-size: 14px;
       color: color(faded);
     }
   }
 
-  .play-button {
-    margin-right: 2px;
+  .reset-button {
+    margin-left: 4px;
   }
 
   p {

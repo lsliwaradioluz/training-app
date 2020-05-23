@@ -61,7 +61,7 @@
                     <button class="flaticon-left-arrow-1" @click="moveSection('left')" v-show="currentSection > 0">
                       Przesuń w lewo
                     </button>
-                    <button class="flaticon-right-arrow-2" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
+                    <button class="flaticon-right-arrow-1" @click="moveSection('right')" v-show="currentSection < sections.length - 1">
                       Przesuń w prawo
                     </button>
                     <button class="flaticon-pencil" @click="openNameEditor()">

@@ -35,9 +35,6 @@
         this.$emit('close');
       }
     },
-    mounted() {
-      this.$refs.textarea.focus();
-    }
   }
 </script>
 

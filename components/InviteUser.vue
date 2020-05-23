@@ -24,8 +24,8 @@ export default {
     data() {
       return {
         user: {
-          fullname: null, 
-          email: null,
+          fullname: 'Łukasz Plum', 
+          email: 'lukasz.mateusz.sliwa@gmail.com',
         }
       }
     },
@@ -34,9 +34,9 @@ export default {
         const link = process.env.NODE_ENV == 'development' ? `http://localhost:3000/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}` : `https://piti.live/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`;
         const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/email' : 'https://piti-backend.herokuapp.com/email';
         this.$axios.$post(endpoint, {
-          from: this.$store.state.auth.user.email,
+          from: 'lukasz@piti.live',
           to: this.user.email, 
-          subject: `Piti: Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`, 
+          subject: `Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`, 
           html: 
           `<!DOCTYPE html>
           <html lang="en">

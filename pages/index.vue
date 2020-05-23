@@ -1,12 +1,14 @@
 <template>
   <div class="website">
     <header class="column j-between">
-      <h1>Get strong in silence. Let your success make all the noise.</h1>
-      <div class="row a-center">
-        <nuxt-link tag="h3" to="/login">Zacznij trening</nuxt-link>
-        <span class="ml1 flaticon-right-arrow-1"></span>
+      <h1>Ruch tyłka z kanapy to najlepsze ćwiczenie jakie można wykonać</h1>
+      <div class="column j-center">
+        <nuxt-link tag="h3" to="/login">
+          Zacznij trening
+          <span class="flaticon-right-arrow-2"></span>
+        </nuxt-link>
       </div>
-    </header>    
+    </header>
   </div>
 </template>
 
@@ -36,7 +38,21 @@
         color: white;
         cursor: pointer;
         margin: 0;
+        span {
+          font-size: 18px;
+          margin-left: .5rem;
+        }
       }
+    }
+  }
+
+  .about {
+    h2 {
+      font-weight: 500;
+    }
+
+    p {
+      font-size: 18px;
     }
   }
   

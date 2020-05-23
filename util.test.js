@@ -8,7 +8,7 @@ test('should see dashboard', async () => {
   });
 
   const page = await browser.newPage();
-  await page.goto('localhost:3000/dashboard');
-  await page.click('input#login');
-  await page.type('input#login', 'lsliwa');
+  await page.goto('localhost:3000/login');
+  // await page.click('input#login');
+  // await page.type('input#login', 'lsliwa');
 }, 10000);

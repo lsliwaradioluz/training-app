@@ -27,7 +27,7 @@ export default {
     background-color: color(primary);
   }
 
-  @media (min-width: 401px) {
+  @media (min-width: 768px) {
     .login-layout {
       max-width: 400px;
       min-height: 0;

@@ -17,10 +17,10 @@
       </CustomInput>
       <nuxt-link class="t-right fs-12" to="forgotpassword" type="button" append>Zapomniałeś hasła?</nuxt-link>
       <button class="button-primary b-headers mt2 mb1" @click.prevent="signIn" type="button">Zaloguj</button>
-      <div class="login__help-buttons row j-center">
+      <!-- <div class="login__help-buttons row j-center">
         <span class="t-faded">Nie masz konta?&nbsp;</span>
         <nuxt-link to="/register-coach">Zarejestruj się</nuxt-link>
-      </div>
+      </div> -->
     </form>      
   </div>
 </template>

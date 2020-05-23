@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @media (min-width: 401px) {
+  @media (min-width: 768px) {
     .error {
       max-width: 400px;
       min-height: 0;
