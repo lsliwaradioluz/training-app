@@ -3,4 +3,3 @@
     <ExerciseEditor />
   </div>
 </template>
-

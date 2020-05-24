@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .website-layout {
-    background-color: color(primary);
-  }
+.website-layout {
+  background-color: color(primary);
+}
 </style>

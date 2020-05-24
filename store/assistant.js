@@ -1,44 +1,45 @@
-import Cookies from 'js-cookie';
-import Vue from 'vue'
+import Vue from "vue"
 
 export const state = () => ({
   showWorkoutAssistant: false,
   currentWorkout: 0,
   currentSection: [0, 0],
-});
+})
 
 export const mutations = {
   toggleWorkoutAssistant(state) {
-    state.showWorkoutAssistant = !state.showWorkoutAssistant;
-  }, 
+    state.showWorkoutAssistant = !state.showWorkoutAssistant
+  },
   setCurrentWorkout(state) {
-    state.currentWorkout == 0 ? state.currentWorkout = 1 : state.currentWorkout = 0;
+    state.currentWorkout == 0
+      ? (state.currentWorkout = 1)
+      : (state.currentWorkout = 0)
   },
   setCurrentSection(state, payload) {
     if (payload) {
-      Vue.set(state.currentSection, payload.index, payload.section);
+      Vue.set(state.currentSection, payload.index, payload.section)
     } else {
-      state.currentSection = [0, 0];
+      state.currentSection = [0, 0]
     }
   },
   clearAssistantState(state) {
-    state.showWorkoutAssistant = false;
-    state.currentWorkout = 0;
-    state.currentSection = [0, 0];
-  }
+    state.showWorkoutAssistant = false
+    state.currentWorkout = 0
+    state.currentSection = [0, 0]
+  },
 }
 
-export const getters = {  
+export const getters = {
   showWorkoutAssistant(state) {
-    return state.showWorkoutAssistant;
+    return state.showWorkoutAssistant
   },
   currentWorkout(state) {
-    return state.currentWorkout;
+    return state.currentWorkout
   },
   currentSection(state) {
-    return state.currentSection;
+    return state.currentSection
   },
   showBlockDescription(state) {
-    return state.showBlockDescription;
-  }
+    return state.showBlockDescription
+  },
 }

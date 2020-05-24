@@ -5,7 +5,7 @@
       <div class="column j-center">
         <nuxt-link tag="h3" to="/login">
           Zacznij trening
-          <span class="flaticon-right-arrow-2"></span>
+          <span class="flaticon-right-arrow-2" />
         </nuxt-link>
       </div>
     </header>
@@ -13,48 +13,45 @@
 </template>
 
 <script>
-  export default {
-    layout: 'website',
-  }
+export default {
+  layout: "website",
+}
 </script>
 
 <style lang="scss" scoped>
-
-  header {
-    min-height: 100vh;
-    background-color: color(headers);
-    h1 {
-      font-weight: 400;
-      font-size: 60px;
-      padding: 4rem 1rem;
-      color: color(secondary);
-      text-transform: uppercase;
-      text-decoration: underline;
-    }
-    div {
-      background-color: color(secondary);
-      padding: 2rem 1rem 3rem 1rem;
-      h3 {
-        color: white;
-        cursor: pointer;
-        margin: 0;
-        span {
-          font-size: 18px;
-          margin-left: .5rem;
-        }
+header {
+  min-height: 100vh;
+  background-color: color(headers);
+  h1 {
+    font-weight: 400;
+    font-size: 60px;
+    padding: 4rem 1rem;
+    color: color(secondary);
+    text-transform: uppercase;
+    text-decoration: underline;
+  }
+  div {
+    background-color: color(secondary);
+    padding: 2rem 1rem 3rem 1rem;
+    h3 {
+      color: white;
+      cursor: pointer;
+      margin: 0;
+      span {
+        font-size: 18px;
+        margin-left: 0.5rem;
       }
     }
   }
+}
 
-  .about {
-    h2 {
-      font-weight: 500;
-    }
-
-    p {
-      font-size: 18px;
-    }
+.about {
+  h2 {
+    font-weight: 500;
   }
-  
-</style>
 
+  p {
+    font-size: 18px;
+  }
+}
+</style>

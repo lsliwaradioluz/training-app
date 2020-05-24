@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import getSingleExercise from '~/apollo/queries/getSingleExercise.gql'
+import getSingleExercise from "~/apollo/queries/getSingleExercise.gql"
 
 export default {
-  layout: 'exercise',
+  layout: "exercise",
   apollo: {
     exercise: {
       query: getSingleExercise,
@@ -16,22 +16,22 @@ export default {
         return {
           id: this.$route.params.id,
         }
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      exercise: {}
+      exercise: {},
     }
-  }
+  },
   // asyncData(context) {
   //   const client = context.app.apolloProvider.defaultClient;
-  //   return client.query({ query: getSingleExercise, variables: { id: context.route.params.id } }) 
+  //   return client.query({ query: getSingleExercise, variables: { id: context.route.params.id } })
   //     .then(({ data }) => {
   //       return {
   //         exercise: data.exercise
   //       }
-  //     }) 
+  //     })
   // },
 }
 </script>

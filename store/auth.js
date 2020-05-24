@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie"
 
 export const state = () => ({
   user: null,
@@ -6,18 +6,18 @@ export const state = () => ({
 
 export const mutations = {
   setUser(state, user) {
-    state.user = user;
-    Cookies.set('user', user);
+    state.user = user
+    Cookies.set("user", user)
   },
   async logout(state) {
-    state.user = null;
-    Cookies.set('user', null);
-    await this.$apolloHelpers.onLogout();
-  }
+    state.user = null
+    Cookies.set("user", null)
+    await this.$apolloHelpers.onLogout()
+  },
 }
 
-export const getters = {  
-  user: state => {
+export const getters = {
+  user: (state) => {
     return state.user
-  }
+  },
 }

@@ -1,44 +1,62 @@
 <template>
   <div class="invite-user tab">
-    <h3 class="mt0 t-green">Zaproś użytkownika</h3>
-    <p class="mb2">Uzupełnij dane podopiecznego, aby wysłać mu zaproszenie do aplikacji Piti. Drogą mailową otrzyma link aktywacyjny, dzięki któremu dokończy rejestrację.</p>
-    <CustomInput 
-      class="mb05"
+    <h3 class="mt0 t-green">
+      Zaproś użytkownika
+    </h3>
+    <p class="mb2">
+      Uzupełnij dane podopiecznego, aby wysłać mu zaproszenie do aplikacji Piti.
+      Drogą mailową otrzyma link aktywacyjny, dzięki któremu dokończy
+      rejestrację.
+    </p>
+    <BaseInput
       v-model="user.fullname"
-      placeholder="Imię i nazwisko"
-      type="text"></CustomInput>
-    <CustomInput 
       class="mb05"
+      placeholder="Imię i nazwisko"
+      type="text"
+    />
+    <BaseInput
       v-model="user.email"
+      class="mb05"
       placeholder="Adres e-mail"
-      type="email"></CustomInput>
+      type="email"
+    />
     <div class="invite-user__buttons p00 pt2 row j-between t-green">
-      <button class="button-primary" type="button" @click.once="sendInvitation">Zaproś</button>
-      <button class="button-primary" type="button" @click="$emit('close')">Wróć</button>
+      <button class="button-primary" type="button" @click.once="sendInvitation">
+        Zaproś
+      </button>
+      <button class="button-primary" type="button" @click="$emit('close')">
+        Wróć
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    data() {
-      return {
-        user: {
-          fullname: 'Łukasz Plum', 
-          email: 'lukasz.mateusz.sliwa@gmail.com',
-        }
-      }
-    },
-    methods: {
-      sendInvitation() {
-        const link = process.env.NODE_ENV == 'development' ? `http://localhost:3000/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}` : `https://piti.live/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`;
-        const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:1337/email' : 'https://piti-backend.herokuapp.com/email';
-        this.$axios.$post(endpoint, {
-          from: 'lukasz@piti.live',
-          to: this.user.email, 
-          subject: `Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`, 
-          html: 
-          `<!DOCTYPE html>
+  data() {
+    return {
+      user: {
+        fullname: "Łukasz Plum",
+        email: "lukasz.mateusz.sliwa@gmail.com",
+      },
+    }
+  },
+  methods: {
+    sendInvitation() {
+      const link =
+        process.env.NODE_ENV == "development"
+          ? `http://localhost:3000/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`
+          : `https://piti.live/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`
+      const endpoint =
+        process.env.NODE_ENV == "development"
+          ? "http://localhost:1337/email"
+          : "https://piti-backend.herokuapp.com/email"
+      this.$axios
+        .$post(endpoint, {
+          from: "lukasz@piti.live",
+          to: this.user.email,
+          subject: `Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`,
+          html: `<!DOCTYPE html>
           <html lang="en">
             <head>
               <meta charset="UTF-8">
@@ -89,22 +107,24 @@ export default {
                 </div> 
               </div> 
             </body>
-          </html>`
+          </html>`,
         })
-        .then(res => {
-          this.$store.commit('main/setNotification', 'Link aktywacyjny został wysłany na podany adres email.');
-          this.$emit('close');
-        });
-      },
-    }
-  }
+        .then(() => {
+          this.$store.commit(
+            "main/setNotification",
+            "Link aktywacyjny został wysłany na podany adres email."
+          )
+          this.$emit("close")
+        })
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-
-  .invite-user__buttons {
-    button {
-      width: 49%;
-    }
+.invite-user__buttons {
+  button {
+    width: 49%;
   }
+}
 </style>
