@@ -432,11 +432,7 @@ export default {
   flex-shrink: 0;
   background-size: cover;
   background-position: center;
-  padding: .5rem;
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // justify-content: center;
+  padding: 1rem;
   p {
     font-size: 12px;
   }
