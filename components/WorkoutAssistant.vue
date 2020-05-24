@@ -1,17 +1,21 @@
 <template>
   <article class="workout-assistant column j-end">
+    <section class="navigation row j-between a-center">
+      <button
+        class="flaticon-left-arrow-2"
+        @click="$store.commit('assistant/toggleWorkoutAssistant')"
+      />
+      <p v-if="lastSet" class="navigation__last-set">
+        ostatnia seria!
+      </p>
+    </section>
     <section class="images">
       <div
         v-for="(image, index) in images"
         class="image"
         :key="index"
-        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image.url}')` }">
-        <p v-if="lastSet" class="image__last-set">
-          ostatnia seria!
-        </p>
-        <p class="m00">{{ image.reps }} {{ image.exercise }}</p>
-        <p class="m00">{{ image.remarks }}</p>
-      </div>
+        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }"
+      />
     </section>
     <section class="controls row">
       <button @click="previousUnit" />
@@ -86,10 +90,6 @@
     </section>
     <section class="buttons">
       <button
-        class="flaticon-cancel"
-        @click="$store.commit('assistant/toggleWorkoutAssistant')"
-      />
-      <button
         v-if="soundEnabled"
         class="flaticon-sound"
         @click="soundEnabled = false"
@@ -100,14 +100,14 @@
         :class="{ 't-headers': automaticModeOn }"
         @click="toggleAutomaticMode"
       />
+      <button class="flaticon-previous-track-button" @click="previousUnit" />
+      <button class="flaticon-play-and-pause-button" @click="nextUnit" />
       <button
         class="flaticon-counterclockwise"
         :class="{ 't-headers': stopwatchOn }"
         @click="stopwatchOn = !stopwatchOn"
       />
       <button class="flaticon-menu" @click="$emit('edit-feedback')" />
-      <button class="flaticon-previous-track-button" @click="previousUnit" />
-      <button class="flaticon-play-and-pause-button" @click="nextUnit" />
     </section>
   </article>
 </template>
@@ -268,6 +268,9 @@ export default {
         : false
     },
     next() {
+      // let next = this.units[this.controls.unit + 1];
+      // if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
+      // return next;
       return this.units[this.controls.unit + 1]
     },
     images() {
@@ -278,28 +281,21 @@ export default {
           if (
             unit.sets &&
             unit.exercise.image &&
-            !images.find(image => image.url == unit.exercise.image.url )
+            images.indexOf(unit.exercise.image.url) == -1
           ) {
-            let exercise = unit.exercise.name;
-            let url = unit.exercise.image.url; 
-            let reps = unit.sets;
-            let remarks = unit.remarks;
-            if (unit.reps) reps += `x${unit.reps}`
-            if (unit.time) reps += `x${unit.time}s`
-            if (unit.distance) reps += `x${unit.distance}m`
-            images.push({ exercise, url, reps, remarks })
+            images.push(unit.exercise.image.url)
           }
         })
       } else if (this.current.exercise.name == "Odpocznij") {
-        let url = this.next.exercise.image
+        const image = this.next.exercise.image
           ? this.next.exercise.image.url
           : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
-        images.push({ url })
+        images.push(image)
       } else {
-        let url = this.current.exercise.image
+        const image = this.current.exercise.image
           ? this.current.exercise.image.url
           : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
-        images.push({ url })
+        images.push(image)
       }
 
       return images
@@ -410,7 +406,7 @@ export default {
   z-index: 2;
 }
 
-.image__last-set {
+.navigation__last-set {
   margin: 0;
   font-size: 13px;
   color: color(headers);
@@ -432,10 +428,6 @@ export default {
   flex-shrink: 0;
   background-size: cover;
   background-position: center;
-  padding: 1rem;
-  p {
-    font-size: 12px;
-  }
   &:first-child {
     flex-grow: 1;
   }
