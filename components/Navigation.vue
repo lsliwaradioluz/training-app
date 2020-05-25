@@ -15,9 +15,7 @@
           "
           class="flaticon-bell copy-pair-icon t-headers ml05"
           @click="showCopyPair = !showCopyPair"
-        >
-          >
-        </button>
+        />
       </li>
     </ul>
     <ul class="links row j-between">

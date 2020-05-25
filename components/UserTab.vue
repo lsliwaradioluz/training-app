@@ -21,15 +21,13 @@
       <div v-if="edit" class="row a-center">
         <ContextMenu v-if="!user.admin">
           <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-headers" />
+            <span class="flaticon-vertical-dots t-headers" />
           </template>
           <template v-slot:options>
-            <button type="button" @click="archiveUser">
-              <i class="flaticon-pencil" />
+            <button class="flaticon-pencil" type="button" @click="archiveUser">
               {{ user.active ? "Archiwizuj" : "Przywróć" }}
             </button>
-            <button type="button" @click="$emit('transfer', user)">
-              <i class="flaticon-double-arrow-cross-of-shuffle" />
+            <button class="flaticon-double-arrow-cross-of-shuffle" type="button" @click="$emit('transfer', user)">
               Transferuj
             </button>
           </template>

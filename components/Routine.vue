@@ -18,7 +18,7 @@
         v-if="complex.units.length > 1 || currentComplex == complexindex"
         class="complex"
       >
-        <h4>{{ complex.name }}</h4>
+        <p class="m00">{{ complex.name }}</p>
         <aside>
           <slot
             name="complex-buttons"
@@ -36,15 +36,8 @@
         <div>
           <p>{{ unit.exercise.name }}</p>
           <ul>
-            <li>
-              <span v-if="unit.sets">{{ unit.sets }}</span>
-              <span v-if="unit.reps">x{{ unit.reps }}</span>
-              <span v-if="unit.time">x{{ unit.time }}s</span>
-              <span v-if="unit.distance">x{{ unit.distance }}m</span>
-            </li>
-            <li v-if="unit.remarks">
-              {{ unit.remarks }}
-            </li>
+            <li>{{ setsAndReps(unit) }}</li>
+            <li v-if="unit.remarks">{{ unit.remarks }}</li>
             <li class="t-faded">przerwa {{ unit.rest }}s</li>
           </ul>
         </div>
@@ -77,6 +70,15 @@ export default {
       type: Number,
     },
   },
+  methods: {
+    setsAndReps(unit) {
+      let setsAndReps = unit.sets;
+      if (unit.reps) setsAndReps += `x${unit.reps}`;
+      if (unit.time) setsAndReps += `x${unit.time}s`;
+      if (unit.distance) setsAndReps += `x${unit.distance}m`;
+      return setsAndReps;
+    }
+  }
 }
 </script>
 
@@ -105,11 +107,8 @@ export default {
 .complex {
   display: flex;
   justify-content: space-between;
-  margin: 0 0 0.5rem 0;
-  h4 {
-    margin-bottom: 0;
-    color: white;
-  }
+  align-items: center;
+  margin: 0 0 4px 0;
   button {
     margin-left: 1rem;
     font-size: 14px;
@@ -120,6 +119,7 @@ export default {
   margin-bottom: 0.5rem;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   p {
     margin: 0;
   }

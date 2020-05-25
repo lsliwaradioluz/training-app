@@ -10,10 +10,8 @@ export const mutations = {
   toggleWorkoutAssistant(state) {
     state.showWorkoutAssistant = !state.showWorkoutAssistant
   },
-  setCurrentWorkout(state) {
-    state.currentWorkout == 0
-      ? (state.currentWorkout = 1)
-      : (state.currentWorkout = 0)
+  setCurrentWorkout(state, payload) {
+    state.currentWorkout = payload;
   },
   setCurrentSection(state, payload) {
     if (payload) {
@@ -30,16 +28,13 @@ export const mutations = {
 }
 
 export const getters = {
-  showWorkoutAssistant(state) {
+  showWorkoutAssistant: (state) => {
     return state.showWorkoutAssistant
   },
-  currentWorkout(state) {
+  currentWorkout: (state) => {
     return state.currentWorkout
   },
-  currentSection(state) {
+  currentSection: (state) => {
     return state.currentSection
-  },
-  showBlockDescription(state) {
-    return state.showBlockDescription
   },
 }

@@ -2,14 +2,14 @@
   <div>
     <div v-if="!$apollo.loading" class="workout">
       <div v-show="!showWorkoutAssistant">
-        <button type="button" @click="setCurrentWorkout">
+        <button type="button" @click="setCurrentWorkout(currentWorkout == 0 ? 1 : 0)">
           <h5 class="m00 t-white">
             {{ currentWorkout == 0 ? users[1] : users[0] }}
           </h5>
         </button>
         <WorkoutPanel
           :workout="workoutWithoutEmptySections"
-          @show-assistant="runWorkoutAssistant"
+          @show-assistant="toggleWorkoutAssistant"
           @edit-feedback="editingFeedback = true"
         />
         <div class="carousel-container b-secondary">
@@ -44,28 +44,26 @@
           </Carousel>
         </div>
       </div>
-      <!-- ASYSTENT  -->
-      <div v-if="renderWorkoutAssistant">
-        <Carousel
-          v-show="showWorkoutAssistant"
-          :navigation-config="carouselNavConfig"
-          :start-from-page="currentWorkout"
-          @change-page="setCurrentWorkout"
-        >
-          <WorkoutAssistant
-            v-for="(workout, index) in workouts"
-            :key="workout.id"
-            :workout="workout"
-            :workout-index="index"
-            :section-index="currentSection[index]"
-            :is-screen-divided="workouts.length > 1"
-            @set-current-section="
-              setCurrentSection({ index: currentWorkout, section: $event })
-            "
-            @edit-feedback="editingFeedback = true"
-          />
-        </Carousel>
-      </div>
+      <!-- ASYSTENT -->
+      <Carousel
+        v-show="showWorkoutAssistant"
+        :navigation-config="carouselNavConfig"
+        :start-from-page="currentWorkout"
+        @change-page="setCurrentWorkout($event)"
+      >
+        <WorkoutAssistant
+          v-for="(workout, index) in workouts"
+          :key="workout.id"
+          :workout="workout"
+          :workout-index="index"
+          :section-index="currentSection[index]"
+          :is-screen-divided="workouts.length > 1"
+          @set-current-section="
+            setCurrentSection({ index: currentWorkout, section: $event })
+          "
+          @edit-feedback="editingFeedback = true"
+        />
+      </Carousel>
       <Modal :show="editingFeedback" @close="editingFeedback = false">
         <FeedbackEditor
           :feedback="workouts[currentWorkout].feedback"
@@ -103,7 +101,6 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-      renderWorkoutAssistant: false,
       editingFeedback: false,
     }
   },
@@ -119,30 +116,6 @@ export default {
         return section.complexes.length > 0
       })
       return workout
-    },
-    filteredSections() {
-      let sectionsClone = JSON.parse(
-        JSON.stringify(this.workoutWithoutEmptySections.sections)
-      )
-      sectionsClone.forEach((section, sectionindex) => {
-        sectionsClone[sectionindex] = _.omit(section, "__typename", "id")
-        section.complexes.forEach((complex, complexindex) => {
-          sectionsClone[sectionindex].complexes[complexindex] = _.omit(
-            complex,
-            "__typename",
-            "id"
-          )
-          complex.units.forEach((unit, unitindex) => {
-            sectionsClone[sectionindex].complexes[complexindex].units[
-              unitindex
-            ] = _.omit(unit, "__typename", "id")
-            sectionsClone[sectionindex].complexes[complexindex].units[
-              unitindex
-            ].exercise = unit.exercise.id
-          })
-        })
-      })
-      return sectionsClone
     },
     users() {
       let users = []
@@ -186,12 +159,6 @@ export default {
           "Nie udało się zapisać notatki. Sprawdź połączenie z Internetem"
         )
       }
-    },
-    runWorkoutAssistant() {
-      if (!this.renderWorkoutAssistant) {
-        this.renderWorkoutAssistant = true
-      }
-      this.toggleWorkoutAssistant()
     },
   },
   beforeRouteEnter(to, from, next) {

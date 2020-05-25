@@ -323,7 +323,7 @@
         </Carousel>
       </div>
     </section>
-    <Modal :show="Boolean(editedUnit)" @close="closeUnitEditor">
+    <Modal :show="Boolean(editedUnit)">
       <UnitEditor
         :exercises="exercises"
         :edited-unit="editedUnit"

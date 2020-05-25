@@ -96,7 +96,6 @@ export default {
   color: rgba(0, 0, 0, 0.774);
   position: absolute;
   top: 1rem;
-  padding-right: 2rem;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.233);
   z-index: 1000;
 }
@@ -105,6 +104,7 @@ export default {
 .context-menu__panel a {
   text-align: left;
   padding: 0.5rem;
+  padding-right: 2rem;
   margin-right: 0.5rem;
   font-size: 12px;
 }

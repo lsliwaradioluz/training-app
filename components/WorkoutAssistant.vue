@@ -5,7 +5,7 @@
         class="flaticon-left-arrow-2"
         @click="$store.commit('assistant/toggleWorkoutAssistant')"
       />
-      <p v-if="lastSet" class="navigation__last-set">
+      <p v-if="isLastSet" class="navigation__last-set">
         ostatnia seria!
       </p>
     </section>
@@ -18,27 +18,29 @@
       />
     </section>
     <section class="controls row">
-      <button @click="previousUnit" />
-      <button @click="nextUnit" />
+      <button class="control" @click="previousUnit" />
+      <button class="control" @click="nextUnit" />
     </section>
-    <section class="panel">
-      <transition name="slide-to-right">
-        <Stopwatch v-if="stopwatchOn" />
-      </transition>
-      <div class="panel__exercise row a-end j-between">
-        <div>
-          <MovingText v-if="showWorkoutAssistant" :key="current.exercise.name">
-            <h3 class="m00 t-white">
-              {{ current.exercise.name }}
-            </h3>
-          </MovingText>
-          <p v-if="current.remarks" class="fs-12 m00">
+    <transition name="slide-to-right">
+      <Stopwatch v-if="stopwatchOn" />
+    </transition>
+    <section class="exercise row a-end j-between">
+      <div class="exercise__name">
+        <MovingText v-if="showWorkoutAssistant" :key="`name${current.exercise.name}`">
+          <h3 class="m00 t-white">
+            {{ current.exercise.name }}
+          </h3>
+        </MovingText>
+        <MovingText v-if="current.remarks" :key="`reps${current.exercise.name}`">
+          <p class="fs-12 m00">
             {{ current.remarks }}
           </p>
-          <p v-else class="fs-12 m00">
-            Wykonaj teraz
-          </p>
-        </div>
+        </MovingText>
+        <p v-else class="fs-12 m00">
+          Wykonaj teraz
+        </p>
+      </div>
+      <div class="exercise__numbers">
         <Timer
           v-if="
             (!current.sets && current.time) ||
@@ -49,21 +51,9 @@
           @countdown-over="nextUnit"
           @beep="playAudio($event)"
         />
-        <div v-else class="panel__exercise__repetitions row a-center j-end pl1">
-          <p v-if="current.reps" class="m00 fs-32">
-            {{ current.reps }}
-          </p>
-          <p v-if="current.reps && current.time" class="m00 fs-32">
-            <span class="fs-22">x</span>{{ current.time
-            }}<span class="fs-22">s</span>
-          </p>
-          <p v-if="current.time && !current.reps" class="m00 fs-32">
-            {{ current.time }}s
-          </p>
-          <p v-if="current.distance" class="m00 t-right fs-32">
-            {{ current.distance }}<span class="fs-22">m</span>
-          </p>
-        </div>
+        <p v-else class="exercise__numbers__time">
+          {{ repetitions }}
+        </p>
       </div>
     </section>
     <section class="progress">
@@ -83,6 +73,7 @@
         <span
           v-for="(unit, index) in units"
           :key="index"
+          class="progress-bar"
           :class="{ 'b-white': index <= controls.unit }"
           @click="controls.unit = index"
         />
@@ -91,23 +82,27 @@
     <section class="buttons">
       <button
         v-if="soundEnabled"
-        class="flaticon-sound"
+        class="button flaticon-sound"
         @click="soundEnabled = false"
       />
-      <button v-else class="flaticon-mute" @click="soundEnabled = true" />
+      <button 
+        v-else 
+        class="button flaticon-mute" 
+        @click="soundEnabled = true" 
+      />
       <button
-        class="flaticon-login"
+        class="button flaticon-login"
         :class="{ 't-headers': automaticModeOn }"
         @click="toggleAutomaticMode"
       />
-      <button class="flaticon-previous-track-button" @click="previousUnit" />
-      <button class="flaticon-play-and-pause-button" @click="nextUnit" />
+      <button class="button flaticon-previous-track-button" @click="previousUnit" />
+      <button class="button flaticon-play-and-pause-button" @click="nextUnit" />
       <button
-        class="flaticon-counterclockwise"
+        class="button flaticon-counterclockwise"
         :class="{ 't-headers': stopwatchOn }"
         @click="stopwatchOn = !stopwatchOn"
       />
-      <button class="flaticon-menu" @click="$emit('edit-feedback')" />
+      <button class="button flaticon-menu" @click="$emit('edit-feedback')" />
     </section>
   </article>
 </template>
@@ -134,7 +129,7 @@ export default {
   },
   data() {
     return {
-      audio: new Audio(),
+      audio: null,
       sections: this.workout.sections,
       controls: {
         section: this.sectionIndex,
@@ -156,13 +151,13 @@ export default {
         this.current.time ||
         this.current.distance
       ) {
-        this.playAudio(this.lastSet ? "ostatniaseria.mp3" : "dzialaj.mp3")
+        this.playAudio(this.isLastSet ? "ostatniaseria.mp3" : "dzialaj.mp3")
       }
     },
     soundEnabled(value) {
-      if (value) {
+      if (value && this.audio) {
         this.audio.volume = 1
-      } else {
+      } else if (!value && this.audio) {
         this.audio.volume = 0
       }
     },
@@ -180,7 +175,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setNotification: "main/setNotification",
+      setNotification: 'main/setNotification',
     }),
     nextUnit() {
       this.controls.unit++
@@ -246,6 +241,7 @@ export default {
       }
     },
     playAudio(audio) {
+      if (!this.audio) this.audio = new Audio()
       this.audio.src = require(`@/assets/sounds/${audio}`)
       this.audio.play()
     },
@@ -260,7 +256,15 @@ export default {
     current() {
       return this.units[this.controls.unit]
     },
-    lastSet() {
+    repetitions() {
+      let repetitions = '';
+      if (this.current.reps) repetitions += `${this.current.reps}`;
+      if (this.current.reps && this.current.time) repetitions += `x`;
+      if (this.current.time) repetitions += `${this.current.time}s`;
+      if (this.current.distance) repetitions = `${this.current.distance}m`;
+      return repetitions;
+    },
+    isLastSet() {
       const lastIndex = this.units.lastIndexOf(this.units[this.controls.unit])
       return lastIndex == this.controls.unit &&
         this.units[this.controls.unit].sets > 1
@@ -268,9 +272,6 @@ export default {
         : false
     },
     next() {
-      // let next = this.units[this.controls.unit + 1];
-      // if (this.controls.unit + 1 > this.units.length - 1) next = { exercise: { name: 'Kolejny blok', images: [] } };
-      // return next;
       return this.units[this.controls.unit + 1]
     },
     images() {
@@ -306,9 +307,7 @@ export default {
       // Get array of arrays containing all sets of a given exercise
       // IE: 3x8 e1, 3x6 e2
       // => [[e1, e1, e1], [e2, e2, e2]]
-      this.sections[this.controls.section].complexes[
-        this.controls.complex
-      ].units.forEach((unit) => {
+      this.sections[this.controls.section].complexes[this.controls.complex].units.forEach((unit) => {
         const groupedUnits = []
         for (let x = 0; x < unit.sets; x++) {
           groupedUnits.push(unit)
@@ -340,27 +339,14 @@ export default {
 
       // Add the rest intervals if there should be any
       for (let i = 0; i <= units.length - 1; i++) {
-        let rest = units[i].rest
-        if (rest > 0 && i < units.length - 1) {
-          let remarks
-          if (units[i + 1].reps) {
-            remarks = `Następnie: ${units[i + 1].reps} ${
-              units[i + 1].exercise.name
-            }`
-          } else if (units[i + 1].time) {
-            remarks = `Następnie: ${units[i + 1].time}s ${
-              units[i + 1].exercise.name
-            }`
-          } else if (units[i + 1].distance) {
-            remarks = `Następnie: ${units[i + 1].distance}m ${
-              units[i + 1].exercise.name
-            }`
-          }
-
+        let time = units[i].rest
+        if (time > 0 && i < units.length - 1) {
+          let remarks = `Następnie: ${units[i + 1].exercise.name}`
+          if (units[i+1].remarks) remarks += ` (${units[i+1].remarks})`
           units.splice(i + 1, 0, {
             exercise: { name: "Odpocznij" },
-            time: rest,
-            remarks: remarks,
+            time,
+            remarks,
           })
         }
       }
@@ -437,27 +423,33 @@ export default {
   margin-left: -1rem;
   width: 100vw;
   height: 100%;
-  button {
-    width: 100%;
-    &:active {
-      // give some styles to a button once it's clicked, for example moving arrow like in youtube
-    }
+}
+
+.control {
+  width: 100%;
+  &:active {
+    // give some styles to a button once it's clicked, for example moving arrow like in youtube
   }
 }
 
-.panel {
+.exercise {
+  padding: 1rem 0;
   z-index: 2;
 }
 
-.panel__exercise {
-  padding: 1rem 0;
-  div:first-child {
-    overflow: hidden;
-  }
+.exercise__name {
+  overflow: hidden;
 }
 
-.panel__exercise__repetitions p {
+.exercise__numbers {
+  padding-left: 1rem;
+}
+
+.exercise__numbers__time {
   line-height: 1;
+  font-size: 32px;
+  margin: 0;
+  color: color(headers);
 }
 
 .progress {
@@ -468,15 +460,13 @@ export default {
   margin-bottom: 1px;
 }
 
-.progress-bars {
-  span {
-    height: 2px;
-    flex: 1;
-    margin-right: 1px;
-    background: gray;
-    &:last-child {
-      margin: 0;
-    }
+.progress-bar {
+  height: 2px;
+  flex: 1;
+  margin-right: 1px;
+  background: gray;
+  &:last-child {
+    margin: 0;
   }
 }
 
@@ -486,8 +476,9 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  button {
-    font-size: 16px;
-  }
+}
+
+.button {
+  font-size: 16px;
 }
 </style>

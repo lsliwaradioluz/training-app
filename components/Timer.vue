@@ -1,21 +1,21 @@
 <template>
-  <div class="timer pl1">
+  <div class="timer">
     <div class="buttons">
-      <button v-show="!countDownInterval" @click="start">
+      <button v-show="!countDownInterval" class="button" @click="start">
         start
       </button>
-      <button v-show="countDownInterval" @click="stop">
+      <button v-show="countDownInterval" class="button" @click="stop">
         stop
       </button>
       <button
         v-show="!countDownInterval && timeleft !== time"
-        class="reset-button"
+        class="button reset-button"
         @click="reset"
       >
         reset
       </button>
     </div>
-    <p class="m00 t-right fs-32 t-headers">
+    <p class="time">
       {{ timeleft | showMinutes }}
     </p>
   </div>
@@ -80,17 +80,22 @@ export default {
 .buttons {
   display: flex;
   justify-content: space-around;
-  button {
-    font-size: 14px;
-    color: color(faded);
-  }
+}
+
+.button {
+  font-size: 14px;
+  color: color(faded);
 }
 
 .reset-button {
   margin-left: 4px;
 }
 
-p {
+.time {
   line-height: 1;
+  margin: 0;
+  text-align: right;
+  font-size: 32px;
+  color: color(headers);
 }
 </style>
