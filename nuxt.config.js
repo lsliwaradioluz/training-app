@@ -87,6 +87,7 @@ export default {
       name: "Piti",
       short_name: "Piti",
       background_color: "#FDDCBD",
+      theme_color: "#FDDCBD",
       orientation: "portrait",
       display: "fullscreen",
       start_url:
