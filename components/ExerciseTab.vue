@@ -53,7 +53,12 @@ import deleteExercise from "~/apollo/mutations/deleteExercise.gql"
 import getAllExercises from "~/apollo/queries/getAllExercises.gql"
 
 export default {
-  props: ["exercise"],
+  props: {
+    exercise: {
+      type: Object, 
+      required: true, 
+    }
+  },
   data() {
     return {
       client: this.$apollo.getClient(),

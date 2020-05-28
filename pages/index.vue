@@ -83,16 +83,6 @@ export default {
 
 .about__section {
   margin-bottom: 8rem;
-  &:nth-child(odd) {
-    .about__header {
-      transform: rotate(1deg);
-    }
-  } 
-  &:nth-child(even) {
-    .about__header {
-      transform: rotate(-1deg);
-    }
-  }
 }
 
 .about__header {

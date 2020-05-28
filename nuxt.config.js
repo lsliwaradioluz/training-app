@@ -87,9 +87,9 @@ export default {
       name: "Piti",
       short_name: "Piti",
       background_color: "#FDDCBD",
-      theme_color: "#FDDCBD",
+      // theme_color: "#FDDCBD",
       orientation: "portrait",
-      display: "fullscreen",
+      // display: "fullscreen",
       start_url:
         process.env.NODE_ENV == "development"
           ? "http://localhost:3000/dashboard"
