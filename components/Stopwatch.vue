@@ -42,6 +42,7 @@ export default {
 <style lang="scss" scoped>
 .stopwatch {
   border-bottom: 1px solid color(gray);
+  z-index: 2;
 }
 
 button {
