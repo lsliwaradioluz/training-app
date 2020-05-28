@@ -2,7 +2,10 @@
   <div>
     <div v-if="!$apollo.loading" class="workout">
       <div v-show="!showWorkoutAssistant">
-        <button type="button" @click="setCurrentWorkout(currentWorkout == 0 ? 1 : 0)">
+        <button
+          type="button"
+          @click="setCurrentWorkout(currentWorkout == 0 ? 1 : 0)"
+        >
           <h5 class="m00 t-white">
             {{ currentWorkout == 0 ? users[1] : users[0] }}
           </h5>
@@ -77,24 +80,27 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex"
-import mainQuery from "~/apollo/queries/workouts/_id/main.gql"
-import updateWorkout from "~/apollo/mutations/updateWorkout.gql"
+import { mapMutations, mapGetters } from "vuex";
+import mainQuery from "~/apollo/queries/workouts/_id/main.gql";
+import updateWorkout from "~/apollo/mutations/updateWorkout.gql";
 
 export default {
   apollo: {
     workouts: {
       query: mainQuery,
       variables() {
-        let IDs
+        let IDs;
         if (this.$store.state.main.workoutToPair) {
-          IDs = [this.$route.params.id, this.$store.state.main.workoutToPair.id]
+          IDs = [
+            this.$route.params.id,
+            this.$store.state.main.workoutToPair.id,
+          ];
         } else {
-          IDs = [this.$route.params.id]
+          IDs = [this.$route.params.id];
         }
         return {
           ids: IDs,
-        }
+        };
       },
     },
   },
@@ -102,7 +108,7 @@ export default {
     return {
       client: this.$apollo.getClient(),
       editingFeedback: false,
-    }
+    };
   },
   computed: {
     ...mapGetters({
@@ -111,18 +117,18 @@ export default {
       currentSection: "assistant/currentSection",
     }),
     workoutWithoutEmptySections() {
-      const workout = this.workouts[this.currentWorkout]
+      const workout = this.workouts[this.currentWorkout];
       workout.sections = workout.sections.filter((section) => {
-        return section.complexes.length > 0
-      })
-      return workout
+        return section.complexes.length > 0;
+      });
+      return workout;
     },
     users() {
-      let users = []
+      let users = [];
       this.workouts.forEach((cur) => {
-        users.push(cur.user.username)
-      })
-      return users
+        users.push(cur.user.username);
+      });
+      return users;
     },
     carouselNavConfig() {
       return {
@@ -131,7 +137,7 @@ export default {
         borderRadius: "0",
         activeColor: "#FDDCBD",
         fullWidth: true,
-      }
+      };
     },
   },
   methods: {
@@ -143,30 +149,30 @@ export default {
       setNotification: "main/setNotification",
     }),
     async saveFeedback(feedback) {
-      this.workouts[this.currentWorkout].feedback = feedback
-      this.editingFeedback = false
+      this.workouts[this.currentWorkout].feedback = feedback;
+      this.editingFeedback = false;
       let input = {
         where: { id: this.workoutWithoutEmptySections.id },
         data: { feedback },
-      }
+      };
       try {
         await this.client.mutate({
           mutation: updateWorkout,
           variables: { input: input },
-        })
+        });
       } catch (err) {
         this.setNotification(
           "Nie udało się zapisać notatki. Sprawdź połączenie z Internetem"
-        )
+        );
       }
     },
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       if (from.name != "exercises-id") {
-        vm.clearAssistantState()
+        vm.clearAssistantState();
       }
-    })
+    });
   },
   async beforeRouteLeave(to, from, next) {
     // if trying to leave straight from assistant, ask for permission
@@ -174,12 +180,12 @@ export default {
       if (
         await this.$root.$confirm("Czy na pewno chcesz wyjść z tego treningu?")
       ) {
-        this.toggleWorkoutAssistant()
+        this.toggleWorkoutAssistant();
       } else {
-        return
+        return;
       }
     }
-    next()
+    next();
   },
-}
+};
 </script>

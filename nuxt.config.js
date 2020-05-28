@@ -1,4 +1,4 @@
-import webpack from "webpack"
+import webpack from "webpack";
 
 export default {
   mode: "universal",
@@ -126,7 +126,7 @@ export default {
         options: {
           name: "[path][name].[ext]",
         },
-      })
+      });
     },
   },
-}
+};

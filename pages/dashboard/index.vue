@@ -1,11 +1,129 @@
 <template>
   <div class="dashboard">
-    <BaseHeader>Pulpit</BaseHeader>
+    <BaseHeader>Instrukcje</BaseHeader>
+    <article>
+      <p>
+        Witaj w aplikacji Piti. Mam nadzieję, że mój projekt pomoże Ci ćwiczyć bardziej regularnie i z większą radością.
+        Aplikacja wciąż znajduje się w fazie testów i dopracowywania, więc mogą pojawiać się błędy. Jeśli natrafisz na któryś 
+        z nich - daj mi znać. Uwagi na temat potencjalnie przydatnych, nowych funkcjonalności równiez są mile widziane! 
+      </p>
+    </article>
+    <article class="navigation-tips">
+      <h3>Jak zacząć?</h3>
+      <p>U dołu ekranu znajduje się menu, za pomocą którego możesz nawigować do innych części aplikacji.</p>
+      <section class="navigation-tip">
+        <span class="navigation-tip__icon flaticon-home"></span>
+        <p>Ikona domu przeniesie Cię do obecnej strony, czyli wskazówek na temat aplikacji</p>
+      </section>
+      <section class="navigation-tip">
+        <span class="navigation-tip__icon flaticon-gymnast"></span>
+        <p>
+          Kółka gimnastyczne to odnosnik do bazy ćwiczeń Piti, z których układane są Twoje treningi. 
+          Jeśli chcesz poznać nowe ruchy, możesz odwiedzić ją w każdej chwili.
+        </p>
+      </section>  
+      <section class="navigation-tip">
+        <span class="navigation-tip__icon flaticon-menu"></span>
+        <p>
+          Ikona listy przekierowuje do Twoich treningów. To tam powinieneś wejść, kiedy trener da znać, że
+          rozpisał kolejną z Twoich sesji.          
+        </p>
+      </section>
+      <section class="navigation-tip">
+        <span class="navigation-tip__icon flaticon-settings"></span>
+        <p>
+          Koło zębate to nic innego jak odnośnik do ustawień Twojego konta. Zmienisz tam swoje dane, hasło
+          dostępu lub avatar.        
+        </p>
+      </section>
+      <section class="navigation-tip">
+        <span class="navigation-tip__icon flaticon-logout"></span>
+        <p>
+          Aplikacja Piti korzysta z plików cookie, aby nawet po wyjściu z niej lub odświeżeniu strony 
+          użytkownik nie musiał logować się ponownie. Jeśli jednak z jakiegoś powodu chcesz się wylogować, ostatni przycisk
+          służy własnie do tego.
+        </p>
+      </section>
+    </article>
+    <article class="assistant-tips">
+      <h3>Czym jest cyfrowy asystent treningu?</h3>
+      <p>
+        Cyfrowy asysstent treningu Piti to największa duma twórcy. Kiedy wejdziesz w swoją rozpsikę treningową na dany 
+        dzień, możesz włączyć go, aby pokazywał kolejne ćwiczenia do wykonania i odmierzał przerwy między seriami. 
+        Cyfrowy asystent posiada swój własny panel sterowania.
+      </p>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-play-and-pause-button"></span>
+        <p>
+          Asystent traktuje Twój trening jak playlistę na Spotify, gdzie kolejne ćwiczenia są jak kolejne piosenki. Aby
+          przewijąc swój trening, dotykaj ekranu: prawej strony, by przewinąć do przodu lub lewej, by się cofnąć. Nawigować
+          możesz również za pomocą strzałek, ale nie jest to najwygodniejsza metoda. Niewykluczone też, że strzałki
+          niebawem znikną.
+        </p>
+      </section>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-sound"></span>
+        <p>
+          Ikona głośnika możesz włączyć lub wyłączyć dźwięki asystenta. Chodzi tu o krótkie "beepy" wydawane przez timer
+          lub głos twórcy aplikacji, mówiący Ci kiedy "działać" lub wrzucić na "luz".
+        </p>
+      </section>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-login"></span>
+        <p>
+          Tym przyciskiem włączysz tak zwany tryb automatyczny. To sygnał dla asystenta, by automatycznie odliczać czas
+          nie tylko do końca przerwy między seriami, ale także do końca danego ćwiczenia (zakładając, że wykonujemy je własnie
+          na czas, a nie na powtórzenia). Funkcja przydaje się w treningach interwałowych typu Tabata, gdzie ćwiczysz w cyklu 
+          praca - odpoczynek o określonej długości (np. 20 sekund / 10 sekund).
+        </p>
+      </section>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-counterclockwise"></span>
+        <p>
+          Ten przycisk włącza lub wyłącza stoper.
+        </p>
+      </section>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-menu"></span>
+        <p>
+          Ostatnia pozycja służy do otwierania edytora notatek. W trakcie lub po każdym treningu zostaw trenerowi komentarz
+          dotyczący wykonanych ćwiczeń. Chodzi tu głównie o liczbę powtórzeń wykonaną w ostatnich seriach ćwiczeń siłlowych. 
+          Dzięki tej informacji trener będzie mógł lepiej zaplanować kolejną sesję.
+        </p>
+      </section>
+    </article>
+    <article class="action">
+      <h3>Gotowy na pierwszy trening?</h3>
+      <p>
+        Mam nadzieję, że aplikacja okaże się łatwa i przyjemna w użyciu. 
+        A teraz przejdź do swoich treningów i zmierz się ze swoją pierwszą rozpiską!
+      </p>
+      <nuxt-link class="button-primary" to="workouts">Zabierz mnie tam</nuxt-link>
+    </article>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .navigation-tip,
+  .assistant-tip {
+    display: flex;
+  }
+
+  .navigation-tip__icon,
+  .assistant-tip__icon {
+    margin-right: .5rem;
+    font-weight: 600;
+    color: color(headers);
+  }
+
+  .action {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
