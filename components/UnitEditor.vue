@@ -132,7 +132,7 @@ export default {
     },
     createExercise() {
       const input = {
-        data: { name: this.unit.exercise.name, category: "strength" },
+        data: { name: this.unit.exercise.name, category: "Strength" },
       }
       return this.client.mutate({
         mutation: createExercise,
