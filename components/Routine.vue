@@ -18,7 +18,7 @@
         v-if="complex.units.length > 1 || currentComplex == complexindex"
         class="complex"
       >
-        <p class="m00">{{ complex.name }}</p>
+        <h5 class="complex-name">{{ complex.name }}</h5>
         <aside>
           <slot
             name="complex-buttons"
@@ -38,7 +38,7 @@
           <ul>
             <li>{{ setsAndReps(unit) }}</li>
             <li v-if="unit.remarks">{{ unit.remarks }}</li>
-            <li class="t-faded">przerwa {{ unit.rest }}s</li>
+            <li class="t-faded">przerwy {{ unit.rest }}s</li>
           </ul>
         </div>
         <aside>
@@ -113,6 +113,12 @@ export default {
     margin-left: 1rem;
     font-size: 14px;
   }
+}
+
+.complex-name {
+  color: color(headers);
+  margin: 0;
+  font-size: 20px;
 }
 
 .unit {

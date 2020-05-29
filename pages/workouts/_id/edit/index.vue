@@ -42,7 +42,6 @@ export default {
           selectedTime: `${hours}:${minutes}`,
           sticky: data.workout.sticky,
           name: data.workout.name,
-          showSticky: data.workout.sticky,
           sections: data.workout.sections,
         }
       })
