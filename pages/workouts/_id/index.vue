@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import getSingleWorkout from "~/apollo/queries/getSingleWorkout.gql";
 import updateWorkout from "~/apollo/mutations/updateWorkout.gql";
 
@@ -102,11 +102,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      showWorkoutAssistant: "assistant/showWorkoutAssistant",
-      currentWorkout: "assistant/currentWorkout",
-      currentSection: "assistant/currentSection",
-    }),
+    ...mapState('assistant', [
+      'showWorkoutAssistant',
+      'currentWorkout',
+      'currentSection',
+    ]),
     workouts() {
       const workouts = [this.workout]
       const workoutToPair = this.$store.state.main.workoutToPair

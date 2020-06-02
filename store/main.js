@@ -1,5 +1,3 @@
-import Cookies from "js-cookie"
-
 export const state = () => ({
   notification: null,
   db: null,
@@ -35,7 +33,8 @@ export const actions = {
   setupDb({ state, commit, dispatch }) {
     var request = window.indexedDB.open("pitidb")
     request.onerror = (event) => {
-      console.log('error occured while opening database.')
+      const errorMessage = event.srcElement.error
+      console.log(errorMessage)
     }
     request.onsuccess = (event) => {
       commit('saveDb', event.target.result)
@@ -46,7 +45,8 @@ export const actions = {
       }
     }
     request.onupgradeneeded = (event) => {
-      let objectStore = state.db.createObjectStore("workouts", { keyPath:'type' })
+      let db = event.target.result;
+      db.createObjectStore("workouts", { keyPath:'type' })
     }
   }, 
   getEntryFromDb({ state, commit }) {

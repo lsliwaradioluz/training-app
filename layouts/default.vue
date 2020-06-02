@@ -1,7 +1,6 @@
 <template>
   <div ref="default" class="default" :class="{ main: !isAssistant }">
     <Navigation v-if="!isAssistant" />
-    {{ cats }}
     <Confirm />
     <Notification />
     <nuxt />
@@ -18,9 +17,6 @@ export default {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant
     },
-    cats() {
-      return this.$store.state.main.cats;
-    }
   },
 }
 </script>

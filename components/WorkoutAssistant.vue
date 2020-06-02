@@ -109,15 +109,11 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex"
 
 export default {
   props: {
     workout: {
       type: Object,
-    },
-    workoutIndex: {
-      type: Number,
     },
     isScreenDivided: {
       type: Boolean,
@@ -176,9 +172,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      showWorkoutAssistant: "assistant/showWorkoutAssistant",
-    }),
+    showWorkoutAssistant() {
+      return this.$store.state.assistant.showWorkoutAssistant
+    },
     currentUnit() {
       return this.controls.unit
     },
@@ -300,9 +296,9 @@ export default {
     },
   },
   methods: {
-    ...mapMutations({
-      setNotification: 'main/setNotification',
-    }),
+    setNotification() {
+      this.$store.commit('main/setNotification')
+    },
     nextUnit() {
       this.controls.unit++
       if (this.controls.unit > this.units.length - 1) {

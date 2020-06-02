@@ -28,13 +28,5 @@ export const mutations = {
 }
 
 export const getters = {
-  showWorkoutAssistant: (state) => {
-    return state.showWorkoutAssistant
-  },
-  currentWorkout: (state) => {
-    return state.currentWorkout
-  },
-  currentSection: (state) => {
-    return state.currentSection
-  },
+  
 }
