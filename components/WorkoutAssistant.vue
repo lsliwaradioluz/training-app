@@ -153,9 +153,13 @@ export default {
       }
     },
     soundEnabled(value) {
-      if (value && this.audio) {
+      if (!this.audio) {
+        this.audio = new Audio()
+      }
+
+      if (value) {
         this.audio.volume = 1
-      } else if (!value && this.audio) {
+      } else if (!value) {
         this.audio.volume = 0
       }
     },
