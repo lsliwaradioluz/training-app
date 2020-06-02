@@ -21,16 +21,16 @@ export default {
   watch: {
     notification(value) {
       if (value) {
+        const notificationLength = this.notification.length;
         clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
-          this.$store.commit("main/setNotification", null)
-        }, 2000)
+          this.unsetNotification();
+        }, notificationLength*50)
       }
     },
   },
   methods: {
     unsetNotification() {
-      clearTimeout(this.timeout)
       this.$store.commit("main/setNotification", null)
     },
   },

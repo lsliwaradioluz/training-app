@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 22/05/2020 20:54
+    Creation date: 02/06/2020 13:28
     */
 
     @font-face {
@@ -75,6 +75,9 @@
 .flaticon-play:before { content: "\f123"; }
 .flaticon-stop:before { content: "\f124"; }
 .flaticon-pause:before { content: "\f125"; }
+.flaticon-movie-player-play-button:before { content: "\f126"; }
+.flaticon-pause-button:before { content: "\f127"; }
+.flaticon-stop-1:before { content: "\f128"; }
     
     $font-Flaticon-up-arrow: "\f100";
     $font-Flaticon-down-arrow: "\f101";
@@ -114,3 +117,6 @@
     $font-Flaticon-play: "\f123";
     $font-Flaticon-stop: "\f124";
     $font-Flaticon-pause: "\f125";
+    $font-Flaticon-movie-player-play-button: "\f126";
+    $font-Flaticon-pause-button: "\f127";
+    $font-Flaticon-stop-1: "\f128";

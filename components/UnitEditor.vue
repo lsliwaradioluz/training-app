@@ -18,7 +18,7 @@
           class="mb0"
           placeholder="Nazwa ćwiczenia"
           :show-status="false"
-          @input="unit.exercise.id = ''"
+          @input="unit.exercise = { name: $event, id: '' }"
         />
         <ul class="exercise__list pt05">
           <transition-group name="animate-list">
@@ -77,7 +77,7 @@
         <button
           class="button-primary"
           type="button"
-          :disabled="disableAddUnitButton"
+          :disabled="addUnitButtonDisabled"
           @click="addUnit"
         >
           Zapisz
@@ -95,15 +95,27 @@ import createExercise from "~/apollo/mutations/createExercise.gql"
 import getAllExercises from "~/apollo/queries/getAllExercises.gql"
 
 export default {
-  props: ["editedUnit", "exercises"],
+  props: {
+    editedUnit: {
+      type: Object, 
+      required: true, 
+    }, 
+    exercises: {
+      type: Array, 
+      required: true, 
+    }
+  },
   data() {
     return {
       client: this.$apollo.getClient(),
       unit: this.editedUnit,
-      disableAddUnitButton: false,
+      addUnitButtonDisabled: false,
     }
   },
   computed: {
+    route() {
+      return this.$route
+    },
     backgroundImage() {
       return this.unit.exercise.image
         ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.unit.exercise.image.url}')`
@@ -177,7 +189,7 @@ export default {
             `Wykonanie tej operacji doda ćwiczenie ${this.unit.exercise.name} do bazy. Kontynuować?`
           )
         ) {
-          this.disableAddUnitButton = true
+          this.addUnitButtonDisabled = true
           this.createExercise().then((res) => {
             this.unit.exercise.id = res.data.createExercise.exercise.id
             this.createUnit()

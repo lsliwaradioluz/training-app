@@ -30,6 +30,7 @@
           v-for="workout in filteredWorkouts"
           :key="workout.id"
           :workout="workout"
+          :user="user"
         />
       </transition-group>
       <p v-if="filteredWorkouts.length == 0" class="pb05 pt05 m00">
@@ -41,40 +42,33 @@
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/workouts/main.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
   apollo: {
-    workouts: {
-      query: mainQuery,
+    user: {
+      query: getSingleUser,
       variables() {
         return {
           id: this.$store.state.auth.user.id,
-        }
-      },
-      manual: true,
-      result({ data, loading }) {
-        if (!loading) {
-          this.workouts = data.user.workouts.sort((a, b) => {
-            return b.sticky - a.sticky
-          })
         }
       },
     },
   },
   data() {
     return {
+      user: Object,
       showHomeworks: false,
     }
   },
   computed: {
     filteredWorkouts() {
       if (this.showHomeworks) {
-        return this.workouts.filter((workout) => {
+        return this.user.workouts.filter((workout) => {
           return workout.sticky
         })
       } else {
-        return this.workouts.filter((workout) => {
+        return this.user.workouts.filter((workout) => {
           return !workout.sticky
         })
       }

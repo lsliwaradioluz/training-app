@@ -2,44 +2,33 @@
   <div class="create-workout">
     <LazyWrapper :loading="$apollo.loading">
       <BaseHeader>Nowy trening</BaseHeader>
-      <WorkoutEditor :specific-data="$data" />
+      <WorkoutEditor :template="$data" />
     </LazyWrapper>
   </div>
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/workouts/new/main.gql"
-import mainWithCopiedQuery from "~/apollo/queries/workouts/new/mainWithCopied.gql"
+import getAllExercises from "~/apollo/queries/getAllExercises.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
   apollo: {
+    exercises: {
+      query: getAllExercises,
+    },
     user: {
-      query() {
-        return this.$store.state.main.workoutToCopy
-          ? mainWithCopiedQuery
-          : mainQuery
-      },
+      query: getSingleUser,
       variables() {
         return {
-          id: this.$route.query.id,
-          copiedWorkoutId: this.$store.state.main.workoutToCopy
-            ? this.$store.state.main.workoutToCopy.id
-            : null,
-        }
-      },
-      manual: true,
-      result({ data, loading }) {
-        if (!loading) {
-          if (data.copiedWorkout) {
-            data.user.workouts.unshift(data.copiedWorkout)
-          }
-          this.user = data.user
+          limit: 3,
+          id: this.$route.query.id
         }
       },
     },
   },
   data() {
     return {
+      exercises: Array, 
       user: Object,
       sections: [
         { name: "Rozgrzewka", complexes: [] },
@@ -48,7 +37,6 @@ export default {
         { name: "Cardio", complexes: [] },
         { name: "Mobility", complexes: [] },
       ],
-      showSticky: false,
       sticky: false,
       name: "",
       selectedDate: new Date().toISOString().split("T")[0],

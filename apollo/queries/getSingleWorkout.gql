@@ -1,5 +1,5 @@
-query($ids: [ID]!) {
-  workouts(where: { id_in: $ids }) {
+query($id: ID!) {
+  workout(id: $id) {
     id
     createdAt
     scheduled

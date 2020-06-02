@@ -41,16 +41,11 @@
         </p>
       </div>
       <div class="exercise__numbers">
-        <Timer
-          v-if="
-            (!current.sets && current.time) ||
-            (automaticModeOn && current.time && !current.reps)
-          "
-          :key="controls.unit"
-          :time="current.time"
-          @countdown-over="nextUnit"
-          @beep="playAudio($event)"
-        />
+        <p 
+          v-if="(!current.sets && current.time) || (automaticModeOn && current.time && !current.reps)" 
+          class="exercise__numbers__time"> 
+          {{ timeleft | showMinutes }}
+        </p>
         <p v-else class="exercise__numbers__time">
           {{ repetitions }}
         </p>
@@ -95,14 +90,20 @@
         :class="{ 't-headers': automaticModeOn }"
         @click="toggleAutomaticMode"
       />
-      <button class="button flaticon-previous-track-button" @click="previousUnit" />
-      <button class="button flaticon-play-and-pause-button" @click="nextUnit" />
       <button
         class="button flaticon-counterclockwise"
         :class="{ 't-headers': stopwatchOn }"
         @click="stopwatchOn = !stopwatchOn"
       />
       <button class="button flaticon-menu" @click="$emit('edit-feedback')" />
+      <Timer
+        :time="current.time"
+        :active="automaticModeOn && current.time > 0 || current.exercise.name == 'Odpocznij'"
+        :key="controls.unit"
+        @countdown-over="nextUnit"
+        @beep="playAudio($event)"
+        @update-time="timeleft = $event">
+      </Timer>
     </section>
   </article>
 </template>
@@ -137,8 +138,9 @@ export default {
         unit: 0,
       },
       stopwatchOn: false,
-      automaticModeOn: false,
+      automaticModeOn: true,
       soundEnabled: true,
+      timeleft: null,
     }
   },
   watch: {
@@ -171,79 +173,6 @@ export default {
           this.controls.unit = 0
         }
       }
-    },
-  },
-  methods: {
-    ...mapMutations({
-      setNotification: 'main/setNotification',
-    }),
-    nextUnit() {
-      this.controls.unit++
-      if (this.controls.unit > this.units.length - 1) {
-        this.nextComplex()
-      }
-    },
-    previousUnit() {
-      this.controls.unit--
-      if (this.controls.unit < 0) {
-        this.previousComplex()
-      }
-    },
-    nextComplex() {
-      this.controls.complex++
-      if (
-        this.controls.complex >
-        this.sections[this.controls.section].complexes.length - 1
-      ) {
-        this.nextSection()
-      } else {
-        this.controls.unit = 0
-      }
-    },
-    previousComplex() {
-      this.controls.complex--
-      if (this.controls.complex < 0) {
-        this.previousSection()
-      } else {
-        this.controls.unit = this.units.length - 1
-      }
-    },
-    nextSection() {
-      this.controls.section++
-      if (this.controls.section > this.sections.length - 1) {
-        this.controls.section = this.sections.length - 1
-        this.controls.complex =
-          this.sections[this.controls.section].complexes.length - 1
-        this.controls.unit = this.units.length - 1
-      } else {
-        this.controls.unit = 0
-        this.controls.complex = 0
-      }
-    },
-    previousSection() {
-      this.controls.section--
-      if (this.controls.section < 0) {
-        this.controls.complex = 0
-        this.controls.unit = 0
-        this.controls.section = 0
-      } else {
-        this.controls.complex =
-          this.sections[this.controls.section].complexes.length - 1
-        this.controls.unit = this.units.length - 1
-      }
-    },
-    toggleAutomaticMode() {
-      this.automaticModeOn = !this.automaticModeOn
-      if (this.automaticModeOn) {
-        this.setNotification("Tryb automatyczny włączony")
-      } else {
-        this.setNotification("Tryb automatyczny wyłączony")
-      }
-    },
-    playAudio(audio) {
-      if (!this.audio) this.audio = new Audio()
-      this.audio.src = require(`@/assets/sounds/${audio}`)
-      this.audio.play()
     },
   },
   computed: {
@@ -370,6 +299,79 @@ export default {
       return units
     },
   },
+  methods: {
+    ...mapMutations({
+      setNotification: 'main/setNotification',
+    }),
+    nextUnit() {
+      this.controls.unit++
+      if (this.controls.unit > this.units.length - 1) {
+        this.nextComplex()
+      }
+    },
+    previousUnit() {
+      this.controls.unit--
+      if (this.controls.unit < 0) {
+        this.previousComplex()
+      }
+    },
+    nextComplex() {
+      this.controls.complex++
+      if (
+        this.controls.complex >
+        this.sections[this.controls.section].complexes.length - 1
+      ) {
+        this.nextSection()
+      } else {
+        this.controls.unit = 0
+      }
+    },
+    previousComplex() {
+      this.controls.complex--
+      if (this.controls.complex < 0) {
+        this.previousSection()
+      } else {
+        this.controls.unit = this.units.length - 1
+      }
+    },
+    nextSection() {
+      this.controls.section++
+      if (this.controls.section > this.sections.length - 1) {
+        this.controls.section = this.sections.length - 1
+        this.controls.complex =
+          this.sections[this.controls.section].complexes.length - 1
+        this.controls.unit = this.units.length - 1
+      } else {
+        this.controls.unit = 0
+        this.controls.complex = 0
+      }
+    },
+    previousSection() {
+      this.controls.section--
+      if (this.controls.section < 0) {
+        this.controls.complex = 0
+        this.controls.unit = 0
+        this.controls.section = 0
+      } else {
+        this.controls.complex =
+          this.sections[this.controls.section].complexes.length - 1
+        this.controls.unit = this.units.length - 1
+      }
+    },
+    toggleAutomaticMode() {
+      this.automaticModeOn = !this.automaticModeOn
+      if (this.automaticModeOn) {
+        this.setNotification("Tryb automatyczny włączony")
+      } else {
+        this.setNotification("Tryb automatyczny wyłączony")
+      }
+    },
+    playAudio(audio) {
+      if (!this.audio) this.audio = new Audio()
+      this.audio.src = require(`@/assets/sounds/${audio}`)
+      this.audio.play()
+    },
+  },
 }
 </script>
 
@@ -471,7 +473,7 @@ export default {
 }
 
 .buttons {
-  padding: 1rem 0;
+  padding: .5rem 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

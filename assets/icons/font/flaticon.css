@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 22/05/2020 20:54
+  	Creation date: 02/06/2020 13:28
   	*/
 
 @font-face {
@@ -68,3 +68,6 @@ margin-left: 20px;
 .flaticon-play:before { content: "\f123"; }
 .flaticon-stop:before { content: "\f124"; }
 .flaticon-pause:before { content: "\f125"; }
+.flaticon-movie-player-play-button:before { content: "\f126"; }
+.flaticon-pause-button:before { content: "\f127"; }
+.flaticon-stop-1:before { content: "\f128"; }

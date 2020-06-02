@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/users/main.gql"
+import mainQuery from "~/apollo/queries/getAllUsers.gql"
 import updateUser from "~/apollo/mutations/updateUser.gql"
-import getUserByEmail from "~/apollo/queries/users/getUserByEmail.gql"
+import getSingleUserByEmail from "~/apollo/queries/getSingleUserByEmail.gql"
 
 export default {
   props: {
@@ -59,7 +59,7 @@ export default {
 
       this.client
         .query({
-          query: getUserByEmail,
+          query: getSingleUserByEmail,
           variables: { email: this.transferEmail },
         })
         .then((res) => {

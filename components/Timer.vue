@@ -1,24 +1,21 @@
 <template>
   <div class="timer">
-    <div class="buttons">
-      <button v-show="!countDownInterval" class="button" @click="start">
-        start
-      </button>
-      <button v-show="countDownInterval" class="button" @click="stop">
-        stop
-      </button>
-      <button
-        v-show="!countDownInterval && timeleft !== time"
-        class="button reset-button"
-        @click="reset"
-      >
-        reset
-      </button>
-    </div>
-    <p class="time">
-      {{ timeleft | showMinutes }}
-    </p>
-  </div>
+    <button 
+      class="button flaticon-stop-1 mr05"
+      :disabled="timeleft == time || countDownInterval"
+      @click="reset" 
+    />
+    <button 
+      v-show="!countDownInterval" 
+      class="button button--big flaticon-movie-player-play-button" 
+      :disabled="!active"
+      @click="start" />
+    <button 
+      v-show="countDownInterval" 
+      class="button button--big flaticon-pause-button" 
+      :disabled="!active"
+      @click="stop" />
+  </div>  
 </template>
 
 <script>
@@ -27,6 +24,9 @@ export default {
     time: {
       type: Number,
     },
+    active: {
+      type: Boolean, 
+    }
   },
   data() {
     return {
@@ -36,26 +36,38 @@ export default {
   },
   watch: {
     timeleft(value) {
-      switch (value) {
-        case 30: 
-          this.$emit("beep", "thirty.mp3")
-          break
-        case 20: 
-          this.$emit("beep", "twenty.mp3")
-          break
-        case 10: 
-          this.$emit("beep", "ten.mp3")
-          break
-        case 3:
-          this.$emit("beep", "threetwoone.mp3")
+      this.$emit('update-time', value)
+      if (this.countDownInterval) {
+        switch (value) {
+          case 30: 
+            this.$emit("beep", "thirty.mp3")
+            break
+          case 20: 
+            this.$emit("beep", "twenty.mp3")
+            break
+          case 10: 
+            this.$emit("beep", "ten.mp3")
+            break
+          case 3:
+            this.$emit("beep", "threetwoone.mp3")
+        }
       }
     },
-  },
-  mounted() {
-    this.start()
+    active: {
+      immediate: true, 
+      handler(isActive) {
+        if (!isActive) {
+          this.stop()
+          this.reset()
+        } else {
+          this.start()
+        }
+      }
+    }
   },
   methods: {
     start() {
+      this.$emit('update-time', this.timeleft)
       this.countDownInterval = setInterval(() => {
         this.timeleft--
         if (this.timeleft == -1) {
@@ -77,25 +89,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.buttons {
+
+.timer {
   display: flex;
-  justify-content: space-around;
+  .button {
+    font-size: 18px;
+  }
+  .button--big {
+    font-size: 32px;
+  }
 }
 
-.button {
-  font-size: 14px;
+.button:disabled {
   color: color(faded);
-}
-
-.reset-button {
-  margin-left: 4px;
-}
-
-.time {
-  line-height: 1;
-  margin: 0;
-  text-align: right;
-  font-size: 32px;
-  color: color(headers);
 }
 </style>

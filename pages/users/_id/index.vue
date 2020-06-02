@@ -53,25 +53,24 @@
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/users/_id/main.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
-  data() {
-    return {
-      user: Object,
-      workouts: Array,
-      showHomeworks: false,
-    }
-  },
   apollo: {
     user: {
-      query: mainQuery,
+      query: getSingleUser,
       variables() {
         return {
           id: this.$route.params.id,
         }
       },
     },
+  },
+  data() {
+    return {
+      user: Object,
+      showHomeworks: false,
+    }
   },
   computed: {
     filteredWorkouts() {

@@ -23,7 +23,7 @@
       <nuxt-link class="flaticon-gymnast" tag="li" to="/exercises" />
       <nuxt-link class="flaticon-menu" tag="li" to="/workouts" />
       <nuxt-link
-        v-if="user && user.admin"
+        v-if="admin"
         class="flaticon-user"
         tag="li"
         to="/users"
@@ -39,7 +39,7 @@
     <Modal :show="showCopyPair" @close="showCopyPair = false">
       <div class="copy-pair">
         <p v-if="workoutToPair" class="row j-between">
-          Parujesz z {{ workoutToPair.user }}
+          Parujesz z {{ workoutToPair.user.username }}
           {{ workoutToPair.scheduled | reverseDate }}
           <button
             class="flaticon-cancel fs-12"
@@ -48,7 +48,7 @@
           />
         </p>
         <p v-if="workoutToCopy" class="row j-between">
-          Kopiujesz {{ workoutToCopy.user }}
+          Kopiujesz {{ workoutToCopy.user.username }}
           {{ workoutToCopy.scheduled | reverseDate }}
           <button
             class="flaticon-cancel fs-12"
@@ -69,8 +69,8 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.$store.getters["auth/user"]
+    admin() {
+      return this.$store.getters["auth/admin"]
     },
     workoutToPair() {
       return this.$store.state.main.workoutToPair
@@ -85,11 +85,11 @@ export default {
     },
     stopPairWorkout() {
       if (!this.workoutToCopy) this.showCopyPair = false
-      this.$store.commit("main/stopPairWorkout")
+      this.$store.dispatch("main/removeEntryFromDb", 'workoutToPair')
     },
     stopCopyWorkout() {
       if (!this.workoutToPair) this.showCopyPair = false
-      this.$store.commit("main/stopCopyWorkout")
+      this.$store.dispatch("main/removeEntryFromDb", 'workoutToCopy')
     },
   },
 }

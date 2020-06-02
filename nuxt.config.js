@@ -70,7 +70,12 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ["~/plugins/filters", "~/plugins/components.js", "~/plugins/mixins"],
+  plugins: [
+    "~/plugins/filters", 
+    "~/plugins/components.js", 
+    "~/plugins/mixins", 
+    { src: "~/plugins/initializeStore.js", mode: 'client' },
+  ],
   /*
    ** Nuxt.js dev-modules
    */

@@ -11,7 +11,7 @@
           </h5>
         </button>
         <WorkoutPanel
-          :workout="workoutWithoutEmptySections"
+          :workout="workouts[currentWorkout]"
           @show-assistant="toggleWorkoutAssistant"
           @edit-feedback="editingFeedback = true"
         />
@@ -31,7 +31,7 @@
             "
           >
             <div
-              v-for="section in workoutWithoutEmptySections.sections"
+              v-for="section in workoutWithoutEmptySections"
               :key="section.id"
               class="p11 column"
             >
@@ -81,25 +81,16 @@
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import mainQuery from "~/apollo/queries/workouts/_id/main.gql";
+import getSingleWorkout from "~/apollo/queries/getSingleWorkout.gql";
 import updateWorkout from "~/apollo/mutations/updateWorkout.gql";
 
 export default {
   apollo: {
-    workouts: {
-      query: mainQuery,
+    workout: {
+      query: getSingleWorkout,
       variables() {
-        let IDs;
-        if (this.$store.state.main.workoutToPair) {
-          IDs = [
-            this.$route.params.id,
-            this.$store.state.main.workoutToPair.id,
-          ];
-        } else {
-          IDs = [this.$route.params.id];
-        }
         return {
-          ids: IDs,
+          id: this.$route.params.id,
         };
       },
     },
@@ -116,17 +107,24 @@ export default {
       currentWorkout: "assistant/currentWorkout",
       currentSection: "assistant/currentSection",
     }),
+    workouts() {
+      const workouts = [this.workout]
+      const workoutToPair = this.$store.state.main.workoutToPair
+      if (workoutToPair) {
+        workouts.push(workoutToPair)
+      }
+      return workouts
+    },
     workoutWithoutEmptySections() {
-      const workout = this.workouts[this.currentWorkout];
-      workout.sections = workout.sections.filter((section) => {
+      const workoutWithoutEmptySections = this.workouts[this.currentWorkout].sections.filter((section) => {
         return section.complexes.length > 0;
       });
-      return workout;
+      return workoutWithoutEmptySections;
     },
     users() {
       let users = [];
-      this.workouts.forEach((cur) => {
-        users.push(cur.user.username);
+      this.workouts.forEach((workout) => {
+        users.push(workout.user.username);
       });
       return users;
     },
@@ -152,7 +150,7 @@ export default {
       this.workouts[this.currentWorkout].feedback = feedback;
       this.editingFeedback = false;
       let input = {
-        where: { id: this.workoutWithoutEmptySections.id },
+        where: { id: this.workouts[this.currentWorkout].id },
         data: { feedback },
       };
       try {

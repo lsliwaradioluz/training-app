@@ -1,6 +1,7 @@
 <template>
   <div class="website-layout">
     <nuxt />
+    <Notification />
   </div>
 </template>
 

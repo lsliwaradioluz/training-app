@@ -1,10 +1,19 @@
-query($id: ID!) {
+query($id: ID!, $limit: Int) {
   user(id: $id) {
     id
     username
-    workouts(limit: 3, sort: "scheduled:desc", where: { sticky_ne: "true", ready: "true" }) {
+    fullname
+    image {
+      id
+      url
+    }
+    workouts(sort: "scheduled:desc", limit: $limit) {
       id
       scheduled
+      ready
+      sticky
+      name
+      createdAt
       feedback
       sections {
         id

@@ -87,33 +87,50 @@
 
 <script>
 import deleteWorkout from "~/apollo/mutations/deleteWorkout.gql"
-import getUserQuery from "~/apollo/queries/users/_id/main.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
-  props: ["workout", "user"],
+  props: {
+    workout: {
+      type: Object, 
+      required: true,
+    }, 
+    user: {
+      type: Object, 
+      required: true, 
+    }
+  },
   data() {
     return {
       client: this.$apollo.getClient(),
-      errorModalVisible: false,
     }
   },
   methods: {
     copyWorkout() {
-      const workoutToCopy = {
-        id: this.workout.id,
-        user: this.user.username,
-        scheduled: this.workout.scheduled,
+      this.workout.user = {
+        id: this.user.id, 
+        username: this.user.username, 
+        fullname: this.user.fullname,
       }
-      this.showButtonsPanel = false
-      this.$store.commit("main/copyWorkout", workoutToCopy)
+      this.workout.type = 'workoutToCopy'
+      if (this.$store.state.main.workoutToCopy) {
+        this.$store.dispatch("main/updateEntryInDb", this.workout)
+      } else {
+        this.$store.dispatch("main/addEntryToDb", this.workout)
+      }
     },
     pairWorkout() {
-      const workoutToPair = {
-        id: this.workout.id,
-        user: this.user.username,
-        scheduled: this.workout.scheduled,
+      this.workout.user = {
+        id: this.user.id, 
+        username: this.user.username, 
+        fullname: this.user.fullname,
       }
-      this.$store.commit("main/pairWorkout", workoutToPair)
+      this.workout.type = 'workoutToPair'
+      if (this.$store.state.main.workoutToPair) {
+        this.$store.dispatch("main/updateEntryInDb", this.workout)
+      } else {
+        this.$store.dispatch("main/addEntryToDb", this.workout)
+      }
     },
     async deleteWorkout() {
       const input = {
@@ -132,7 +149,7 @@ export default {
           update: (cache, { data: { deleteWorkout } }) => {
             // read data from cache for chosen queries
             const data = cache.readQuery({
-              query: getUserQuery,
+              query: getSingleUser,
               variables: { id: this.$route.params.id },
             })
             // find index of deleted item in cached user.workouts array
@@ -142,7 +159,7 @@ export default {
             // remove deleted item from data
             data.user.workouts.splice(workoutIndex, 1)
             //write data back to cache
-            this.client.writeQuery({ query: getUserQuery, data: data })
+            this.client.writeQuery({ query: getSingleUser, data: data })
           },
         })
       }

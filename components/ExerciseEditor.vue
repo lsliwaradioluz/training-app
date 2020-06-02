@@ -156,9 +156,7 @@ export default {
     },
     createExercise() {
       if (this.uploadedImage) this.input.image = this.uploadedImage.id
-      console.log(this.input.category)
       if (!this.input.category) this.input.category = "Strength"
-      console.log(this.input.category)
       const input = {
         data: this.input,
       }

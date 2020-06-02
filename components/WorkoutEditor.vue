@@ -105,7 +105,7 @@
                   </template>
                   <template v-slot:options>
                     <button
-                      v-if="user.workouts.length > 0"
+                      v-if="previousWorkouts.length > 0"
                       class="flaticon-double-arrow-cross-of-shuffle"
                       @click="currentComplex = complexindex"
                     >
@@ -217,7 +217,7 @@
                         Dodaj ćwiczenie
                       </button>
                       <button
-                        v-if="user.workouts.length > 0"
+                        v-if="previousWorkouts.length > 0"
                         class="flaticon-double-arrow-cross-of-shuffle"
                         @click="currentComplex = complexindex"
                       >
@@ -248,26 +248,26 @@
       </div>
     </section>
     <!-- POPRZEDNIE TRENINGI  -->
-    <section v-if="user.workouts.length > 0">
+    <section v-if="previousWorkouts.length > 0">
       <header
         class="row j-between a-start pt1 t-faded"
-        :class="{ pb05: !user.workouts[currentWorkout].feedback }"
+        :class="{ pb05: !previousWorkouts[currentWorkout].feedback }"
       >
         <div class="column">
-          <h4 v-if="!user.workouts[currentWorkout].user" class="mb0 t-faded">
-            {{ user.workouts[currentWorkout].scheduled | getDayName }}
-            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
+          <h4 v-if="!previousWorkouts[currentWorkout].user" class="mb0 t-faded">
+            {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
+            {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
           </h4>
           <h4 v-else class="mb0 t-faded">
-            {{ user.workouts[currentWorkout].scheduled | getDayName }}
-            {{ user.workouts[currentWorkout].scheduled | getDayAndMonth }}
-            ({{ user.workouts[currentWorkout].user.username }})
+            {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
+            {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
+            ({{ previousWorkouts[currentWorkout].user.username }})
           </h4>
           <p
-            v-show="user.workouts[currentWorkout].feedback"
+            v-show="previousWorkouts[currentWorkout].feedback"
             class="t-faded fs-13 mb05"
           >
-            {{ user.workouts[currentWorkout].feedback }}
+            {{ previousWorkouts[currentWorkout].feedback }}
           </p>
         </div>
         <div class="row ml05">
@@ -347,7 +347,7 @@
       <button class="button-primary" type="button" @click="uploadWorkout">
         Zapisz
       </button>
-      <button class="button-primary" type="button" @click="$router.go(-1)">
+      <button class="button-primary" type="button" @click="leaveAssistant">
         Wróć
       </button>
     </section>
@@ -356,16 +356,14 @@
 
 <script>
 import NameEditor from "~/components/NameEditor.vue"
-import exercisesQuery from "~/apollo/queries/users/_id/exercises.gql"
-import getUserQuery from "~/apollo/queries/users/_id/main.gql"
-import getWorkoutsQuery from "~/apollo/queries/workouts/new/main.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 import createWorkout from "~/apollo/mutations/createWorkout.gql"
 import updateWorkout from "~/apollo/mutations/updateWorkout.gql"
 
 export default {
   components: { NameEditor },
   props: {
-    specificData: {
+    template: {
       type: Object,
     },
     edit: {
@@ -374,13 +372,12 @@ export default {
   },
   data() {
     return {
+      ...this.template,
       client: this.$apollo.getClient(),
-      ...this.specificData,
       currentSection: 0,
       currentComplex: null,
       currentUnit: null,
       currentWorkout: 0,
-      exercises: null,
       editedUnit: null,
       nameEditorVisible: false,
     }
@@ -399,7 +396,7 @@ export default {
           complex.units.forEach((unit, unitindex) => {
             sectionsClone[sectionindex].complexes[complexindex].units[
               unitindex
-            ] = _.omit(unit, "__typename", "id", "max")
+            ] = _.omit(unit, "__typename", "id")
             sectionsClone[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id
@@ -417,10 +414,25 @@ export default {
       })
       return Boolean(sectionsNotEmpty.length)
     },
+    previousWorkouts() {
+      let previousWorkouts
+      if (this.edit) {
+        previousWorkouts = this.user.workouts.filter(workout => {
+          return workout.id != this.id && !workout.sticky && workout.ready
+        })
+      } else {
+        previousWorkouts = this.user.workouts.filter(workout => {
+          return !workout.sticky && workout.ready
+        })
+      }
+      const workoutToCopy = this.$store.state.main.workoutToCopy
+      if (workoutToCopy) {
+        previousWorkouts.unshift(workoutToCopy)
+      }
+      return previousWorkouts
+    },
     previousWorkoutSections() {
-      const previousWorkoutSections = this.user.workouts[
-        this.currentWorkout
-      ].sections.filter((section) => {
+      const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter((section) => {
         return section.complexes.length > 0
       })
       return previousWorkoutSections
@@ -518,74 +530,44 @@ export default {
       }
     },
     moveUnit(sectionindex, complexindex, unitindex, direction) {
-      let currentUnits = this.sections[sectionindex].complexes[complexindex]
-        .units
-      let unitToMove = currentUnits[unitindex]
+      let complexContainingUnit = this.sections[sectionindex].complexes[complexindex].units
+      let unitToMove = complexContainingUnit[unitindex]
       let newIndex = direction == "up" ? unitindex - 1 : unitindex + 1
 
-      currentUnits.splice(unitindex, 1)
-      currentUnits.splice(newIndex, 0, unitToMove)
-    },
-    populateUnitEditor(unit) {
-      if (unit != undefined) {
-        this.editedUnit = {
-          exercise: unit.exercise,
-          numbers: {
-            sets: unit.sets || 0,
-            reps: unit.reps || 0,
-            time: unit.time || 0,
-            distance: unit.distance || 0,
-            rest: unit.rest || 0,
-          },
-          remarks: unit.remarks || "",
-        }
-      } else {
-        let rest
-        if (this.currentComplex != null) {
-          let units = this.sections[this.currentSection].complexes[
-            this.currentComplex
-          ].units
-          rest = units[units.length - 1].rest
-        } else {
-          this.sections[this.currentSection].complexes.length > 0
-            ? (rest = this.sections[this.currentSection].complexes[0].units[0]
-                .rest)
-            : (rest = 90)
-        }
-        this.editedUnit = {
-          exercise: {
-            name: "",
-            id: "",
-          },
-          numbers: {
-            sets: 0,
-            reps: 0,
-            time: 0,
-            distance: 0,
-            rest: rest,
-          },
-          remarks: "",
-        }
-      }
+      complexContainingUnit.splice(unitindex, 1)
+      complexContainingUnit.splice(newIndex, 0, unitToMove)
     },
     openUnitEditor(unit, unitindex, complexindex) {
-      if (!this.exercises) {
-        this.client.query({ query: exercisesQuery }).then(({ data }) => {
-          this.exercises = data.exercises
-          this.populateUnitEditor(unit)
-          // to trzeba skrócić
-          if (unit != undefined) {
-            this.currentUnit = unitindex
-            this.currentComplex = complexindex
-          }
-        })
+      let rest
+      let exercise = {
+        name: "",
+        id: "",
+      }
+
+      if (this.currentComplex != null) {
+        let units = this.sections[this.currentSection].complexes[this.currentComplex].units
+        rest = units[units.length - 1].rest
       } else {
-        this.populateUnitEditor(unit)
-        // z tym
-        if (unit != undefined) {
-          this.currentUnit = unitindex
-          this.currentComplex = complexindex
-        }
+        this.sections[this.currentSection].complexes.length > 0
+          ? (rest = this.sections[this.currentSection].complexes[0].units[0].rest)
+          : (rest = 90)
+      }
+
+      this.editedUnit = {
+        exercise: unit && unit.exercise || exercise,
+        numbers: {
+          sets: unit && unit.sets || 0,
+          reps: unit && unit.reps || 0,
+          time: unit && unit.time || 0,
+          distance: unit && unit.distance || 0,
+          rest: unit && unit.rest || rest,
+        },
+        remarks: unit && unit.remarks || "",
+      }
+
+      if (unit != undefined) {
+        this.currentUnit = unitindex
+        this.currentComplex = complexindex
       }
     },
     closeUnitEditor() {
@@ -594,7 +576,9 @@ export default {
       this.currentUnit = null
     },
     openNameEditor(complex) {
-      if (complex != undefined) this.currentComplex = complex
+      if (complex != undefined) {
+        this.currentComplex = complex
+      }
       this.nameEditorVisible = true
     },
     closeNameEditor(name) {
@@ -608,84 +592,89 @@ export default {
       }
       this.nameEditorVisible = false
     },
-    uploadWorkout() {
-      let input
-      if (this.edit == true) {
-        input = {
-          where: {
-            id: this.id,
-          },
-          data: {
-            scheduled: this.dateAndTime,
-            sticky: this.sticky,
-            name: this.name,
-            ready: this.workoutReady,
-            sections: this.filteredSections,
-          },
-        }
-      } else {
-        input = {
-          data: {
-            user: this.user.id,
-            scheduled: this.dateAndTime,
-            sticky: this.sticky,
-            name: this.name,
-            ready: this.workoutReady,
-            sections: this.filteredSections,
-          },
-        }
-      }
-
-      if (this.edit) {
-        this.client
-          .mutate({ mutation: updateWorkout, variables: { input: input } })
-          .then(() => {
-            this.$router.go(-1)
-          })
-      } else {
-        this.client
-          .mutate({
-            mutation: createWorkout,
-            variables: { input: input },
-            update: (cache, { data: { createWorkout } }) => {
-              // read data from cache for this query
-              const data_1 = cache.readQuery({
-                query: getUserQuery,
-                variables: { id: this.user.id },
-              })
-              const data_2 = cache.readQuery({
-                query: getWorkoutsQuery,
-                variables: { id: this.user.id },
-              })
-              // push new item to the data read from the cache
-              data_1.user.workouts.unshift(createWorkout.workout)
-              data_2.user.workouts.unshift(createWorkout.workout)
-              // write data back to cache
-              this.client.writeQuery({ query: getUserQuery, data: data_1 })
-              if (this.workoutReady) {
-                this.client.writeQuery({
-                  query: getWorkoutsQuery,
-                  data: data_2,
-                })
-              }
-            },
-          })
-          .then(() => {
-            this.$router.go(-1)
-          })
-      }
-    },
     showPreviousWorkout() {
       this.currentWorkout == 0
         ? (this.currentWorkout = 0)
         : this.currentWorkout--
     },
     showNextWorkout() {
-      this.currentWorkout == this.user.workouts.length - 1
-        ? (this.currentWorkout = this.user.workouts.length - 1)
+      this.currentWorkout == this.previousWorkouts.length - 1
+        ? (this.currentWorkout = this.previousWorkouts.length - 1)
         : this.currentWorkout++
     },
+    async uploadWorkout() {
+      let configObj
+      const input = {
+        data: {
+          scheduled: this.dateAndTime,
+          sticky: this.sticky,
+          name: this.name,
+          ready: this.workoutReady,
+          sections: this.filteredSections,
+        },
+      }
+      if (this.edit) {
+        input.where = { 
+          id: this.id 
+        }
+        configObj = {
+          mutation: updateWorkout, 
+          variables: { input }
+        }
+      } else {
+        input.data.user = this.user.id;
+        configObj = {
+          mutation: createWorkout,
+          variables: { input },
+          update: (cache, { data: { createWorkout } }) => {
+            const data = cache.readQuery({
+              query: getSingleUser,
+              variables: { id: this.user.id },
+            })
+            data.user.workouts.unshift(createWorkout.workout)
+            this.client.writeQuery({ query: getSingleUser, data })
+          },
+        }
+      }
+
+      try {
+        await this.client.mutate(configObj)
+      } catch {
+        this.$store.commit('main/setNotification', 'Coś poszło nie tak. Spróbuj jeszcze raz')
+        return
+      }
+      this.leaveAssistant();
+    },
+    leaveAssistant() {
+      this.$store.commit('main/setIsEditing', false)
+      this.$router.go(-1);
+    }, 
+    createBackup() {
+      if (this.$store.state.main.workoutEditor.isEditing && this.workoutReady && !this.edit) {
+        const workoutEditorBackup = {
+          type: 'workoutEditorBackup', 
+          sections: this.sections
+        }
+        this.$store.dispatch('main/addEntryToDb', workoutEditorBackup);
+      }
+    }, 
+    async loadBackup() {
+      const backup = this.$store.state.main.workoutEditor.backup;
+      if (backup && !this.edit) {
+        if (await this.$root.$confirm("W pamięci znajduje się niezapisany trening. Chcesz go dokończyć?")) {
+          this.sections = backup.sections;
+        }
+        this.$store.dispatch('main/removeEntryFromDb', "workoutEditorBackup");
+      }
+      this.$store.commit('main/setIsEditing', true)
+    }
   },
+  mounted() {
+    this.loadBackup();
+  },
+  beforeDestroy() {
+    this.createBackup()
+  }
 }
 </script>
 
@@ -707,7 +696,7 @@ export default {
   padding-bottom: 3rem;
   width: 100vw;
   background-color: color(secondary);
-  button {
+  .button-primary {
     width: 49%;
   }
 }

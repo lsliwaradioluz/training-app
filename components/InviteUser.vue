@@ -36,8 +36,8 @@ export default {
   data() {
     return {
       user: {
-        fullname: "Łukasz Plum",
-        email: "lukasz.mateusz.sliwa@gmail.com",
+        fullname: "",
+        email: "",
       },
     }
   },

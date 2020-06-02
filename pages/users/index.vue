@@ -55,12 +55,12 @@
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/users/main.gql"
+import getAllUsers from "~/apollo/queries/getAllUsers.gql"
 
 export default {
   apollo: {
     user: {
-      query: mainQuery,
+      query: getAllUsers,
       variables() {
         return {
           id: this.$store.getters["auth/user"].id,
