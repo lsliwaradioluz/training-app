@@ -3,7 +3,7 @@
     <p class="mb0">
       Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor
       treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie
-      nowe.
+      nowe. {{ workoutReady }}
     </p>
     <section>
       <header>
@@ -348,7 +348,7 @@
         Zapisz
       </button>
       <button class="button-primary" type="button" @click="leaveAssistant">
-        Wróć
+        Anuluj
       </button>
     </section>
   </article>
@@ -384,35 +384,38 @@ export default {
   },
   computed: {
     filteredSections() {
-      let sectionsClone = JSON.parse(JSON.stringify(this.sections))
-      sectionsClone.forEach((section, sectionindex) => {
-        sectionsClone[sectionindex] = _.omit(section, "__typename", "id")
+      const sectionsClone = JSON.parse(JSON.stringify(this.sections))
+      let filteredSections = sectionsClone.filter(section => {
+        return section.complexes.length > 0 
+      })
+      //level one
+      filteredSections.forEach((section, sectionindex) => {
+        filteredSections[sectionindex] = _.omit(section, "__typename", "id")
+        // level two
         section.complexes.forEach((complex, complexindex) => {
-          sectionsClone[sectionindex].complexes[complexindex] = _.omit(
+          filteredSections[sectionindex].complexes[complexindex] = _.omit(
             complex,
             "__typename",
             "id"
           )
           complex.units.forEach((unit, unitindex) => {
-            sectionsClone[sectionindex].complexes[complexindex].units[
+            filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ] = _.omit(unit, "__typename", "id")
-            sectionsClone[sectionindex].complexes[complexindex].units[
+            filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id
           })
         })
       })
-      return sectionsClone
+
+      return filteredSections
     },
     dateAndTime() {
       return new Date(this.selectedDate + " " + this.selectedTime)
     },
     workoutReady() {
-      const sectionsNotEmpty = this.sections.filter((section) => {
-        return section.complexes.length > 0
-      })
-      return Boolean(sectionsNotEmpty.length)
+      return this.filteredSections.length > 0
     },
     previousWorkouts() {
       let previousWorkouts
@@ -671,7 +674,6 @@ export default {
   },
   mounted() {
     this.loadBackup();
-    console.log(this.previousWorkouts)
   },
   beforeDestroy() {
     this.createBackup()

@@ -317,10 +317,7 @@ export default {
     },
     nextComplex() {
       this.controls.complex++
-      if (
-        this.controls.complex >
-        this.sections[this.controls.section].complexes.length - 1
-      ) {
+      if (this.controls.complex > this.sections[this.controls.section].complexes.length - 1) {
         this.nextSection()
       } else {
         this.controls.unit = 0
@@ -338,10 +335,10 @@ export default {
       this.controls.section++
       if (this.controls.section > this.sections.length - 1) {
         this.controls.section = this.sections.length - 1
-        this.controls.complex =
-          this.sections[this.controls.section].complexes.length - 1
+        this.controls.complex = this.sections[this.controls.section].complexes.length - 1
         this.controls.unit = this.units.length - 1
       } else {
+        console.log('next section here')
         this.controls.unit = 0
         this.controls.complex = 0
       }

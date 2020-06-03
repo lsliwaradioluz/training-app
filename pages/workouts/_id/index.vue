@@ -31,7 +31,7 @@
             "
           >
             <div
-              v-for="section in workoutWithoutEmptySections"
+              v-for="section in workouts[currentWorkout].sections"
               :key="section.id"
               class="p11 column"
             >
@@ -114,12 +114,6 @@ export default {
         workouts.push(workoutToPair)
       }
       return workouts
-    },
-    workoutWithoutEmptySections() {
-      const workoutWithoutEmptySections = this.workouts[this.currentWorkout].sections.filter((section) => {
-        return section.complexes.length > 0;
-      });
-      return workoutWithoutEmptySections;
     },
     users() {
       let users = [];
