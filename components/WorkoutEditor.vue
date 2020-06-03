@@ -671,6 +671,7 @@ export default {
   },
   mounted() {
     this.loadBackup();
+    console.log(this.previousWorkouts)
   },
   beforeDestroy() {
     this.createBackup()

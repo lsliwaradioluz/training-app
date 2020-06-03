@@ -20,7 +20,7 @@ export default {
       query: getSingleUser,
       variables() {
         return {
-          limit: 3,
+          limit: 5,
           id: this.$route.query.id
         }
       },
