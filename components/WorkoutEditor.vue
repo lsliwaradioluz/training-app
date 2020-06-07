@@ -105,17 +105,17 @@
                   </template>
                   <template v-slot:options>
                     <button
+                      class="flaticon-add-button"
+                      @click="addExerciseToComplex(complexindex)"
+                    >
+                      Dodaj ćwiczenie
+                    </button>
+                    <button
                       v-if="previousWorkouts.length > 0"
                       class="flaticon-double-arrow-cross-of-shuffle"
                       @click="currentComplex = complexindex"
                     >
                       Kopiuj ćwiczenie
-                    </button>
-                    <button
-                      class="flaticon-add-button"
-                      @click="addExerciseToComplex(complexindex)"
-                    >
-                      Dodaj ćwiczenie
                     </button>
                     <button
                       v-show="complexindex != 0"
@@ -189,7 +189,7 @@
                     >
                       Przesuń w dół
                     </button>
-                    <template v-show="complex.units.length == 1">
+                    <template v-if="complex.units.length == 1">
                       <button
                         v-show="complexindex != 0"
                         class="flaticon-up"
