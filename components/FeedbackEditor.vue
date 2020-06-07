@@ -1,13 +1,14 @@
 <template>
   <form class="tab">
-    <h3 class="m00">
+    <h3 class="m00 mb05">
       Edytuj notatkę
     </h3>
-    <BaseTextarea
+    <BaseInput
       ref="textarea"
       v-model="newFeedback"
-      placeholder="Jak Ci poszło?"
+      placeholder="Jak poszło to ćwiczenie?"
       :show-label="false"
+      :show-status="false"
     />
     <div class="buttons">
       <button class="button-primary" type="button" @click="submitChanges">

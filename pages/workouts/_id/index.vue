@@ -13,7 +13,6 @@
         <WorkoutPanel
           :workout="workouts[currentWorkout]"
           @show-assistant="toggleWorkoutAssistant"
-          @edit-feedback="editingFeedback = true"
         />
         <div class="carousel-container b-secondary">
           <Carousel
@@ -36,11 +35,26 @@
               class="p11 column"
             >
               <Routine :section="section">
-                <template v-slot:unit-buttons="{ unit }">
-                  <nuxt-link
-                    class="flaticon-right-arrow t-faded"
-                    :to="`/exercises/${unit.exercise.id}`"
-                  />
+                <template v-slot:unit-buttons="{ unit, complexindex, unitindex }">
+                  <ContextMenu>
+                    <template v-slot:trigger>
+                      <span class="flaticon-vertical-dots fs-12" />
+                    </template>
+                    <template v-slot:options>
+                      <nuxt-link
+                        v-if="unit.exercise.image"
+                        class="flaticon-gymnast"
+                        tag="button"
+                        type="button"
+                        :to="`/exercises/${unit.exercise.id}`"
+                      >
+                        Zobacz ćwiczenie 
+                      </nuxt-link>
+                      <button class="flaticon-pencil" type="button" @click="editFeedback(complexindex, unitindex)">
+                        Dodaj notatkę
+                      </button>
+                    </template>
+                  </ContextMenu>
                 </template>
               </Routine>
             </div>
@@ -64,14 +78,13 @@
           @set-current-section="
             setCurrentSection({ index: currentWorkout, section: $event })
           "
-          @edit-feedback="editingFeedback = true"
         />
       </Carousel>
-      <Modal :show="editingFeedback" @close="editingFeedback = false">
+      <Modal :show="!!feedbackBeingEdited" @close="feedbackBeingEdited = null">
         <FeedbackEditor
-          :feedback="workouts[currentWorkout].feedback"
+          :feedback="feedbackBeingEdited && feedbackBeingEdited.content"
           @feedback-edited="saveFeedback($event)"
-          @close="editingFeedback = false"
+          @close="feedbackBeingEdited = null"
         />
       </Modal>
     </div>
@@ -98,7 +111,7 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-      editingFeedback: false,
+      feedbackBeingEdited: null,
     };
   },
   computed: {
@@ -131,6 +144,31 @@ export default {
         fullWidth: true,
       };
     },
+    filteredSections() {
+      const sectionsClone = JSON.parse(JSON.stringify(this.workouts[this.currentWorkout].sections))
+      //level one
+      sectionsClone.forEach((section, sectionindex) => {
+        sectionsClone[sectionindex] = _.omit(section, "__typename", "id")
+        // level two
+        section.complexes.forEach((complex, complexindex) => {
+          sectionsClone[sectionindex].complexes[complexindex] = _.omit(
+            complex,
+            "__typename",
+            "id"
+          )
+          complex.units.forEach((unit, unitindex) => {
+            sectionsClone[sectionindex].complexes[complexindex].units[
+              unitindex
+            ] = _.omit(unit, "__typename", "id")
+            sectionsClone[sectionindex].complexes[complexindex].units[
+              unitindex
+            ].exercise = unit.exercise.id
+          })
+        })
+      })
+
+      return sectionsClone
+    },
   },
   methods: {
     ...mapMutations({
@@ -140,17 +178,32 @@ export default {
       setCurrentSection: "assistant/setCurrentSection",
       setNotification: "main/setNotification",
     }),
+    editFeedback(complex, unit) {
+      const section = this.currentSection[this.currentWorkout]
+      const content = this.workouts[this.currentWorkout].sections[section].complexes[complex].units[unit].feedback
+      this.feedbackBeingEdited = {
+        complex,
+        unit, 
+        content,
+      }
+    },
     async saveFeedback(feedback) {
-      this.workouts[this.currentWorkout].feedback = feedback;
-      this.editingFeedback = false;
+      const section = this.currentSection[this.currentWorkout]
+      const { complex, unit } = this.feedbackBeingEdited
+      const unitindex = this.feedbackBeingEdited.unit
+
+      let sections = this.workouts[this.currentWorkout].sections
+      sections[section].complexes[complex].units[unit].feedback = feedback;
+      this.feedbackBeingEdited = null;
+
       let input = {
         where: { id: this.workouts[this.currentWorkout].id },
-        data: { feedback },
+        data: { sections: this.filteredSections },
       };
       try {
         await this.client.mutate({
           mutation: updateWorkout,
-          variables: { input: input },
+          variables: { input },
         });
       } catch (err) {
         this.setNotification(

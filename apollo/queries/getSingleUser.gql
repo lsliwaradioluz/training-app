@@ -14,7 +14,6 @@ query($id: ID!, $limit: Int) {
       sticky
       name
       createdAt
-      feedback
       sections {
         id
         name
@@ -29,6 +28,7 @@ query($id: ID!, $limit: Int) {
             distance
             rest 
             remarks
+            feedback
             exercise {
               id
               name

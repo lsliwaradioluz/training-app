@@ -3,7 +3,6 @@ mutation($input: updateWorkoutInput) {
     workout {
       id
       scheduled
-      feedback
       ready
       sticky
       name
@@ -22,6 +21,7 @@ mutation($input: updateWorkoutInput) {
               distance
               rest
               remarks
+              feedback
               exercise {
                 id
                 name

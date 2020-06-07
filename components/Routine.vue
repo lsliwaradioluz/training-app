@@ -39,6 +39,7 @@
             <li>{{ setsAndReps(unit) }}</li>
             <li v-if="unit.remarks">{{ unit.remarks }}</li>
             <li class="t-faded">przerwy {{ unit.rest }}s</li>
+            <li class="t-faded" v-if="unit.feedback">{{ unit.feedback }}</li>
           </ul>
         </div>
         <aside>

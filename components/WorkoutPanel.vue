@@ -44,13 +44,6 @@
           Kopiuj
         </nuxt-link>
       </template> -->
-      <button
-        class="button-tertiary"
-        type="button"
-        @click="$emit('edit-feedback')"
-      >
-        Notatka
-      </button>
     </div>
   </div>
 </template>
@@ -109,6 +102,7 @@ export default {
   button {
     flex-basis: 49%;
     flex-shrink: 1;
+    flex-grow: 1;
   }
 }
 </style>

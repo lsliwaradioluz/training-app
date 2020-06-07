@@ -250,26 +250,17 @@
     <!-- POPRZEDNIE TRENINGI  -->
     <section v-if="previousWorkouts.length > 0">
       <header
-        class="row j-between a-start pt1 t-faded"
-        :class="{ pb05: !previousWorkouts[currentWorkout].feedback }"
+        class="row j-between a-start pt1 pb05 t-faded"
       >
-        <div class="column">
-          <h4 v-if="!previousWorkouts[currentWorkout].user" class="mb0 t-faded">
-            {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
-            {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
-          </h4>
-          <h4 v-else class="mb0 t-faded">
-            {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
-            {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
-            ({{ previousWorkouts[currentWorkout].user.username }})
-          </h4>
-          <p
-            v-show="previousWorkouts[currentWorkout].feedback"
-            class="t-faded fs-13 mb05"
-          >
-            {{ previousWorkouts[currentWorkout].feedback }}
-          </p>
-        </div>
+        <h4 v-if="!previousWorkouts[currentWorkout].user" class="mb0 t-faded">
+          {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
+          {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
+        </h4>
+        <h4 v-else class="mb0 t-faded">
+          {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
+          {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
+          ({{ previousWorkouts[currentWorkout].user.username }})
+        </h4>
         <div class="row ml05">
           <button
             class="flaticon-left-arrow"
@@ -401,7 +392,7 @@ export default {
           complex.units.forEach((unit, unitindex) => {
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
-            ] = _.omit(unit, "__typename", "id")
+            ] = _.omit(unit, "__typename", "id", "feedback")
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id

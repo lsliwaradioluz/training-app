@@ -75,27 +75,28 @@
       </div>
     </section>
     <section class="buttons">
-      <button
-        v-if="soundEnabled"
-        class="button flaticon-sound"
-        @click="soundEnabled = false"
-      />
-      <button 
-        v-else 
-        class="button flaticon-mute" 
-        @click="soundEnabled = true" 
-      />
-      <button
-        class="button flaticon-login"
-        :class="{ 't-headers': automaticModeOn }"
-        @click="toggleAutomaticMode"
-      />
-      <button
-        class="button flaticon-counterclockwise"
-        :class="{ 't-headers': stopwatchOn }"
-        @click="stopwatchOn = !stopwatchOn"
-      />
-      <button class="button flaticon-menu" @click="$emit('edit-feedback')" />
+      <div class="buttons__functions">
+        <button
+          v-if="soundEnabled"
+          class="button flaticon-sound"
+          @click="soundEnabled = false"
+        />
+        <button 
+          v-else 
+          class="button flaticon-mute" 
+          @click="soundEnabled = true" 
+        />
+        <button
+          class="button flaticon-login"
+          :class="{ 't-headers': automaticModeOn }"
+          @click="toggleAutomaticMode"
+        />
+        <button
+          class="button flaticon-counterclockwise"
+          :class="{ 't-headers': stopwatchOn }"
+          @click="stopwatchOn = !stopwatchOn"
+        />
+      </div>
       <Timer
         :time="current.time"
         :active="automaticModeOn && current.time > 0 || current.exercise.name == 'Odpocznij'"
@@ -477,7 +478,12 @@ export default {
   align-items: center;
 }
 
+.buttons__functions {
+  display: flex;
+}
+
 .button {
+  margin-right: .5rem;
   font-size: 16px;
 }
 </style>
