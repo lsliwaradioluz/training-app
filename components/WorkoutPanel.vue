@@ -14,7 +14,7 @@
     <p>
       Zapoznaj się z rozpiską, przesuwając palcem w lewo lub w prawo. Skorzystaj
       z Cyfrowego Asystenta, który przeprowadzi Cię przez Twój trening krok po
-      kroku. Po zakończonej sesji dodaj komentarz dla trenera.
+      kroku. Dodawaj komentarze do ćwiczeń, aby trener wiedział, jak Ci poszło.
     </p>
     <div class="buttons row j-between">
       <button
