@@ -1,93 +1,101 @@
 <template>
-  <div
+  <article
     class="unit-editor tab p11"
-    :style="{ backgroundImage: backgroundImage }"
+    :style="{ backgroundImage }"
   >
-    <div class="row j-between t-green mb05">
-      <h3 v-if="editedUnit.exercise.name != ''" class="m00">
-        Edytuj ćwiczenie
-      </h3>
-      <h3 v-else class="m00">
-        Dodaj ćwiczenie
-      </h3>
-    </div>
-    <form>
-      <div>
-        <BaseInput
-          v-model="unit.exercise.name"
-          class="mb0"
-          placeholder="Nazwa ćwiczenia"
-          :show-status="false"
-          @input="unit.exercise = { name: $event, id: '' }"
-        />
-        <ul class="exercise__list pt05">
-          <transition-group name="animate-list">
-            <li
-              v-for="exercise in filteredExercises"
-              :key="exercise.id"
-              class="fs-15"
-              @click="passExercise(exercise)"
-            >
-              {{ exercise.name }}
-            </li>
-          </transition-group>
-        </ul>
+    <h3 class="t-center">Edytuj ćwiczenie</h3>
+    <nav class="navigation">
+      <div 
+        class="navigation-button"
+        v-for="(step, index) in steps" 
+        :key="index">
+        <div 
+          class="navigation-button__number"
+          :class="{ 'navigation-button__number--active': index == currentStep }" 
+          @click="currentStep = index">
+          {{ index + 1 }}
+        </div>
+        <p class="navigation-button__caption mt05 mb05">{{ step }}</p>
       </div>
-      <div class="exercise__repetitions row j-between">
-        <div
+    </nav>
+    <template v-if="currentStep == 0">
+      <BaseSearch
+        v-model="unit.exercise.name"
+        class="mb0"
+        placeholder="Szukaj ćwiczenia..."
+        :icon="false"
+        @input="unit.exercise = { name: $event, id: '' }"
+      />
+      <ul class="exercise__list pt05">
+        <transition-group name="animate-list">
+          <li
+            v-for="exercise in filteredExercises"
+            :key="exercise.id"
+            class="fs-15"
+            @click="passExercise(exercise)"
+          >
+            {{ exercise.name }}
+          </li>
+        </transition-group>
+      </ul>
+    </template>
+    <section v-if="currentStep == 1" class="details">
+      <div class="details__numbers">
+        <div 
           v-for="(number, key) in unit.numbers"
           :key="key"
-          class="p10 t-center"
-        >
-          <p>{{ key | shorten }}</p>
-          <i
-            class="flaticon-up-arrow small t-green"
-            @click="
-              key == 'distance'
-                ? (unit.numbers[key] += 100)
-                : unit.numbers[key]++
-            "
-          />
-          <p class="m00">
+          class="details__number">
+          <div class="column a-center">
+            <p class="mb0">{{ key | shorten }}</p>
             <input
               v-model="unit.numbers[key]"
-              class="input--invisible t-center"
+              class="fs-40 t-center"
               type="number"
+              min="0"
             />
-          </p>
-          <i
-            class="flaticon-down-arrow small t-green"
-            @click="
-              key == 'distance'
-                ? (unit.numbers[key] -= 100)
-                : unit.numbers[key]--
-            "
-          />
+          </div>
+          <div class="row">
+            <button
+              class="flaticon-minus"
+              @click="
+                key == 'distance'
+                  ? (unit.numbers[key] -= 100)
+                  : unit.numbers[key]--
+              "
+            />
+            <button
+              class="flaticon-plus"
+              @click="
+                key == 'distance'
+                  ? (unit.numbers[key] += 100)
+                  : unit.numbers[key]++
+              "
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <BaseTextarea
-          v-model="unit.remarks"
-          placeholder="Uwagi do ćwiczenia"
-          :value="unit.remarks"
-          :show-status="false"
-        />
-      </div>
-      <div class="unit-editor__buttons row j-between mt2">
-        <button
-          class="button-primary"
-          type="button"
-          :disabled="addUnitButtonDisabled"
-          @click="addUnit"
-        >
-          Zapisz
-        </button>
-        <button class="button-primary" type="button" @click="$emit('cancel')">
-          Anuluj
-        </button>
-      </div>
-    </form>
-  </div>
+      <BaseInput
+        class="mb0"
+        v-model="unit.remarks"
+        placeholder="Uwagi do ćwiczenia"
+        :value="unit.remarks"
+        :show-status="false"
+      />
+    </section>
+    <section class="buttons row j-between mt2">
+      <button
+        class="button-primary"
+        type="button"
+        :disabled="addUnitButtonDisabled"
+        @click="addUnit"
+      >
+        Zapisz
+      </button>
+      <button class="button-primary" type="button" @click="$emit('cancel')">
+        Anuluj
+      </button>
+    </section>
+  </article>
 </template>
 
 <script>
@@ -110,6 +118,11 @@ export default {
       client: this.$apollo.getClient(),
       unit: this.editedUnit,
       addUnitButtonDisabled: false,
+      steps: [
+        'Wybierz ćwiczenie', 
+        'Określ powtórzenia',
+      ],
+      currentStep: 0, 
     }
   },
   computed: {
@@ -122,7 +135,7 @@ export default {
         : "none"
     },
     filteredExercises() {
-      let filteredExercises = []
+      let filteredExercises = this.exercises
       const filter = this.unit.exercise.name.toLowerCase()
       if (filter !== "") {
         filteredExercises = this.exercises.filter((exercise) => {
@@ -132,8 +145,6 @@ export default {
             (filter.includes(exerciseName) && this.unit.exercise.id == "")
           return conditions
         })
-      } else {
-        filteredExercises = []
       }
       return filteredExercises
     },
@@ -207,12 +218,51 @@ export default {
 .unit-editor {
   background-size: cover;
   background-position: center;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-around;
+}
+
+.navigation-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 25%;
+  text-align: center;
+}
+
+.navigation-button__number {
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid color(headers);
+  color: color(headers);
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.navigation-button__number--active {
+  color: color(secondary);
+  background-color: color(headers);
+}
+
+.navigation-button__caption {
+  font-size: 12px;
 }
 
 .exercise__list {
-  max-height: 15vh;
-  overflow-y: scroll;
   transition: all 0.3s;
+  flex-basis: 100%;
+  flex-shrink: 1;
+  overflow: scroll;
 
   &::-webkit-scrollbar-thumb {
     background-color: white;
@@ -226,21 +276,39 @@ export default {
 
   li {
     border: none;
-    padding-left: 0;
+    padding: 3px 0;
   }
 }
 
-.exercise__repetitions {
-  > div {
-    width: 25%;
-  }
-  p {
-    margin-bottom: 0;
-    text-align: center;
+.details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.details__numbers {
+  display: flex;
+  flex-basis: 100%;
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+} 
+
+.details__number {
+  display: flex;
+  flex-basis: 30%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  button {
+    margin: 0 2px;
   }
 }
 
-.unit-editor__buttons button {
-  width: 49%;
+.buttons {
+  button {
+    width: 49%;
+  }
 }
 </style>

@@ -33,22 +33,22 @@ export default {
 <style lang="scss" scoped>
 .search {
   position: relative;
+  margin-bottom: 1rem;
 }
 
 .icon {
   position: absolute;
-  top: 18px;
+  top: 17px;
   color: color(faded);
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .input {
   background-color: transparent;
   border-bottom: 1px solid color(faded);
   border-radius: 0;
-  margin-bottom: 1rem;
-  font-size: 13px;
-  height: 50px;
+  font-size: 14px;
+  height: 45px;
   padding-top: 0.5rem;
   padding-bottom: 0;
   transition: border-color 0.3s;

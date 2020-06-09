@@ -27,17 +27,4 @@ export default {
   min-height: 100vh;
   background-color: color(primary);
 }
-
-@media (min-width: 768px) {
-  .default {
-    max-width: 400px;
-    min-height: 0;
-    height: 90vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    margin: 5vh auto;
-    border-radius: 15px;
-    box-shadow: 0 0 0 5px black;
-  }
-}
 </style>

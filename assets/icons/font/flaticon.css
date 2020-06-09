@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 02/06/2020 13:28
+  	Creation date: 09/06/2020 13:21
   	*/
 
 @font-face {
@@ -57,17 +57,18 @@ margin-left: 20px;
 .flaticon-settings:before { content: "\f118"; }
 .flaticon-user:before { content: "\f119"; }
 .flaticon-logout:before { content: "\f11a"; }
-.flaticon-plus:before { content: "\f11b"; }
-.flaticon-bell:before { content: "\f11c"; }
-.flaticon-continuous:before { content: "\f11d"; }
-.flaticon-tick:before { content: "\f11e"; }
-.flaticon-right-arrow-2:before { content: "\f11f"; }
-.flaticon-left-arrow-2:before { content: "\f120"; }
-.flaticon-pencil:before { content: "\f121"; }
-.flaticon-add-button:before { content: "\f122"; }
-.flaticon-play:before { content: "\f123"; }
-.flaticon-stop:before { content: "\f124"; }
-.flaticon-pause:before { content: "\f125"; }
-.flaticon-movie-player-play-button:before { content: "\f126"; }
-.flaticon-pause-button:before { content: "\f127"; }
-.flaticon-stop-1:before { content: "\f128"; }
+.flaticon-bell:before { content: "\f11b"; }
+.flaticon-continuous:before { content: "\f11c"; }
+.flaticon-tick:before { content: "\f11d"; }
+.flaticon-right-arrow-2:before { content: "\f11e"; }
+.flaticon-left-arrow-2:before { content: "\f11f"; }
+.flaticon-pencil:before { content: "\f120"; }
+.flaticon-add-button:before { content: "\f121"; }
+.flaticon-play:before { content: "\f122"; }
+.flaticon-stop:before { content: "\f123"; }
+.flaticon-pause:before { content: "\f124"; }
+.flaticon-movie-player-play-button:before { content: "\f125"; }
+.flaticon-pause-button:before { content: "\f126"; }
+.flaticon-stop-1:before { content: "\f127"; }
+.flaticon-minus:before { content: "\f128"; }
+.flaticon-plus:before { content: "\f129"; }

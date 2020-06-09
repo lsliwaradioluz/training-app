@@ -38,21 +38,4 @@ export default {
   padding: 1rem;
   z-index: 2;
 }
-
-@media (min-width: 768px) {
-  .exercise-layout {
-    max-width: 400px;
-    min-height: 0;
-    height: 90vh;
-    overflow: hidden;
-    margin: 5vh auto;
-    border-radius: 15px;
-    box-shadow: 0 0 0 5px black;
-  }
-
-  .navigation {
-    max-width: 400px;
-    margin: 0 auto;
-  }
-}
 </style>

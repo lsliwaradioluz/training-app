@@ -3,7 +3,7 @@
     <p class="mb0">
       Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor
       treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie
-      nowe. {{ workoutReady }}
+      nowe.
     </p>
     <section>
       <header>

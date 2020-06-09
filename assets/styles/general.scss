@@ -15,17 +15,3 @@ body {
   letter-spacing: -.3px;
   background-color: color(primary);
 }
-
-@media (min-width: 768px) {
-  body {
-    background-color: white;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-
-  * {
-    cursor: url('../images/cursor.png'), auto !important;
-  }
-}

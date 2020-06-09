@@ -145,18 +145,6 @@ export default {
   }
 }
 
-@media (min-width: 401px) {
-  .links {
-    left: initial;
-    max-width: 400px;
-    margin: 0 auto;
-    transform: translateX(-1rem);
-    margin-bottom: 5vh;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-}
-
 .nuxt-link-active {
   color: color(headers);
 }
