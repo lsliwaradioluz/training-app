@@ -53,15 +53,6 @@
         Cyfrowy asystent posiada swój własny panel sterowania.
       </p>
       <section class="assistant-tip">
-        <span class="assistant-tip__icon flaticon-play-and-pause-button"></span>
-        <p>
-          Asystent traktuje Twój trening jak playlistę na Spotify, gdzie kolejne ćwiczenia są jak kolejne piosenki. Aby
-          przewijąc swój trening, dotykaj ekranu: prawej strony, by przewinąć do przodu lub lewej, by się cofnąć. Nawigować
-          możesz również za pomocą strzałek, ale nie jest to najwygodniejsza metoda. Niewykluczone też, że strzałki
-          niebawem znikną.
-        </p>
-      </section>
-      <section class="assistant-tip">
         <span class="assistant-tip__icon flaticon-sound"></span>
         <p>
           Ikona głośnika możesz włączyć lub wyłączyć dźwięki asystenta. Chodzi tu o krótkie "beepy" wydawane przez timer
@@ -71,10 +62,11 @@
       <section class="assistant-tip">
         <span class="assistant-tip__icon flaticon-login"></span>
         <p>
-          Tym przyciskiem włączysz tak zwany tryb automatyczny. To sygnał dla asystenta, by automatycznie odliczać czas
-          nie tylko do końca przerwy między seriami, ale także do końca danego ćwiczenia (zakładając, że wykonujemy je własnie
-          na czas, a nie na powtórzenia). Funkcja przydaje się w treningach interwałowych typu Tabata, gdzie ćwiczysz w cyklu 
-          praca - odpoczynek o określonej długości (np. 20 sekund / 10 sekund).
+          Tym przyciskiem włączysz tak zwany tryb automatyczny, w którym asystent sam będzie odliczał czas do końca serii 
+          i sam będzie przechodził do kolejnego ćwiczenia po jej zakończeniu. Funkcja przydaje się w treningach interwałowych 
+          typu Tabata, gdzie ćwiczysz w cyklu praca - odpoczynek o określonej długości (np. 20 sekund / 10 sekund). Przy wyłączonym
+          trybie automatycznym wspomniane czynności (startowanie zegara i przechodznie do kolejnych serii) musisz wykonywać
+          własnoręcznie.
         </p>
       </section>
       <section class="assistant-tip">
@@ -87,8 +79,15 @@
         <span class="assistant-tip__icon flaticon-menu"></span>
         <p>
           Ostatnia pozycja służy do otwierania edytora notatek. W trakcie lub po każdym treningu zostaw trenerowi komentarz
-          dotyczący wykonanych ćwiczeń. Chodzi tu głównie o liczbę powtórzeń wykonaną w ostatnich seriach ćwiczeń siłlowych. 
+          dotyczący każdego z wykonanych ćwiczeń. Chodzi tu głównie o liczbę powtórzeń wykonaną w ostatnich seriach ćwiczeń siłowych. 
           Dzięki tej informacji trener będzie mógł lepiej zaplanować kolejną sesję.
+        </p>
+      </section>
+      <section class="assistant-tip">
+        <span class="assistant-tip__icon flaticon-movie-player-play-button"></span>
+        <p>
+          Po prawej stronie panelu znajdziesz przyciski sterujące timerem, który odlicza do zera podczas przerw 
+          oraz ćwiczeń wykonywanych na czas. Możesz go wystartować, zatrzymać lub zresetować.
         </p>
       </section>
     </article>
