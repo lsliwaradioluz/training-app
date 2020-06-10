@@ -13,8 +13,14 @@
       @touchend="revealPassword = false"
     />
     <span
-      class="status flaticon-tick"
       v-if="showStatus && showTick"
+      class="status flaticon-tick"
+    />
+    <button
+      v-if="showClearBtn"
+      class="status flaticon-cancel"
+      type="button"
+      @click="clearInput"
     />
     <input
       ref="input"
@@ -35,10 +41,10 @@
 <script>
 export default {
   props: {
-    icon: {
+    value: {
       type: String,
     },
-    value: {
+    icon: {
       type: String,
     },
     placeholder: {
@@ -68,6 +74,10 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    showClearBtn: {
+      type: Boolean, 
+      default: () => false,
+    }
   },
   data() {
     return {
@@ -84,6 +94,9 @@ export default {
         ? (this.showTick = true)
         : (this.showTick = false)
     },
+    clearInput() {
+      this.$emit('input', '')
+    }
   },
 }
 </script>

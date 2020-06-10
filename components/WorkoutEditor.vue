@@ -392,7 +392,7 @@ export default {
           complex.units.forEach((unit, unitindex) => {
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
-            ] = _.omit(unit, "__typename", "id", "feedback")
+            ] = _.omit(unit, "__typename", "id")
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id
@@ -534,8 +534,11 @@ export default {
     openUnitEditor(unit, unitindex, complexindex) {
       let rest
       let exercise = {
-        name: "",
-        id: "",
+        name: unit && unit.exercise.name || "",
+        id: unit && unit.exercise.id || "",
+        image: {
+          url: unit && unit.exercise.image.url || null,
+        }
       }
 
       if (this.currentComplex != null) {
@@ -548,7 +551,7 @@ export default {
       }
 
       this.editedUnit = {
-        exercise: unit && unit.exercise || exercise,
+        exercise,
         numbers: {
           sets: unit && unit.sets || 0,
           reps: unit && unit.reps || 0,
@@ -557,6 +560,7 @@ export default {
           rest: unit && unit.rest || rest,
         },
         remarks: unit && unit.remarks || "",
+        feedback: unit && unit.feedback || "",
       }
 
       if (unit != undefined) {

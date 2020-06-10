@@ -8,7 +8,7 @@
     <button 
       v-show="!countDownInterval" 
       class="button button--big flaticon-movie-player-play-button" 
-      :disabled="!active"
+      :disabled="playButtonDisabled"
       @click="start" />
     <button 
       v-show="countDownInterval" 
@@ -39,6 +39,11 @@ export default {
       countDownInterval: null,
     }
   },
+  computed: {
+    playButtonDisabled() {
+      return !this.active || this.timeleft == 0
+    }
+  },
   methods: {
     start() {
       this.$emit('update-time', this.timeleft)
@@ -61,9 +66,12 @@ export default {
           }
         }
         if (this.timeleft == -1) {
-          this.timeleft = 0
-          clearInterval(this.countDownInterval)
-          this.$emit("countdown-over")
+          this.timeleft = 0;
+          this.$emit('update-time', this.timeleft)
+          this.stop()
+          if (this.automatic) {
+            this.$emit("countdown-over")
+          }
         }
       }, 1000)
     },
@@ -78,7 +86,7 @@ export default {
   },
   mounted() {
     this.$emit('update-time', this.timeleft)
-    if (this.automatic) {
+    if (this.automatic && this.active) {
       this.start()
     }
   }

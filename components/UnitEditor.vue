@@ -3,14 +3,9 @@
     class="unit-editor tab p11"
     :style="{ backgroundImage }"
   >
-    <div class="row j-between mb05">
-      <h3 v-if="editedUnit.exercise.name != ''" class="m00">
-        Edytuj ćwiczenie
-      </h3>
-      <h3 v-else class="m00">
-        Dodaj ćwiczenie
-      </h3>
-    </div>
+    <h3 class="m00">
+      Edytuj ćwiczenie
+    </h3>
     <form>
       <div>
         <BaseSearch
@@ -68,20 +63,24 @@
           />
         </div>
       </div>
-      <div>
-        <BaseInput
-          v-model="unit.remarks"
-          placeholder="Uwagi do ćwiczenia"
-          :value="unit.remarks"
-          :show-status="false"
-        />
-      </div>
+      <BaseInput
+        v-model="unit.remarks"
+        placeholder="Uwagi do ćwiczenia"
+        :show-status="false"
+        show-clear-btn
+      />
+      <BaseInput
+        v-model="unit.feedback"
+        placeholder="Notatka do ćwiczenia"
+        :show-status="false"
+        show-clear-btn
+      />
       <div class="unit-editor__buttons row j-between mt2">
         <button
           class="button-primary"
           type="button"
-          :disabled="addUnitButtonDisabled"
-          @click="addUnit"
+          :disabled="createUnitButtonDisabled"
+          @click="createUnit"
         >
           Zapisz
         </button>
@@ -94,9 +93,6 @@
 </template>
 
 <script>
-import createExercise from "~/apollo/mutations/createExercise.gql"
-import getAllExercises from "~/apollo/queries/getAllExercises.gql"
-
 export default {
   props: {
     editedUnit: {
@@ -110,21 +106,11 @@ export default {
   },
   data() {
     return {
-      client: this.$apollo.getClient(),
       unit: this.editedUnit,
-      addUnitButtonDisabled: false,
-      steps: [
-        'Wybierz ćwiczenie', 
-        'Określ powtórzenia', 
-        'Dodaj uwagi',
-      ],
-      currentStep: 0, 
+      createUnitButtonDisabled: false,
     }
   },
   computed: {
-    route() {
-      return this.$route
-    },
     backgroundImage() {
       return this.unit.exercise.image
         ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.unit.exercise.image.url}')`
@@ -150,24 +136,15 @@ export default {
     passExercise(exercise) {
       this.unit.exercise = { ...exercise }
     },
-    createExercise() {
-      const input = {
-        data: { name: this.unit.exercise.name, category: "Strength" },
-      }
-      return this.client.mutate({
-        mutation: createExercise,
-        variables: { input },
-        update: (cache, { data: { createExercise } }) => {
-          // read data from cache for this query
-          const data = cache.readQuery({ query: getAllExercises })
-          // push new item to cache
-          data.exercises.unshift(createExercise.exercise)
-          // write data back to the cache
-          this.client.writeQuery({ query: getAllExercises, data: data })
-        },
-      })
-    },
     createUnit() {
+      if (this.unit.exercise.id == "") {
+        this.$store.commit(
+          "main/setNotification",
+          "Musisz wybrać ćwiczenie"
+        )
+        return 
+      }
+      
       for (let key in this.unit.numbers) {
         // inputs (even type number) always return string. We simply use + to convert string to number
         this.unit.numbers[key] = +this.unit.numbers[key]
@@ -177,7 +154,7 @@ export default {
       if (sets == 0 || reps + time + distance == 0) {
         this.$store.commit(
           "main/setNotification",
-          "Musisz określić liczbę serii i liczbę powtórzeń"
+          "Musisz określić liczbę serii oraz powtórzeń"
         )
         return
       }
@@ -189,23 +166,6 @@ export default {
       }
 
       this.$emit("add-unit", newUnit)
-    },
-    async addUnit() {
-      if (this.unit.exercise.id == "") {
-        if (
-          await this.$root.$confirm(
-            `Wykonanie tej operacji doda ćwiczenie ${this.unit.exercise.name} do bazy. Kontynuować?`
-          )
-        ) {
-          this.addUnitButtonDisabled = true
-          this.createExercise().then((res) => {
-            this.unit.exercise.id = res.data.createExercise.exercise.id
-            this.createUnit()
-          })
-        }
-      } else {
-        this.createUnit()
-      }
     },
   },
 }
