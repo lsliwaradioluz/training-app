@@ -536,9 +536,7 @@ export default {
       let exercise = {
         name: unit && unit.exercise.name || "",
         id: unit && unit.exercise.id || "",
-        image: {
-          url: unit && unit.exercise.image.url || null,
-        }
+        image: unit && unit.exercise.image || null,
       }
 
       if (this.currentComplex != null) {
