@@ -32,7 +32,7 @@ export default {
       sections: [
         { name: "Rozgrzewka", complexes: [] },
         { name: "Skillwork", complexes: [] },
-        { name: "Strength", complexes: [] },
+        { name: "Siła", complexes: [] },
         { name: "Cardio", complexes: [] },
         { name: "Mobility", complexes: [] },
       ],

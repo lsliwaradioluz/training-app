@@ -1,5 +1,5 @@
 <template>
-  <article class="routine">
+  <article class="routine" :class="{ 'routine--expanded': editor }">
     <section class="header">
       <h3>{{ section.name }}</h3>
       <aside>
@@ -14,10 +14,7 @@
         blind: currentComplex != null && currentComplex != complexindex,
       }"
     >
-      <div
-        v-if="complex.units.length > 1 || currentComplex == complexindex"
-        class="complex"
-      >
+      <div class="complex">
         <h5 class="complex-name">{{ complex.name }}</h5>
         <aside>
           <slot
@@ -31,16 +28,15 @@
         v-for="(unit, unitindex) in complex.units"
         :key="unitindex"
         class="unit"
-        :class="{ pl05: complex.units.length > 1 }"
       >
         <div>
           <p>{{ unit.exercise.name }}</p>
           <ul>
             <li>{{ setsAndReps(unit) }}</li>
             <li v-if="unit.remarks">{{ unit.remarks }}</li>
-            <li class="t-faded" v-if="unit.rest">{{ unit.rest }}s odpoczynku</li>
+            <li class="t-faded" v-if="unit.rest">Odpocznij {{ unit.rest }}s</li>
             <li class="t-faded" v-else>Bez odpoczynku</li>
-            <li class="t-faded" v-if="unit.feedback">{{ unit.feedback }}</li>
+            <li class="unit__feedback" v-if="unit.feedback">{{ unit.feedback }}</li>
           </ul>
         </div>
         <aside>
@@ -71,6 +67,10 @@ export default {
     currentComplex: {
       type: Number,
     },
+    editor: {
+      type: Boolean, 
+      default: () => false,
+    }
   },
   methods: {
     setsAndReps(unit) {
@@ -89,7 +89,11 @@ export default {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-height: 200px;
+  padding-bottom: 25px;
+}
+
+.routine--expanded {
+  padding-bottom: 70px;
 }
 
 .header {
@@ -125,6 +129,7 @@ export default {
 
 .unit {
   margin-bottom: 0.5rem;
+  padding-left: .5rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -138,5 +143,9 @@ export default {
       margin-left: 1rem;
     }
   }
+}
+
+.unit__feedback {
+  color: #5C946E;
 }
 </style>

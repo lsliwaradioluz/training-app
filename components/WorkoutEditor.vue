@@ -62,7 +62,7 @@
             :key="sectionindex"
             class="p11 column"
           >
-            <Routine :section="section" :current-complex="currentComplex">
+            <Routine :section="section" :current-complex="currentComplex" editor>
               <template v-slot:section-buttons>
                 <ContextMenu>
                   <template v-slot:trigger>
@@ -155,13 +155,7 @@
               <template
                 v-slot:unit-buttons="{ unit, unitindex, complex, complexindex }"
               >
-                <ContextMenu
-                  :bottom="
-                    unitindex == complex.units.length - 1 &&
-                    complexindex == section.complexes.length - 1 &&
-                    unitindex + complexindex > 0
-                  "
-                >
+                <ContextMenu>
                   <template v-slot:trigger>
                     <span class="flaticon-vertical-dots fs-12" />
                   </template>
@@ -205,23 +199,6 @@
                         "
                       >
                         Przesuń w dół
-                      </button>
-                    </template>
-                    <template
-                      v-if="currentComplex == null && complex.units.length < 2"
-                    >
-                      <button
-                        class="flaticon-add-button"
-                        @click="addExerciseToComplex(complexindex)"
-                      >
-                        Dodaj ćwiczenie
-                      </button>
-                      <button
-                        v-if="previousWorkouts.length > 0"
-                        class="flaticon-double-arrow-cross-of-shuffle"
-                        @click="currentComplex = complexindex"
-                      >
-                        Paruj
                       </button>
                     </template>
                     <button
@@ -392,7 +369,7 @@ export default {
           complex.units.forEach((unit, unitindex) => {
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
-            ] = _.omit(unit, "__typename", "id")
+            ] = _.omit(unit, "__typename", "id", "feedback")
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id
@@ -492,6 +469,7 @@ export default {
     },
     addUnit(unit) {
       const unitClone = JSON.parse(JSON.stringify(unit))
+
       if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
           name: "Blok",
@@ -558,7 +536,6 @@ export default {
           rest: unit && unit.rest || rest,
         },
         remarks: unit && unit.remarks || "",
-        feedback: unit && unit.feedback || "",
       }
 
       if (unit != undefined) {

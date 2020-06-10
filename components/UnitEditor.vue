@@ -69,12 +69,6 @@
         :show-status="false"
         show-clear-btn
       />
-      <BaseInput
-        v-model="unit.feedback"
-        placeholder="Notatka do ćwiczenia"
-        :show-status="false"
-        show-clear-btn
-      />
       <div class="unit-editor__buttons row j-between mt2">
         <button
           class="button-primary"

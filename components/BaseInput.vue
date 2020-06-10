@@ -136,6 +136,7 @@ export default {
   width: 100%;
   padding-top: 1rem;
   padding-bottom: 0;
+  padding-right: 1rem;
   font-size: 14px;
   height: 45px;
   transition: all 0.25s ease;
