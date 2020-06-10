@@ -112,7 +112,7 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return this.unit.exercise.image
+      return this.unit.exercise.image.url
         ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.unit.exercise.image.url}')`
         : "none"
     },
