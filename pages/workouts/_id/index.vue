@@ -35,7 +35,7 @@
               class="p11 column"
             >
               <Routine :section="section">
-                <template v-slot:unit-buttons="{ unit, complexindex, unitindex }">
+                <template v-slot:unit-buttons="{ unit }">
                   <ContextMenu>
                     <template v-slot:trigger>
                       <span class="flaticon-vertical-dots fs-12" />
@@ -50,7 +50,7 @@
                       >
                         Zobacz ćwiczenie 
                       </nuxt-link>
-                      <button class="flaticon-pencil" type="button" @click="editFeedback(complexindex, unitindex)">
+                      <button class="flaticon-pencil" type="button" @click="editFeedback(unit)">
                         Dodaj notatkę
                       </button>
                     </template>
@@ -75,16 +75,15 @@
           :workout-index="index"
           :section-index="currentSection[index]"
           :is-screen-divided="workouts.length > 1"
-          @set-current-section="
-            setCurrentSection({ index: currentWorkout, section: $event })
-          "
+          @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })"
+          @edit-feedback="editFeedback($event)"
         />
       </Carousel>
-      <Modal :show="!!feedbackBeingEdited" @close="feedbackBeingEdited = null">
+      <Modal :show="!!editedUnit" @close="editedUnit = null">
         <FeedbackEditor
-          :feedback="feedbackBeingEdited && feedbackBeingEdited.content"
+          :unit="editedUnit"
           @feedback-edited="saveFeedback($event)"
-          @close="feedbackBeingEdited = null"
+          @close="editedUnit = null"
         />
       </Modal>
     </div>
@@ -111,7 +110,7 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-      feedbackBeingEdited: null,
+      editedUnit: null,
     };
   },
   computed: {
@@ -178,24 +177,12 @@ export default {
       setCurrentSection: "assistant/setCurrentSection",
       setNotification: "main/setNotification",
     }),
-    editFeedback(complex, unit) {
-      const section = this.currentSection[this.currentWorkout]
-      const content = this.workouts[this.currentWorkout].sections[section].complexes[complex].units[unit].feedback
-      this.feedbackBeingEdited = {
-        complex,
-        unit, 
-        content,
-      }
+    editFeedback(unit) {
+      this.editedUnit = unit
     },
-    async saveFeedback(feedback) {
-      const section = this.currentSection[this.currentWorkout]
-      const { complex, unit } = this.feedbackBeingEdited
-      const unitindex = this.feedbackBeingEdited.unit
-
-      let sections = this.workouts[this.currentWorkout].sections
-      sections[section].complexes[complex].units[unit].feedback = feedback;
-      this.feedbackBeingEdited = null;
-
+    async saveFeedback(editedFeedback) {
+      this.editedUnit.feedback = editedFeedback
+      this.editedUnit = null
       let input = {
         where: { id: this.workouts[this.currentWorkout].id },
         data: { sections: this.filteredSections },

@@ -29,7 +29,9 @@
               class="fs-15"
               @click="passExercise(exercise)"
             >
-              {{ exercise.name }}
+              <p class="m00">{{ exercise.name }}</p>
+              <p class="t-faded m00 fs-11" v-if="exercise.alias">{{ exercise.alias }}</p>
+              <p class="t-faded m00 fs-11" v-else>Brak alternatywnej nazwy</p>
             </li>
           </transition-group>
         </ul>
@@ -129,11 +131,12 @@ export default {
         : "none"
     },
     filteredExercises() {
-      let filteredExercises = this.exercises
+      let filteredExercises = []
       const filter = this.unit.exercise.name.toLowerCase()
       if (filter !== "") {
         filteredExercises = this.exercises.filter((exercise) => {
-          const exerciseName = exercise.name.toLowerCase()
+          const alias = exercise.alias ? exercise.alias : ""
+          const exerciseName = exercise.name.toLowerCase() + alias.toLowerCase()
           const conditions =
             (exerciseName.includes(filter) && this.unit.exercise.id == "") ||
             (filter.includes(exerciseName) && this.unit.exercise.id == "")

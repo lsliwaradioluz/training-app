@@ -14,7 +14,7 @@
         v-for="(image, index) in images"
         class="image"
         :key="index"
-        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${image}')` }"
+        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url('${image}')` }"
       />
     </section>
     <section class="controls row">
@@ -42,7 +42,7 @@
       </div>
       <div class="exercise__numbers">
         <p 
-          v-if="(!current.sets && current.time) || (automaticModeOn && current.time && !current.reps)" 
+          v-if="current.time && !current.reps" 
           class="exercise__numbers__time"> 
           {{ timeleft | showMinutes }}
         </p>
@@ -96,10 +96,16 @@
           :class="{ 't-headers': stopwatchOn }"
           @click="stopwatchOn = !stopwatchOn"
         />
+        <button
+          class="button flaticon-menu"
+          @click="$emit('edit-feedback', current)"
+          :disabled="!current.sets"
+        />
       </div>
       <Timer
         :time="current.time"
-        :active="automaticModeOn && current.time > 0 || current.exercise.name == 'Odpocznij'"
+        :active="current.time > 0 && !current.reps"
+        :automatic="automaticModeOn"
         :key="controls.unit"
         @countdown-over="nextUnit"
         @beep="playAudio($event)"
@@ -272,7 +278,9 @@ export default {
         let time = units[i].rest
         if (time > 0 && i < units.length - 1) {
           let remarks = `Następnie: ${units[i + 1].exercise.name}`
-          if (units[i+1].remarks) remarks += ` (${units[i+1].remarks})`
+          if (units[i+1].remarks) { 
+            remarks += ` (${units[i+1].remarks})`
+          }
           units.splice(i + 1, 0, {
             exercise: { name: "Odpocznij" },
             time,
@@ -301,8 +309,8 @@ export default {
     },
   },
   methods: {
-    setNotification() {
-      this.$store.commit('main/setNotification')
+    setNotification(message) {
+      this.$store.commit('main/setNotification', message)
     },
     nextUnit() {
       this.controls.unit++
@@ -339,7 +347,6 @@ export default {
         this.controls.complex = this.sections[this.controls.section].complexes.length - 1
         this.controls.unit = this.units.length - 1
       } else {
-        console.log('next section here')
         this.controls.unit = 0
         this.controls.complex = 0
       }
@@ -485,5 +492,8 @@ export default {
 .button {
   margin-right: .5rem;
   font-size: 16px;
+  &:disabled {
+    color: color(faded);
+  }
 }
 </style>

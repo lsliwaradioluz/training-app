@@ -26,6 +26,11 @@ export default {
     },
     active: {
       type: Boolean, 
+      required: true,
+    },
+    automatic: {
+      type: Boolean, 
+      required: true,
     }
   },
   data() {
@@ -34,42 +39,27 @@ export default {
       countDownInterval: null,
     }
   },
-  watch: {
-    timeleft(value) {
-      this.$emit('update-time', value)
-      if (this.countDownInterval) {
-        switch (value) {
-          case 30: 
-            this.$emit("beep", "thirty.mp3")
-            break
-          case 20: 
-            this.$emit("beep", "twenty.mp3")
-            break
-          case 10: 
-            this.$emit("beep", "ten.mp3")
-            break
-          case 3:
-            this.$emit("beep", "threetwoone.mp3")
-        }
-      }
-    },
-    active: {
-      immediate: true, 
-      handler(isActive) {
-        if (!isActive) {
-          this.stop()
-          this.reset()
-        } else {
-          this.start()
-        }
-      }
-    }
-  },
   methods: {
     start() {
       this.$emit('update-time', this.timeleft)
       this.countDownInterval = setInterval(() => {
         this.timeleft--
+        this.$emit('update-time', this.timeleft)
+        if (this.countDownInterval) {
+          switch (this.timeleft) {
+            case 30: 
+              this.$emit("beep", "thirty.mp3")
+              break
+            case 20: 
+              this.$emit("beep", "twenty.mp3")
+              break
+            case 10: 
+              this.$emit("beep", "ten.mp3")
+              break
+            case 3:
+              this.$emit("beep", "threetwoone.mp3")
+          }
+        }
         if (this.timeleft == -1) {
           this.timeleft = 0
           clearInterval(this.countDownInterval)
@@ -83,8 +73,15 @@ export default {
     },
     reset() {
       this.timeleft = this.time
+      this.$emit('update-time', this.timeleft)
     },
   },
+  mounted() {
+    this.$emit('update-time', this.timeleft)
+    if (this.automatic) {
+      this.start()
+    }
+  }
 }
 </script>
 

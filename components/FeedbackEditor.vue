@@ -1,7 +1,7 @@
 <template>
   <form class="tab">
     <h3 class="m00 mb05">
-      Edytuj notatkę
+      Dodaj notatkę
     </h3>
     <BaseInput
       ref="textarea"
@@ -24,14 +24,14 @@
 <script>
 export default {
   props: {
-    feedback: {
-      type: String,
-      default: () => "",
+    unit: {
+      type: Object,
+      required: true,
     },
   },
   data() {
     return {
-      newFeedback: this.feedback,
+      newFeedback: this.unit.feedback,
     }
   },
   methods: {
