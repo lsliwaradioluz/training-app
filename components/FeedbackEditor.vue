@@ -11,10 +11,10 @@
       :show-status="false"
     />
     <div class="buttons">
-      <button class="button-primary" type="button" @click="submitChanges">
+      <button class="button button-primary" type="button" @click="submitChanges" :disabled="submitBtnDisabled">
         Zapisz
       </button>
-      <button class="button-primary" type="button" @click="declineChanges">
+      <button class="button button-primary" type="button" @click="declineChanges">
         Wróć
       </button>
     </div>
@@ -32,10 +32,12 @@ export default {
   data() {
     return {
       newFeedback: this.unit.feedback,
+      submitBtnDisabled: false,
     }
   },
   methods: {
     submitChanges() {
+      this.submitBtnDisabled = true
       this.$emit("feedback-edited", this.newFeedback)
     },
     declineChanges() {
@@ -50,8 +52,12 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
-  button {
-    width: 49%;
+}
+
+.button {
+  width: 49%;
+  &:disabled {
+    background-color: color(faded);
   }
 }
 </style>

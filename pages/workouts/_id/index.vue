@@ -50,7 +50,7 @@
                       >
                         Zobacz ćwiczenie 
                       </nuxt-link>
-                      <button class="flaticon-pencil" type="button" @click="editFeedback(unit)">
+                      <button class="flaticon-pencil" type="button" @click="openFeedbackEditor(unit)">
                         Dodaj notatkę
                       </button>
                     </template>
@@ -76,7 +76,7 @@
           :section-index="currentSection[index]"
           :is-screen-divided="workouts.length > 1"
           @set-current-section="setCurrentSection({ index: currentWorkout, section: $event })"
-          @edit-feedback="editFeedback($event)"
+          @edit-feedback="openFeedbackEditor($event)"
         />
       </Carousel>
       <Modal :show="!!editedUnit" @close="editedUnit = null">
@@ -177,12 +177,11 @@ export default {
       setCurrentSection: "assistant/setCurrentSection",
       setNotification: "main/setNotification",
     }),
-    editFeedback(unit) {
+    openFeedbackEditor(unit) {
       this.editedUnit = unit
     },
-    async saveFeedback(editedFeedback) {
-      this.editedUnit.feedback = editedFeedback
-      this.editedUnit = null
+    async saveFeedback(newFeedback) {
+      this.editedUnit.feedback = newFeedback
       let input = {
         where: { id: this.workouts[this.currentWorkout].id },
         data: { sections: this.filteredSections },
@@ -192,11 +191,15 @@ export default {
           mutation: updateWorkout,
           variables: { input },
         });
+        this.setNotification(
+          "Notatka dodana pomyślnie"
+        );
       } catch (err) {
         this.setNotification(
           "Nie udało się zapisać notatki. Sprawdź połączenie z Internetem"
         );
       }
+      this.editedUnit = null
     },
   },
   beforeRouteEnter(to, from, next) {

@@ -24,26 +24,6 @@
       >
         Asystent
       </button>
-      <!-- <template v-if="user.admin">
-        <nuxt-link 
-          class="button-tertiary mr05 ml05" 
-          tag="button" 
-          type="button" 
-          @click.native="pairWorkout" 
-          to="/users"
-          v-if="!isPairing">
-          Paruj
-        </nuxt-link>
-        <nuxt-link 
-          class="button-tertiary mr05" 
-          tag="button" 
-          type="button" 
-          @click.native="copyWorkout" 
-          to="/users"
-          v-if="!isCopying">
-          Kopiuj
-        </nuxt-link>
-      </template> -->
     </div>
   </div>
 </template>
@@ -63,31 +43,6 @@ export default {
     user() {
       return this.$store.state.auth.user
     },
-    // isPairing() {
-    //   return this.$store.state.main.workoutToPair;
-    // },
-    // isCopying() {
-    //   return this.$store.state.main.workoutToCopy;
-    // }
-  },
-  methods: {
-    // pairWorkout() {
-    //   const workoutToPair = {
-    //     id: this.workout.id,
-    //     user: this.workout.user.username,
-    //     scheduled: this.workout.scheduled
-    //   }
-    //   this.$store.commit('main/pairWorkout', workoutToPair);
-    // },
-    // copyWorkout() {
-    //   const workoutToCopy = {
-    //     id: this.workout.id,
-    //     user: this.user.username,
-    //     scheduled: this.workout.scheduled
-    //   }
-    //   this.showButtonsPanel = false;
-    //   this.$store.commit('main/copyWorkout', workoutToCopy);
-    // },
   },
 }
 </script>
