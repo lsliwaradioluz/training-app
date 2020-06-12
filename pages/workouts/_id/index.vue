@@ -181,7 +181,9 @@ export default {
       this.editedUnit = unit
     },
     async saveFeedback(newFeedback) {
+      const oldFeedback = this.editedUnit.feedback
       this.editedUnit.feedback = newFeedback
+      
       let input = {
         where: { id: this.workouts[this.currentWorkout].id },
         data: { sections: this.filteredSections },
@@ -191,15 +193,16 @@ export default {
           mutation: updateWorkout,
           variables: { input },
         });
+        this.editedUnit = null
         this.setNotification(
-          "Notatka dodana pomyślnie"
+          "Notatka zapisana pomyślnie!"
         );
       } catch (err) {
+        this.editedUnit.feedback = oldFeedback
         this.setNotification(
           "Nie udało się zapisać notatki. Sprawdź połączenie z Internetem"
         );
       }
-      this.editedUnit = null
     },
   },
   beforeRouteEnter(to, from, next) {

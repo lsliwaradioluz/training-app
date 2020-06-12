@@ -1,7 +1,7 @@
 <template>
   <form class="tab">
     <h3 class="m00 mb05">
-      Dodaj notatkę
+      Dodaj notatkę dla {{ unit.exercise.name }}
     </h3>
     <BaseInput
       ref="textarea"
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       newFeedback: this.unit.feedback,
-      submitBtnDisabled: false,
+      submitBtnDisabled: false
     }
   },
   methods: {
