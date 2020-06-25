@@ -5,7 +5,6 @@ mutation($input: updateExerciseInput) {
       name
       alias
       description
-      category
       image {
         id
         url

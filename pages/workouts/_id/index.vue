@@ -46,7 +46,7 @@
                         class="flaticon-gymnast"
                         tag="button"
                         type="button"
-                        :to="`/exercises/${unit.exercise.id}`"
+                        :to="`/exercises/${unit.exercise.family.id}?exercise=${unit.exercise.id}`"
                       >
                         Zobacz ćwiczenie 
                       </nuxt-link>
@@ -189,11 +189,11 @@ export default {
         data: { sections: this.filteredSections },
       };
       try {
+        this.$nuxt.$loading.start()
         await this.client.mutate({
           mutation: updateWorkout,
           variables: { input },
         });
-        this.editedUnit = null
         this.setNotification(
           "Notatka zapisana pomyślnie!"
         );
@@ -203,6 +203,8 @@ export default {
           "Nie udało się zapisać notatki. Sprawdź połączenie z Internetem"
         );
       }
+      this.editedUnit = null
+      this.$nuxt.$loading.finish()
     },
   },
   beforeRouteEnter(to, from, next) {

@@ -1,7 +1,7 @@
 <template>
   <form class="tab">
     <h3 class="m00 mb05">
-      Dodaj notatkę dla {{ unit.exercise.name }}
+      Dodaj notatkę
     </h3>
     <BaseInput
       ref="textarea"
@@ -14,7 +14,7 @@
       <button class="button button-primary" type="button" @click="submitChanges" :disabled="submitBtnDisabled">
         Zapisz
       </button>
-      <button class="button button-primary" type="button" @click="declineChanges">
+      <button class="button button-primary" type="button" @click="declineChanges" :disabled="submitBtnDisabled">
         Wróć
       </button>
     </div>

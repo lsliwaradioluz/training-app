@@ -36,6 +36,10 @@ query($id: ID!, $limit: Int) {
                 id
                 url
               }
+              family {
+                id
+                name
+              }
             }
           }
         }

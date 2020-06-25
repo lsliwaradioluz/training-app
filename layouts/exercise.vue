@@ -9,6 +9,7 @@
     </div>
     <nuxt />
     <Confirm />
+    <Notification />
   </div>
 </template>
 

@@ -1,0 +1,10 @@
+mutation($input: deleteFamilyInput) {
+  deleteFamily(input: $input) {
+    family {
+      id
+      name
+      alias
+      description
+    }
+  }
+}

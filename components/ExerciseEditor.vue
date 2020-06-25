@@ -23,11 +23,11 @@
         placeholder="Polska nazwa"
         :show-status="false"
       />
-      <BaseSelect
-        v-model="input.category"
-        placeholder="Kategoria"
-        :options="['Strength', 'Conditioning', 'Mobility']"
-      />
+      <BaseSelect placeholder="Kategoria" :value="input.family">
+        <select v-model="input.family">
+          <option v-for="(family, index) in families" :key="index" :value="family">{{ family.name }}</option>
+        </select>
+      </BaseSelect>
     </form>
     <!-- ZDJĘCIE  -->
     <div
@@ -59,12 +59,6 @@
         Usuń zdjęcie
       </button>
     </div>
-    <!-- OPIS  -->
-    <!-- <CustomTextarea
-      class="mt1"
-      :value="input.description"
-      placeholder="Opis ćwiczenia"
-      @type="input.description = $event" /> -->
     <!-- BUTTONY ZAPISZ ODRZUĆ  -->
     <div class="buttons row j-between mt2">
       <button
@@ -93,15 +87,19 @@
 <script>
 import createExercise from "~/apollo/mutations/createExercise.gql"
 import updateExercise from "~/apollo/mutations/updateExercise.gql"
-import getAllExercises from "~/apollo/queries/getAllExercises.gql"
+import getSingleFamily from "~/apollo/queries/getSingleFamily.gql"
 
 export default {
   props: {
     exercise: {
       type: Object,
       default: () => {
-        return { name: "", alias: "", category: null, description: "" }
+        return { name: "", alias: "", description: "" }
       },
+    },
+    families: {
+      type: Array, 
+      required: true, 
     },
     edit: {
       type: Boolean,
@@ -120,12 +118,16 @@ export default {
       input: {
         name: this.exercise.name,
         alias: this.exercise.alias,
-        category: this.exercise.category,
-        // description: this.exercise.description,
+        family: null,
       },
+      oldFamily: this.$route.params.id
     }
   },
   methods: {
+    setFamily() {
+      const currentFamiy = this.families.find(family => family.id == this.$route.params.id)
+      this.input.family = currentFamiy
+    },
     launchFileUpload() {
       this.$refs.input.click()
     },
@@ -156,7 +158,7 @@ export default {
     },
     createExercise() {
       if (this.uploadedImage) this.input.image = this.uploadedImage.id
-      if (!this.input.category) this.input.category = "Strength"
+      this.input.family = this.input.family.id
       const input = {
         data: this.input,
       }
@@ -166,33 +168,58 @@ export default {
           variables: { input },
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
-            const data = cache.readQuery({ query: getAllExercises })
+            const data = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
             // push new item to cache
-            data.exercises.unshift(createExercise.exercise)
+            data.family.exercises.push(createExercise.exercise)
             // write data back to the cache
-            this.client.writeQuery({ query: getAllExercises, data: data })
+            this.client.writeQuery({ query: getSingleFamily, data, variables: { id: this.input.family } })
           },
         })
         .then(() => {
           this.$router.go(-1)
         })
     },
-    updateExercise() {
+    async updateExercise() {
       if (this.uploadedImage) this.input.image = this.uploadedImage.id
+      this.input.family = this.input.family.id
       const input = {
-        where: {
-          id: this.exercise.id,
-        },
+        where: { id: this.exercise.id },
         data: this.input,
       }
 
-      this.client.mutate({
-        mutation: updateExercise,
-        variables: { input: input },
-      })
-      this.$router.go(-1)
+      try {
+        await this.client.mutate({
+          mutation: updateExercise,
+          variables: { input },
+          update: (cache, { data: { updateExercise } }) => {
+            if (this.oldFamily != this.input.family) {
+              const { family: oldFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.oldFamily } })
+              const { family: newFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
+
+              const exerciseIndex = oldFamily.exercises.findIndex(exercise => exercise.id == updateExercise.exercise.id)
+              oldFamily.exercises.splice(exerciseIndex, 1)
+              newFamily.exercises.push(updateExercise.exercise)
+              
+              cache.writeQuery({ query: getSingleFamily, variables: { id: this.oldFamily }, data: oldFamily })
+              cache.writeQuery({ query: getSingleFamily, variables: { id: this.input.family }, data: newFamily })
+            }
+          },
+        })
+        this.$router.go(-1)
+      } catch {
+        const message = 'Nie udało się edytować ćwiczenia. Sprawdź połączenie z Internetem'
+        
+        this.$store.commit(
+          "main/setNotification",
+          message
+        )
+      }
+      
     },
   },
+  mounted() {
+    this.setFamily()
+  }
 }
 </script>
 

@@ -7,7 +7,7 @@
           <nuxt-link
             v-if="user.admin"
             class="flaticon-plus ml1 t-white"
-            :to="{ path: 'new' }"
+            :to="{ path: 'new-family' }"
             append
           />
         </BaseHeader>
@@ -23,45 +23,12 @@
         </p>
         <BaseSearch
           :value="search"
-          placeholder="Szukaj ćwiczenia"
+          placeholder="Szukaj ćwiczeń"
           @input="searchFunction($event)"
         />
-        <div v-if="!search" class="row mb1">
-          <nuxt-link
-            class="button-switch"
-            :class="{ 'button-switch--active': category == 'strength' }"
-            tag="button"
-            type="button"
-            :to="{ query: { category: 'strength' } }"
-          >
-            Siła
-          </nuxt-link>
-          <nuxt-link
-            class="button-switch"
-            :class="{ 'button-switch--active': category == 'conditioning' }"
-            tag="button"
-            type="button"
-            :to="{ query: { category: 'conditioning' } }"
-          >
-            Kondycja
-          </nuxt-link>
-          <nuxt-link
-            class="button-switch"
-            :class="{ 'button-switch--active': category == 'mobility' }"
-            tag="button"
-            type="button"
-            :to="{ query: { category: 'mobility' } }"
-          >
-            Mobilność
-          </nuxt-link>
-        </div>
-        <template v-if="filteredExercises.length > 0">
+        <template v-if="filteredFamilies.length > 0">
           <transition-group name="animate-list">
-            <ExerciseTab
-              v-for="exercise in filteredExercises"
-              :key="exercise.id"
-              :exercise="exercise"
-            />
+            <FamilyTab v-for="family in filteredFamilies" :key="family.id" :family="family" />
           </transition-group>
         </template>
         <p v-else>
@@ -73,52 +40,38 @@
 </template>
 
 <script>
-import getAllExercises from "~/apollo/queries/getAllExercises.gql"
+import getAllFamilies from "~/apollo/queries/getAllFamilies.gql"
 
 export default {
   apollo: {
-    exercises: {
-      query: getAllExercises,
-    },
+    families: {
+      query: getAllFamilies,
+    }
   },
   data() {
     return {
-      exercises: [],
+      families: [],
     }
   },
   computed: {
     user() {
       return this.$store.getters["auth/user"]
     },
-    category() {
-      if (this.$route.query.category) {
-        return this.$route.query.category
-      } else {
-        return "strength"
-      }
-    },
     search() {
       return this.$route.query.search
     },
-    filteredExercises() {
+    filteredFamilies() {
       if (this.search) {
-        return this.exercises.filter((exercise) => {
+        return this.families.filter((family) => {
           const search = this.search.toLowerCase()
-          const alias = exercise.alias ? exercise.alias : ""
-          const exerciseName = exercise.name.toLowerCase() + alias.toLowerCase()
+          const alias = family.alias ? family.alias : ""
+          const familyName = family.name.toLowerCase() + alias.toLowerCase()
           const conditions =
-            exerciseName.includes(search) || search.includes(exerciseName)
+            familyName.includes(search) || search.includes(familyName)
           return conditions
         })
-      } else if (this.category) {
-        return this.exercises.filter((exercise) => {
-          return (
-            exercise.category &&
-            exercise.category.toLowerCase() == this.category
-          )
-        })
       } else {
-        return this.exercises
+        return this.families
       }
     },
   },

@@ -9,9 +9,7 @@ import BaseSelect from "../components/BaseSelect"
 import Workout from "../components/Workout"
 import UserTab from "../components/UserTab"
 import Carousel from "../components/Carousel"
-import ExerciseTab from "../components/ExerciseTab"
 import ExerciseEditor from "../components/ExerciseEditor"
-import ExerciseView from "../components/ExerciseView"
 import Routine from "../components/Routine"
 import WorkoutPanel from "../components/WorkoutPanel"
 import WorkoutAssistant from "../components/WorkoutAssistant"
@@ -30,6 +28,8 @@ import TransferUser from "../components/TransferUser"
 import Avatar from "../components/Avatar"
 import LazyWrapper from "../components/LazyWrapper"
 import FeedbackEditor from "../components/FeedbackEditor"
+import FamilyEditor from "../components/FamilyEditor"
+import FamilyTab from "../components/FamilyTab"
 
 Vue.component("BaseHeader", BaseHeader)
 Vue.component("BaseInput", BaseInput)
@@ -40,9 +40,7 @@ Vue.component("BaseSelect", BaseSelect)
 Vue.component("Workout", Workout)
 Vue.component("UserTab", UserTab)
 Vue.component("Carousel", Carousel)
-Vue.component("ExerciseTab", ExerciseTab)
 Vue.component("ExerciseEditor", ExerciseEditor)
-Vue.component("ExerciseView", ExerciseView)
 Vue.component("Routine", Routine)
 Vue.component("WorkoutPanel", WorkoutPanel)
 Vue.component("WorkoutAssistant", WorkoutAssistant)
@@ -61,3 +59,5 @@ Vue.component("TransferUser", TransferUser)
 Vue.component("Avatar", Avatar)
 Vue.component("LazyWrapper", LazyWrapper)
 Vue.component("FeedbackEditor", FeedbackEditor)
+Vue.component("FamilyEditor", FamilyEditor)
+Vue.component("FamilyTab", FamilyTab)

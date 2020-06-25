@@ -32,6 +32,10 @@ query($id: ID!) {
               id
               url
             }
+            family {
+              id
+              name
+            }
           }
         }
       }

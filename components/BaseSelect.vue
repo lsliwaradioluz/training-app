@@ -6,31 +6,14 @@
     <p v-show="!value" class="placeholder">
       {{ placeholder }}
     </p>
-    <select
-      class="select"
-      :value="value"
-      @change="$emit('input', $event.target.value)"
-    >
-      <option
-        class="option"
-        v-for="(option, index) in options"
-        :key="index"
-        :value="option">
-        {{ option }}
-      </option>
-    </select>
+    <slot></slot>
   </div>
-
 </template>
 
 <script>
 export default {
   props: {
     value: {
-      type: String,
-    },
-    options: {
-      type: Array,
       required: true,
     },
     placeholder: {
@@ -69,7 +52,7 @@ export default {
   margin: 0;
 }
 
-.select {
+select {
   display: block;
   width: 100%;
   padding-top: 1rem;
@@ -84,17 +67,18 @@ export default {
   -moz-appearance: none;
 }
 
-.select:focus {
+select:focus {
   border-bottom: 1px solid color(headers);
 }
 
-.option {
+option {
   color: white;
   border: none;
   background-color: color(secondary);
+  padding-left: .5rem;
 }
 
-.option:disabled {
+option:disabled {
   color: color(faded);
 }
 </style>

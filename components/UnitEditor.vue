@@ -3,34 +3,20 @@
     class="unit-editor tab p11"
     :style="{ backgroundImage }"
   >
-    <h3 class="m00">
+    <h3 class="m00 mb05">
       Edytuj ćwiczenie
     </h3>
     <form>
-      <div>
-        <BaseSearch
-          v-model="unit.exercise.name"
-          class="mb0"
-          placeholder="Szukaj ćwiczenia..."
-          :show-status="false"
-          :icon="false"
-          @input="unit.exercise = { name: $event, id: '' }"
-        />
-        <ul class="exercise__list pt05">
-          <transition-group name="animate-list">
-            <li
-              v-for="exercise in filteredExercises"
-              :key="exercise.id"
-              class="fs-15"
-              @click="passExercise(exercise)"
-            >
-              <p class="m00">{{ exercise.name }}</p>
-              <p class="t-faded m00 fs-11" v-if="exercise.alias">{{ exercise.alias }}</p>
-              <p class="t-faded m00 fs-11" v-else>Brak alternatywnej nazwy</p>
-            </li>
-          </transition-group>
-        </ul>
-      </div>
+      <BaseSelect placeholder="Kategoria" :value="chosenFamily">
+        <select v-model="chosenFamily">
+          <option v-for="(family, index) in familyNames" :key="index" :value="family">{{ family }}</option>
+        </select>
+      </BaseSelect>
+      <BaseSelect placeholder="Ćwiczenie" :value="chosenExercise" v-if="chosenFamily">
+        <select v-model="chosenExercise">
+          <option v-for="exercise in filteredExercises" :key="exercise.id" :value="exercise">{{ exercise.name }}</option>
+        </select>
+      </BaseSelect>
       <div class="exercise__repetitions row j-between">
         <div
           v-for="(number, key) in unit.numbers"
@@ -93,7 +79,7 @@ export default {
       type: Object, 
       required: true, 
     }, 
-    exercises: {
+    families: {
       type: Array, 
       required: true, 
     }
@@ -102,36 +88,34 @@ export default {
     return {
       unit: this.editedUnit,
       createUnitButtonDisabled: false,
+      chosenFamily: null,
+      chosenExercise: null,
     }
   },
   computed: {
     backgroundImage() {
-      return this.unit.exercise.image
-        ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.unit.exercise.image.url}')`
+      return this.chosenExercise && this.chosenExercise.image
+        ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.chosenExercise.image.url}')`
         : "none"
     },
-    filteredExercises() {
-      let filteredExercises = []
-      const filter = this.unit.exercise.name.toLowerCase()
-      if (filter !== "") {
-        filteredExercises = this.exercises.filter((exercise) => {
-          const alias = exercise.alias ? exercise.alias : ""
-          const exerciseName = exercise.name.toLowerCase() + alias.toLowerCase()
-          const conditions =
-            (exerciseName.includes(filter) && this.unit.exercise.id == "") ||
-            (filter.includes(exerciseName) && this.unit.exercise.id == "")
-          return conditions
-        })
-      }
-      return filteredExercises
+    familyNames() {
+      return this.families.map(family => family.name)
     },
+    filteredExercises() {
+      const chosenFamily = this.families.find(family => family.name == this.chosenFamily)
+      return chosenFamily.exercises
+    }
   },
   methods: {
-    passExercise(exercise) {
-      this.unit.exercise = { ...exercise }
+    setFamilyAndExercise() {
+      if (this.editedUnit.exercise.name) {
+        const chosenFamily = this.families.find(family => family.name == this.editedUnit.exercise.family.name)
+        this.chosenFamily = chosenFamily.name
+        this.chosenExercise = chosenFamily.exercises.find(exercise => exercise.name == this.editedUnit.exercise.name)
+      }
     },
     createUnit() {
-      if (this.unit.exercise.id == "") {
+      if (this.unit.exercise == "") {
         this.$store.commit(
           "main/setNotification",
           "Musisz wybrać ćwiczenie"
@@ -155,75 +139,26 @@ export default {
 
       const newUnit = {
         ...this.unit.numbers,
-        exercise: this.unit.exercise,
+        exercise: {
+          ...this.chosenExercise
+        },
         remarks: this.unit.remarks,
       }
 
       this.$emit("add-unit", newUnit)
     },
   },
+  mounted() {
+    this.setFamilyAndExercise()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .unit-editor {
   background-size: cover;
   background-position: center;
-}
-
-.navigation {
-  display: flex;
-  justify-content: space-between;
-}
-
-.navigation-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-basis: 25%;
-  text-align: center;
-}
-
-.navigation-button__number {
-  height: 35px;
-  width: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1.5px solid color(headers);
-  color: color(headers);
-  font-weight: 600;
-}
-
-.navigation-button__number--active {
-  color: color(secondary);
-  background-color: color(headers);
-}
-
-.navigation-button__caption {
-  font-size: 12px;
-}
-
-.exercise__list {
-  max-height: 30vh;
-  overflow-y: scroll;
-  transition: all 0.3s;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: white;
-    width: 1px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: white;
-    width: 1px;
-  }
-
-  li {
-    border: none;
-    padding: 4px 0;
-  }
 }
 
 .exercise__repetitions {

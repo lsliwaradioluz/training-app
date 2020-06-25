@@ -293,7 +293,7 @@
     </section>
     <Modal :show="Boolean(editedUnit)">
       <UnitEditor
-        :exercises="exercises"
+        :families="families"
         :edited-unit="editedUnit"
         @add-unit="addUnit($event)"
         @cancel="closeUnitEditor"
@@ -512,9 +512,11 @@ export default {
     openUnitEditor(unit, unitindex, complexindex) {
       let rest
       let exercise = {
-        name: unit && unit.exercise.name || "",
         id: unit && unit.exercise.id || "",
+        name: unit && unit.exercise.name || "",
+        alias: unit && unit.exercise.alias || "",
         image: unit && unit.exercise.image || null,
+        family: unit && unit.exercise.family || null, 
       }
 
       if (this.currentComplex != null) {

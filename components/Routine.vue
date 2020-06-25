@@ -30,7 +30,7 @@
         class="unit"
       >
         <div>
-          <p>{{ unit.exercise.name }}</p>
+          <p class="unit__exercise-name">{{ unit.exercise.name }}</p>
           <ul>
             <li>{{ setsAndReps(unit) }}</li>
             <li v-if="unit.remarks">{{ unit.remarks }}</li>
@@ -133,9 +133,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  p {
-    margin: 0;
-  }
   aside {
     button,
     a {
@@ -143,6 +140,10 @@ export default {
       margin-left: 1rem;
     }
   }
+}
+
+.unit__exercise-name {
+  margin: 0;
 }
 
 .unit__feedback {

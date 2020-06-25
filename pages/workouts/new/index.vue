@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import getAllExercises from "~/apollo/queries/getAllExercises.gql"
+import getAllFamilies from "~/apollo/queries/getAllFamilies.gql"
 import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
   apollo: {
-    exercises: {
-      query: getAllExercises,
+    families: {
+      query: getAllFamilies,
     },
     user: {
       query: getSingleUser,
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       exercises: Array, 
+      families: Array,
       user: Object,
       sections: [
         { name: "Rozgrzewka", complexes: [] },

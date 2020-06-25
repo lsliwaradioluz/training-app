@@ -1,0 +1,21 @@
+query getAllFamilies {
+  families(sort: "name:asc") {
+    id
+    name
+    alias
+    description
+    exercises {
+      id
+      name
+      alias
+      image {
+        id
+        url
+      }
+      family {
+        id
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+mutation($input: updateFamilyInput) {
+  updateFamily(input: $input) {
+    family {
+      id
+      name
+      alias
+      description
+      exercises {
+        id
+        name
+        alias
+        image {
+          id
+          url
+        }
+      }
+    }
+  }
+}

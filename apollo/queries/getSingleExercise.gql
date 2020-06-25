@@ -3,8 +3,10 @@ query($id: ID!) {
     id
     name
     alias
-    description
-    category
+    family {
+      id
+      name
+    }
     image {
       id
       url
