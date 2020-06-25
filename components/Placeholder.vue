@@ -1,11 +1,18 @@
 <template>
-  <div class="placeholder">
+  <div class="placeholder" :class="{ 'main': padding }">
     <div v-for="n in 7" :key="n" class="tab" />
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    padding: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

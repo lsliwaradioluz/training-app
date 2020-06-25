@@ -2,12 +2,12 @@
   <div class="timer">
     <button 
       class="button flaticon-add-button mr05"
-      :disabled="countDownInterval"
+      :disabled="!timeleft || countDownInterval"
       @click="increment" 
     />
     <button 
       class="button flaticon-stop-1 mr05"
-      :disabled="timeleft >= time || countDownInterval"
+      :disabled="!timeleft || timeleft >= time || countDownInterval"
       @click="reset" 
     />
     <button 

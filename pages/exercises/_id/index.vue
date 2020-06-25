@@ -2,7 +2,9 @@
   <div class="family" v-if="!$apollo.loading">
     <article class="family__exercise" :style="{ backgroundImage }">
       <h3 class="family__exercise__name" v-if="currentExercise">
-        {{ currentExercise.name }}
+        <MovingText :key="current">
+          {{ currentExercise.name }}
+        </MovingText>
         <ContextMenu v-if="user.admin">
           <template v-slot:trigger>
             <i class="flaticon-vertical-dots" />
@@ -84,7 +86,7 @@
       </p>
     </article> -->
   </div>
-  <Placeholder v-else />
+  <Placeholder padding v-else />
 </template>
 
 <script>
