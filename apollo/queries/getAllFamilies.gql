@@ -1,5 +1,5 @@
 query getAllFamilies {
-  families() {
+  families {
     id
     name
     alias
