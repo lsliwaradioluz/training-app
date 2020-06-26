@@ -18,23 +18,35 @@
         />
       </li>
     </ul>
-    <ul class="links row j-between">
-      <nuxt-link class="flaticon-home" tag="li" to="/dashboard" />
-      <nuxt-link class="flaticon-gymnast" tag="li" to="/exercises" />
-      <nuxt-link class="flaticon-menu" tag="li" to="/workouts" />
+    <ul class="links">
+      <nuxt-link class="link flaticon-home" tag="li" to="/dashboard">
+        <p class="link__text">Strona główna</p>
+      </nuxt-link>
+      <nuxt-link class="link flaticon-gymnast" tag="li" to="/exercises">
+        <p class="link__text">Baza ćwiczeń</p>
+      </nuxt-link>
+      <nuxt-link class="link flaticon-menu" tag="li" to="/workouts">
+        <p class="link__text">Twoje treningi</p>
+      </nuxt-link>
       <nuxt-link
         v-if="admin"
-        class="flaticon-user"
+        class="link flaticon-user"
         tag="li"
         to="/users"
-      />
-      <nuxt-link class="flaticon-settings" tag="li" to="/settings" />
+      >
+        <p class="link__text">Podopieczni</p>
+      </nuxt-link>
+      <nuxt-link class="link flaticon-settings" tag="li" to="/settings">
+        <p class="link__text">Ustawienia</p>
+      </nuxt-link>
       <nuxt-link
-        class="flaticon-logout"
+        class="link flaticon-logout"
         tag="li"
         to="/login"
         @click.native="$store.commit('auth/logout')"
-      />
+      >
+        <p class="link__text">Wyloguj się</p>
+      </nuxt-link>
     </ul>
     <Modal :show="showCopyPair" @close="showCopyPair = false">
       <div class="copy-pair">
@@ -136,16 +148,54 @@ export default {
   background-color: color(secondary);
   color: color(faded);
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.466);
-  li {
-    padding: 1rem 0;
-    text-align: center;
-    width: 20%;
-    font-size: 16px;
-    font-weight: 600;
-  }
+  display: flex;
+  justify-content: space-between;
+}
+
+.link {
+  padding: 1rem 0;
+  text-align: center;
+  width: 20%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.link__text {
+  display: none;
 }
 
 .nuxt-link-active {
   color: color(headers);
+}
+
+@media (min-width: 768px) {
+
+  .links {
+    left: 0;
+    top: 0;
+    bottom: initial;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 30%;
+    height: 100%;
+    padding: 1rem 4rem 2rem 2rem;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity .3s;
+    &:hover {
+      opacity: .8;
+    }
+  }
+
+  .link__text {
+    display: block;
+    margin: 0 0 0 .5rem;
+  }
 }
 </style>

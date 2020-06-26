@@ -22,9 +22,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.default {
-  position: relative;
-  min-height: 100vh;
-  background-color: color(primary);
-}
+  .default {
+    position: relative;
+    min-height: 100vh;
+    background-color: color(primary);
+  }
+
+  @media (min-width: 768px) {
+    .default {
+      padding-left: calc(30% + 2rem);
+    }
+  }
 </style>

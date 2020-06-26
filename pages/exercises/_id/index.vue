@@ -1,90 +1,102 @@
 <template>
   <div class="family" v-if="!$apollo.loading">
-    <article class="family__exercise" :style="{ backgroundImage }">
-      <h3 class="family__exercise__name" v-if="currentExercise">
-        <MovingText :key="current">
-          {{ currentExercise.name }}
-        </MovingText>
-        <ContextMenu v-if="user.admin">
-          <template v-slot:trigger>
-            <i class="flaticon-vertical-dots" />
-          </template>
-          <template v-slot:options>
-            <nuxt-link
-              class="flaticon-pencil mr05"
-              tag="button"
-              type="button"
-              :to="`edit-exercise?exercise=${currentExercise.id}`"
-              append
-            >
-              Edytuj ćwiczenie
-            </nuxt-link>
-            <button
-              class="flaticon-trash fs-09 mr05"
-              type="button"
-              @click="deleteExercise"
-            >
-              Usuń ćwiczenie
-            </button>
-          </template>
-        </ContextMenu>
-      </h3>
-    </article>
-    <article class="family__details">
-      <h3 class="family__details__name">
-        {{ family.name }}
-        <ContextMenu v-if="user.admin" bottom>
-          <template v-slot:trigger>
-            <i class="flaticon-vertical-dots" />
-          </template>
-          <template v-slot:options>
-            <nuxt-link
-              class="flaticon-add-button"
-              tag="button"
-              type="button"
-              to="new-exercise"
-              append
-            >
-              Dodaj ćwiczenie
-            </nuxt-link>
-            <nuxt-link
-              class="flaticon-pencil"
-              tag="button"
-              type="button"
-              to="edit-family"
-              append
-            >
-              Edytuj kategorię
-            </nuxt-link>
-            <button class="flaticon-trash" type="button" @click="deleteFamily">
-              Usuń kategorię
-            </button>
-          </template>
-        </ContextMenu>
-      </h3>
-      <p class="family__details__alias">
-        {{ family.alias }}
-      </p>
-      <ul class="family__details__exercises" v-if="family.exercises.length > 0">
-        <li
-          class="family__details__exercise"
-          :class="{ 'family__details__exercise--active': index == current }"
-          v-for="(exercise, index) in family.exercises"
-          :key="exercise.id"
-          @click="current = index"
+    <div class="family__main">
+      <article class="family__exercise" :style="{ backgroundImage }">
+        <h3 class="family__exercise__name" v-if="currentExercise">
+          <MovingText :key="current">
+            {{ currentExercise.name }}
+          </MovingText>
+          <ContextMenu v-if="user.admin">
+            <template v-slot:trigger>
+              <i class="flaticon-vertical-dots" />
+            </template>
+            <template v-slot:options>
+              <nuxt-link
+                class="flaticon-pencil mr05"
+                tag="button"
+                type="button"
+                :to="`edit-exercise?exercise=${currentExercise.id}`"
+                append
+              >
+                Edytuj ćwiczenie
+              </nuxt-link>
+              <button
+                class="flaticon-trash fs-09 mr05"
+                type="button"
+                @click="deleteExercise"
+              >
+                Usuń ćwiczenie
+              </button>
+            </template>
+          </ContextMenu>
+        </h3>
+      </article>
+      <article class="family__details">
+        <h3 class="family__details__name">
+          {{ family.name }}
+          <ContextMenu v-if="user.admin" bottom>
+            <template v-slot:trigger>
+              <i class="flaticon-vertical-dots" />
+            </template>
+            <template v-slot:options>
+              <nuxt-link
+                class="flaticon-add-button"
+                tag="button"
+                type="button"
+                to="new-exercise"
+                append
+              >
+                Dodaj ćwiczenie
+              </nuxt-link>
+              <nuxt-link
+                class="flaticon-pencil"
+                tag="button"
+                type="button"
+                to="edit-family"
+                append
+              >
+                Edytuj kategorię
+              </nuxt-link>
+              <button
+                class="flaticon-trash"
+                type="button"
+                @click="deleteFamily"
+              >
+                Usuń kategorię
+              </button>
+            </template>
+          </ContextMenu>
+          <button
+            class="family__details__button flaticon-down-arrow"
+            @click="scrollToDescription"
+            v-if="!user.admin && family.description"
+          />
+        </h3>
+        <p class="family__details__alias">
+          {{ family.alias }}
+        </p>
+        <ul
+          class="family__details__exercises"
+          v-if="family.exercises.length > 0"
         >
-          {{ index + 1 }}
-        </li>
-      </ul>
-      <p class="mb0 mt05" v-else>
-        Ta kategoria nie ma jeszcze żadnego ćwiczenia
-      </p>
-    </article>
-    <!-- <article class="family__description">
-      <p>
-        {{ family.description }}
-      </p>
-    </article> -->
+          <li
+            class="family__details__exercise"
+            :class="{ 'family__details__exercise--active': index == current }"
+            v-for="(exercise, index) in family.exercises"
+            :key="exercise.id"
+            @click="current = index"
+          >
+            {{ index + 1 }}
+          </li>
+        </ul>
+        <p class="mb0 mt05" v-else>
+          Ta kategoria nie ma jeszcze żadnego ćwiczenia
+        </p>
+      </article>
+    </div>
+    <p class="family__description" v-if="family.description" ref="description">
+      {{ family.description }}
+    </p>
   </div>
   <Placeholder padding v-else />
 </template>
@@ -142,6 +154,9 @@ export default {
     },
   },
   methods: {
+    scrollToDescription() {
+      this.$refs.description.scrollIntoView({ behavior: "smooth" });
+    },
     async deleteExercise() {
       if (await this.$root.$confirm("Na pewno chcesz usunąć to ćwiczenie?")) {
         const input = {
@@ -217,7 +232,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.family {
+.family__main {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -250,6 +265,11 @@ export default {
   margin: 0;
   display: flex;
   justify-content: space-between;
+}
+
+.family__details__button {
+  display: flex;
+  align-items: center;
 }
 
 .family__details__alias {
@@ -286,5 +306,6 @@ export default {
 
 .family__description {
   padding: 0 1rem 1rem 1rem;
+  margin: 0;
 }
 </style>
