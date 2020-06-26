@@ -270,6 +270,7 @@ export default {
 .family__details__button {
   display: flex;
   align-items: center;
+  animation: pulse 1s infinite;
 }
 
 .family__details__alias {
