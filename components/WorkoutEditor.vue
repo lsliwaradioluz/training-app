@@ -446,6 +446,7 @@ export default {
         ...sectionClone.complexes
       )
       this.sections[this.currentSection].name = sectionClone.name
+      this.$store.commit('main/setNotification', 'Dodane!')
     },
     moveComplex(sectionindex, complexindex, direction) {
       let currentComplexes = this.sections[sectionindex].complexes
@@ -462,6 +463,7 @@ export default {
     copyComplex(complex) {
       const complexClone = JSON.parse(JSON.stringify(complex))
       this.sections[this.currentSection].complexes.push(complexClone)
+      this.$store.commit('main/setNotification', 'Dodane!')
     },
     addExerciseToComplex(complexindex) {
       this.currentComplex = complexindex
@@ -488,6 +490,7 @@ export default {
         this.currentUnit = null
       }
       this.editedUnit = null
+      this.$store.commit('main/setNotification', 'Dodane!')
     },
     deleteUnit(complex, unit) {
       this.sections[this.currentSection].complexes[complex].units.splice(

@@ -21,11 +21,11 @@ export default {
   watch: {
     notification(value) {
       if (value) {
-        const notificationLength = this.notification.length;
+        const notificationLength = this.notification.length * 50 > 1000 ? this.notification.length * 50 : 1000;
         clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
           this.unsetNotification();
-        }, notificationLength*50)
+        }, notificationLength)
       }
     },
   },
