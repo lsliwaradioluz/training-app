@@ -1,13 +1,18 @@
 <template>
   <div class="timer">
     <button 
+      class="button flaticon-minus-1 mr05"
+      :disabled="!timeleft || countDownInterval"
+      @click="decrement" 
+    />
+    <button 
       class="button flaticon-add-button mr05"
       :disabled="!timeleft || countDownInterval"
       @click="increment" 
     />
     <button 
       class="button flaticon-stop-1 mr05"
-      :disabled="!timeleft || timeleft >= time || countDownInterval"
+      :disabled="!timeleft || timeleft == time || countDownInterval"
       @click="reset" 
     />
     <button 
@@ -86,6 +91,10 @@ export default {
     },
     reset() {
       this.timeleft = this.time
+      this.$emit('update-time', this.timeleft)
+    },
+    decrement() {
+      this.timeleft--
       this.$emit('update-time', this.timeleft)
     },
     increment() {

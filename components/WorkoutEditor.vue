@@ -356,10 +356,8 @@ export default {
       let filteredSections = sectionsClone.filter(section => {
         return section.complexes.length > 0 
       })
-      //level one
       filteredSections.forEach((section, sectionindex) => {
-        filteredSections[sectionindex] = _.omit(section, "__typename", "id")
-        // level two
+        section = _.omit(section, "__typename", "id")
         section.complexes.forEach((complex, complexindex) => {
           filteredSections[sectionindex].complexes[complexindex] = _.omit(
             complex,

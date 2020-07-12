@@ -297,6 +297,7 @@ export default {
   margin-right: 5px;
   margin-bottom: 5px;
   transition: background-color 0.3s;
+  font-size: 13px;
 }
 
 .family__details__exercise--active {

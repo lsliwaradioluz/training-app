@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 09/06/2020 13:21
+    Creation date: 12/07/2020 08:51
     */
 
     @font-face {
@@ -79,6 +79,7 @@
 .flaticon-stop-1:before { content: "\f127"; }
 .flaticon-minus:before { content: "\f128"; }
 .flaticon-plus:before { content: "\f129"; }
+.flaticon-minus-1:before { content: "\f12a"; }
     
     $font-Flaticon-up-arrow: "\f100";
     $font-Flaticon-down-arrow: "\f101";
@@ -122,3 +123,4 @@
     $font-Flaticon-stop-1: "\f127";
     $font-Flaticon-minus: "\f128";
     $font-Flaticon-plus: "\f129";
+    $font-Flaticon-minus-1: "\f12a";
