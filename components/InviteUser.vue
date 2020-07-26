@@ -53,7 +53,7 @@ export default {
           : "https://piti-backend.herokuapp.com/email"
       this.$axios
         .$post(endpoint, {
-          from: "lukasz@piti.live",
+          from: "Pitiapp@piti.live",
           to: this.user.email,
           subject: `Trener ${this.$store.state.auth.user.fullname} zaprasza się do wspólnego trenowania!`,
           html: `<!DOCTYPE html>

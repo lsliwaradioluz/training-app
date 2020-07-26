@@ -1,7 +1,13 @@
 /*SPACING*/
 
 .main {
-  padding: 4.5rem 1rem;
+  padding: 4.5rem 5%;
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding: 4.5rem 10%;
+  }
 }
 
 /*paddings general*/

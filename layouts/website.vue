@@ -1,12 +1,12 @@
 <template>
-  <div class="website-layout">
+  <div class="website">
     <nuxt />
     <Notification />
   </div>
 </template>
 
 <style lang="scss" scoped>
-  .website-layout {
-    background-color: color(primary);
+  .website {
+    background-color: white;
   }
 </style>

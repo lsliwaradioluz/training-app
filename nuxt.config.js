@@ -37,6 +37,11 @@ export default {
         href:
           "https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&display=swap",
       },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css2?family=Work+Sans&display=swap",
+      },
     ],
   },
   /*
