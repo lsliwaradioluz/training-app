@@ -400,6 +400,7 @@ img {
 }
 
 .welcome {
+  min-height: -webkit-fill-available;
   min-height: 80vh;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("https://images.unsplash.com/photo-1580086229554-1c2a34000456?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1294&q=80");
