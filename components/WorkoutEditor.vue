@@ -315,7 +315,7 @@
       <button class="button-primary" type="button" @click="uploadWorkout">
         Zapisz
       </button>
-      <button class="button-primary" type="button" @click="leaveAssistant">
+      <button class="button-primary" type="button" @click="leaveEditor">
         Anuluj
       </button>
     </section>
@@ -356,18 +356,17 @@ export default {
       let filteredSections = sectionsClone.filter(section => {
         return section.complexes.length > 0 
       })
-      filteredSections.forEach((section, sectionindex) => {
-        section = _.omit(section, "__typename", "id")
-        section.complexes.forEach((complex, complexindex) => {
-          filteredSections[sectionindex].complexes[complexindex] = _.omit(
+      
+      filteredSections.forEach((section, sectionindex, sections) => {
+        sections[sectionindex] = _.omit(section, "__typename", "id")
+        section.complexes.forEach((complex, complexindex, complexes) => {
+          complexes[complexindex] = _.omit(
             complex,
             "__typename",
             "id"
           )
-          complex.units.forEach((unit, unitindex) => {
-            filteredSections[sectionindex].complexes[complexindex].units[
-              unitindex
-            ] = _.omit(unit, "__typename", "id", "feedback")
+          complex.units.forEach((unit, unitindex, units) => {
+            units[unitindex] = _.omit(unit, "__typename", "id", "feedback")
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id
@@ -619,9 +618,9 @@ export default {
         this.$store.commit('main/setNotification', 'Coś poszło nie tak. Spróbuj jeszcze raz')
         return
       }
-      this.leaveAssistant();
+      this.leaveEditor();
     },
-    leaveAssistant() {
+    leaveEditor() {
       this.$store.commit('main/setIsEditing', false)
       this.$router.go(-1);
     }, 
