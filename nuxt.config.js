@@ -55,7 +55,7 @@ export default {
     endpoint:
       process.env.NODE_ENV == "development"
         ? "http://localhost:1337"
-        : "https://piti-backend.herokuapp.com",
+        : "https://piti-api.herokuapp.com",
   },
   /*
    ** Global CSS
@@ -112,8 +112,8 @@ export default {
       default: {
         httpEndpoint:
           process.env.NODE_ENV == "development"
-            ? "http://localhost:1337/graphql"
-            : "https://piti-backend.herokuapp.com/graphql",
+            ? "http://localhost:1337/api/graphql"
+            : "https://piti-api.herokuapp.com/api/graphql",
       },
     },
   },
