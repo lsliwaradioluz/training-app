@@ -185,8 +185,8 @@ export default {
       this.editedUnit.feedback = newFeedback
       
       let input = {
-        where: { id: this.workouts[this.currentWorkout].id },
-        data: { sections: this.filteredSections },
+        id: this.workouts[this.currentWorkout].id,
+        sections: this.filteredSections,
       };
       try {
         this.$nuxt.$loading.start()
