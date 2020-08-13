@@ -115,11 +115,11 @@ export default {
       endpoint:
         process.env.NODE_ENV == "development"
           ? "http://localhost:1337/api/upload-file"
-          : "https://piti-backend.herokuapp.com/api/upload-file",
+          : "https://piti-api.herokuapp.com/api/upload-file",
       deleteFileEndpoint:
         process.env.NODE_ENV == "development"
           ? "http://localhost:1337/api/delete-file"
-          : "https://piti-backend.herokuapp.com/api/delete-file",
+          : "https://piti-api.herokuapp.com/api/delete-file",
       loadingImage: false,
       uploadedImage: this.exercise.image || null,
       input: {

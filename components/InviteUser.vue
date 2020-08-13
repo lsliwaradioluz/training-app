@@ -51,7 +51,7 @@ export default {
       const endpoint =
         process.env.NODE_ENV == "development"
           ? "http://localhost:1337/api/email"
-          : "https://piti-backend.herokuapp.com/api/email";
+          : "https://piti-api.herokuapp.com/api/email";
 
       const data = {
         from: "Piti@piti.live",
