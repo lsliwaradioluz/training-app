@@ -139,10 +139,6 @@ export default {
     return {
       family: {},
       client: this.$apollo.getClient(),
-      deleteFileEndpoint:
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/api/delete-file"
-          : "https://piti-backend.herokuapp.com/api/delete-file",
       current: 0,
     };
   },
@@ -197,7 +193,7 @@ export default {
 
         const file = deletedExercise.data.deleteExercise.image
 
-        fetch(this.deleteFileEndpoint, {
+        fetch(`${process.env.endpoint}/api/delete-file`, {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'

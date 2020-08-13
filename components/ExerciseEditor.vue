@@ -112,14 +112,6 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-      endpoint:
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/api/upload-file"
-          : "https://piti-api.herokuapp.com/api/upload-file",
-      deleteFileEndpoint:
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/api/delete-file"
-          : "https://piti-api.herokuapp.com/api/delete-file",
       loadingImage: false,
       uploadedImage: this.exercise.image || null,
       input: {
@@ -152,7 +144,7 @@ export default {
       this.loadingImage = true
       const formData = new FormData()
       formData.append("image", this.$refs.input.files[0])
-      fetch(this.endpoint, {
+      fetch(`${process.env.endpoint}/api/upload-file`, {
         method: "POST",
         body: formData,
       })
@@ -172,7 +164,7 @@ export default {
         })
     },
     deleteImage() {
-      fetch(this.deleteFileEndpoint, {
+      fetch(`${process.env.endpoint}/api/delete-file`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

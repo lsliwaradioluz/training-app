@@ -48,11 +48,6 @@ export default {
           ? `http://localhost:3000/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`
           : `https://piti.live/register-trainee?name=${this.user.fullname}&email=${this.user.email}&coach=${this.$store.state.auth.user.id}`;
 
-      const endpoint =
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/api/email"
-          : "https://piti-api.herokuapp.com/api/email";
-
       const data = {
         from: "Piti@piti.live",
         to: this.user.email,
@@ -111,7 +106,7 @@ export default {
           </html>`,
       };
 
-      fetch(endpoint, {
+      fetch(`${process.env.endpoint}/api/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
