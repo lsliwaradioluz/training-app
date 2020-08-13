@@ -1,12 +1,10 @@
-mutation($input: deleteWorkoutInput) {
-  deleteWorkout(input: $input) {
-    workout {
-      id
-      scheduled 
-      ready
-      sticky
-      name
-      createdAt
-    }
+mutation($id: ID!) {
+  deleteWorkout(id: $id) {
+    id
+    scheduled 
+    ready
+    sticky
+    name
+    createdAt
   }
 }

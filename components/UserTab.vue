@@ -27,8 +27,20 @@
             <button class="flaticon-pencil" type="button" @click="archiveUser">
               {{ user.active ? "Archiwizuj" : "Przywróć" }}
             </button>
-            <button class="flaticon-double-arrow-cross-of-shuffle" type="button" @click="$emit('transfer', user)">
+            <button
+              class="flaticon-double-arrow-cross-of-shuffle"
+              type="button"
+              @click="$emit('transfer', user)"
+            >
               Transferuj
+            </button>
+            <button
+              v-if="!user.active"
+              class="flaticon-trash"
+              type="button"
+              @click="deleteUser"
+            >
+              Usuń
             </button>
           </template>
         </ContextMenu>
@@ -38,7 +50,9 @@
 </template>
 
 <script>
-import updateUser from "~/apollo/mutations/updateUser.gql"
+import updateUser from "~/apollo/mutations/updateUser.gql";
+import deleteUser from "~/apollo/mutations/deleteUser.gql";
+import getAllUsers from "~/apollo/queries/getAllUsers.gql";
 
 export default {
   props: {
@@ -53,37 +67,72 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-    }
+    };
   },
   computed: {
     backgroundImage() {
       return this.user.image
         ? this.user.image.url
-        : require("assets/images/user.svg")
+        : require("assets/images/user.svg");
     },
   },
   methods: {
     archiveUser() {
       const input = {
-        where: {
-          id: this.user.id,
-        },
-        data: {
-          active: this.user.active ? false : true,
-        },
-      }
+        id: this.user.id,
+        active: this.user.active ? false : true,
+      };
 
       this.client
-        .mutate({ mutation: updateUser, variables: { input: input } })
+        .mutate({ mutation: updateUser, variables: { input } })
         .then(() => {
           const message = this.user.active
             ? "Podopieczny został przeniesiony do archiwum."
-            : "Podopieczny znów jest aktywny."
-          this.$store.commit("main/setNotification", message)
+            : "Podopieczny znów jest aktywny.";
+          this.$store.commit("main/setNotification", message);
         })
+        .catch((err) => console.log(err));
+    },
+    async deleteUser() {
+      if (
+        await this.$root.$confirm(
+          "Czy na pewno chcesz usunąć tego użytkownika?"
+        )
+      ) {
+
+        try {
+          await this.client.mutate({
+            mutation: deleteUser,
+            variables: { id: this.user.id },
+            update: (cache, { data: { deleteUser } }) => {
+              // read data from cache for chosen queries
+              const data = cache.readQuery({
+                query: getAllUsers,
+                variables: { id: this.$store.state.auth.user.id },
+              })
+              // find index of deleted item in cached user.workouts array
+              const deletedUserIndex = data.users.findIndex(
+                (user) => user.id == deleteUser.id
+              )
+              // remove deleted item from data
+              data.users.splice(deletedUserIndex, 1)
+              //write data back to cache
+              this.client.writeQuery({ query: getAllUsers, data })
+            },
+          });
+
+          const message = "Podopieczny usunięty pomyślnie"
+          this.$store.commit("main/setNotification", message);
+        } catch (err) {
+          console.log(err)
+          const message = "Wystąpił błąd. Sprawdź połączenie z Internetem"
+          this.$store.commit("main/setNotification", message);
+        }
+        
+      }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

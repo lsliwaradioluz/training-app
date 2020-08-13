@@ -34,6 +34,7 @@
 
 <script>
 import { mapMutations } from "vuex"
+import registerMutation from '~/apollo/mutations/register.gql'
 
 export default {
   layout: "login",
@@ -58,12 +59,8 @@ export default {
       }
 
       const username = this.generateUsername(this.user.fullname)
-      const endpoint =
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/auth/local/register"
-          : "https://piti-backend.herokuapp.com/auth/local/register"
-      const userObject = {
-        username: username,
+      const input = {
+        username,
         fullname: this.user.fullname,
         email: this.user.email,
         password: this.user.password,
@@ -71,28 +68,36 @@ export default {
         admin: false,
       }
 
-      this.$axios
-        .$post(endpoint, userObject)
-        .then((res) => {
-          let user = {
-            id: res.user.id,
-            username: res.user.username,
-            fullname: res.user.fullname,
-            email: res.user.email,
-            image: res.user.image,
-            admin: res.user.admin,
+      this.client
+        .mutate({
+          mutation: registerMutation,
+          variables: { input }
+        })
+        .then(res => {
+          const user = res.data.register.user
+          const token = res.data.register.token
+
+          let userToSet = {
+            id: user.id,
+            username: user.username,
+            fullname: user.fullname,
+            email: user.email,
+            image: user.image,
+            admin: user.admin,
+            active: user.active,
           }
 
-          this.$apolloHelpers.onLogin(res.jwt, undefined, { expires: 7 })
+          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 })
 
-          this.setUser(user)
+          this.setUser(userToSet)
           this.$router.push({
             path: "/dashboard",
           })
         })
-        .catch(() => {
-          this.setNotification("Nie można zarejestrować")
-        })
+        .catch((err) => {
+          console.log(err)
+          this.setNotification("Nie udało się zarejestrować. Sprawdź połączenie z Internetem")
+        });
     },
     ...mapMutations({
       setUser: "auth/setUser",

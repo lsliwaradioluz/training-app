@@ -27,58 +27,64 @@
       >
         Zaloguj
       </button>
-      <!-- <div class="login__help-buttons row j-center">
+      <div class="login__help-buttons row j-center">
         <span class="t-faded">Nie masz konta?&nbsp;</span>
         <nuxt-link to="/register-coach">Zarejestruj się</nuxt-link>
-      </div> -->
+      </div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex"
+import { mapMutations } from "vuex";
+import loginMutation from "~/apollo/mutations/login.gql";
 
 export default {
   layout: "login",
   data() {
     return {
-      identifier: "",
+      client: this.$apollo.getClient(),
+      identifier: "lsliwa",
       revealPassword: false,
-      password: "",
-    }
+      password: "950928",
+    };
   },
   methods: {
     signIn() {
-      const endpoint =
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/auth/local"
-          : "https://piti-backend.herokuapp.com/auth/local"
-      this.$axios
-        .$post(endpoint, {
-          identifier: this.identifier.toLowerCase(),
-          password: this.password,
+      const input = {
+        identifier: this.identifier.toLowerCase(),
+        password: this.password,
+      };
+
+      this.client
+        .mutate({
+          mutation: loginMutation,
+          variables: { input }
         })
-        .then((res) => {
-          let user = {
-            id: res.user.id,
-            username: res.user.username,
-            fullname: res.user.fullname,
-            email: res.user.email,
-            image: res.user.image,
-            admin: res.user.admin,
-            active: res.user.active,
+        .then(res => {
+          const user = res.data.login.user
+          const token = res.data.login.token
+
+          let userToSet = {
+            id: user.id,
+            username: user.username,
+            fullname: user.fullname,
+            email: user.email,
+            image: user.image,
+            admin: user.admin,
+            active: user.active,
           }
 
-          this.$apolloHelpers.onLogin(res.jwt, undefined, { expires: 7 })
+          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 })
 
-          this.setUser(user)
+          this.setUser(userToSet)
           this.$router.push({
             path: "/dashboard",
           })
         })
         .catch(() => {
           this.setNotification("Nieprawidłowy login lub hasło")
-        })
+        });
     },
     ...mapMutations({
       setUser: "auth/setUser",
@@ -86,7 +92,7 @@ export default {
       setNotification: "main/setNotification",
     }),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

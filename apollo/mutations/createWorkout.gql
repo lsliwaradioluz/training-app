@@ -1,34 +1,32 @@
 mutation($input: createWorkoutInput) {
   createWorkout(input: $input) {
-    workout {
+    id
+    scheduled
+    ready
+    sticky
+    name
+    createdAt
+    sections {
       id
-      scheduled
-      ready
-      sticky
       name
-      createdAt
-      sections {
+      complexes {
+        name 
+        id
+        units {
           id
-          name
-          complexes {
-            name 
+          sets
+          reps
+          time
+          distance
+          rest
+          remarks
+          feedback
+          exercise {
             id
-            units {
-              id
-              sets
-              reps
-              time
-              distance
-              rest
-              remarks
-              feedback
-              exercise {
-                id
-                name
-              }
-            }
+            name
           }
         }
+      }
     }
   }
 }

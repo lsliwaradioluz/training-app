@@ -1,16 +1,13 @@
-query($id: ID!) {
-  user(id: $id) {
+query getAllUsers($id: ID!) {
+  users(id: $id) {
     id
-    users(sort: "username:asc") {
+    username
+    fullname
+    admin
+    active
+    image {
       id
-      username
-      fullname
-      admin
-      active
-      image {
-        id
-        url
-      }
+      url
     }
   }
 }

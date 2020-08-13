@@ -1,7 +1,11 @@
 <template>
   <div class="family" v-if="!$apollo.loading">
     <div class="family__main">
-      <article class="family__exercise" :style="{ backgroundImage }">
+      <article class="family__exercise">
+        <video class="family__exercise__video" autoplay loop muted playsinline :key="`image-${current}`">
+          <source :src="video" type="video/webm">
+          <source :src="video" type="video/mp4">
+        </video>
         <h3 class="family__exercise__name" v-if="currentExercise">
           <MovingText :key="current">
             {{ currentExercise.name }}
@@ -94,9 +98,9 @@
         </p>
       </article>
     </div>
-    <p class="family__description" v-if="family.description" ref="description">
+    <!-- <p class="family__description" v-if="family.description" ref="description">
       {{ family.description }}
-    </p>
+    </p> -->
   </div>
   <Placeholder padding v-else />
 </template>
@@ -135,6 +139,10 @@ export default {
     return {
       family: {},
       client: this.$apollo.getClient(),
+      deleteFileEndpoint:
+        process.env.NODE_ENV == "development"
+          ? "http://localhost:1337/api/delete-file"
+          : "https://piti-backend.herokuapp.com/api/delete-file",
       current: 0,
     };
   },
@@ -145,11 +153,12 @@ export default {
     currentExercise() {
       return this.family.exercises[this.current];
     },
-    backgroundImage() {
-      if (this.currentExercise && this.currentExercise.image) {
-        return `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${this.currentExercise.image.url}')`;
+    video() {
+      if (this.currentExercise) {
+        const link = this.currentExercise.image.url.replace(".gif", ".mp4")
+        return link
       } else {
-        return `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif')`;
+        return "https://res.cloudinary.com/drsgb4wld/image/upload/v1594649581/GIF-200713_160448_03e89fc155.mp4"
       }
     },
   },
@@ -159,15 +168,9 @@ export default {
     },
     async deleteExercise() {
       if (await this.$root.$confirm("Na pewno chcesz usunąć to ćwiczenie?")) {
-        const input = {
-          where: {
-            id: this.currentExercise.id,
-          },
-        };
-
-        this.client.mutate({
+        const deletedExercise = await this.client.mutate({
           mutation: deleteExercise,
-          variables: { input },
+          variables: { id: this.currentExercise.id },
           update: (cache, { data: { deleteExercise } }) => {
             if (this.current == this.family.exercises.length - 1) {
               this.current -= 1;
@@ -179,7 +182,7 @@ export default {
             });
             // find index of deleted item in cached user.workouts array
             const exerciseIndex = data.family.exercises.findIndex(
-              (exercise) => exercise.id == deleteExercise.exercise.id
+              (exercise) => exercise.id == deleteExercise.id
             );
             // remove deleted item from cache
             data.family.exercises.splice(exerciseIndex, 1);
@@ -191,6 +194,16 @@ export default {
             });
           },
         });
+
+        const file = deletedExercise.data.deleteExercise.image
+
+        fetch(this.deleteFileEndpoint, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(file),
+        })
       }
     },
     async deleteFamily() {
@@ -202,22 +215,16 @@ export default {
       }
 
       if (await this.$root.$confirm("Na pewno chcesz usunąć tę kategorię?")) {
-        const input = {
-          where: {
-            id: this.family.id,
-          },
-        };
-
         this.client.mutate({
           mutation: deleteFamily,
-          variables: { input },
+          variables: { id: this.family.id },
           update: (cache, { data: { deleteFamily } }) => {
             this.$router.push("/exercises");
             // read data from cache for this query
             const data = cache.readQuery({ query: getAllFamilies });
             // find index of deleted item in cached user.workouts array
             const familyIndex = data.families.findIndex(
-              (family) => family.id == deleteFamily.family.id
+              (family) => family.id == deleteFamily.id
             );
             // remove deleted item from cache
             data.families.splice(familyIndex, 1);
@@ -239,8 +246,7 @@ export default {
 }
 
 .family__exercise {
-  background-size: cover;
-  background-position: center;
+  position: relative;
   flex-basis: 90%;
   flex-shrink: 1;
   border-bottom: 2px solid color(headers);
@@ -250,11 +256,21 @@ export default {
   padding: 1rem;
 }
 
+.family__exercise__video {
+  position: absolute; 
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
 .family__exercise__name {
   color: white !important;
   margin: 0;
   display: flex;
   justify-content: space-between;
+  z-index: 4;
 }
 
 .family__details {

@@ -1,49 +1,20 @@
-query($id: ID!, $limit: Int) {
-  user(id: $id) {
+query($id: ID, $email: String) {
+  user(id: $id, email: $email) {
     id
     username
     fullname
+    admin
     image {
       id
       url
     }
-    workouts(sort: "scheduled:desc", limit: $limit) {
+    workouts {
       id
       scheduled
       ready
       sticky
       name
       createdAt
-      sections {
-        id
-        name
-        complexes {
-          name 
-          id
-          units {
-            id
-            sets
-            reps
-            time
-            distance
-            rest 
-            remarks
-            feedback
-            exercise {
-              id
-              name
-              image {
-                id
-                url
-              }
-              family {
-                id
-                name
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

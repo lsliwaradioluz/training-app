@@ -59,16 +59,11 @@ import getAllUsers from "~/apollo/queries/getAllUsers.gql"
 
 export default {
   apollo: {
-    user: {
+    users: {
       query: getAllUsers,
       variables() {
         return {
           id: this.$store.getters["auth/user"].id,
-        }
-      },
-      result({ data, loading }) {
-        if (!loading) {
-          this.users = [this.$store.getters["auth/user"], ...data.user.users]
         }
       },
     },

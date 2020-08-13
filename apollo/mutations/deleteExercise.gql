@@ -1,8 +1,11 @@
-mutation($input: deleteExerciseInput) {
-  deleteExercise(input: $input) {
-    exercise {
+mutation($id: ID!) {
+  deleteExercise(id: $id) {
+    id
+    name
+    image {
       id
-      name
+      url
+      public_id
     }
   }
 }

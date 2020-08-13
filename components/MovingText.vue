@@ -62,7 +62,8 @@ export default {
 <style scoped>
 #wrapper {
   width: 100%;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #wrapper::-webkit-scrollbar {

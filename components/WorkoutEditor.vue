@@ -225,7 +225,7 @@
       </div>
     </section>
     <!-- POPRZEDNIE TRENINGI  -->
-    <section v-if="previousWorkouts.length > 0">
+    <!-- <section v-if="previousWorkouts.length > 0">
       <header
         class="row j-between a-start pt1 pb05 t-faded"
       >
@@ -290,7 +290,7 @@
           </div>
         </Carousel>
       </div>
-    </section>
+    </section> -->
     <Modal :show="Boolean(editedUnit)">
       <UnitEditor
         :families="families"
@@ -382,29 +382,29 @@ export default {
     workoutReady() {
       return this.filteredSections.length > 0
     },
-    previousWorkouts() {
-      let previousWorkouts
-      if (this.edit) {
-        previousWorkouts = this.user.workouts.filter(workout => {
-          return workout.id != this.id && !workout.sticky && workout.ready
-        })
-      } else {
-        previousWorkouts = this.user.workouts.filter(workout => {
-          return !workout.sticky && workout.ready
-        })
-      }
-      const workoutToCopy = this.$store.state.main.workoutToCopy
-      if (workoutToCopy) {
-        previousWorkouts.unshift(workoutToCopy)
-      }
-      return previousWorkouts
-    },
-    previousWorkoutSections() {
-      const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter((section) => {
-        return section.complexes.length > 0
-      })
-      return previousWorkoutSections
-    },
+    // previousWorkouts() {
+    //   let previousWorkouts
+    //   if (this.edit) {
+    //     previousWorkouts = this.user.workouts.filter(workout => {
+    //       return workout.id != this.id && !workout.sticky && workout.ready
+    //     })
+    //   } else {
+    //     previousWorkouts = this.user.workouts.filter(workout => {
+    //       return !workout.sticky && workout.ready
+    //     })
+    //   }
+    //   const workoutToCopy = this.$store.state.main.workoutToCopy
+    //   if (workoutToCopy) {
+    //     previousWorkouts.unshift(workoutToCopy)
+    //   }
+    //   return previousWorkouts
+    // },
+    // previousWorkoutSections() {
+    //   const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter((section) => {
+    //     return section.complexes.length > 0
+    //   })
+    //   return previousWorkoutSections
+    // },
     carouselNavConfig() {
       return {
         height: "2px",
@@ -580,24 +580,20 @@ export default {
     async uploadWorkout() {
       let configObj
       const input = {
-        data: {
-          scheduled: this.dateAndTime,
-          sticky: this.sticky,
-          name: this.name,
-          ready: this.workoutReady,
-          sections: this.filteredSections,
-        },
+        scheduled: this.dateAndTime,
+        sticky: this.sticky,
+        name: this.name,
+        ready: this.workoutReady,
+        sections: this.filteredSections,
       }
       if (this.edit) {
-        input.where = { 
-          id: this.id 
-        }
+        input.id = this.id 
         configObj = {
           mutation: updateWorkout, 
           variables: { input }
         }
       } else {
-        input.data.user = this.user.id;
+        input.user = this.user.id;
         configObj = {
           mutation: createWorkout,
           variables: { input },
@@ -606,14 +602,14 @@ export default {
               query: getSingleUser,
               variables: { id: this.user.id },
             })
-            data.user.workouts.unshift(createWorkout.workout)
+            data.user.workouts.unshift(createWorkout)
             this.client.writeQuery({ query: getSingleUser, data })
           },
         }
       }
 
       try {
-        await this.client.mutate(configObj)
+        const result = await this.client.mutate(configObj)
       } catch {
         this.$store.commit('main/setNotification', 'Coś poszło nie tak. Spróbuj jeszcze raz')
         return

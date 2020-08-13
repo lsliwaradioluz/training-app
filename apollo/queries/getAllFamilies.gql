@@ -1,5 +1,5 @@
 query getAllFamilies {
-  families(sort: "name:asc") {
+  families {
     id
     name
     alias
@@ -11,10 +11,6 @@ query getAllFamilies {
       image {
         id
         url
-      }
-      family {
-        id
-        name
       }
     }
   }

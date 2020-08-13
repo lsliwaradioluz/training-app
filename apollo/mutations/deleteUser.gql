@@ -1,11 +1,8 @@
-mutation($input: deleteUserInput) {
-  deleteUser(input: $input) {
-    user {
-      id
-      username
-      skill { 
-        id
-      }
-    }
+mutation($id: ID!) {
+  deleteUser(id: $id) {
+    username
+    fullname
+    email
+    active
   }
 }

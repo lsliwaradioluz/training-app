@@ -133,18 +133,13 @@ export default {
       }
     },
     async deleteWorkout() {
-      const input = {
-        where: {
-          id: this.workout.id,
-        },
-      }
       if (
         await this.$root.$confirm("Czy na pewno chcesz usunąć ten element?")
       ) {
         this.client.mutate({
           mutation: deleteWorkout,
           variables: {
-            input: input,
+            id: this.workout.id,
           },
           update: (cache, { data: { deleteWorkout } }) => {
             // read data from cache for chosen queries
@@ -154,12 +149,12 @@ export default {
             })
             // find index of deleted item in cached user.workouts array
             const workoutIndex = data.user.workouts.findIndex(
-              (workout) => workout.id == deleteWorkout.workout.id
+              (workout) => workout.id == deleteWorkout.id
             )
             // remove deleted item from data
             data.user.workouts.splice(workoutIndex, 1)
             //write data back to cache
-            this.client.writeQuery({ query: getSingleUser, data: data })
+            this.client.writeQuery({ query: getSingleUser, data })
           },
         })
       }

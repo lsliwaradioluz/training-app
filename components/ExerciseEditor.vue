@@ -7,8 +7,8 @@
       Nowe ćwiczenie
     </BaseHeader>
     <p>
-      W aplikacji Piti najlepiej sprawdzają się animacje w formacie .gif o
-      przybliżonej rozdzielczości 16:9. Przesłany plik nie może ważyć więcej niż
+      W aplikacji Piti najlepiej sprawdzają się filmy w formacie .mp4 o
+      przybliżonej rozdzielczości 16:9. Przesłany plik nie powinien ważyć więcej niż
       10 megabajtów.
     </p>
     <!-- NAZWA I KATEGORIA -->
@@ -32,7 +32,7 @@
     <!-- ZDJĘCIE  -->
     <div
       v-if="!uploadedImage"
-      class="image-upload p32 column a-center j-center"
+      class="video-upload p32 column a-center j-center"
     >
       <span
         v-if="!uploadedImage && !loadingImage"
@@ -41,7 +41,7 @@
         <i class="flaticon-plus fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
         <form v-show="false">
-          <input ref="input" name="files" type="file" @change="uploadImage" />
+          <input ref="input" name="image" type="file" @change="uploadImage" />
         </form>
       </span>
       <span
@@ -53,8 +53,11 @@
         <p class="m00 mt05 fs-12">Wczytuję...</p>
       </span>
     </div>
-    <div v-else class="image column">
-      <img :src="uploadedImage.url" alt="exercise image" />
+    <div v-else class="video column">
+      <video autoplay loop muted playsinline>
+        <source :src="video" type="video/webm">
+        <source :src="video" type="video/mp4">
+      </video>
       <button class="button-secondary mt05" type="button" @click="deleteImage">
         Usuń zdjęcie
       </button>
@@ -111,8 +114,12 @@ export default {
       client: this.$apollo.getClient(),
       endpoint:
         process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/upload"
-          : "https://piti-backend.herokuapp.com/upload",
+          ? "http://localhost:1337/api/upload-file"
+          : "https://piti-backend.herokuapp.com/api/upload-file",
+      deleteFileEndpoint:
+        process.env.NODE_ENV == "development"
+          ? "http://localhost:1337/api/delete-file"
+          : "https://piti-backend.herokuapp.com/api/delete-file",
       loadingImage: false,
       uploadedImage: this.exercise.image || null,
       input: {
@@ -121,6 +128,16 @@ export default {
         family: null,
       },
       oldFamily: this.$route.params.id
+    }
+  },
+  computed: {
+    video() {
+      if (this.uploadedImage) {
+        const link = this.uploadedImage.url.replace(".gif", ".mp4")
+        return link
+      } else {
+        return null
+      }
     }
   },
   methods: {
@@ -134,16 +151,17 @@ export default {
     uploadImage() {
       this.loadingImage = true
       const formData = new FormData()
-      formData.append("files", this.$refs.input.files[0])
+      formData.append("image", this.$refs.input.files[0])
       fetch(this.endpoint, {
         method: "POST",
         body: formData,
       })
         .then((res) => {
-          res.json().then((data) => {
-            this.uploadedImage = data[0]
-            this.loadingImage = false
-          })
+          return res.json()
+        })
+        .then((data) => {
+          this.uploadedImage = data
+          this.loadingImage = false
         })
         .catch(() => {
           this.loadingImage = false
@@ -154,23 +172,28 @@ export default {
         })
     },
     deleteImage() {
+      fetch(this.deleteFileEndpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.uploadedImage),
+      })
       this.uploadedImage = null
     },
     createExercise() {
-      if (this.uploadedImage) this.input.image = this.uploadedImage.id
+      if (this.uploadedImage) this.input.image = this.uploadedImage._id
       this.input.family = this.input.family.id
-      const input = {
-        data: this.input,
-      }
+    
       this.client
         .mutate({
           mutation: createExercise,
-          variables: { input },
+          variables: { input: this.input },
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
             const data = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
             // push new item to cache
-            data.family.exercises.push(createExercise.exercise)
+            data.family.exercises.push(createExercise)
             // write data back to the cache
             this.client.writeQuery({ query: getSingleFamily, data, variables: { id: this.input.family } })
           },
@@ -178,30 +201,35 @@ export default {
         .then(() => {
           this.$router.go(-1)
         })
+        .catch(() => {
+          const message = 'Nie udało się stworzyć ćwiczenia. Sprawdź połączenie z Internetem'
+          this.$store.commit(
+            "main/setNotification",
+            message
+          )
+        })
     },
     async updateExercise() {
-      if (this.uploadedImage) this.input.image = this.uploadedImage.id
+      if (this.uploadedImage) this.input.image = this.uploadedImage._id
       this.input.family = this.input.family.id
-      const input = {
-        where: { id: this.exercise.id },
-        data: this.input,
-      }
+      this.input.id = this.exercise.id
 
       try {
         await this.client.mutate({
           mutation: updateExercise,
-          variables: { input },
+          variables: { input: this.input },
           update: (cache, { data: { updateExercise } }) => {
             if (this.oldFamily != this.input.family) {
               const { family: oldFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.oldFamily } })
-              const { family: newFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
-
-              const exerciseIndex = oldFamily.exercises.findIndex(exercise => exercise.id == updateExercise.exercise.id)
-              oldFamily.exercises.splice(exerciseIndex, 1)
-              newFamily.exercises.push(updateExercise.exercise)
-              
+              const exerciseIndex = oldFamily.exercises.findIndex(exercise => exercise.id == updateExercise.id)
+              oldFamily.exercises.splice(exerciseIndex, 1)              
               cache.writeQuery({ query: getSingleFamily, variables: { id: this.oldFamily }, data: oldFamily })
-              cache.writeQuery({ query: getSingleFamily, variables: { id: this.input.family }, data: newFamily })
+              
+              if (cache.data.data.ROOT_QUERY[`family({"id":"${this.input.family}"})`]) {
+                const { family: newFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
+                newFamily.exercises.push(updateExercise)
+                cache.writeQuery({ query: getSingleFamily, variables: { id: this.input.family }, data: newFamily })
+              }
             }
           },
         })
@@ -230,7 +258,7 @@ export default {
   transition: background-image 0.3s;
 }
 
-.image-upload {
+.video-upload {
   border: 1px solid color(faded);
   color: color(faded);
   border-radius: 6px;
@@ -238,7 +266,8 @@ export default {
   margin-bottom: 0;
 }
 
-img {
+video {
+  object-fit: cover;
   width: 100%;
 }
 

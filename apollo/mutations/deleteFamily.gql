@@ -1,10 +1,8 @@
-mutation($input: deleteFamilyInput) {
-  deleteFamily(input: $input) {
-    family {
-      id
-      name
-      alias
-      description
-    }
+mutation($id: ID!) {
+  deleteFamily(id: $id) {
+    id
+    name
+    alias
+    description
   }
 }

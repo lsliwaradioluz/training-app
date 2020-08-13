@@ -1,14 +1,11 @@
 mutation($input: updateExerciseInput) {
   updateExercise(input: $input) {
-    exercise {
+    id
+    name
+    alias
+    image {
       id
-      name
-      alias
-      description
-      image {
-        id
-        url
-      }
+      url
     }
   }
 }

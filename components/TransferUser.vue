@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import mainQuery from "~/apollo/queries/getAllUsers.gql"
+import getAllUsers from "~/apollo/queries/getAllUsers.gql"
 import updateUser from "~/apollo/mutations/updateUser.gql"
-import getSingleUserByEmail from "~/apollo/queries/getSingleUserByEmail.gql"
+import getSingleUser from "~/apollo/queries/getSingleUser.gql"
 
 export default {
   props: {
@@ -59,13 +59,13 @@ export default {
 
       this.client
         .query({
-          query: getSingleUserByEmail,
+          query: getSingleUser,
           variables: { email: this.transferEmail },
         })
-        .then((res) => {
+        .then(res => {
           if (
-            !res.data.users[0].admin ||
-            res.data.users[0].id == this.$store.getters["auth/user"].id
+            !res.data.user.admin ||
+            res.data.user.id == this.$store.getters["auth/user"].id
           ) {
             this.$store.commit(
               "main/setNotification",
@@ -76,35 +76,29 @@ export default {
           }
 
           const input = {
-            where: {
-              id: this.user.id,
-            },
-            data: {
-              user: res.data.users[0].id,
-              active: true,
-            },
-          }
+            id: this.user.id,
+            user: res.data.user.id,
+            active: true,
+          };
 
           this.client
             .mutate({
               mutation: updateUser,
-              variables: {
-                input: input,
-              },
+              variables: { input },
               update: (cache) => {
                 // read data from cache for chosen queries
                 const data = cache.readQuery({
-                  query: mainQuery,
+                  query: getAllUsers,
                   variables: { id: this.$store.getters["auth/user"].id },
                 })
                 // find index of deleted item in cached user.workouts array
-                const userIndex = data.user.users.findIndex(
+                const userIndex = data.users.findIndex(
                   (user) => user.id == this.user.id
                 )
                 // remove deleted item from data
-                data.user.users.splice(userIndex, 1)
+                data.users.splice(userIndex, 1)
                 //write data back to cache
-                cache.writeQuery({ query: mainQuery, data: data })
+                cache.writeQuery({ query: getAllUsers, data })
               },
             })
             .then(() => {
@@ -121,7 +115,7 @@ export default {
               )
             })
         })
-        .catch(() => {
+        .catch((err) => {
           this.transferInProgress = false
           this.$store.commit(
             "main/setNotification",

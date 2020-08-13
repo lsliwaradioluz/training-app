@@ -1,15 +1,13 @@
 mutation($input: updateUserInput) {
   updateUser(input: $input) {
-    user {
+    id
+    username
+    fullname
+    email
+    active
+    image {
       id
-      username
-      fullname
-      email
-      active
-      image {
-        id
-        url 
-      }
+      url 
     }
   }
 }

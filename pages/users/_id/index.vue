@@ -7,7 +7,6 @@
         Kopiuj, aby móc skorzystać z wybranego treningu nawet u innego
         użytkownika.
       </p>
-      <!-- TRENINGI  -->
       <div>
         <h3 class="head row j-between a-center pr0">
           <span>Lista treningów</span>

@@ -9,13 +9,13 @@
         ostatnia seria!
       </p>
     </section>
-    <section class="images">
-      <div
-        v-for="(image, index) in images"
-        class="image"
-        :key="index"
-        :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url('${image}')` }"
-      />
+    <section>
+      <transition name="fade">
+        <video class="video" :key="controls.unit" autoplay loop muted playsinline preload>
+          <source :src="video" type="video/webm">
+          <source :src="video" type="video/mp4">
+        </video>
+      </transition>
     </section>
     <section class="controls row">
       <button class="control" @click="previousUnit" />
@@ -210,32 +210,20 @@ export default {
     next() {
       return this.units[this.controls.unit + 1]
     },
-    images() {
-      let images = []
-
-      if (this.current.exercise.name == "Rozpoczynasz nowy blok") {
-        this.units.forEach((unit) => {
-          if (
-            unit.sets &&
-            unit.exercise.image &&
-            images.indexOf(unit.exercise.image.url) == -1
-          ) {
-            images.push(unit.exercise.image.url)
-          }
-        })
-      } else if (this.current.exercise.name == "Odpocznij") {
-        const image = this.next.exercise.image
+    video() {
+      let video
+      
+      if (this.current.exercise.name == "Odpocznij" || this.current.exercise.name == "Rozpoczynasz nowy blok") {
+        video = this.next.exercise.image
           ? this.next.exercise.image.url
           : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
-        images.push(image)
       } else {
-        const image = this.current.exercise.image
+        video = this.current.exercise.image
           ? this.current.exercise.image.url
           : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
-        images.push(image)
       }
 
-      return images
+      return video.replace(".gif", ".mp4")
     },
     units() {
       let units = []
@@ -384,8 +372,6 @@ export default {
 .workout-assistant {
   height: 100vh;
   padding: 0 1rem;
-  background-size: cover;
-  background-position: center;
   position: relative;
   overflow: hidden;
 }
@@ -405,25 +391,13 @@ export default {
   color: color(headers);
 }
 
-.images {
+.video {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.image {
-  min-height: 140px;
-  flex-basis: 50%;
-  flex-shrink: 0;
-  background-size: cover;
-  background-position: center;
-  &:first-child {
-    flex-grow: 1;
-  }
+  object-fit: cover;
 }
 
 .controls {

@@ -64,7 +64,7 @@
       <button
         class="button-primary"
         type="button"
-        @click="user ? updateUser() : createUser()"
+        @click="updateUser()"
       >
         Zapisz
       </button>

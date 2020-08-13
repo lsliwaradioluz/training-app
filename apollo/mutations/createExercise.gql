@@ -1,14 +1,7 @@
 mutation($input: createExerciseInput) {
   createExercise(input: $input) {
-    exercise {
-      id
-      name
-      alias
-      description
-      image {
-        id
-        url
-      }
-    }
+    id
+    name
+    alias
   }
 }
