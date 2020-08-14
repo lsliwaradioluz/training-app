@@ -1,20 +1,36 @@
 <template>
-  <article
-    class="unit-editor tab p11"
-    :style="{ backgroundImage }"
-  >
-    <h3 class="m00 mb05">
+  <article class="unit-editor tab p11">
+    <Video
+      v-if="chosenExercise"
+      :key="chosenExercise ? chosenExercise.id : 0"
+      :source="video"
+    />
+    <h3 class="unit-editor__header">
       Edytuj ćwiczenie
     </h3>
     <form>
       <BaseSelect placeholder="Kategoria" :value="chosenFamily">
         <select v-model="chosenFamily">
-          <option v-for="(family, index) in familyNames" :key="index" :value="family">{{ family }}</option>
+          <option
+            v-for="(family, index) in familyNames"
+            :key="index"
+            :value="family"
+            >{{ family }}</option
+          >
         </select>
       </BaseSelect>
-      <BaseSelect placeholder="Ćwiczenie" :value="chosenExercise" v-if="chosenFamily">
+      <BaseSelect
+        placeholder="Ćwiczenie"
+        :value="chosenExercise"
+        v-if="chosenFamily"
+      >
         <select v-model="chosenExercise">
-          <option v-for="exercise in filteredExercises" :key="exercise.id" :value="exercise">{{ exercise.name }}</option>
+          <option
+            v-for="exercise in filteredExercises"
+            :key="exercise.id"
+            :value="exercise"
+            >{{ exercise.name }}</option
+          >
         </select>
       </BaseSelect>
       <div class="exercise__repetitions row j-between">
@@ -76,13 +92,13 @@
 export default {
   props: {
     editedUnit: {
-      type: Object, 
-      required: true, 
-    }, 
+      type: Object,
+      required: true,
+    },
     families: {
-      type: Array, 
-      required: true, 
-    }
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -90,78 +106,88 @@ export default {
       createUnitButtonDisabled: false,
       chosenFamily: null,
       chosenExercise: null,
-    }
+    };
   },
   computed: {
-    backgroundImage() {
-      return this.chosenExercise && this.chosenExercise.image
-        ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${this.chosenExercise.image.url}')`
-        : "none"
+    video() {
+      if (this.chosenExercise && this.chosenExercise.image) {
+        const link = this.chosenExercise.image.url.replace(".gif", ".mp4");
+        return link;
+      } else {
+        return "";
+      }
     },
     familyNames() {
-      return this.families.map(family => family.name)
+      return this.families.map((family) => family.name);
     },
     filteredExercises() {
-      const chosenFamily = this.families.find(family => family.name == this.chosenFamily)
-      return chosenFamily.exercises
-    }
+      const chosenFamily = this.families.find(
+        (family) => family.name == this.chosenFamily
+      );
+      return chosenFamily.exercises;
+    },
   },
   methods: {
     setFamilyAndExercise() {
       if (this.editedUnit.exercise.name) {
-        const chosenFamily = this.families.find(family => family.name == this.editedUnit.exercise.family.name)
-        this.chosenFamily = chosenFamily.name
-        this.chosenExercise = chosenFamily.exercises.find(exercise => exercise.name == this.editedUnit.exercise.name)
+        const chosenFamily = this.families.find(
+          (family) => family.name == this.editedUnit.exercise.family.name
+        );
+        this.chosenFamily = chosenFamily.name;
+        this.chosenExercise = chosenFamily.exercises.find(
+          (exercise) => exercise.name == this.editedUnit.exercise.name
+        );
       }
     },
     createUnit() {
       if (this.unit.exercise == "") {
-        this.$store.commit(
-          "main/setNotification",
-          "Musisz wybrać ćwiczenie"
-        )
-        return 
-      }
-      
-      for (let key in this.unit.numbers) {
-        // inputs (even type number) always return string. We simply use + to convert string to number
-        this.unit.numbers[key] = +this.unit.numbers[key]
+        this.$store.commit("main/setNotification", "Musisz wybrać ćwiczenie");
+        return;
       }
 
-      const { sets, reps, time, distance } = this.unit.numbers
+      for (let key in this.unit.numbers) {
+        // inputs (even type number) always return string. We simply use + to convert string to number
+        this.unit.numbers[key] = +this.unit.numbers[key];
+      }
+
+      const { sets, reps, time, distance } = this.unit.numbers;
       if (sets == 0 || reps + time + distance == 0) {
         this.$store.commit(
           "main/setNotification",
           "Musisz określić liczbę serii oraz powtórzeń"
-        )
-        return
+        );
+        return;
       }
 
       const newUnit = {
         ...this.unit.numbers,
         exercise: {
-          ...this.chosenExercise
+          ...this.chosenExercise,
         },
         remarks: this.unit.remarks,
-      }
+      };
 
-      this.$emit("add-unit", newUnit)
+      this.$emit("add-unit", newUnit);
     },
   },
   mounted() {
-    this.setFamilyAndExercise()
-  }
-}
+    this.setFamilyAndExercise();
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 .unit-editor {
-  background-size: cover;
-  background-position: center;
+  position: relative;
+}
+
+.unit-editor__header {
+  margin: 0 0 0.5rem 0;
+  position: relative;
 }
 
 .exercise__repetitions {
+  position: relative;
   > div {
     width: 25%;
   }

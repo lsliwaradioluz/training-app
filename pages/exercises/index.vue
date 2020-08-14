@@ -12,13 +12,13 @@
           />
         </BaseHeader>
         <p class="mb0">
-          Baza Piti zawiera ponad sto ćwiczeń opatrzonych animacjami. Wybierz
-          kategorię z poniższej listy, aby zobaczyć przypisane do niej
-          ćwiczenia.
+          Piti daje Ci pełną elastyczność w tworzeniu własnej bazy ćwiczeń.
+          Dodaj nowe kategorie i przypisz im odpowiednie ćwiczenia. Możesz także
+          swobodnie przenosić ćwiczenia między kategoriami, usuwać i edytować je zgodnie z własną wizją.
         </p>
         <BaseSearch
           :value="search"
-          placeholder="Szukaj ćwiczeń"
+          placeholder="Wyszukaj kategorię"
           @input="searchFunction($event)"
         />
         <template v-if="filteredFamilies.length > 0">
@@ -30,9 +30,10 @@
             />
           </transition-group>
         </template>
-        <p v-else>
-          Brak ćwiczeń
-        </p>
+        <div class="no-exercises" v-else>
+          <span class="flaticon-careless no-exercises__icon"></span>
+          <p class="no-exercises__caption">Nie dodałeś jeszcze żadnej kategorii. Możesz to zrobić wciskając plusa w prawym górnym rogu ekranu</p>
+        </div>
       </div>
     </LazyWrapper>
   </div>
@@ -45,6 +46,11 @@ export default {
   apollo: {
     families: {
       query: getAllFamilies,
+      variables() {
+        return {
+          userId: this.user.id,
+        };
+      },
     },
   },
   data() {
@@ -63,8 +69,7 @@ export default {
       if (this.search) {
         return this.families.filter((family) => {
           const search = this.search.toLowerCase();
-          const alias = family.alias ? family.alias : "";
-          const familyName = family.name.toLowerCase() + alias.toLowerCase();
+          const familyName = family.name.toLowerCase();
           const conditions =
             familyName.includes(search) || search.includes(familyName);
           return conditions;
@@ -85,3 +90,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .no-exercises {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+    opacity: 0.2;
+  }
+
+  .no-exercises__icon {
+    font-size: 80px;
+  }
+
+  .no-exercises__caption {
+    text-align: center;
+  }
+</style>

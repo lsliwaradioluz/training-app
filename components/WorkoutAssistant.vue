@@ -11,10 +11,7 @@
     </section>
     <section>
       <transition name="fade">
-        <video class="video" :key="controls.unit" autoplay loop muted playsinline preload>
-          <source :src="video" type="video/webm">
-          <source :src="video" type="video/mp4">
-        </video>
+        <Video :source="video" :key="controls.unit" opacity="0.5" />
       </transition>
     </section>
     <section class="controls row">
@@ -279,7 +276,7 @@ export default {
 
       units.unshift({
         exercise: { name: "Rozpoczynasz nowy blok" },
-        remarks: "Kolejne ćwiczenia widoczne są na ekranie",
+        remarks: "Kolejne ćwiczenie widoczne jest na ekranie",
       })
 
       if (

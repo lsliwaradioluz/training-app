@@ -16,6 +16,11 @@ export default {
   apollo: {
     families: {
       query: getAllFamilies,
+      variables() {
+        return {
+          userId: this.$store.state.auth.user.id
+        }
+      }
     },
     workout: {
       query: getSingleWorkout,

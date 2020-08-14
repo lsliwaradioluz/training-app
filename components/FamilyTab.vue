@@ -1,47 +1,19 @@
 <template>
-  <div class="family-tab column pt05 pb05">
+  <div class="family-tab">
     <div class="row j-between">
       <nuxt-link class="link pr1 row" :to="this.family.id" append>
         <div>
-          <h4 class="m00">
+          <h4 class="family-tab__name">
             {{ family.name }}
           </h4>
-          <p v-if="family.alias" class="description t-medium t-faded m00">
-            {{ family.alias }}
-          </p>
-          <p v-else class="description t-medium t-faded m00">
-            Brak alternatywnej nazwy
+          <p class="description t-medium t-faded m00">
+            {{ familyCaption }}
           </p>
         </div>
       </nuxt-link>
-      <div class="row a-center">
-        <!-- <ContextMenu v-if="user.admin">
-          <template v-slot:trigger>
-            <i class="flaticon-vertical-dots t-headers mr0" />
-          </template>
-          <template v-slot:options>
-            <nuxt-link
-              class="flaticon-pencil mr05"
-              tag="button"
-              type="button"
-              :to="`${family.id}/edit`"
-              append
-            >
-              Edytuj
-            </nuxt-link>
-            <button
-              class="flaticon-trash fs-09 mr05"
-              type="button"
-              @click="deletefamily"
-            >
-              Usuń
-            </button>
-          </template>
-        </ContextMenu> -->
-        <span
-          class="flaticon-right-arrow t-headers"
-        />
-      </div>
+      <span
+        class="flaticon-right-arrow t-headers row a-center"
+      />
     </div>
   </div>
 </template>
@@ -54,13 +26,34 @@
         required: true, 
       }
     },
-    methods: {}
+    computed: {
+      familyCaption() {
+      let exerciseDeclination;
+      const numberOfExercises = this.family.exercises.length
+
+      if (numberOfExercises == 1) {
+          exerciseDeclination = "ćwiczenie"
+      } else if ([2,3,4].includes(numberOfExercises)) {
+          exerciseDeclination = "ćwiczenia"
+      } else {
+        exerciseDeclination = "ćwiczeń"
+      }
+
+      return `Kategoria | ${numberOfExercises} ${exerciseDeclination}`
+    }
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-h4 {
+
+.family-tab {
+  padding: .5rem 0;
+}
+
+.family-tab__name {
   color: white;
+  margin: 0;
 }
 
 .link {

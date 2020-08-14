@@ -6,26 +6,29 @@
     <BaseHeader v-else>
       Nowe ćwiczenie
     </BaseHeader>
-    <p>
-      W aplikacji Piti najlepiej sprawdzają się filmy w formacie .mp4 o
-      przybliżonej rozdzielczości 16:9. Przesłany plik nie powinien ważyć więcej niż
-      10 megabajtów.
+    <p v-if="!edit">
+      Dodaj nazwę, kategorię oraz wideo poglądowe nowego ćwiczenia. W aplikacji
+      Piti najlepiej sprawdzają się filmy w formacie mp4 w rozdzielczości 16:9.
+    </p>
+    <p v-else>
+      Edytuj nazwę, kategorię oraz wideo poglądowe swojego ćwiczenia. W aplikacji
+      Piti najlepiej sprawdzają się filmy w formacie mp4 w rozdzielczości 16:9.
     </p>
     <!-- NAZWA I KATEGORIA -->
     <form>
       <BaseInput
         v-model="input.name"
-        placeholder="Angielska nazwa"
+        placeholder="Nazwa ćwiczenia"
         :show-status="false"
       />
-      <BaseInput
-        v-model="input.alias"
-        placeholder="Polska nazwa"
-        :show-status="false"
-      />
-      <BaseSelect placeholder="Kategoria" :value="input.family">
+      <BaseSelect placeholder="Kategoria ćwiczenia" :value="input.family">
         <select v-model="input.family">
-          <option v-for="(family, index) in families" :key="index" :value="family">{{ family.name }}</option>
+          <option
+            v-for="(family, index) in families"
+            :key="index"
+            :value="family"
+            >{{ family.name }}</option
+          >
         </select>
       </BaseSelect>
     </form>
@@ -39,7 +42,7 @@
         class="column j-center a-center"
       >
         <i class="flaticon-plus fs-32" @click="launchFileUpload" />
-        <p class="m00 mt05 fs-12">Na razie brak zdjęcia</p>
+        <p class="m00 mt05 fs-12">Na razie brak filmu</p>
         <form v-show="false">
           <input ref="input" name="image" type="file" @change="uploadImage" />
         </form>
@@ -55,11 +58,11 @@
     </div>
     <div v-else class="video column">
       <video autoplay loop muted playsinline>
-        <source :src="video" type="video/webm">
-        <source :src="video" type="video/mp4">
+        <source :src="video" type="video/webm" />
+        <source :src="video" type="video/mp4" />
       </video>
       <button class="button-secondary mt05" type="button" @click="deleteImage">
-        Usuń zdjęcie
+        Usuń film
       </button>
     </div>
     <!-- BUTTONY ZAPISZ ODRZUĆ  -->
@@ -88,21 +91,21 @@
 </template>
 
 <script>
-import createExercise from "~/apollo/mutations/createExercise.gql"
-import updateExercise from "~/apollo/mutations/updateExercise.gql"
-import getSingleFamily from "~/apollo/queries/getSingleFamily.gql"
+import createExercise from "~/apollo/mutations/createExercise.gql";
+import updateExercise from "~/apollo/mutations/updateExercise.gql";
+import getSingleFamily from "~/apollo/queries/getSingleFamily.gql";
 
 export default {
   props: {
     exercise: {
       type: Object,
       default: () => {
-        return { name: "", alias: "", description: "" }
+        return { name: "" };
       },
     },
     families: {
-      type: Array, 
-      required: true, 
+      type: Array,
+      required: true,
     },
     edit: {
       type: Boolean,
@@ -116,95 +119,101 @@ export default {
       uploadedImage: this.exercise.image || null,
       input: {
         name: this.exercise.name,
-        alias: this.exercise.alias,
         family: null,
       },
-      oldFamily: this.$route.params.id
-    }
+      oldFamily: this.$route.params.id,
+    };
   },
   computed: {
     video() {
       if (this.uploadedImage) {
-        const link = this.uploadedImage.url.replace(".gif", ".mp4")
-        return link
+        const link = this.uploadedImage.url.replace(".gif", ".mp4");
+        return link;
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
   methods: {
     setFamily() {
-      const currentFamiy = this.families.find(family => family.id == this.$route.params.id)
-      this.input.family = currentFamiy
+      const currentFamiy = this.families.find(
+        (family) => family.id == this.$route.params.id
+      );
+      this.input.family = currentFamiy;
     },
     launchFileUpload() {
-      this.$refs.input.click()
+      this.$refs.input.click();
     },
     uploadImage() {
-      this.loadingImage = true
-      const formData = new FormData()
-      formData.append("image", this.$refs.input.files[0])
+      this.loadingImage = true;
+      const formData = new FormData();
+      formData.append("image", this.$refs.input.files[0]);
       fetch(`${process.env.endpoint}/api/upload-file`, {
         method: "POST",
         body: formData,
       })
         .then((res) => {
-          return res.json()
+          return res.json();
         })
         .then((data) => {
-          this.uploadedImage = data
-          this.loadingImage = false
+          this.uploadedImage = data;
+          this.loadingImage = false;
         })
         .catch(() => {
-          this.loadingImage = false
+          this.loadingImage = false;
           this.$store.commit(
             "main/setNotification",
             "Nie udało się załadować pliku. Upewnij się, że wybrany plik nie waży więcej niż 10MB."
-          )
-        })
+          );
+        });
     },
     deleteImage() {
       fetch(`${process.env.endpoint}/api/delete-file`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(this.uploadedImage),
-      })
-      this.uploadedImage = null
+      });
+      this.uploadedImage = null;
     },
     createExercise() {
-      if (this.uploadedImage) this.input.image = this.uploadedImage._id
-      this.input.family = this.input.family.id
-    
+      if (this.uploadedImage) this.input.image = this.uploadedImage._id;
+      this.input.family = this.input.family.id;
+
       this.client
         .mutate({
           mutation: createExercise,
           variables: { input: this.input },
           update: (cache, { data: { createExercise } }) => {
             // read data from cache for this query
-            const data = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
+            const data = cache.readQuery({
+              query: getSingleFamily,
+              variables: { id: this.input.family },
+            });
             // push new item to cache
-            data.family.exercises.push(createExercise)
+            data.family.exercises.push(createExercise);
             // write data back to the cache
-            this.client.writeQuery({ query: getSingleFamily, data, variables: { id: this.input.family } })
+            this.client.writeQuery({
+              query: getSingleFamily,
+              data,
+              variables: { id: this.input.family },
+            });
           },
         })
         .then(() => {
-          this.$router.go(-1)
+          this.$router.go(-1);
         })
         .catch(() => {
-          const message = 'Nie udało się stworzyć ćwiczenia. Sprawdź połączenie z Internetem'
-          this.$store.commit(
-            "main/setNotification",
-            message
-          )
-        })
+          const message =
+            "Nie udało się stworzyć ćwiczenia. Sprawdź połączenie z Internetem";
+          this.$store.commit("main/setNotification", message);
+        });
     },
     async updateExercise() {
-      if (this.uploadedImage) this.input.image = this.uploadedImage._id
-      this.input.family = this.input.family.id
-      this.input.id = this.exercise.id
+      if (this.uploadedImage) this.input.image = this.uploadedImage._id;
+      this.input.family = this.input.family.id;
+      this.input.id = this.exercise.id;
 
       try {
         await this.client.mutate({
@@ -212,35 +221,52 @@ export default {
           variables: { input: this.input },
           update: (cache, { data: { updateExercise } }) => {
             if (this.oldFamily != this.input.family) {
-              const { family: oldFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.oldFamily } })
-              const exerciseIndex = oldFamily.exercises.findIndex(exercise => exercise.id == updateExercise.id)
-              oldFamily.exercises.splice(exerciseIndex, 1)              
-              cache.writeQuery({ query: getSingleFamily, variables: { id: this.oldFamily }, data: oldFamily })
-              
-              if (cache.data.data.ROOT_QUERY[`family({"id":"${this.input.family}"})`]) {
-                const { family: newFamily } = cache.readQuery({ query: getSingleFamily, variables: { id: this.input.family } })
-                newFamily.exercises.push(updateExercise)
-                cache.writeQuery({ query: getSingleFamily, variables: { id: this.input.family }, data: newFamily })
+              const { family: oldFamily } = cache.readQuery({
+                query: getSingleFamily,
+                variables: { id: this.oldFamily },
+              });
+              const exerciseIndex = oldFamily.exercises.findIndex(
+                (exercise) => exercise.id == updateExercise.id
+              );
+              oldFamily.exercises.splice(exerciseIndex, 1);
+              cache.writeQuery({
+                query: getSingleFamily,
+                variables: { id: this.oldFamily },
+                data: oldFamily,
+              });
+
+              if (
+                cache.data.data.ROOT_QUERY[
+                  `family({"id":"${this.input.family}"})`
+                ]
+              ) {
+                const { family: newFamily } = cache.readQuery({
+                  query: getSingleFamily,
+                  variables: { id: this.input.family },
+                });
+                newFamily.exercises.push(updateExercise);
+                cache.writeQuery({
+                  query: getSingleFamily,
+                  variables: { id: this.input.family },
+                  data: newFamily,
+                });
               }
             }
           },
-        })
-        this.$router.go(-1)
+        });
+        this.$router.go(-1);
       } catch {
-        const message = 'Nie udało się edytować ćwiczenia. Sprawdź połączenie z Internetem'
-        
-        this.$store.commit(
-          "main/setNotification",
-          message
-        )
+        const message =
+          "Nie udało się edytować ćwiczenia. Sprawdź połączenie z Internetem";
+
+        this.$store.commit("main/setNotification", message);
       }
-      
     },
   },
   mounted() {
-    this.setFamily()
-  }
-}
+    this.setFamily();
+  },
+};
 </script>
 
 <style lang="scss" scoped>

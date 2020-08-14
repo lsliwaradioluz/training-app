@@ -15,6 +15,36 @@ query($id: ID, $email: String) {
       sticky
       name
       createdAt
+      sections {
+        id
+        name
+        complexes {
+          id
+          name 
+          units {
+            id
+            sets
+            reps
+            time
+            distance 
+            rest
+            remarks
+            feedback
+            exercise {
+              id
+              name
+              image {
+                id
+                url
+              }
+              family {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

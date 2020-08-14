@@ -17,7 +17,7 @@ export default {
 
 <style lang="scss" scoped>
 .placeholder {
-  opacity: 0.7;
+  opacity: 0.5;
   animation: blink 1s infinite;
   div {
     height: 5rem;

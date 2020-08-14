@@ -30,6 +30,7 @@ import LazyWrapper from "../components/LazyWrapper"
 import FeedbackEditor from "../components/FeedbackEditor"
 import FamilyEditor from "../components/FamilyEditor"
 import FamilyTab from "../components/FamilyTab"
+import Video from "../components/Video"
 
 Vue.component("BaseHeader", BaseHeader)
 Vue.component("BaseInput", BaseInput)
@@ -61,3 +62,4 @@ Vue.component("LazyWrapper", LazyWrapper)
 Vue.component("FeedbackEditor", FeedbackEditor)
 Vue.component("FamilyEditor", FamilyEditor)
 Vue.component("FamilyTab", FamilyTab)
+Vue.component("Video", Video)

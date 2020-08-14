@@ -1,16 +1,18 @@
-query getAllFamilies {
-  families {
+query getAllFamilies($userId: ID) {
+  families(userId: $userId) {
     id
     name
-    alias
-    description
+    createdAt
     exercises {
       id
       name
-      alias
       image {
         id
         url
+      }
+      family {
+        id
+        name
       }
     }
   }

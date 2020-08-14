@@ -15,6 +15,11 @@ export default {
   apollo: {
     families: {
       query: getAllFamilies,
+      variables() {
+        return {
+          userId: this.$store.state.auth.user.id
+        }
+      }
     },
     user: {
       query: getSingleUser,
@@ -32,10 +37,9 @@ export default {
       user: Object,
       sections: [
         { name: "Rozgrzewka", complexes: [] },
-        { name: "Skillwork", complexes: [] },
         { name: "Siła", complexes: [] },
-        { name: "Cardio", complexes: [] },
-        { name: "Mobility", complexes: [] },
+        { name: "Wytrzymałość", complexes: [] },
+        { name: "Mobilność", complexes: [] },
       ],
       sticky: false,
       name: "",

@@ -2,6 +2,5 @@ mutation($input: createExerciseInput) {
   createExercise(input: $input) {
     id
     name
-    alias
   }
 }

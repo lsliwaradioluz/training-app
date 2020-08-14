@@ -11,7 +11,8 @@ import getAllFamilies from "~/apollo/queries/getAllFamilies.gql"
 export default {
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
-    const { data: familiesData } = await client.query({ query: getAllFamilies })
+    const userId = context.store.state.auth.user.id
+    const { data: familiesData } = await client.query({ query: getAllFamilies, variables: { userId } })
     const { data: exerciseData } = await client
       .query({
         query: getSingleExercise,

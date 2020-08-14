@@ -2,7 +2,6 @@ query($id: ID!) {
   exercise(id: $id) {
     id
     name
-    alias
     family {
       id
       name

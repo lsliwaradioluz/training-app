@@ -2,17 +2,7 @@
   <div class="family-editor">
     <BaseInput
       v-model="editedFamily.name"
-      placeholder="Angielska nazwa"
-      :show-status="false"
-    />
-    <BaseInput
-      v-model="editedFamily.alias"
-      placeholder="Polska nazwa"
-      :show-status="false"
-    />
-    <BaseTextarea
-      v-model="editedFamily.description"
-      placeholder="Opis"
+      placeholder="Nazwa kategorii"
       :show-status="false"
     />
     <div class="family-editor__buttons">
@@ -43,7 +33,7 @@ export default {
     family: {
       type: Object,
       default: () => {
-        return { name: "", alias: "", description: "" };
+        return { name: "" };
       },
     },
   },
@@ -52,10 +42,14 @@ export default {
       client: this.$apollo.getClient(),
       editedFamily: {
         name: this.family.name,
-        alias: this.family.alias,
-        description: this.family.description,
+        user: this.$store.state.auth.user.id,
       },
     };
+  },
+  computed: {
+    userID() {
+      return this.$store.state.auth.user.id;
+    },
   },
   methods: {
     async createFamily() {
@@ -69,11 +63,18 @@ export default {
           variables: { input: this.editedFamily },
           update: (cache, { data: { createFamily } }) => {
             // read data from cache for this query
-            const data = cache.readQuery({ query: getAllFamilies });
+            const data = cache.readQuery({
+              query: getAllFamilies,
+              variables: { userId: this.userID },
+            });
             // push new item to cache
             data.families.unshift(createFamily);
             // write data back to the cache
-            this.client.writeQuery({ query: getAllFamilies, data: data });
+            this.client.writeQuery({
+              query: getAllFamilies,
+              variables: { userId: this.userID },
+              data,
+            });
           },
         });
         this.$router.go(-1);
@@ -89,8 +90,8 @@ export default {
       }
 
       const input = {
-        ...this.editedFamily, 
-        id: this.family.id
+        ...this.editedFamily,
+        id: this.family.id,
       };
 
       try {
@@ -107,9 +108,7 @@ export default {
     },
     verifyInputs() {
       if (
-        this.editedFamily.name.length < 3 ||
-        this.editedFamily.description.length < 3 ||
-        this.editedFamily.alias.length < 3
+        this.editedFamily.name.length < 3
       ) {
         const message = "Tekst w każdym z pól musi mieć co najmniej 3 znaki";
         this.$store.commit("main/setNotification", message);

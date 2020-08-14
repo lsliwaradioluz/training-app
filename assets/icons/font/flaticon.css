@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 26/07/2020 11:33
+  	Creation date: 14/08/2020 09:36
   	*/
 
 @font-face {
@@ -76,3 +76,4 @@ margin-left: 20px;
 .flaticon-instagram:before { content: "\f12b"; }
 .flaticon-telephone:before { content: "\f12c"; }
 .flaticon-placeholder:before { content: "\f12d"; }
+.flaticon-careless:before { content: "\f12e"; }

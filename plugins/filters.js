@@ -31,37 +31,6 @@ Vue.filter("getDayName", (value) => {
   return dayname
 })
 
-Vue.filter("getShortDayName", (value) => {
-  const date = new Date(value)
-  const weekDay = date.getDay()
-  let dayAbbreviation
-
-  switch (weekDay) {
-    case 1:
-      dayAbbreviation = "Pn"
-      break
-    case 2:
-      dayAbbreviation = "Wt"
-      break
-    case 3:
-      dayAbbreviation = "Śr"
-      break
-    case 4:
-      dayAbbreviation = "Cz"
-      break
-    case 5:
-      dayAbbreviation = "Pt"
-      break
-    case 6:
-      dayAbbreviation = "Sb"
-      break
-    case 0:
-      dayAbbreviation = "Nd"
-  }
-
-  return dayAbbreviation
-})
-
 // Filtry daty
 
 Vue.filter("reverseDate", (value) => {
@@ -85,28 +54,8 @@ Vue.filter("getDayAndMonth", (value) => {
   return dayAndMonth
 })
 
-Vue.filter("addZero", (value) => {
-  return value < 10 ? `0${value}` : value
-})
-
 Vue.filter("shorten", (value) => {
   return value.length > 4 ? value.slice(0, 4) : value
-})
-
-Vue.filter("shortenText", (value) => {
-  return value.length > 25 ? `${value.slice(0, 25)}...` : value
-})
-
-Vue.filter("shortenSection", (value) => {
-  return value.length > 15 ? `${value.slice(0, 15)}...` : value
-})
-
-Vue.filter("shortenExercise", (value) => {
-  return value.length > 30 ? `${value.slice(0, 30)}...` : value
-})
-
-Vue.filter("shortenAlias", (value) => {
-  return value.length > 35 ? `${value.slice(0, 35)}...` : value
 })
 
 Vue.filter("showMinutes", (value) => {
@@ -134,10 +83,4 @@ Vue.filter("filterStopwatchTime", (value) => {
 Vue.filter("getName", (value) => {
   const nameArray = value.split(" ")
   return nameArray[0]
-})
-
-Vue.filter("cutFilename", (value) => {
-  const nameWithoutType = value.slice(0, -4)
-  const type = value.slice(value.length - 3)
-  return value.length > 7 ? `${nameWithoutType.slice(0, 7)}...${type}` : value
 })

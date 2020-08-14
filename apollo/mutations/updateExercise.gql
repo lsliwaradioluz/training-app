@@ -2,7 +2,6 @@ mutation($input: updateExerciseInput) {
   updateExercise(input: $input) {
     id
     name
-    alias
     image {
       id
       url

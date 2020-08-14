@@ -2,12 +2,10 @@ mutation($input: createFamilyInput) {
   createFamily(input: $input) {
     id
     name
-    alias
-    description
+    createdAt
     exercises {
       id
       name
-      alias
       image {
         id
         url

@@ -78,14 +78,6 @@
       </div>
     </header>
     <article class="philosophy main" ref="philosophy">
-      <div v-if="families">
-        <div v-for="family in families" :key="family.name">
-          <h3>{{ family.name }}</h3>
-          <ul>
-            <li v-for="exercise in family.exercises" :key="exercise.id">{{ exercise.name }}</li>
-          </ul>
-        </div>
-      </div>
       <h3>Wierzymy w ideę ruchowej diety</h3>
       <p>
         Ciało człowieka potrzebuje ruchu tak samo, jak potrzebuje wody, snu i
@@ -243,15 +235,9 @@
 </template>
 
 <script>
-import getAllFamilies from "~/apollo/queries/getAllFamilies.gql";
 
 export default {
   layout: "website",
-  apollo: {
-    families: {
-      query: getAllFamilies,
-    },
-  },
   data() {
     return {
       steps: [

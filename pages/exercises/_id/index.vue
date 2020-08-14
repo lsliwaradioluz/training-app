@@ -2,10 +2,7 @@
   <div class="family" v-if="!$apollo.loading">
     <div class="family__main">
       <article class="family__exercise">
-        <video class="family__exercise__video" autoplay loop muted playsinline :key="`image-${current}`">
-          <source :src="video" type="video/webm">
-          <source :src="video" type="video/mp4">
-        </video>
+        <Video :key="`image-${current}`" :source="video" opacity="0.5" />
         <h3 class="family__exercise__name" v-if="currentExercise">
           <MovingText :key="current">
             {{ currentExercise.name }}
@@ -76,8 +73,8 @@
             v-if="!user.admin && family.description"
           />
         </h3>
-        <p class="family__details__alias">
-          {{ family.alias }}
+        <p class="family__details__caption">
+          {{ familyCaption }}
         </p>
         <ul
           class="family__details__exercises"
@@ -98,9 +95,6 @@
         </p>
       </article>
     </div>
-    <!-- <p class="family__description" v-if="family.description" ref="description">
-      {{ family.description }}
-    </p> -->
   </div>
   <Placeholder padding v-else />
 </template>
@@ -144,18 +138,32 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters["auth/user"];
+      return this.$store.state.auth.user;
     },
     currentExercise() {
       return this.family.exercises[this.current];
     },
     video() {
-      if (this.currentExercise) {
-        const link = this.currentExercise.image.url.replace(".gif", ".mp4")
-        return link
+      if (this.currentExercise && this.currentExercise.image) {
+        const link = this.currentExercise.image.url.replace(".gif", ".mp4");
+        return link;
       } else {
-        return "https://res.cloudinary.com/drsgb4wld/image/upload/v1594649581/GIF-200713_160448_03e89fc155.mp4"
+        return "https://res.cloudinary.com/drsgb4wld/image/upload/v1594649581/GIF-200713_160448_03e89fc155.mp4";
       }
+    },
+    familyCaption() {
+      let exerciseDeclination;
+      const numberOfExercises = this.family.exercises.length;
+
+      if (numberOfExercises == 1) {
+        exerciseDeclination = "ćwiczenie";
+      } else if ([2, 3, 4].includes(numberOfExercises)) {
+        exerciseDeclination = "ćwiczenia";
+      } else {
+        exerciseDeclination = "ćwiczeń";
+      }
+
+      return `Kategoria | ${numberOfExercises} ${exerciseDeclination}`;
     },
   },
   methods: {
@@ -191,15 +199,15 @@ export default {
           },
         });
 
-        const file = deletedExercise.data.deleteExercise.image
+        const file = deletedExercise.data.deleteExercise.image;
 
         fetch(`${process.env.endpoint}/api/delete-file`, {
           method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(file),
-        })
+        });
       }
     },
     async deleteFamily() {
@@ -216,8 +224,19 @@ export default {
           variables: { id: this.family.id },
           update: (cache, { data: { deleteFamily } }) => {
             this.$router.push("/exercises");
+            // Check if cache for this query exists
+            if (
+              !cache.data.data.ROOT_QUERY[
+                `families({"userId":"${this.user.id}"})`
+              ]
+            ) {
+              return;
+            }
             // read data from cache for this query
-            const data = cache.readQuery({ query: getAllFamilies });
+            const data = cache.readQuery({
+              query: getAllFamilies,
+              variables: { userId: this.user.id },
+            });
             // find index of deleted item in cached user.workouts array
             const familyIndex = data.families.findIndex(
               (family) => family.id == deleteFamily.id
@@ -225,7 +244,11 @@ export default {
             // remove deleted item from cache
             data.families.splice(familyIndex, 1);
             // write data back to the cache
-            cache.writeQuery({ query: getAllFamilies, data });
+            cache.writeQuery({
+              query: getAllFamilies,
+              variables: { userId: this.user.id },
+              data,
+            });
           },
         });
       }
@@ -252,15 +275,6 @@ export default {
   padding: 1rem;
 }
 
-.family__exercise__video {
-  position: absolute; 
-  object-fit: cover;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-}
-
 .family__exercise__name {
   color: white !important;
   margin: 0;
@@ -285,7 +299,7 @@ export default {
   animation: pulse 1s infinite;
 }
 
-.family__details__alias {
+.family__details__caption {
   margin: 0;
   color: color(faded);
   font-size: 12px;

@@ -36,7 +36,7 @@
       :class="{ 't-headers': workout.ready }"
     />
     <div v-else class="row a-center">
-      <ContextMenu>
+      <ContextMenu bottom>
         <template v-slot:trigger>
           <i class="flaticon-vertical-dots t-headers" />
         </template>

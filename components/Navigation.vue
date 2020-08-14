@@ -22,7 +22,7 @@
       <nuxt-link class="link flaticon-home" tag="li" to="/dashboard">
         <p class="link__text">Strona główna</p>
       </nuxt-link>
-      <nuxt-link class="link flaticon-gymnast" tag="li" to="/exercises">
+      <nuxt-link class="link flaticon-gymnast" tag="li" to="/exercises" v-if="admin">
         <p class="link__text">Baza ćwiczeń</p>
       </nuxt-link>
       <nuxt-link class="link flaticon-menu" tag="li" to="/workouts">
@@ -178,6 +178,7 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     width: 30%;
+    max-width: 300px;
     height: 100%;
     padding: 1rem 4rem 2rem 2rem;
   }

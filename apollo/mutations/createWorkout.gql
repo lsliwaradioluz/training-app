@@ -24,6 +24,14 @@ mutation($input: createWorkoutInput) {
           exercise {
             id
             name
+            image {
+              id
+              url
+            }
+            family {
+              id
+              name
+            }
           }
         }
       }
