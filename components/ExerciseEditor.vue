@@ -7,12 +7,14 @@
       Nowe ćwiczenie
     </BaseHeader>
     <p v-if="!edit">
-      Dodaj nazwę, kategorię oraz wideo poglądowe nowego ćwiczenia. W aplikacji
-      Piti najlepiej sprawdzają się filmy w formacie mp4 w rozdzielczości 16:9.
+      Dodaj nazwę, kategorię oraz wideo poglądowe nowego ćwiczenia. Aplikacja
+      Piti akceptuje tylko filmy w formacie mp4, w preferowanej rozdzielczości
+      16:9.
     </p>
     <p v-else>
-      Edytuj nazwę, kategorię oraz wideo poglądowe swojego ćwiczenia. W aplikacji
-      Piti najlepiej sprawdzają się filmy w formacie mp4 w rozdzielczości 16:9.
+      Edytuj nazwę, kategorię oraz wideo poglądowe swojego ćwiczenia. Aplikacja
+      Piti akceptuje tylko filmy w formacie mp4, w preferowanej rozdzielczości
+      16:9.
     </p>
     <!-- NAZWA I KATEGORIA -->
     <form>
@@ -44,7 +46,13 @@
         <i class="flaticon-plus fs-32" @click="launchFileUpload" />
         <p class="m00 mt05 fs-12">Na razie brak filmu</p>
         <form v-show="false">
-          <input ref="input" name="image" type="file" @change="uploadImage" />
+          <input
+            ref="input"
+            name="image"
+            type="file"
+            @change="uploadImage"
+            accept=".mp4"
+          />
         </form>
       </span>
       <span
@@ -145,9 +153,16 @@ export default {
       this.$refs.input.click();
     },
     uploadImage() {
+      const file = this.$refs.input.files[0];
+      if (file.type != "video/mp4") {
+        const message =
+          "W tym miejscu możesz załączyć jedynie film w formacie mp4.";
+        this.$store.commit("main/setNotification", message);
+        return;
+      }
       this.loadingImage = true;
       const formData = new FormData();
-      formData.append("image", this.$refs.input.files[0]);
+      formData.append("image", file);
       fetch(`${process.env.endpoint}/api/upload-file`, {
         method: "POST",
         body: formData,

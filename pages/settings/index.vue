@@ -83,10 +83,6 @@ export default {
     return {
       user: { ...this.$store.getters["auth/user"] },
       client: this.$apollo.getClient(),
-      endpoint:
-        process.env.NODE_ENV == "development"
-          ? "http://localhost:1337/upload"
-          : "https://piti-backend.herokuapp.com/upload",
       loadingImage: false,
     }
   },
@@ -98,7 +94,7 @@ export default {
       this.loadingImage = true
       const formData = new FormData()
       formData.append("files", this.$refs.input.files[0])
-      fetch(this.endpoint, {
+      fetch(`${process.env}/upload-file`, {
         method: "POST",
         body: formData,
       }).then((res) => {
@@ -110,21 +106,17 @@ export default {
     },
     updateUser() {
       const input = {
-        where: {
-          id: this.user.id,
-        },
-        data: {
-          fullname: this.user.fullname,
-          username: this.user.username,
-          email: this.user.email,
-          image: this.user.image ? this.user.image.id : null,
-        },
+        id: this.user.id,
+        fullname: this.user.fullname,
+        username: this.user.username,
+        email: this.user.email,
+        image: this.user.image ? this.user.image.id : null,
       }
 
       this.client
-        .mutate({ mutation: updateUser, variables: { input: input } })
+        .mutate({ mutation: updateUser, variables: { input } })
         .then((res) => {
-          this.$store.commit("auth/setUser", res.data.updateUser.user)
+          this.$store.commit("auth/setUser", res.data.updateUser)
           this.$router.go(-1)
         })
     },

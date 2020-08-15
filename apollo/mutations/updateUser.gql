@@ -5,6 +5,7 @@ mutation($input: updateUserInput) {
     fullname
     email
     active
+    admin
     image {
       id
       url 
