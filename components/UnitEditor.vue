@@ -204,7 +204,7 @@ export default {
 .exercise__numbers {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   padding: 1rem 0 .5rem 0;
 }
 
@@ -216,27 +216,25 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 0;
-  flex-basis: 33%;
-  flex-shrink: 0;
+  width: 40%;
+}
+
+.exercise__number__value {
+  margin: 0;
+  font-size: 20px;
+  width: 30%;
+  text-align: center;
 }
 
 .exercise__number__buttons {
   display: flex;
-  flex-basis: 33%;
-  flex-shrink: 0;
+  width: 30%;
   justify-content: flex-end;
 }
 
 .exercise__number__button {
   display: inline;
   margin-left: 8px;
-}
-
-.exercise__number__value {
-  margin: 0;
-  font-size: 24px;
-  flex-basis: 33%;
-  flex-shrink: 0;
 }
 
 .unit-editor__buttons button {
