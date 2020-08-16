@@ -1,5 +1,5 @@
 <template>
-  <article class="unit-editor">
+  <article class="unit-editor tab">
     <Video
       v-if="chosenExercise"
       :key="chosenExercise ? chosenExercise.id : 0"
@@ -48,9 +48,9 @@
           <p class="exercise__number__caption">{{ key | getPolishKey }}</p>
           <div class="exercise__number__body">
             <button
-              class="exercise__number__button flaticon-plus"
+              class="exercise__number__button flaticon-minus"
               type="button"
-              @click="increaseNumber(key)"
+              @click="decreaseNumber(key)"
             />
             <input
               v-model="unit.numbers[key]"
@@ -59,9 +59,9 @@
               max="9999"
             />
             <button
-              class="exercise__number__button flaticon-minus"
+              class="exercise__number__button flaticon-plus"
               type="button"
-              @click="decreaseNumber(key)"
+              @click="increaseNumber(key)"
             />
           </div>
         </div>
@@ -193,7 +193,7 @@ export default {
 <style lang="scss" scoped>
 .unit-editor {
   position: relative;
-  padding: 2rem 1rem;
+  overflow: hidden;
 }
 
 .unit-editor__header {
@@ -218,9 +218,6 @@ export default {
 }
 
 .exercise__number__caption {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
   font-size: 12px;
   color: color(faded);
   margin-bottom: 2px;
@@ -234,7 +231,6 @@ export default {
 }
 
 .exercise__number__button {
-  display: inline;
   padding: .5rem;
   border-right: 1px solid color(faded);
   border-left: 1px solid color(faded);
@@ -242,12 +238,11 @@ export default {
 }
 
 .exercise__number__value {
-  text-align: center;
   font-size: 20px;
   width: 60px;
-  text-align: center;
   display: flex;
   align-items: center;
+  text-align: center;
 }
 
 .unit-editor__buttons button {
