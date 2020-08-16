@@ -1,5 +1,5 @@
 <template>
-  <article class="unit-editor tab p11">
+  <article class="unit-editor">
     <Video
       v-if="chosenExercise"
       :key="chosenExercise ? chosenExercise.id : 0"
@@ -33,25 +33,30 @@
           >
         </select>
       </BaseSelect>
+      <BaseInput
+        v-model="unit.remarks"
+        placeholder="Uwagi do ćwiczenia"
+        :show-status="false"
+        show-clear-btn
+      />
       <section class="exercise__numbers">
         <div
           v-for="(number, key) in unit.numbers"
           :key="key"
           class="exercise__number"
-        > 
+        >
           <p class="exercise__number__caption">{{ key | getPolishKey }}</p>
-          <p class="exercise__number__value">
-            <input
-              v-model="unit.numbers[key]"
-              class="input--invisible t-center"
-              type="number"
-            />
-          </p>
-          <div class="exercise__number__buttons">
+          <div class="exercise__number__body">
             <button
               class="exercise__number__button flaticon-plus"
               type="button"
               @click="increaseNumber(key)"
+            />
+            <input
+              v-model="unit.numbers[key]"
+              class="exercise__number__value"
+              min="0"
+              max="9999"
             />
             <button
               class="exercise__number__button flaticon-minus"
@@ -61,12 +66,6 @@
           </div>
         </div>
       </section>
-      <BaseInput
-        v-model="unit.remarks"
-        placeholder="Uwagi do ćwiczenia"
-        :show-status="false"
-        show-clear-btn
-      />
       <div class="unit-editor__buttons row j-between mt2">
         <button
           class="button-primary"
@@ -194,6 +193,7 @@ export default {
 <style lang="scss" scoped>
 .unit-editor {
   position: relative;
+  padding: 2rem 1rem;
 }
 
 .unit-editor__header {
@@ -204,37 +204,50 @@ export default {
 .exercise__numbers {
   position: relative;
   display: flex;
-  flex-direction: column;
-  padding: 1rem 0 .5rem 0;
+  overflow: scroll;
+  padding: 1rem 0;
+  &::-webkit-scrollbar {
+   display: none;
+  }
 }
 
 .exercise__number {
   display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
 }
 
 .exercise__number__caption {
   display: flex;
   align-items: center;
   margin-bottom: 0;
-  width: 40%;
+  font-size: 12px;
+  color: color(faded);
+  margin-bottom: 2px;
 }
 
-.exercise__number__value {
-  margin: 0;
-  font-size: 20px;
-  width: 30%;
-  text-align: center;
-}
-
-.exercise__number__buttons {
+.exercise__number__body {
   display: flex;
-  width: 30%;
-  justify-content: flex-end;
+  justify-content: space-between;
+  border-top: 1px solid color(faded);
+  border-bottom: 1px solid color(faded);
 }
 
 .exercise__number__button {
   display: inline;
-  margin-left: 8px;
+  padding: .5rem;
+  border-right: 1px solid color(faded);
+  border-left: 1px solid color(faded);
+  color: color(faded);
+}
+
+.exercise__number__value {
+  text-align: center;
+  font-size: 20px;
+  width: 60px;
+  text-align: center;
+  display: flex;
+  align-items: center;
 }
 
 .unit-editor__buttons button {
