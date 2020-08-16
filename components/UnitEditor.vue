@@ -8,7 +8,7 @@
     <h3 class="unit-editor__header">
       Edytuj ćwiczenie
     </h3>
-    <form>
+    <form @submit.prevent>
       <BaseSelect placeholder="Kategoria" :value="chosenFamily">
         <select v-model="chosenFamily">
           <option
@@ -33,38 +33,34 @@
           >
         </select>
       </BaseSelect>
-      <div class="exercise__repetitions row j-between">
+      <section class="exercise__numbers">
         <div
           v-for="(number, key) in unit.numbers"
           :key="key"
-          class="p10 t-center"
-        >
-          <p>{{ key | shorten }}</p>
-          <i
-            class="flaticon-up-arrow small t-green"
-            @click="
-              key == 'distance'
-                ? (unit.numbers[key] += 100)
-                : unit.numbers[key]++
-            "
-          />
-          <p class="m00">
+          class="exercise__number"
+        > 
+          <p class="exercise__number__caption">{{ key | getPolishKey }}</p>
+          <p class="exercise__number__value">
             <input
               v-model="unit.numbers[key]"
               class="input--invisible t-center"
               type="number"
             />
           </p>
-          <i
-            class="flaticon-down-arrow small t-green"
-            @click="
-              key == 'distance'
-                ? (unit.numbers[key] -= 100)
-                : unit.numbers[key]--
-            "
-          />
+          <div class="exercise__number__buttons">
+            <button
+              class="exercise__number__button flaticon-plus"
+              type="button"
+              @click="increaseNumber(key)"
+            />
+            <button
+              class="exercise__number__button flaticon-minus"
+              type="button"
+              @click="decreaseNumber(key)"
+            />
+          </div>
         </div>
-      </div>
+      </section>
       <BaseInput
         v-model="unit.remarks"
         placeholder="Uwagi do ćwiczenia"
@@ -139,6 +135,25 @@ export default {
         );
       }
     },
+    increaseNumber(key) {
+      if (key == "distance") {
+        this.unit.numbers[key] += 100
+      } else {
+        this.unit.numbers[key]++
+      }
+    },
+    decreaseNumber(key) {
+      let number = this.unit.numbers[key]
+      if (number == 0) {
+        return
+      }
+
+      if (key == "distance") {
+        this.unit.numbers[key] -= 100
+      } else {
+        this.unit.numbers[key]--
+      }
+    },
     createUnit() {
       if (this.unit.exercise == "") {
         this.$store.commit("main/setNotification", "Musisz wybrać ćwiczenie");
@@ -186,15 +201,42 @@ export default {
   position: relative;
 }
 
-.exercise__repetitions {
+.exercise__numbers {
   position: relative;
-  > div {
-    width: 25%;
-  }
-  p {
-    margin-bottom: 0;
-    text-align: center;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem 0 .5rem 0;
+}
+
+.exercise__number {
+  display: flex;
+}
+
+.exercise__number__caption {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  flex-basis: 33%;
+  flex-shrink: 0;
+}
+
+.exercise__number__buttons {
+  display: flex;
+  flex-basis: 33%;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.exercise__number__button {
+  display: inline;
+  margin-left: 8px;
+}
+
+.exercise__number__value {
+  margin: 0;
+  font-size: 24px;
+  flex-basis: 33%;
+  flex-shrink: 0;
 }
 
 .unit-editor__buttons button {

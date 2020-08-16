@@ -1,6 +1,6 @@
 <template>
   <nav class="navigation" role="navigation">
-    <ul class="row j-between a-center">
+    <ul class="navigation__buttons row j-between a-center">
       <li>
         <button
           class="flaticon-left-arrow-2 mr05 t-faded"
@@ -19,10 +19,11 @@
       </li>
     </ul>
     <ul class="links">
+      <div class="dupa"></div>
       <nuxt-link class="link flaticon-home" tag="li" to="/dashboard">
         <p class="link__text">Strona główna</p>
       </nuxt-link>
-      <nuxt-link class="link flaticon-gymnast" tag="li" to="/exercises">
+      <nuxt-link class="link flaticon-gymnast" tag="li" to="/exercises" v-if="admin">
         <p class="link__text">Baza ćwiczeń</p>
       </nuxt-link>
       <nuxt-link class="link flaticon-menu" tag="li" to="/workouts">
@@ -109,16 +110,19 @@ export default {
 
 <style lang="scss" scoped>
 .navigation {
+  li {
+    border: none;
+    padding-left: 0;
+  }
+}
+
+.navigation__buttons {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 2;
   width: 100%;
   padding: 1rem;
-  li {
-    border: none;
-    padding-left: 0;
-  }
 }
 
 .copy-pair-icon {
@@ -150,6 +154,8 @@ export default {
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.466);
   display: flex;
   justify-content: space-between;
+  max-width: 450px;
+  z-index: 1000;
 }
 
 .link {
@@ -168,34 +174,14 @@ export default {
   color: color(headers);
 }
 
-@media (min-width: 768px) {
-
+@media (min-width: 450px) {
   .links {
-    left: 0;
-    top: 0;
-    bottom: initial;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    width: 30%;
-    height: 100%;
-    padding: 1rem 4rem 2rem 2rem;
-  }
-
-  .link {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    cursor: pointer;
-    transition: opacity .3s;
-    &:hover {
-      opacity: .8;
-    }
-  }
-
-  .link__text {
-    display: block;
-    margin: 0 0 0 .5rem;
+    bottom: 10vh;
+    left: calc(50vw - 450px/2);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border: 4px solid black;
+    border-top: none;
   }
 }
 </style>

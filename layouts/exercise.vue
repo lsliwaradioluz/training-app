@@ -29,6 +29,7 @@ export default {
   background-color: color(primary);
   position: relative;
   height: 100vh;
+  max-width: 450px;
 }
 
 .navigation {
@@ -38,5 +39,21 @@ export default {
   width: 100%;
   padding: 1rem;
   z-index: 2;
+}
+
+@media (min-width: 450px) {
+  .exercise-layout {
+    min-height: 0;
+    min-width: 450px;
+    max-height: 80vh;
+    height: 80vh;
+    overflow: scroll;
+    border: 4px solid black;
+    border-radius: 15px;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

@@ -13,5 +13,13 @@ body {
   line-height: 1.4;
   font-weight: 400;
   letter-spacing: -.3px;
-  // background-color: color(primary);
+}
+
+@media (min-width: 450px) {
+  body {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
 }

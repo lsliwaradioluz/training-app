@@ -661,10 +661,8 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-left: -1rem;
-  margin-bottom: -3rem;
   padding: 1rem;
-  padding-bottom: 3rem;
-  width: 100vw;
+  width: calc(100% + 2rem);
   background-color: color(secondary);
   .button-primary {
     width: 49%;

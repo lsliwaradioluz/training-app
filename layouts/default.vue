@@ -26,11 +26,21 @@ export default {
     position: relative;
     min-height: 100vh;
     background-color: color(primary);
+    max-width: 450px;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 450px) {
     .default {
-      padding-left: calc(30% + 2rem);
+      min-height: 0;
+      min-width: 450px;
+      height: 80vh;
+      overflow: scroll;
+      border: 4px solid black;
+      border-radius: 15px;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
     }
   }
 </style>

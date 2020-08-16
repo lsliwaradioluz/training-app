@@ -258,8 +258,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.family {
+  height: 100%;
+}
+
 .family__main {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }

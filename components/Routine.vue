@@ -93,7 +93,7 @@ export default {
 }
 
 .routine--expanded {
-  padding-bottom: 70px;
+  height: 150px;
 }
 
 .header {

@@ -54,9 +54,14 @@ Vue.filter("getDayAndMonth", (value) => {
   return dayAndMonth
 })
 
-Vue.filter("shorten", (value) => {
-  return value.length > 4 ? value.slice(0, 4) : value
-})
+Vue.filter('shorten', (value, toLength) => {
+  if (value.length > toLength) {
+    let text = value.replace("**", "");
+    return `${text.slice(0, toLength)}`
+  } else {
+    return value;
+  }
+});
 
 Vue.filter("showMinutes", (value) => {
   const minutes = Math.floor(value / 60)
@@ -83,4 +88,25 @@ Vue.filter("filterStopwatchTime", (value) => {
 Vue.filter("getName", (value) => {
   const nameArray = value.split(" ")
   return nameArray[0]
+})
+
+Vue.filter("getPolishKey", (value) => {
+  let key
+  switch (value) {
+    case "sets": 
+      key = "serie"
+      break
+    case "reps":
+      key = "powtórzenia"
+      break
+    case "time":
+      key = "czas (s)"
+      break
+    case "distance":
+      key = "dystans (m)"
+      break
+    case "rest":
+      key = "odpoczynek (s)"
+  }
+  return key
 })

@@ -10,6 +10,7 @@
             mousedown: onTouchStart,
             mousemove: onTouchMove,
             mouseup: onTouchEnd,
+            passiv: true, 
           }
         : {}
     "
@@ -140,8 +141,6 @@ export default {
       return this.currentPage == 0
     },
     maxScrollRight() {
-      // const lastElementVisible = this.currentPage + this.numberOfColumns;
-      // return lastElementVisible >= this.length;
       return this.currentPage + 1 == this.numberOfPages
     },
     numberOfPages() {
@@ -167,7 +166,6 @@ export default {
   mounted() {
     this.setCarousel()
     this.runCarousel()
-    window.addEventListener("resize", this.setCarousel)
   },
   updated() {
     this.setCarousel()
