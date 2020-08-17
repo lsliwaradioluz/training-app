@@ -45,10 +45,14 @@ export default {
 .technology {
   flex: 0 0 auto;
   max-width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
 .technology__image {
   width: 100%;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 </style>
