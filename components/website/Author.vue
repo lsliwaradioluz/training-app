@@ -1,6 +1,11 @@
 <template>
   <article class="author container">
-    <section class="author__tab">
+    <section
+      class="author__tab"
+      data-aos="zoom-in-up"
+      data-aos-duration="500"
+      data-aos-once="true"
+    >
       <img
         class="author__tab__image"
         :src="require(`../../assets/images/lukasz.jpg`)"
@@ -11,7 +16,7 @@
         ''Moim marzeniem było stworzyć prostą i szybką aplikację treningową.
         Dzięki niej moi podopieczni mieli ćwiczyć częściej i chętniej, a ja
         zaoszczędzić czas. Teraz oddaję projekt w Twoje ręce, abyś korzystając z
-        niego, pomógł mi go rozwijać'''. 
+        niego, pomógł mi go rozwijać'''.
       </p>
       <p class="author__tab__signature">
         Łukasz Śliwa
@@ -62,7 +67,7 @@ export default {};
 }
 
 .author__tab__signature {
-  text-align: right; 
+  text-align: right;
   color: black;
   align-self: flex-end;
   font-weight: 600;

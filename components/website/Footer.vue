@@ -1,7 +1,13 @@
 <template>
   <footer class="footer" ref="contact">
     <div class="container">
-      <form class="footer__form" @submit.prevent>
+      <form
+        class="footer__form"
+        @submit.prevent
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        data-aos-once="true"
+      >
         <h3 class="footer__form__header">
           Pochwal, skarć lub zapytaj
         </h3>
@@ -134,7 +140,7 @@ export default {
 
 .footer__form__input {
   color: black;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .footer__form__button,
@@ -155,7 +161,10 @@ export default {
 }
 
 .footer__contact {
-  background-image: linear-gradient(rgb(255, 174, 0) 10%, rgba(255, 174, 0, 0.822) 80%);
+  background-image: linear-gradient(
+    rgb(255, 174, 0) 10%,
+    rgba(255, 174, 0, 0.822) 80%
+  );
   padding-top: 3rem;
   padding-bottom: 1rem;
   position: relative;
@@ -164,7 +173,7 @@ export default {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   &:after {
     content: "";
     position: absolute;

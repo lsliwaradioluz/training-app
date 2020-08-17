@@ -1,7 +1,14 @@
 <template>
   <article class="howtos">
     <div class="container">
-      <section class="howto" v-for="(howto, index) in howtos" :key="index">
+      <section
+        class="howto"
+        v-for="(howto, index) in howtos"
+        :key="index"
+        data-aos="zoom-in"
+        data-aos-duration="500"
+        data-aos-once="true"
+      >
         <h3 class="howto__title">{{ howto.title }}</h3>
         <img
           class="howto__icon"
@@ -29,9 +36,7 @@
         >
           Pokaż mi, jak to zrobić
         </button>
-        <Modal :show="showModal" @close="showModal = false">
-
-        </Modal>
+        <Modal :show="showModal" @close="showModal = false"> </Modal>
       </div>
     </div>
   </article>
@@ -79,7 +84,7 @@ export default {
   position: relative;
   .container {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
   }
 }
@@ -124,9 +129,9 @@ export default {
   }
   &:after {
     content: "";
-    position: absolute; 
+    position: absolute;
     height: 20%;
-    width: 150%; 
+    width: 150%;
     background-color: #fff9eb;
     bottom: -15%;
     left: -10%;
