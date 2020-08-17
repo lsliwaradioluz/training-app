@@ -81,7 +81,6 @@ export default {
   padding-bottom: 12px;
   padding-top: 12px;
   font-size: 14px;
-  color: white;
   font-weight: 400;
 }
 

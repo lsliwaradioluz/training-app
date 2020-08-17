@@ -1,6 +1,6 @@
     /*
     Flaticon icon font: Flaticon
-    Creation date: 14/08/2020 09:36
+    Creation date: 16/08/2020 07:16
     */
 
     @font-face {
@@ -84,6 +84,7 @@
 .flaticon-telephone:before { content: "\f12c"; }
 .flaticon-placeholder:before { content: "\f12d"; }
 .flaticon-careless:before { content: "\f12e"; }
+.flaticon-speech-bubble:before { content: "\f12f"; }
     
     $font-Flaticon-up-arrow: "\f100";
     $font-Flaticon-down-arrow: "\f101";
@@ -132,3 +133,4 @@
     $font-Flaticon-telephone: "\f12c";
     $font-Flaticon-placeholder: "\f12d";
     $font-Flaticon-careless: "\f12e";
+    $font-Flaticon-speech-bubble: "\f12f";

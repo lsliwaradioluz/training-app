@@ -9,11 +9,7 @@
         ostatnia seria!
       </p>
     </section>
-    <section>
-      <transition name="fade">
-        <Video :source="video" :key="controls.unit" opacity="0.5" />
-      </transition>
-    </section>
+    <Video :source="video" :key="controls.unit" opacity="0" />  
     <section class="controls row">
       <button class="control" @click="previousUnit" />
       <button class="control" @click="nextUnit" />
