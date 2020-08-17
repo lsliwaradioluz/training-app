@@ -29,40 +29,37 @@
         </button>
       </form>
     </div>
-    <article class="footer__contact main">
-      <h3 class="footer__contact__header">Znajdź nas</h3>
-      <p>
-        Większość naszej pracy zobaczysz na naszym profilu na Instagramie.
-        Możesz kontaktować się z nami za jego pośrednictwem lub telefonicznie.
-      </p>
-      <section class="footer__contact__buttons">
-        <a
-          class="footer__contact__button flaticon-instagram"
-          href="https://www.instagram.com/hes.coach.sliwa/"
-          target="_blank"
-        >
-          <p class="footer__contact__button__text">Instagram</p>
-        </a>
-        <a
-          class="footer__contact__button flaticon-telephone"
-          href="tel:+48784184075"
-        >
-          <p class="footer__contact__button__text">784 184 075</p>
-        </a>
-        <a
-          class="footer__contact__button flaticon-placeholder"
-          href="https://goo.gl/maps/Lp75gJ4HZg7nBmxr8"
-          target="_blank"
-        >
-          <p class="footer__contact__button__text">Wielkopolska 72</p>
-        </a>
-      </section>
-      <section class="footer__signature">
-        <p class="footer__signature__text">
-          Coded by Łukasz Śliwa from Piti. Icons made by Freepik from
-          www.flaticon.com
-        </p>
-      </section>
+    <article class="footer__contact">
+      <div class="container">
+        <section class="footer__contact__buttons">
+          <a
+            class="footer__contact__button flaticon-instagram"
+            href="https://www.instagram.com/hes.coach.sliwa/"
+            target="_blank"
+          >
+            <p class="footer__contact__button__text">Instagram</p>
+          </a>
+          <a
+            class="footer__contact__button flaticon-linkedin"
+            href="https://goo.gl/maps/Lp75gJ4HZg7nBmxr8"
+            target="_blank"
+          >
+            <p class="footer__contact__button__text">LinkedIn</p>
+          </a>
+          <a
+            class="footer__contact__button flaticon-telephone"
+            href="tel:+48784184075"
+          >
+            <p class="footer__contact__button__text">784 184 075</p>
+          </a>
+        </section>
+        <section class="footer__signature">
+          <p class="footer__signature__text">
+            Coded by Łukasz Śliwa from Piti. Icons made by Freepik from
+            www.flaticon.com
+          </p>
+        </section>
+      </div>
     </article>
   </footer>
 </template>
@@ -112,7 +109,8 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .footer__form {
@@ -123,7 +121,7 @@ export default {
   flex-direction: column;
   border-radius: 6px;
   max-width: 300px;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .footer__form__header {
@@ -139,7 +137,8 @@ export default {
   margin-bottom: .5rem;
 }
 
-.footer__form__button {
+.footer__form__button,
+.footer__motivation__button {
   background-color: #ff8000;
   margin-top: 2rem;
   padding: 8px 20px;
@@ -156,9 +155,26 @@ export default {
 }
 
 .footer__contact {
-  background-color: #ff8000;
-  padding-top: 2rem;
+  background-image: linear-gradient(rgb(255, 174, 0) 10%, rgba(255, 174, 0, 0.822) 80%);
+  padding-top: 3rem;
   padding-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  &:after {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 140%;
+    height: 50px;
+    transform: rotate(2deg);
+    background-color: #fff9eb;
+  }
 }
 
 .footer__contact__buttons {
@@ -166,7 +182,7 @@ export default {
 }
 
 .footer__contact__button {
-  color: color(primary);
+  color: #fff9eb;
   font-size: 28px;
   margin: 1.5rem 1rem 1.5rem 0;
   display: flex;
@@ -179,12 +195,13 @@ export default {
 }
 
 .footer__signature {
-  border-top: 1px solid rgba(0, 0, 0, 0.384);
+  border-top: 1px solid #fff9eb;
   padding-top: 1rem;
 }
 
 .footer__signature__text {
   font-size: 12px;
   margin: 0;
+  color: #fff9eb;
 }
 </style>

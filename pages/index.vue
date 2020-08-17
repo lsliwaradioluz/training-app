@@ -1,11 +1,17 @@
 <template>
   <div>
-    <Navigation />
+    <Navigation @scroll="scrollTo($event)" />
     <Header />
-    <HowTo />
-    <Author />
+    <div ref="howto">
+      <HowTo />
+    </div>
+    <div ref="author">
+      <Author />
+    </div>
     <Technologies />
-    <Footer />
+    <div ref="contact">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -20,5 +26,10 @@ import Footer from '~/components/website/Footer'
 export default {
   layout: "website",
   components: { Navigation, Header, HowTo, Author, Technologies, Footer },
+  methods: {
+    scrollTo(targetName) {
+      this.$refs[targetName].scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 };
 </script>

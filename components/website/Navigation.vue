@@ -1,24 +1,24 @@
 <template>
-  <nav class="nav">
+  <nav class="nav" >
     <div class="nav__container container">
       <h1 class="nav__logo">piti</h1>
       <transition name="slide-to-right">
         <section class="nav__menu" ref="nav">
-          <ul class="nav__menu__buttons">
+          <ul class="nav__menu__buttons" @click="scrollTo">
             <li class="nav__menu__button">
-              <nuxt-link to="register-coach">Jak zacząć</nuxt-link>
+              <a data-destination="howto">Jak zacząć</a>
             </li>
+            <!-- <li class="nav__menu__button">
+              <a data-destination="philosophy">Filozofia</a>
+            </li> -->
             <li class="nav__menu__button">
-              <nuxt-link to="login">Filozofia</nuxt-link>
+              <a data-destination="author">O autorze</a>
             </li>
+            <!-- <li class="nav__menu__button">
+              <a data-destination="technologies">Technologie</a>
+            </li> -->
             <li class="nav__menu__button">
-              <nuxt-link to="register-coach">O autorze</nuxt-link>
-            </li>
-            <li class="nav__menu__button">
-              <nuxt-link to="register-coach">Technologie</nuxt-link>
-            </li>
-            <li class="nav__menu__button">
-              <nuxt-link to="register-coach">Kontakt</nuxt-link>
+              <a data-destination="contact">Kontakt</a>
             </li>
           </ul>
           <ul class="nav__menu__buttons">
@@ -31,10 +31,12 @@
           </ul>
         </section>
       </transition>
-      <button
-        class="nav__button flaticon-menu"
-        @click="showMenu"
-      ></button>
+      <div class="nav__button container" ref="navButton">
+        <button
+          class="flaticon-menu"
+          @click="showMenu"
+        ></button>
+      </div>
     </div>
   </nav>
 </template>
@@ -64,16 +66,30 @@ export default {
           button.style.animation = 'fade-and-slide-down 1s';
         })
       }
-
+      
+      this.toggleNavigation()
+    },
+    toggleNavigation() {
+      const navigation = this.$refs.nav
+      const navButton = this.$refs.navButton
       navigation.classList.toggle("nav__menu--visible");
-    }
-  }
+      navButton.classList.toggle("nav__button--open")
+    },
+    scrollTo() {
+      if (event.target.nodeName != 'A') {
+        return 
+      }
+      const targetName = event.target.dataset.destination;
+      this.$emit("scroll", targetName)
+      this.toggleNavigation()
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .nav {
-  position: fixed;
+  position: absolute;
   top: 0;
   padding: 1rem 0;
   z-index: 2;
@@ -98,8 +114,38 @@ export default {
 }
 
 .nav__button {
-  font-size: 25px;
-  cursor: pointer;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    font-size: 25px;
+    cursor: pointer;
+    position: relative;
+    &:after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: -13px;
+      background: #FF8000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      z-index: -1;
+      transition: transform .7s;
+    }
+  }
+}
+
+.nav__button--open {
+  button:after {
+    opacity: 1;
+    transform: scale(50);
+  }
 }
 
 .nav__menu {
@@ -110,12 +156,11 @@ export default {
   top: 0;
   height: 100vh;
   width: 80%;
-  background-color: #FFF9EB;
-  color: #FF8000;
+  color: #FFF9EB;
   overflow: hidden;
-  padding-top: 1rem;
+  padding-top: 30%;
   transform: translateX(-100%);
-  transition: transform 0.3s;
+  z-index: 2;
 }
 
 .nav__menu--visible {
@@ -125,7 +170,6 @@ export default {
 .nav__menu__buttons {
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
 }
 
 .nav__menu__button {
@@ -134,7 +178,7 @@ export default {
   align-items: center;
   transition: opacity 0.3s;
   border-left: none;
-  font-size: 18px;
+  font-size: 20px;
   &:hover,
   &:active {
     opacity: 0.6;
@@ -168,9 +212,5 @@ export default {
     display: none;
   }
 }
-
-// #ffae00
-// #f2eada
-// #ff7f00
 
 </style>

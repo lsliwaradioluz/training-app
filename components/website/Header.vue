@@ -61,7 +61,6 @@ export default {
   &::after {
     content: "";
     position: absolute;
-    top: 0;
     top: -50%;
     left: 60%;
     height: 120%;

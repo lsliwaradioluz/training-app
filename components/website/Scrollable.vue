@@ -38,7 +38,7 @@ export default {
       const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
       this.currentScroll = event.target.scrollLeft;
 
-      const trackToWidthRatio = (containerWidth - 40) / scrollWidth;
+      const trackToWidthRatio = (containerWidth - 60) / scrollWidth;
       const distance = this.currentScroll * trackToWidthRatio;
 
       this.$refs.thumb.style.left = `${distance}px`;
@@ -61,12 +61,12 @@ export default {
 
       const containerWidth = this.$refs.scrollable.clientWidth;
       const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
-      const trackToWidthRatio = (containerWidth - 40) / scrollWidth;
+      const trackToWidthRatio = (containerWidth - 60) / scrollWidth;
       
       if (this.thumbPosition + move < 0) {
         this.$refs.thumb.style.left = '0';
-      } else if (this.thumbPosition + move > this.$refs.track.clientWidth - 40) {
-        this.$refs.thumb.style.left = `${this.$refs.track.clientWidth - 40}px`;
+      } else if (this.thumbPosition + move > this.$refs.track.clientWidth - 60) {
+        this.$refs.thumb.style.left = `${this.$refs.track.clientWidth - 60}px`;
       }
 
       this.$refs.scrollable.scrollLeft = +this.$refs.thumb.style.left.replace("px","") / trackToWidthRatio
@@ -107,22 +107,36 @@ export default {
 }
 
 .scrollable__thumb {
-  height: 40px;
-  width: 40px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
   position: absolute;
   left: 0;
-  top: -19px;
+  top: -29px;
   background-color: #ff8000;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  transition: padding .3s, transform .3s;
 }
 
 .scrollable__thumb--active {
-  transform: scale(1.2);
-  padding: 5px;
+  animation: bounce .3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+    padding: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    padding: 10px;
+  }
+  100% {
+    transform: scale(1.1);
+    padding: 7px;
+  }
 }
 
 // animation-fill-mode: forwards;  
