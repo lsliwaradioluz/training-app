@@ -1,8 +1,8 @@
 <template>
   <article class="unit-editor tab">
     <Video
-      v-if="chosenExercise"
-      :key="chosenExercise ? chosenExercise.id : 0"
+      v-if="unit.exercise"
+      :key="unit.exercise ? unit.exercise.id : 0"
       :source="video"
     />
     <h3 class="unit-editor__header">
@@ -21,10 +21,10 @@
       </BaseSelect>
       <BaseSelect
         placeholder="Ćwiczenie"
-        :value="chosenExercise"
+        :value="unit.exercise"
         v-if="chosenFamily"
       >
-        <select v-model="chosenExercise">
+        <select v-model="unit.exercise">
           <option
             v-for="exercise in filteredExercises"
             :key="exercise.id"
@@ -70,7 +70,6 @@
         <button
           class="button-primary"
           type="button"
-          :disabled="createUnitButtonDisabled"
           @click="createUnit"
         >
           Zapisz
@@ -100,13 +99,12 @@ export default {
       unit: this.editedUnit,
       createUnitButtonDisabled: false,
       chosenFamily: null,
-      chosenExercise: null,
     };
   },
   computed: {
     video() {
-      if (this.chosenExercise && this.chosenExercise.image) {
-        const link = this.chosenExercise.image.url.replace(".gif", ".mp4");
+      if (this.unit.exercise && this.unit.exercise.image) {
+        const link = this.unit.exercise.image.url.replace(".gif", ".mp4");
         return link;
       } else {
         return "";
@@ -129,7 +127,7 @@ export default {
           (family) => family.name == this.editedUnit.exercise.family.name
         );
         this.chosenFamily = chosenFamily.name;
-        this.chosenExercise = chosenFamily.exercises.find(
+        this.unit.exercise = chosenFamily.exercises.find(
           (exercise) => exercise.name == this.editedUnit.exercise.name
         );
       }
@@ -154,8 +152,8 @@ export default {
       }
     },
     createUnit() {
-      if (this.unit.exercise == "") {
-        this.$store.commit("main/setNotification", "Musisz wybrać ćwiczenie");
+      if (this.unit.exercise.id == "") {
+        this.$store.commit("main/setNotification", "Musisz wybrać ćwiczenie!");
         return;
       }
 
@@ -176,7 +174,7 @@ export default {
       const newUnit = {
         ...this.unit.numbers,
         exercise: {
-          ...this.chosenExercise,
+          ...this.unit.exercise,
         },
         remarks: this.unit.remarks,
       };

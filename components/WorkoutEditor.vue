@@ -76,6 +76,13 @@
                       Dodaj ćwiczenie
                     </button>
                     <button
+                      v-if="copiedUnit"
+                      class="flaticon-copy"
+                      @click="addUnit(copiedUnit)"
+                    >
+                      Wklej ćwiczenie
+                    </button>
+                    <button
                       v-show="currentSection > 0"
                       class="flaticon-left-arrow-1"
                       @click="moveSection('left')"
@@ -98,7 +105,7 @@
                   </template>
                 </ContextMenu>
               </template>
-              <template v-slot:complex-buttons="{ complexindex }">
+              <template v-slot:complex-buttons="{ complexindex, complex }">
                 <ContextMenu v-show="currentComplex != complexindex">
                   <template v-slot:trigger>
                     <span class="flaticon-vertical-dots fs-12" />
@@ -116,6 +123,13 @@
                       @click="currentComplex = complexindex"
                     >
                       Kopiuj ćwiczenie
+                    </button>
+                    <button
+                      v-if="copiedUnit"
+                      class="flaticon-copy"
+                      @click="pasteUnit(complex)"
+                    >
+                      Wklej ćwiczenie
                     </button>
                     <button
                       v-show="complexindex != 0"
@@ -206,6 +220,12 @@
                       @click="openUnitEditor(unit, unitindex, complexindex)"
                     >
                       Edytuj
+                    </button>
+                    <button
+                      class="flaticon-copy"
+                      @click="copyUnit(unit)"
+                    >
+                      Kopiuj
                     </button>
                     <button
                       class="flaticon-trash"
@@ -347,6 +367,7 @@ export default {
       currentUnit: null,
       currentWorkout: 0,
       editedUnit: null,
+      copiedUnit: null, 
       nameEditorVisible: false,
     }
   },
@@ -508,6 +529,13 @@ export default {
 
       complexContainingUnit.splice(unitindex, 1)
       complexContainingUnit.splice(newIndex, 0, unitToMove)
+    },
+    copyUnit(unit) {
+      this.copiedUnit = unit
+      this.$store.commit('main/setNotification', 'Skopiowano do schowka!')
+    },
+    pasteUnit(complex) {
+      complex.units.push(this.copiedUnit)
     },
     openUnitEditor(unit, unitindex, complexindex) {
       let rest

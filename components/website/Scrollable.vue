@@ -19,7 +19,6 @@
         <span>></span>
       </div>
     </div>
-    {{ }}
   </article>
 </template>
 
@@ -36,9 +35,10 @@ export default {
     onScroll() {
       const containerWidth = this.$refs.scrollable.clientWidth;
       const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
+      const thumbWidth = this.$refs.thumb.clientWidth
       this.currentScroll = event.target.scrollLeft;
 
-      const trackToWidthRatio = (containerWidth - 60) / scrollWidth;
+      const trackToWidthRatio = (containerWidth - thumbWidth) / scrollWidth;
       const distance = this.currentScroll * trackToWidthRatio;
 
       this.$refs.thumb.style.left = `${distance}px`;
@@ -61,12 +61,13 @@ export default {
 
       const containerWidth = this.$refs.scrollable.clientWidth;
       const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
-      const trackToWidthRatio = (containerWidth - 60) / scrollWidth;
+      const thumbWidth = this.$refs.thumb.clientWidth
+      const trackToWidthRatio = (containerWidth - thumbWidth) / scrollWidth;
       
       if (this.thumbPosition + move < 0) {
         this.$refs.thumb.style.left = '0';
-      } else if (this.thumbPosition + move > this.$refs.track.clientWidth - 60) {
-        this.$refs.thumb.style.left = `${this.$refs.track.clientWidth - 60}px`;
+      } else if (this.thumbPosition + move > this.$refs.track.clientWidth - thumbWidth) {
+        this.$refs.thumb.style.left = `${this.$refs.track.clientWidth - thumbWidth}px`;
       }
 
       this.$refs.scrollable.scrollLeft = +this.$refs.thumb.style.left.replace("px","") / trackToWidthRatio
@@ -107,12 +108,12 @@ export default {
 }
 
 .scrollable__thumb {
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   border-radius: 50%;
   position: absolute;
   left: 0;
-  top: -29px;
+  top: -24px;
   background-color: #ff8000;
   display: flex;
   align-items: center;
@@ -139,5 +140,4 @@ export default {
   }
 }
 
-// animation-fill-mode: forwards;  
 </style>

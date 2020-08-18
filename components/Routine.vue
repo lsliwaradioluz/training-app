@@ -34,7 +34,7 @@
           <ul>
             <li>{{ setsAndReps(unit) }}</li>
             <li v-if="unit.remarks">{{ unit.remarks }}</li>
-            <li class="t-faded" v-if="unit.rest">Odpocznij {{ unit.rest }}s</li>
+            <li class="t-faded" v-if="unit.rest">Odpoczywaj {{ unit.rest }}s</li>
             <li class="t-faded" v-else>Bez odpoczynku</li>
             <li class="unit__feedback" v-if="unit.feedback">{{ unit.feedback }}</li>
           </ul>
@@ -93,7 +93,8 @@ export default {
 }
 
 .routine--expanded {
-  min-height: 150px;
+  min-height: 200px;
+  padding-bottom: 60px;
 }
 
 .header {
