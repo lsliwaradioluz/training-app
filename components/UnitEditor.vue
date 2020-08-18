@@ -1,7 +1,7 @@
 <template>
   <article class="unit-editor tab">
     <Video
-      v-if="unit.exercise"
+      v-if="unit.exercise.image"
       :key="unit.exercise ? unit.exercise.id : 0"
       :source="video"
     />
