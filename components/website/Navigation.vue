@@ -179,6 +179,7 @@ export default {
   transition: opacity 0.3s;
   border-left: none;
   font-size: 20px;
+  cursor: pointer;
   &:hover,
   &:active {
     opacity: 0.6;

@@ -33,13 +33,19 @@
           />
           <BaseCheckbox v-model="sticky" label="Przyklejony" />
         </div>
-        <BaseInput
-          v-show="sticky"
-          v-model="name"
-          placeholder="Nazwa treningu"
-          type="text"
-          :show-status="false"
-        />
+        <div class="inputs__sticky" v-show="sticky">
+          <p class="inputs__sticky__header">
+            Przyklejony trening pokaże się w zakładce "wielorazowe" na liście
+            treningów podopiecznego. Nie będzie miał konkretnej daty, a jedynie
+            nazwę, którą mu nadasz
+          </p>
+          <BaseInput
+            v-model="name"
+            placeholder="Nazwa treningu"
+            type="text"
+            :show-status="false"
+          />
+        </div>
       </div>
     </section>
     <section>
@@ -53,7 +59,7 @@
         <Carousel
           v-if="sections.length > 0"
           :navigation-config="carouselNavConfig"
-          :blocked="currentComplex != null"
+          :blocked="currentComplex != null || dragging"
           :start-from-page="currentSection"
           @change-page="currentSection = $event"
         >
@@ -62,7 +68,16 @@
             :key="sectionindex"
             class="p11 column"
           >
-            <Routine :section="section" :current-complex="currentComplex" editor>
+            <Routine
+              :section="section"
+              :current-complex="currentComplex"
+              editor
+              @dragstart="dragging = true"
+              @dragend=" $event.type == 'complex' ? 
+                moveComplex(sectionindex, $event.elementIndex, $event.moveCount)
+                : moveUnit(sectionindex, $event.elementIndex, $event.moveCount, $event.parentIndex)
+              "
+            >
               <template v-slot:section-buttons>
                 <ContextMenu>
                   <template v-slot:trigger>
@@ -108,7 +123,7 @@
               <template v-slot:complex-buttons="{ complexindex, complex }">
                 <ContextMenu v-show="currentComplex != complexindex">
                   <template v-slot:trigger>
-                    <span class="flaticon-vertical-dots fs-12" />
+                    <span class="flaticon-menu fs-12" />
                   </template>
                   <template v-slot:options>
                     <button
@@ -130,20 +145,6 @@
                       @click="pasteUnit(complex)"
                     >
                       Wklej ćwiczenie
-                    </button>
-                    <button
-                      v-show="complexindex != 0"
-                      class="flaticon-up"
-                      @click="moveComplex(currentSection, complexindex, 'up')"
-                    >
-                      Przesuń w górę
-                    </button>
-                    <button
-                      v-show="complexindex != section.complexes.length - 1"
-                      class="flaticon-down-arrow-1"
-                      @click="moveComplex(currentSection, complexindex, 'down')"
-                    >
-                      Przesuń w dół
                     </button>
                     <button
                       class="flaticon-pencil"
@@ -171,49 +172,11 @@
               >
                 <ContextMenu>
                   <template v-slot:trigger>
-                    <span class="flaticon-vertical-dots fs-12" />
+                    <span class="flaticon-menu fs-12" />
                   </template>
                   <template v-slot:options>
-                    <button
-                      v-show="unitindex != 0"
-                      class="flaticon-up"
-                      @click="
-                        moveUnit(currentSection, complexindex, unitindex, 'up')
-                      "
-                    >
-                      Przesuń w górę
-                    </button>
-                    <button
-                      v-show="unitindex != complex.units.length - 1"
-                      class="flaticon-down-arrow-1"
-                      @click="
-                        moveUnit(
-                          currentSection,
-                          complexindex,
-                          unitindex,
-                          'down'
-                        )
-                      "
-                    >
-                      Przesuń w dół
-                    </button>
+
                     <template v-if="complex.units.length == 1">
-                      <button
-                        v-show="complexindex != 0"
-                        class="flaticon-up"
-                        @click="moveComplex(currentSection, complexindex, 'up')"
-                      >
-                        Przesuń w górę
-                      </button>
-                      <button
-                        v-show="complexindex != section.complexes.length - 1"
-                        class="flaticon-down-arrow-1"
-                        @click="
-                          moveComplex(currentSection, complexindex, 'down')
-                        "
-                      >
-                        Przesuń w dół
-                      </button>
                     </template>
                     <button
                       class="flaticon-pencil"
@@ -221,10 +184,7 @@
                     >
                       Edytuj
                     </button>
-                    <button
-                      class="flaticon-copy"
-                      @click="copyUnit(unit)"
-                    >
+                    <button class="flaticon-copy" @click="copyUnit(unit)">
                       Kopiuj
                     </button>
                     <button
@@ -246,9 +206,7 @@
     </section>
     <!-- POPRZEDNIE TRENINGI  -->
     <section v-if="previousWorkouts.length > 0">
-      <header
-        class="row j-between a-start pt1 pb05 t-faded"
-      >
+      <header class="row j-between a-start pt1 pb05 t-faded">
         <h4 v-if="!previousWorkouts[currentWorkout].user" class="mb0 t-faded">
           {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
           {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
@@ -343,10 +301,10 @@
 </template>
 
 <script>
-import NameEditor from "~/components/NameEditor.vue"
-import getSingleUser from "~/apollo/queries/getSingleUser.gql"
-import createWorkout from "~/apollo/mutations/createWorkout.gql"
-import updateWorkout from "~/apollo/mutations/updateWorkout.gql"
+import NameEditor from "~/components/NameEditor.vue";
+import getSingleUser from "~/apollo/queries/getSingleUser.gql";
+import createWorkout from "~/apollo/mutations/createWorkout.gql";
+import updateWorkout from "~/apollo/mutations/updateWorkout.gql";
 
 export default {
   components: { NameEditor },
@@ -367,64 +325,63 @@ export default {
       currentUnit: null,
       currentWorkout: 0,
       editedUnit: null,
-      copiedUnit: null, 
+      copiedUnit: null,
       nameEditorVisible: false,
-    }
+      dragging: false,
+    };
   },
   computed: {
     filteredSections() {
-      const sectionsClone = JSON.parse(JSON.stringify(this.sections))
-      let filteredSections = sectionsClone.filter(section => {
-        return section.complexes.length > 0 
-      })
-      
+      const sectionsClone = JSON.parse(JSON.stringify(this.sections));
+      let filteredSections = sectionsClone.filter((section) => {
+        return section.complexes.length > 0;
+      });
+
       filteredSections.forEach((section, sectionindex, sections) => {
-        sections[sectionindex] = _.omit(section, "__typename", "id")
+        sections[sectionindex] = _.omit(section, "__typename", "id");
         section.complexes.forEach((complex, complexindex, complexes) => {
-          complexes[complexindex] = _.omit(
-            complex,
-            "__typename",
-            "id"
-          )
+          complexes[complexindex] = _.omit(complex, "__typename", "id");
           complex.units.forEach((unit, unitindex, units) => {
-            units[unitindex] = _.omit(unit, "__typename", "id", "feedback")
+            units[unitindex] = _.omit(unit, "__typename", "id", "feedback");
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
-            ].exercise = unit.exercise.id
-          })
-        })
-      })
+            ].exercise = unit.exercise.id;
+          });
+        });
+      });
 
-      return filteredSections
+      return filteredSections;
     },
     dateAndTime() {
-      return new Date(this.selectedDate + " " + this.selectedTime)
+      return new Date(this.selectedDate + " " + this.selectedTime);
     },
     workoutReady() {
-      return this.filteredSections.length > 0
+      return this.filteredSections.length > 0;
     },
     previousWorkouts() {
-      let previousWorkouts
+      let previousWorkouts;
       if (this.edit) {
-        previousWorkouts = this.user.workouts.filter(workout => {
-          return workout.id != this.id && !workout.sticky && workout.ready
-        })
+        previousWorkouts = this.user.workouts.filter((workout) => {
+          return workout.id != this.id && !workout.sticky && workout.ready;
+        });
       } else {
-        previousWorkouts = this.user.workouts.filter(workout => {
-          return !workout.sticky && workout.ready
-        })
+        previousWorkouts = this.user.workouts.filter((workout) => {
+          return !workout.sticky && workout.ready;
+        });
       }
-      const workoutToCopy = this.$store.state.main.workoutToCopy
+      const workoutToCopy = this.$store.state.main.workoutToCopy;
       if (workoutToCopy) {
-        previousWorkouts.unshift(workoutToCopy)
+        previousWorkouts.unshift(workoutToCopy);
       }
-      return previousWorkouts
+      return previousWorkouts;
     },
     previousWorkoutSections() {
-      const previousWorkoutSections = this.previousWorkouts[this.currentWorkout].sections.filter((section) => {
-        return section.complexes.length > 0
-      })
-      return previousWorkoutSections
+      const previousWorkoutSections = this.previousWorkouts[
+        this.currentWorkout
+      ].sections.filter((section) => {
+        return section.complexes.length > 0;
+      });
+      return previousWorkoutSections;
     },
     carouselNavConfig() {
       return {
@@ -433,7 +390,7 @@ export default {
         borderRadius: "0",
         activeColor: "#FDDCBD",
         fullWidth: true,
-      }
+      };
     },
   },
   methods: {
@@ -441,184 +398,191 @@ export default {
       const newSection = {
         name: "Nowa sekcja",
         complexes: [],
-      }
-      this.sections.push(newSection)
-      this.currentSection = this.sections.length - 1
+      };
+      this.sections.push(newSection);
+      this.currentSection = this.sections.length - 1;
     },
     moveSection(direction) {
-      let sectionToMove = this.sections[this.currentSection]
+      let sectionToMove = this.sections[this.currentSection];
       let newIndex =
-        direction == "left" ? this.currentSection - 1 : this.currentSection + 1
-      this.sections.splice(this.currentSection, 1)
-      this.sections.splice(newIndex, 0, sectionToMove)
-      this.currentSection = newIndex
+        direction == "left" ? this.currentSection - 1 : this.currentSection + 1;
+      this.sections.splice(this.currentSection, 1);
+      this.sections.splice(newIndex, 0, sectionToMove);
+      this.currentSection = newIndex;
     },
     deleteSection() {
-      this.sections.splice(this.currentSection, 1)
+      this.sections.splice(this.currentSection, 1);
       this.currentSection =
-        this.currentSection == 0 ? 0 : this.currentSection - 1
+        this.currentSection == 0 ? 0 : this.currentSection - 1;
     },
     copySection(section) {
-      const sectionClone = JSON.parse(JSON.stringify(section))
+      const sectionClone = JSON.parse(JSON.stringify(section));
       this.sections[this.currentSection].complexes.push(
         ...sectionClone.complexes
-      )
-      this.sections[this.currentSection].name = sectionClone.name
-      this.$store.commit('main/setNotification', 'Dodane!')
+      );
+      this.sections[this.currentSection].name = sectionClone.name;
+      this.$store.commit("main/setNotification", "Dodane!");
     },
-    moveComplex(sectionindex, complexindex, direction) {
-      let currentComplexes = this.sections[sectionindex].complexes
-      let complexToMove = currentComplexes[complexindex]
-      let newIndex = direction == "up" ? complexindex - 1 : complexindex + 1
+    moveComplex(sectionindex, complexindex, moveCount) {
+      let currentComplexes = this.sections[sectionindex].complexes;
+      let complexToMove = currentComplexes[complexindex];
+      let newIndex = complexindex + moveCount;
 
-      currentComplexes.splice(complexindex, 1)
-      currentComplexes.splice(newIndex, 0, complexToMove)
+      currentComplexes.splice(complexindex, 1);
+      currentComplexes.splice(newIndex, 0, complexToMove);
+      this.dragging = false;
     },
     deleteComplex(complexindex) {
-      this.sections[this.currentSection].complexes.splice(complexindex, 1)
-      this.currentComplex = null
+      this.sections[this.currentSection].complexes.splice(complexindex, 1);
+      this.currentComplex = null;
     },
     copyComplex(complex) {
-      const complexClone = JSON.parse(JSON.stringify(complex))
-      this.sections[this.currentSection].complexes.push(complexClone)
-      this.$store.commit('main/setNotification', 'Dodane!')
+      const complexClone = JSON.parse(JSON.stringify(complex));
+      this.sections[this.currentSection].complexes.push(complexClone);
+      this.$store.commit("main/setNotification", "Dodane!");
     },
     addExerciseToComplex(complexindex) {
-      this.currentComplex = complexindex
-      this.openUnitEditor()
+      this.currentComplex = complexindex;
+      this.openUnitEditor();
     },
     addUnit(unit) {
-      const unitClone = JSON.parse(JSON.stringify(unit))
+      const unitClone = JSON.parse(JSON.stringify(unit));
 
       if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
           name: "Blok",
           units: [unitClone],
-        }
-        this.sections[this.currentSection].complexes.push(newComplex)
+        };
+        this.sections[this.currentSection].complexes.push(newComplex);
       } else if (this.currentComplex != null && this.currentUnit == null) {
         this.sections[this.currentSection].complexes[
           this.currentComplex
-        ].units.push(unitClone)
+        ].units.push(unitClone);
       } else {
         this.sections[this.currentSection].complexes[this.currentComplex].units[
           this.currentUnit
-        ] = unitClone
-        this.currentComplex = null
-        this.currentUnit = null
+        ] = unitClone;
+        this.currentComplex = null;
+        this.currentUnit = null;
       }
-      this.editedUnit = null
-      this.$store.commit('main/setNotification', 'Dodane!')
+      this.editedUnit = null;
+      this.$store.commit("main/setNotification", "Dodane!");
     },
     deleteUnit(complex, unit) {
       this.sections[this.currentSection].complexes[complex].units.splice(
         unit,
         1
-      )
+      );
       if (
         this.sections[this.currentSection].complexes[complex].units.length == 0
       ) {
-        this.sections[this.currentSection].complexes.splice(complex, 1)
-        this.currentComplex = null
+        this.sections[this.currentSection].complexes.splice(complex, 1);
+        this.currentComplex = null;
       }
     },
-    moveUnit(sectionindex, complexindex, unitindex, direction) {
-      let complexContainingUnit = this.sections[sectionindex].complexes[complexindex].units
-      let unitToMove = complexContainingUnit[unitindex]
-      let newIndex = direction == "up" ? unitindex - 1 : unitindex + 1
+    moveUnit(sectionindex, unitindex, moveCount, complexindex) {
+      let currentUnits = this.sections[sectionindex].complexes[
+        complexindex
+      ].units;
+      let unitToMove = currentUnits[unitindex];
+      let newIndex = unitindex + moveCount;
 
-      complexContainingUnit.splice(unitindex, 1)
-      complexContainingUnit.splice(newIndex, 0, unitToMove)
+      currentUnits.splice(unitindex, 1);
+      currentUnits.splice(newIndex, 0, unitToMove);
+      this.dragging = false;
     },
     copyUnit(unit) {
-      this.copiedUnit = unit
-      this.$store.commit('main/setNotification', 'Skopiowano do schowka!')
+      this.copiedUnit = unit;
+      this.$store.commit("main/setNotification", "Skopiowano do schowka!");
     },
     pasteUnit(complex) {
-      complex.units.push(this.copiedUnit)
+      complex.units.push(this.copiedUnit);
     },
     openUnitEditor(unit, unitindex, complexindex) {
-      let rest
+      let rest;
       let exercise = {
-        id: unit && unit.exercise.id || "",
-        name: unit && unit.exercise.name || "",
-        image: unit && unit.exercise.image || null,
-        family: unit && unit.exercise.family || null, 
-      }
+        id: (unit && unit.exercise.id) || "",
+        name: (unit && unit.exercise.name) || "",
+        image: (unit && unit.exercise.image) || null,
+        family: (unit && unit.exercise.family) || null,
+      };
 
       if (this.currentComplex != null) {
-        let units = this.sections[this.currentSection].complexes[this.currentComplex].units
-        rest = units[units.length - 1].rest
+        let units = this.sections[this.currentSection].complexes[
+          this.currentComplex
+        ].units;
+        rest = units[units.length - 1].rest;
       } else {
         this.sections[this.currentSection].complexes.length > 0
-          ? (rest = this.sections[this.currentSection].complexes[0].units[0].rest)
-          : (rest = 90)
+          ? (rest = this.sections[this.currentSection].complexes[0].units[0]
+              .rest)
+          : (rest = 90);
       }
 
       this.editedUnit = {
         exercise,
         numbers: {
-          sets: unit && unit.sets || 0,
-          reps: unit && unit.reps || 0,
-          time: unit && unit.time || 0,
-          distance: unit && unit.distance || 0,
-          rest: unit && unit.rest || rest,
+          sets: (unit && unit.sets) || 0,
+          reps: (unit && unit.reps) || 0,
+          time: (unit && unit.time) || 0,
+          distance: (unit && unit.distance) || 0,
+          rest: (unit && unit.rest) || rest,
         },
-        remarks: unit && unit.remarks || "",
-      }
+        remarks: (unit && unit.remarks) || "",
+      };
 
       if (unit != undefined) {
-        this.currentUnit = unitindex
-        this.currentComplex = complexindex
+        this.currentUnit = unitindex;
+        this.currentComplex = complexindex;
       }
     },
     closeUnitEditor() {
-      this.editedUnit = null
-      this.currentComplex = null
-      this.currentUnit = null
+      this.editedUnit = null;
+      this.currentComplex = null;
+      this.currentUnit = null;
     },
     openNameEditor(complex) {
       if (complex != undefined) {
-        this.currentComplex = complex
+        this.currentComplex = complex;
       }
-      this.nameEditorVisible = true
+      this.nameEditorVisible = true;
     },
     closeNameEditor(name) {
       if (this.currentComplex != null && name) {
         this.sections[this.currentSection].complexes[
           this.currentComplex
-        ].name = name
-        this.currentComplex = null
+        ].name = name;
+        this.currentComplex = null;
       } else if (!this.currentComplex && name) {
-        this.sections[this.currentSection].name = name
+        this.sections[this.currentSection].name = name;
       }
-      this.nameEditorVisible = false
+      this.nameEditorVisible = false;
     },
     showPreviousWorkout() {
       this.currentWorkout == 0
         ? (this.currentWorkout = 0)
-        : this.currentWorkout--
+        : this.currentWorkout--;
     },
     showNextWorkout() {
       this.currentWorkout == this.previousWorkouts.length - 1
         ? (this.currentWorkout = this.previousWorkouts.length - 1)
-        : this.currentWorkout++
+        : this.currentWorkout++;
     },
     async uploadWorkout() {
-      let configObj
+      let configObj;
       const input = {
         scheduled: this.dateAndTime,
         sticky: this.sticky,
         name: this.name,
         ready: this.workoutReady,
         sections: this.filteredSections,
-      }
+      };
       if (this.edit) {
-        input.id = this.id 
+        input.id = this.id;
         configObj = {
-          mutation: updateWorkout, 
-          variables: { input }
-        }
+          mutation: updateWorkout,
+          variables: { input },
+        };
       } else {
         input.user = this.user.id;
         configObj = {
@@ -628,52 +592,63 @@ export default {
             const data = cache.readQuery({
               query: getSingleUser,
               variables: { id: this.user.id },
-            })
-            data.user.workouts.unshift(createWorkout)
-            this.client.writeQuery({ query: getSingleUser, data })
+            });
+            data.user.workouts.unshift(createWorkout);
+            this.client.writeQuery({ query: getSingleUser, data });
           },
-        }
+        };
       }
 
       try {
-        const result = await this.client.mutate(configObj)
+        const result = await this.client.mutate(configObj);
       } catch {
-        this.$store.commit('main/setNotification', 'Coś poszło nie tak. Spróbuj jeszcze raz')
-        return
+        this.$store.commit(
+          "main/setNotification",
+          "Coś poszło nie tak. Spróbuj jeszcze raz"
+        );
+        return;
       }
       this.leaveEditor();
     },
     leaveEditor() {
-      this.$store.commit('main/setIsEditing', false)
+      this.$store.commit("main/setIsEditing", false);
       this.$router.go(-1);
-    }, 
+    },
     createBackup() {
-      if (this.$store.state.main.workoutEditor.isEditing && this.workoutReady && !this.edit) {
+      if (
+        this.$store.state.main.workoutEditor.isEditing &&
+        this.workoutReady &&
+        !this.edit
+      ) {
         const workoutEditorBackup = {
-          type: 'workoutEditorBackup', 
-          sections: this.sections
-        }
-        this.$store.dispatch('main/addEntryToDb', workoutEditorBackup);
+          type: "workoutEditorBackup",
+          sections: this.sections,
+        };
+        this.$store.dispatch("main/addEntryToDb", workoutEditorBackup);
       }
-    }, 
+    },
     async loadBackup() {
       const backup = this.$store.state.main.workoutEditor.backup;
       if (backup && !this.edit) {
-        if (await this.$root.$confirm("W pamięci znajduje się niezapisany trening. Chcesz go dokończyć?")) {
+        if (
+          await this.$root.$confirm(
+            "W pamięci znajduje się niezapisany trening. Chcesz go dokończyć?"
+          )
+        ) {
           this.sections = backup.sections;
         }
-        this.$store.dispatch('main/removeEntryFromDb', "workoutEditorBackup");
+        this.$store.dispatch("main/removeEntryFromDb", "workoutEditorBackup");
       }
-      this.$store.commit('main/setIsEditing', true)
-    }
+      this.$store.commit("main/setIsEditing", true);
+    },
   },
   mounted() {
     this.loadBackup();
   },
   beforeDestroy() {
-    this.createBackup()
-  }
-}
+    this.createBackup();
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -683,6 +658,11 @@ export default {
   padding: 1rem;
   padding-bottom: 0.5rem;
   background-color: color(secondary);
+}
+
+.inputs__sticky__header {
+  margin-bottom: 0.5rem;
+  font-size: 14px;
 }
 
 .buttons {

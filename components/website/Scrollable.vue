@@ -1,10 +1,10 @@
 <template>
   <article class="scrollable">
-    <section class="scrollable__container" @scroll="onScroll" ref="scrollable">
+    <section class="scrollable__container" @scroll="onScroll" ref="scrollContainer">
       <slot></slot>
     </section>
     <div class="scrollable__track" ref="track">
-      <div class="scrollable__progress" ref="progress" />
+      <div class="scrollable__progress" ref="progressBar" />
       <div
         class="scrollable__thumb"
         ref="thumb"
@@ -27,56 +27,53 @@ export default {
   data() {
     return {
       touchStart: null,
-      thumbPosition: null, 
-      currentScroll: null,
+      startingScroll: null,
+      trackContainerRatio: null,
     };
   },
   methods: {
+    setTrackContainerRatio() {
+      const containerWidth = this.$refs.scrollContainer.clientWidth;
+      const scrollWidth = this.$refs.scrollContainer.scrollWidth - containerWidth;
+      const thumbWidth = this.$refs.thumb.clientWidth;
+      this.trackContainerRatio = (containerWidth - thumbWidth) / scrollWidth;
+    },
     onScroll() {
-      const containerWidth = this.$refs.scrollable.clientWidth;
-      const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
-      const thumbWidth = this.$refs.thumb.clientWidth
-      this.currentScroll = event.target.scrollLeft;
+      if (!this.trackContainerRatio) {
+        this.setTrackContainerRatio();
+      }
 
-      const trackToWidthRatio = (containerWidth - thumbWidth) / scrollWidth;
-      const distance = this.currentScroll * trackToWidthRatio;
+      const currentScroll = event.target.scrollLeft;
+      const distance = currentScroll * this.trackContainerRatio;
 
       this.$refs.thumb.style.left = `${distance}px`;
-      this.$refs.progress.style.width = `${distance}px`;
+      this.$refs.progressBar.style.width = `${distance}px`;
     },
     onTouchStart() {
       if (!event.touches) {
-        return
+        return;
       }
+      if (!this.trackContainerRatio) {
+        this.setTrackContainerRatio();
+      }
+
+      document.querySelector("body").style.overflow = "hidden"
       this.$refs.thumb.classList.add("scrollable__thumb--active");
-      this.touchStart = event.touches[0].screenX
-      this.thumbPosition = +this.$refs.thumb.style.left.replace("px","");
+      this.touchStart = event.touches[0].screenX;
+      this.startingScroll = this.$refs.scrollContainer.scrollLeft
     },
     onTouchMove() {
       if (!event.touches) {
-        return
-      }
-      const move = event.touches[0].screenX - this.touchStart
-      this.$refs.thumb.style.left = `${this.thumbPosition + move}px`;
-
-      const containerWidth = this.$refs.scrollable.clientWidth;
-      const scrollWidth = this.$refs.scrollable.scrollWidth - containerWidth;
-      const thumbWidth = this.$refs.thumb.clientWidth
-      const trackToWidthRatio = (containerWidth - thumbWidth) / scrollWidth;
-      
-      if (this.thumbPosition + move < 0) {
-        this.$refs.thumb.style.left = '0';
-      } else if (this.thumbPosition + move > this.$refs.track.clientWidth - thumbWidth) {
-        this.$refs.thumb.style.left = `${this.$refs.track.clientWidth - thumbWidth}px`;
+        return;
       }
 
-      this.$refs.scrollable.scrollLeft = +this.$refs.thumb.style.left.replace("px","") / trackToWidthRatio
-    }, 
+      const moveLength = event.touches[0].screenX - this.touchStart
+      this.$refs.scrollContainer.scrollLeft = this.startingScroll + (moveLength / this.trackContainerRatio)
+    },
     onTouchEnd() {
       this.$refs.thumb.classList.remove("scrollable__thumb--active");
-      this.thumbPosition = null;
-      this.touchStart = null;
-    }
+      document.querySelector("body").style.overflow = "auto"
+    },
   },
 };
 </script>
@@ -84,6 +81,7 @@ export default {
 <style lang="scss" scoped>
 .scrollable__container {
   display: flex;
+  justify-content: space-between;
   overflow-x: scroll;
   overflow-y: hidden;
   &::-webkit-scrollbar {
@@ -103,7 +101,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  height: 2px;
+  height: 100%;
   background-color: #ff8000;
 }
 
@@ -121,7 +119,7 @@ export default {
 }
 
 .scrollable__thumb--active {
-  animation: bounce .3s;
+  animation: bounce 0.3s;
   animation-fill-mode: forwards;
 }
 
@@ -139,5 +137,4 @@ export default {
     padding: 7px;
   }
 }
-
 </style>

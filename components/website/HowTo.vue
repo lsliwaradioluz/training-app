@@ -161,4 +161,31 @@ export default {
     opacity: 0.8;
   }
 }
+
+@media (min-width: 1024px) {
+  .howtos .container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .howto {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    flex-basis: 25%;
+    flex-grow: 0;
+  }
+
+  .howtos__add-to-main-screen {
+    padding: 7% 0 10% 0;
+    margin-bottom: 0; 
+  }
+
+  .howtos__add-to-main-screen .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 60%;
+  }
+}
+
 </style>

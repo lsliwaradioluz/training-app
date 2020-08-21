@@ -74,6 +74,12 @@
   transition: transform 0.3s;
 }
 
+// ANIMACJA FLIP LIST
+
+.flip-list-move {
+  transition: transform .3s;
+}
+
 // KEYFRAMES 
 
 @keyframes spin {

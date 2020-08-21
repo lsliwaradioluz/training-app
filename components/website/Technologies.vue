@@ -1,6 +1,6 @@
 <template>
   <article class="technologies container">
-    <Scrollable>
+    <Scrollable class="technologies__carousel">
       <section
         class="technology"
         v-for="(technology, index) in technologies"
@@ -55,4 +55,5 @@ export default {
   width: 100%;
   opacity: 0.6;
 }
+
 </style>
