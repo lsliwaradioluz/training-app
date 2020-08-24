@@ -30,7 +30,23 @@ Backend: [link]
 
 ## Screenshoty
 
-![screenshot](https://github.com/lsliwaradioluz/training-app/blob/gh-pages/screenshots/user.jpg)
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/user.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/exercise.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/exercises.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/settings.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/user.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/userlist.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/workout-assistant.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/workout-editor.jpg?raw=true)
+
+![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/workout-page.jpg?raw=true)
 
 ## Build Setup
 
