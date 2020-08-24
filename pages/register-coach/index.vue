@@ -15,6 +15,7 @@
         placeholder="Imię i nazwisko"
         type="text"
         :spellcheck="false"
+        autocomplete="off"
       />
       <BaseInput
         v-model="user.email"
@@ -22,6 +23,7 @@
         placeholder="Adres e-mail"
         type="email"
         :spellcheck="false"
+        autocomplete="off"
       />
       <BaseInput
         v-model="user.password"
@@ -29,12 +31,14 @@
         placeholder="Hasło"
         type="password"
         :spellcheck="false"
+        autocomplete="off"
       />
       <BaseInput
         v-model="user.repeatPassword"
         placeholder="Powtórz hasło"
         type="password"
         :spellcheck="false"
+        autocomplete="off"
       />
       <button
         class="button-primary mt1 mb1"

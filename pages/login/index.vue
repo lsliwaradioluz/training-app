@@ -57,9 +57,9 @@ export default {
   data() {
     return {
       client: this.$apollo.getClient(),
-      identifier: "lsliwa",
+      identifier: "",
       revealPassword: false,
-      password: "950928",
+      password: "",
     };
   },
   methods: {
