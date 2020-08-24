@@ -1,6 +1,6 @@
-# Piti - aplikacja dla trenerów personalnych 
+# Piti
 
-> Oto mój flagowy projekt, który mam nadzieję przekona Cię do zaoferowania mi pracy
+Oto mój flagowy projekt, który mam nadzieję przekona Cię do zaoferowania mi pracy
 
 ## Build Setup
 
