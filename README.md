@@ -2,7 +2,7 @@
 
 Aplikacja dla trenerów personalnych do układania planów treningowych oraz zarządzania klientami. Powstała jako odpowiedź na moje własne zapotrzebowania na szybkie i łatwe w obsłudze oprogramowanie do układania treningów. Miało zastąpić słabo nadające się do tego arkusze Google, gdzie wszystko trzeba było wpisywać ręcznie. 
 
-# Koncepcja 
+## Koncepcja 
 
 Każdy trening nie jest tak naprawdę nowym, niezależnym i całkowicie niepowtarzalnym dziełem. Pracując z klientami, trener bez przerwy korzysta z tych samych elementów, tych samych wzorców. Hasło przewodnie aplikacji Piti to "Treningi są jak ogry i cebula - mają warstwy". 
 
