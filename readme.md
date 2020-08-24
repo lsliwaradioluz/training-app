@@ -1,23 +1,25 @@
 # Piti
 
-Aplikacja typu Progressive Web App dla trenerów personalnych do układania planów treningowych oraz zarządzania klientami. Powstała jako odpowiedź na moje własne zapotrzebowania na szybkie i łatwe w obsłudze oprogramowanie do układania treningów. Miało zastąpić słabo nadające się do tego arkusze Google, gdzie wszystko trzeba było wpisywać ręcznie.
+Piti is a Progressive Web App for personal trainers to manage their clients and create workout schedules. It was created as a response to my own demand for fast and easy-to-use software to aid my current job as personal trainer. It was supposed to replace Google Docs, where everything had to be typed by hand.
 
-## Koncepcja dla trenera
+## What it means for coaches
 
-Każdy trening nie jest tak naprawdę nowym, niezależnym i całkowicie niepowtarzalnym dziełem. Pracując z klientami, trener bez przerwy korzysta z tych samych elementów, tych samych wzorców. Hasło przewodnie aplikacji Piti to "Treningi są jak ogry i cebula - mają warstwy".
+Every workout is not a unique and independent work. While working with clients, coaches keep repeating the same schemes and using the same elements. The app's slogan is: "Workouts are like ogres and onions - they have layers". 
 
-- Najniżsżą warstwą leżącą u podstawy każdego treningu jest ćwiczenie (jego nazwa oraz przypisany mu film instruktażowy)
-- Kolejną warstwą jest jednostka treningowa - połączenie ćwiczenia oraz przypisanej mu liczby serii, powtórzeń, długości odpoczynku oraz ewentualnych uwag co do sposobu wykonania
-- Następną warstwą jest blok. Blok może skłądać się z jednej lub więcej jednostek treningowych.
-- Bloki pogrupowane są w sekcje. Sekcja to nic innego jak najwyższy poziom organizacyjny rozpiski treningowej. Przykładowe sekcje to Rozgrzewka, Skillwork, Siła, Wytrzymałośc, Mobilizacja
+- The lowest layer which makes the foundation of every workout is simply an exercise (its name and corresponding video that shows its execution)
+- The next layer is a training unit. It is a combination of an exercise and a scheduled number of sets, reps, rest duration and optional remarks regarding the execution
+- Next we have a complex. A complex can consist of one or more training units. 
+- Complexes are grouped in sections. Section is nothing more that just the highest level structure of a workout. Example sections include Warmup, Skillwork, Strenght, Endurance, Mobility.
 
-Każdy podopieczny ma przypisaną do siebie listę treningów, które już dla niego utworzyłeś. Tworząc kolejne, możesz korzystać z poprzednich, dzięki czemu oszczędzasz czas. Co ważne, aplikacja Piti opiera się na koncepcji "jak najmniej kliknięć". Oznacza to, że została zaprojektowana tak, by ręczne wpisywanie jakiegokolwiek tekstu zdarzało się jak najrzadziej. Ma być szybko!
+In Piti, every client has his own list of workouts. When you create a new workout, you can easily reuse the pieces of the previous ones. It saves a lot of time! Moreover, Piti presumes you don't want to type anything by hand. It was design to take you as few clicks away from creating the workout as possible. 
 
-## Koncepcja dla podopiecznego
+## What it means for clients
 
-Podopieczni często otrzymują od trenerów rozpiski treningowe na kartce papieru lub w wiadomości email. Nie wiedzą, jak je rozczytać, co zniechęca ich do ćwiczenia. W aplikacji Piti mają do dyspozycji asystenta treningu, który przeprowadzi ich przez sesję krok po kroku. Będzie pokazywał im na ekranie ćwiczenie do wykonania teraz i zaraz, odmierzy czas do końca przerwy lub do końca serii. Pozwoli też dodać notatkę do danego ćwiczenia - czy było łatwe, czy udało się wykonać założoną liczbę powtórzeń i tym podobne.
+Our clients often receive workout schedules on paper or via email. They find it hard to decipher them, which discourages them from working out. Piti provides them with the next generation Workout Assistant feature. They see the schedule, they click the Assistant button and voila! The assistant treats the workout just like a playlist on Spotify. You can navigate forward to the next exercise (just like next song) or backwards to the previous one. 
 
-## Technologie
+The assistant will measure the time you have left till the end of set or rest interval. You can also use it to add comments to the sets you've just performed. That feature ensures great feedback exchange between the client and the coach so that the next workout can be even better than the last!
+
+## Tech stack: 
 
 Frontend:
 
@@ -26,13 +28,13 @@ Frontend:
 - Javascript
 - VueJS (Nuxt - ze względu na potrzebę Server Side Rendering)
 
-Backend: [link]
+Backend: [click here](https://github.com/lsliwaradioluz/training-app-API)
 
 ## Live Demo 
 
-Działanie aplikacji można sprawdzić pod [tym](https://www.piti.live) adresem. Pod przyciskiem zaloguj znajduje się odnośnik "Jesteś HR-owcem? Wejdź tędy". Tam proszę klikać.  
+You can test the app [here](https://www.piti.live). Underneath the "Zaloguj" button there is a line "Jesteś HR-owcem? Wejdź tędy". Click there.
 
-Backend Piti znajduje się na Heroku i używa free dynos. Dlatego też wczytanie się apki może zając kilkanaście sekund. Jeżeli wisi, to własnie dlatego, innych problemów nie przewiduję. 
+The backend of the app is served on Heroku and it uses free dynos. Therefore it can take several more seconds to load. But do not get discouraged - refresh the page and you should be good to go. 
 
 ## Build Setup
 
@@ -51,7 +53,7 @@ $ npm run start
 $ npm run generate
 ```
 
-## Screenshoty
+## Screenshots
 
 ![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/user.jpg?raw=true)
 
