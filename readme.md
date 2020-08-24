@@ -28,6 +28,12 @@ Frontend:
 
 Backend: [link]
 
+## Live Demo 
+
+Działanie aplikacji można sprawdzić pod [tym](https://www.piti.live) adresem. Na samym dole widoku logowania, obok odnośnika do rejestracji, znajduje się przycisk "Jesteś HR-owcem? Zaloguj się bez danych". 
+
+Backend Piti znajduje się na Heroku i używa free dynos. Dlatego też wczytanie się apki może zając kilkanaście sekund. Jeżeli wisi, to własnie dlatego, innych problemów nie przewiduję. 
+
 ## Screenshoty
 
 ![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/user.jpg?raw=true)
