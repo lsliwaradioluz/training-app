@@ -26,7 +26,7 @@ Frontend:
 - HTML
 - CSS
 - Javascript
-- VueJS (Nuxt - ze względu na potrzebę Server Side Rendering)
+- VueJS (Nuxt - because it needed server side rendering)
 
 Backend: [click here](https://github.com/lsliwaradioluz/training-app-API)
 
