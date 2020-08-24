@@ -1,5 +1,7 @@
 # Piti
 
+> UWAGA! FLAGOWY PROJEKT! Jeżeli chcesz sprawdzić moje umiejętności, a nie masz zbyt wiele czasu, wejdź w ten projekt. 
+
 Aplikacja typu Progressive Web App dla trenerów personalnych do układania planów treningowych oraz zarządzania klientami. Powstała jako odpowiedź na moje własne zapotrzebowania na szybkie i łatwe w obsłudze oprogramowanie do układania treningów. Miało zastąpić słabo nadające się do tego arkusze Google, gdzie wszystko trzeba było wpisywać ręcznie.
 
 ## Koncepcja dla trenera
