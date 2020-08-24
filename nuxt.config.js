@@ -79,7 +79,6 @@ export default {
     "~/plugins/filters", 
     "~/plugins/components.js", 
     "~/plugins/mixins", 
-    { src: "~/plugins/aos", mode: 'client' },
     { src: "~/plugins/initializeStore.js", mode: 'client' },
   ],
   /*

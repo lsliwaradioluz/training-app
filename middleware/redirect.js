@@ -1,5 +1,6 @@
 export default (context) => {
   if (
+    context.route.path == '/' || 
     context.store.state.auth.user == null &&
     !context.route.path.includes("login") &&
     !context.route.path.includes("register-coach") &&

@@ -5,6 +5,7 @@
       treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie
       nowe.
     </p>
+    {{ sections[0].complexes[0].name }}
     <section>
       <header>
         <h4 class="t-faded m00 pt1 pb05">
@@ -72,11 +73,8 @@
               :section="section"
               :current-complex="currentComplex"
               editor
-              @dragstart="dragging = true"
-              @dragend=" $event.type == 'complex' ? 
-                moveComplex(sectionindex, $event.elementIndex, $event.moveCount)
-                : moveUnit(sectionindex, $event.elementIndex, $event.moveCount, $event.parentIndex)
-              "
+              @dragging="dragging = true"
+              @input="dragging = false"
             >
               <template v-slot:section-buttons>
                 <ContextMenu>
@@ -123,7 +121,7 @@
               <template v-slot:complex-buttons="{ complexindex, complex }">
                 <ContextMenu v-show="currentComplex != complexindex">
                   <template v-slot:trigger>
-                    <span class="flaticon-menu fs-12" />
+                    <span class="flaticon-vertical-dots complex-move-button fs-12" />
                   </template>
                   <template v-slot:options>
                     <button
@@ -172,7 +170,7 @@
               >
                 <ContextMenu>
                   <template v-slot:trigger>
-                    <span class="flaticon-menu fs-12" />
+                    <span class="flaticon-vertical-dots unit-move-button fs-12" />
                   </template>
                   <template v-slot:options>
 
@@ -305,9 +303,10 @@ import NameEditor from "~/components/NameEditor.vue";
 import getSingleUser from "~/apollo/queries/getSingleUser.gql";
 import createWorkout from "~/apollo/mutations/createWorkout.gql";
 import updateWorkout from "~/apollo/mutations/updateWorkout.gql";
+import Draggable from './Draggable'
 
 export default {
-  components: { NameEditor },
+  components: { NameEditor, Draggable },
   props: {
     template: {
       type: Object,
@@ -328,6 +327,7 @@ export default {
       copiedUnit: null,
       nameEditorVisible: false,
       dragging: false,
+      numbers: [1,2,3,4,5,6]
     };
   },
   computed: {
@@ -652,6 +652,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.number {
+  border: 2px solid color(headers);
+  border-radius: 5px;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: .5rem;
+  background-color: color(primary);
+  p {
+    margin: 0;
+  }
+}
 .inputs {
   width: 100vw;
   margin-left: -1rem;

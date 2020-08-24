@@ -31,6 +31,7 @@ import FeedbackEditor from "../components/FeedbackEditor"
 import FamilyEditor from "../components/FamilyEditor"
 import FamilyTab from "../components/FamilyTab"
 import Video from "../components/Video"
+import Draggable from "../components/Draggable"
 
 Vue.component("BaseHeader", BaseHeader)
 Vue.component("BaseInput", BaseInput)
@@ -63,3 +64,4 @@ Vue.component("FeedbackEditor", FeedbackEditor)
 Vue.component("FamilyEditor", FamilyEditor)
 Vue.component("FamilyTab", FamilyTab)
 Vue.component("Video", Video)
+Vue.component("Draggable", Draggable)

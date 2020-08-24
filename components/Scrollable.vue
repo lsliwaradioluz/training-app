@@ -3,7 +3,8 @@
     <section class="scrollable__container" @scroll="onScroll" ref="scrollContainer">
       <slot></slot>
     </section>
-    <div class="scrollable__track" ref="track">
+    <!-- to poniżej trzeba ukryć, jak niepotrzebne  -->
+    <div class="scrollable__track" ref="track" v-if="showTrack">
       <div class="scrollable__progress" ref="progressBar" />
       <div
         class="scrollable__thumb"
@@ -28,6 +29,7 @@ export default {
     return {
       touchStart: null,
       startingScroll: null,
+      showTrack: false, 
       trackContainerRatio: null,
     };
   },
@@ -37,6 +39,13 @@ export default {
       const scrollWidth = this.$refs.scrollContainer.scrollWidth - containerWidth;
       const thumbWidth = this.$refs.thumb.clientWidth;
       this.trackContainerRatio = (containerWidth - thumbWidth) / scrollWidth;
+    },
+    setShowTrack() {
+      const containerWidth = this.$refs.scrollContainer.clientWidth;
+      const scrollWidth = this.$refs.scrollContainer.scrollWidth;
+      if (scrollWidth > containerWidth) {
+        this.showTrack = true
+      }
     },
     onScroll() {
       if (!this.trackContainerRatio) {
@@ -75,6 +84,10 @@ export default {
       document.querySelector("body").style.overflow = "auto"
     },
   },
+  mounted() {
+    this.setShowTrack()
+  }
+
 };
 </script>
 

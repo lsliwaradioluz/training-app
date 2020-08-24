@@ -1,8 +1,16 @@
 <template>
-  <div class="login column j-center">
-    <h1 class="mt0 mb2">
+  <div class="login">
+    <h1 class="login__header">
       Zaloguj się
     </h1>
+    <p class="login__caption">
+      Witamy w Piti - aplikacji #1 na rynku trenerów personalnych. Może jeszcze
+      nie teraz, ale w przyszłości na pewno. Zaloguj się, aby uzyskać dostęp do
+      swoich danych lub
+      <nuxt-link class="login__caption__register" to="register-coach"
+        >załóż konto</nuxt-link
+      >, jeśli jeszcze go nie masz!
+    </p>
     <form class="column j-center" @submit.prevent>
       <BaseInput
         id="login"
@@ -59,11 +67,11 @@ export default {
       this.client
         .mutate({
           mutation: loginMutation,
-          variables: { input }
+          variables: { input },
         })
-        .then(res => {
-          const user = res.data.login.user
-          const token = res.data.login.token
+        .then((res) => {
+          const user = res.data.login.user;
+          const token = res.data.login.token;
 
           let userToSet = {
             id: user.id,
@@ -73,17 +81,17 @@ export default {
             image: user.image,
             admin: user.admin,
             active: user.active,
-          }
+          };
 
-          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 })
+          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 });
 
-          this.setUser(userToSet)
+          this.setUser(userToSet);
           this.$router.push({
             path: "/dashboard",
-          })
+          });
         })
         .catch(() => {
-          this.setNotification("Nieprawidłowy login lub hasło")
+          this.setNotification("Nieprawidłowy login lub hasło");
         });
     },
     ...mapMutations({
@@ -96,6 +104,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login__header {
+  margin: 0;
+}
+
+.login__caption {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.login__caption__register {
+  color: color(faded);
+  text-decoration: underline;
+}
+
 .login__help-buttons {
   font-size: 12px;
 }

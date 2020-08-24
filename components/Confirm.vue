@@ -1,13 +1,13 @@
 <template>
   <div
     class="confirm column j-center"
-    :class="{ 'confirm--active': showConfirm, main: showConfirm }"
+    :class="{ 'confirm__window--active': showConfirm, main: showConfirm }"
   >
-    <div v-show="showConfirm" class="window tab b-primary">
+    <div v-show="showConfirm" class="confirm__window tab b-primary">
       <p class="t-center">
         {{ message }}
       </p>
-      <div class="buttons row j-between">
+      <div class="confirm__window__buttons row j-between">
         <button class="button-primary" type="button" @click="confirm">
           Tak
         </button>
@@ -56,22 +56,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.window {
+.confirm__window {
   border-radius: 0;
+  max-width: 450px;
 }
 
-.confirm--active {
+.confirm__window--active {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 450px;
   background-color: rgba(0, 0, 0, 0.678);
   z-index: 1000000;
   transition: background-color 0.5s;
 }
 
-.buttons button {
+.confirm__window__buttons button {
   width: 49%;
+}
+
+@media (min-width: 450px) {
+  .confirm__window--active {
+    height: 80vh;
+    top: 10vh;
+    left: calc(50vw - 450px/2);
+    border-radius: 15px;
+  }
 }
 </style>

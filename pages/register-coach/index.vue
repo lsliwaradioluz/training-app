@@ -1,8 +1,13 @@
 <template>
   <div class="register-coach column j-center">
-    <h1 class="mt0 mb2">
+    <h1 class="register-coach__header">
       Zarejestruj się
     </h1>
+    <p class="register-coach__caption">
+      Dołącz do trenerów korzystających z najbardziej przejrzystej aplikacji
+      treningowej na rynku. Twórz rozpiski w oka mgnieniu i zarządzaj
+      podopiecznymi jednym kliknięciem. Bez opłat. Bez zbędnych funkcji.
+    </p>
     <form class="column j-center mt1" @submit.prevent>
       <BaseInput
         v-model="user.fullname"
@@ -49,8 +54,8 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex"
-import registerMutation from '~/apollo/mutations/register.gql'
+import { mapMutations } from "vuex";
+import registerMutation from "~/apollo/mutations/register.gql";
 
 export default {
   layout: "login",
@@ -63,7 +68,7 @@ export default {
         password: "",
         repeatPassword: "",
       },
-    }
+    };
   },
   methods: {
     register() {
@@ -73,32 +78,32 @@ export default {
         !this.user.password ||
         !this.user.repeatPassword
       ) {
-        this.setNotification("Wszystkie pola muszą być wypełnione")
-        return
+        this.setNotification("Wszystkie pola muszą być wypełnione");
+        return;
       }
 
       if (this.user.password != this.user.repeatPassword) {
-        this.setNotification("Podane hasła nie są takie same")
-        return
+        this.setNotification("Podane hasła nie są takie same");
+        return;
       }
 
-      const username = this.generateUsername(this.user.fullname)
+      const username = this.generateUsername(this.user.fullname);
       const input = {
         username,
         fullname: this.user.fullname,
         email: this.user.email,
         password: this.user.password,
         admin: true,
-      }
+      };
 
       this.client
         .mutate({
           mutation: registerMutation,
-          variables: { input }
+          variables: { input },
         })
-        .then(res => {
-          const user = res.data.register.user
-          const token = res.data.register.token
+        .then((res) => {
+          const user = res.data.register.user;
+          const token = res.data.register.token;
 
           let userToSet = {
             id: user.id,
@@ -108,18 +113,20 @@ export default {
             image: user.image,
             admin: user.admin,
             active: user.active,
-          }
+          };
 
-          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 })
+          this.$apolloHelpers.onLogin(token, undefined, { expires: 7 });
 
-          this.setUser(userToSet)
+          this.setUser(userToSet);
           this.$router.push({
             path: "/dashboard",
-          })
+          });
         })
         .catch((err) => {
-          console.log(err)
-          this.setNotification("Nie udało się zarejestrować. Sprawdź połączenie z Internetem")
+          console.log(err);
+          this.setNotification(
+            "Nie udało się zarejestrować. Sprawdź połączenie z Internetem"
+          );
         });
     },
     ...mapMutations({
@@ -127,10 +134,19 @@ export default {
       setNotification: "main/setNotification",
     }),
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
+.register-coach__header {
+  margin: 0;
+}
+
+.register-coach__caption {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 .register-coach__help-buttons {
   font-size: 12px;
 }
