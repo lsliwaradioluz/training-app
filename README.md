@@ -1,6 +1,6 @@
-# training-app
+# Piti - aplikacja dla trenerów personalnych 
 
-> Follow along workouts everyday, everywhere
+> Oto mój flagowy projekt, który mam nadzieję przekona Cię do zaoferowania mi pracy
 
 ## Build Setup
 
@@ -18,5 +18,3 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
