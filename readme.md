@@ -34,6 +34,23 @@ Działanie aplikacji można sprawdzić pod [tym](https://www.piti.live) adresem.
 
 Backend Piti znajduje się na Heroku i używa free dynos. Dlatego też wczytanie się apki może zając kilkanaście sekund. Jeżeli wisi, to własnie dlatego, innych problemów nie przewiduję. 
 
+## Build Setup
+
+```bash
+# install dependencies
+$ npm run install
+
+# serve with hot reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm run start
+
+# generate static project
+$ npm run generate
+```
+
 ## Screenshoty
 
 ![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/user.jpg?raw=true)
@@ -53,20 +70,3 @@ Backend Piti znajduje się na Heroku i używa free dynos. Dlatego też wczytanie
 ![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/workout-editor.jpg?raw=true)
 
 ![screenshot](https://github.com/lsliwaradioluz/training-app/blob/master/assets/images/screenshots/workout-page.jpg?raw=true)
-
-## Build Setup
-
-```bash
-# install dependencies
-$ npm run install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
-```
