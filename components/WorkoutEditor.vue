@@ -5,7 +5,6 @@
       treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie
       nowe.
     </p>
-    {{ sections[0].complexes[0].name }}
     <section>
       <header>
         <h4 class="t-faded m00 pt1 pb05">
