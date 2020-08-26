@@ -11,6 +11,7 @@
       button="complex-move-button"
       v-model="sectionToModify.complexes"
       @dragging="$emit('dragging')"
+      @dragfail="$emit('dragend')"
       @input="$emit('dragend', sectionToModify)"
     >
       <section

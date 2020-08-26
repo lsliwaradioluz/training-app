@@ -26,8 +26,7 @@ export default {
   data() {
     return {
       touchStart: null,
-      verticalMoveLength: 0, 
-      horizontalMoveLength: 0,
+      moveLength: {},
       moveCount: 0,
       movingElement: null,
       movingElementIndex: null,
@@ -44,6 +43,20 @@ export default {
         element.style.transition = ``;
       }, 300);
     },
+    resetState() {
+      for (let sibling of this.movingElementSiblings) {
+        sibling.style.transform = "";
+      }
+      this.moveCount = 0;
+      this.movingElement.classList.remove("moving")
+      this.movingmovingElementIndex = null;
+      this.movingElement = null
+      this.movingElementSiblings = null;
+      this.nextSibling = null;
+      this.previousSibling = null;
+      this.moveLength = {};
+      document.querySelector("html").style.overflow = "auto";
+    },
     moveElement() {
       const valueCopy = [...this.value]
       const element = valueCopy[this.movingElementIndex]
@@ -51,13 +64,16 @@ export default {
       valueCopy.splice(this.movingElementIndex, 1)
       valueCopy.splice(newElementIndex, 0, element)
       this.$emit("input", valueCopy)
+      this.resetState()
     },
     deleteElement() {
       const valueCopy = [...this.value]
       valueCopy.splice(this.movingElementIndex, 1)
+      this.animateElement(this.movingElement);
       this.movingElement.style.transform = `translateX(-500px)`
       setTimeout(() => {
         this.$emit("input", valueCopy)
+        this.resetState()
       }, 300)
     },
     setSiblings() {
@@ -131,14 +147,14 @@ export default {
 
 
       if (event.type == "touchmove") {
-        this.verticalMoveLength = event.touches[0].screenY - this.touchStart.vertical;
-        this.horizontalMoveLength = event.touches[0].screenX - this.touchStart.horizontal
+        this.moveLength.vertical = event.touches[0].screenY - this.touchStart.vertical;
+        this.moveLength.horizontal = event.touches[0].screenX - this.touchStart.horizontal
       } else if (event.type == "mousemove" && this.mousedown == true) {
-        this.verticalMoveLength = event.screenY - this.touchStart.vertical
-        this.horizontalMoveLength = event.screenX - this.touchStart.horizontal
+        this.moveLength.vertical = event.screenY - this.touchStart.vertical
+        this.moveLength.horizontal = event.screenX - this.touchStart.horizontal
       }
 
-      this.movingElement.style.transform = `translate(${this.horizontalMoveLength < 0 ? this.horizontalMoveLength : 0}px, ${this.verticalMoveLength}px)`;
+      this.movingElement.style.transform = `translate(${this.moveLength.horizontal < 0 ? this.moveLength.horizontal : 0}px, ${this.moveLength.vertical}px)`;
       
       if (this.nextSibling && movingElementBottom >= nextSiblingBottom) {
         this.animateElement(this.nextSibling);
@@ -169,31 +185,19 @@ export default {
       }
     },
     onEnd() {  
-        if (!this.movingElement) {
-          return
-        }
+      if (!this.movingElement) {
+        return
+      }
 
-        for (let sibling of this.movingElementSiblings) {
-          sibling.style.transform = "";
-        }
-
-        if (this.horizontalMoveLength < -100) {
-          this.animateElement(this.movingElement);
-          this.deleteElement()
-        } else if (this.moveCount != 0) {
-          this.moveElement()
-        } else {
-          this.animateElement(this.movingElement);
-        }
-
-        this.moveCount = 0;
-        this.movingElement.classList.remove("moving")
-        this.movingmovingElementIndex = null;
-        this.movingElement = null
-        this.movingElementSiblings = null;
-        this.nextSibling = null;
-        this.previousSibling = null;
-        document.querySelector("html").style.overflow = "auto";
+      if (this.moveLength.horizontal < -100) {
+        this.deleteElement()
+      } else if (this.moveCount != 0) {
+        this.moveElement()
+      } else {
+        this.$emit("dragfail")
+        this.animateElement(this.movingElement);
+        this.resetState()
+      }
     },
   },
 };

@@ -73,7 +73,7 @@
               :current-complex="currentComplex"
               editor
               @dragging="dragging = true"
-              @input="dragging = false"
+              @dragend="dragging = false"
             >
               <template v-slot:section-buttons>
                 <ContextMenu>
@@ -149,12 +149,6 @@
                     >
                       Zmień nazwę
                     </button>
-                    <button
-                      class="flaticon-trash"
-                      @click="deleteComplex(complexindex)"
-                    >
-                      Usuń
-                    </button>
                   </template>
                 </ContextMenu>
                 <button
@@ -165,16 +159,13 @@
                 />
               </template>
               <template
-                v-slot:unit-buttons="{ unit, unitindex, complex, complexindex }"
+                v-slot:unit-buttons="{ unit, unitindex, complexindex }"
               >
                 <ContextMenu>
                   <template v-slot:trigger>
                     <span class="flaticon-vertical-dots unit-move-button fs-12" />
                   </template>
                   <template v-slot:options>
-
-                    <template v-if="complex.units.length == 1">
-                    </template>
                     <button
                       class="flaticon-pencil"
                       @click="openUnitEditor(unit, unitindex, complexindex)"
@@ -183,12 +174,6 @@
                     </button>
                     <button class="flaticon-copy" @click="copyUnit(unit)">
                       Kopiuj
-                    </button>
-                    <button
-                      class="flaticon-trash"
-                      @click="deleteUnit(complexindex, unitindex)"
-                    >
-                      Usuń
                     </button>
                   </template>
                 </ContextMenu>
@@ -326,7 +311,6 @@ export default {
       copiedUnit: null,
       nameEditorVisible: false,
       dragging: false,
-      numbers: [1,2,3,4,5,6]
     };
   },
   computed: {
@@ -422,19 +406,6 @@ export default {
       this.sections[this.currentSection].name = sectionClone.name;
       this.$store.commit("main/setNotification", "Dodane!");
     },
-    moveComplex(sectionindex, complexindex, moveCount) {
-      let currentComplexes = this.sections[sectionindex].complexes;
-      let complexToMove = currentComplexes[complexindex];
-      let newIndex = complexindex + moveCount;
-
-      currentComplexes.splice(complexindex, 1);
-      currentComplexes.splice(newIndex, 0, complexToMove);
-      this.dragging = false;
-    },
-    deleteComplex(complexindex) {
-      this.sections[this.currentSection].complexes.splice(complexindex, 1);
-      this.currentComplex = null;
-    },
     copyComplex(complex) {
       const complexClone = JSON.parse(JSON.stringify(complex));
       this.sections[this.currentSection].complexes.push(complexClone);
@@ -466,29 +437,6 @@ export default {
       }
       this.editedUnit = null;
       this.$store.commit("main/setNotification", "Dodane!");
-    },
-    deleteUnit(complex, unit) {
-      this.sections[this.currentSection].complexes[complex].units.splice(
-        unit,
-        1
-      );
-      if (
-        this.sections[this.currentSection].complexes[complex].units.length == 0
-      ) {
-        this.sections[this.currentSection].complexes.splice(complex, 1);
-        this.currentComplex = null;
-      }
-    },
-    moveUnit(sectionindex, unitindex, moveCount, complexindex) {
-      let currentUnits = this.sections[sectionindex].complexes[
-        complexindex
-      ].units;
-      let unitToMove = currentUnits[unitindex];
-      let newIndex = unitindex + moveCount;
-
-      currentUnits.splice(unitindex, 1);
-      currentUnits.splice(newIndex, 0, unitToMove);
-      this.dragging = false;
     },
     copyUnit(unit) {
       this.copiedUnit = unit;
@@ -651,17 +599,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.number {
-  border: 2px solid color(headers);
-  border-radius: 5px;
-  padding: 1rem;
-  text-align: center;
-  margin-bottom: .5rem;
-  background-color: color(primary);
-  p {
-    margin: 0;
-  }
-}
 .inputs {
   width: 100vw;
   margin-left: -1rem;
