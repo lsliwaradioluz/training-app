@@ -38,6 +38,7 @@
           button="unit-move-button"
           v-model="sectionToModify.complexes[complexindex].units"
           @dragging="$emit('dragging')"
+          @dragfail="$emit('dragend')"
           @input="$emit('dragend', sectionToModify)"
         >
           <div
