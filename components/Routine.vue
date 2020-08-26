@@ -95,6 +95,11 @@ export default {
       default: () => false,
     },
   },
+  watch: {
+    section(value) {
+      this.sectionToModify = value
+    }
+  },
   data() {
     return {
       sectionToModify: this.section,
