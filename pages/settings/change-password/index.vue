@@ -36,17 +36,13 @@ export default {
   methods: {
     updatePassword() {
       const input = {
-        where: {
-          id: this.user.id,
-        },
-        data: {
-          password: this.password,
-        },
+        id: this.user.id,
+        password: this.password,
       }
 
       if (this.password == this.repeatPassword) {
         this.client
-          .mutate({ mutation: updateUser, variables: { input: input } })
+          .mutate({ mutation: updateUser, variables: { input } })
           .then(() => {
             this.$router.go(-1)
           })

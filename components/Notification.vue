@@ -46,6 +46,7 @@ export default {
   z-index: 10020;
   padding: 1rem;
   font-size: 13px;
+  max-width: 450px;
   background-color: color(headers);
   color: color(primary);
 }
@@ -66,6 +67,16 @@ export default {
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@media (min-width: 450px) {
+  .notification {
+    bottom: 10vh;
+    left: calc(50vw - 450px/2);
+    border-radius: 15px;
+    border: 4px solid black;
+    border-top: none;
   }
 }
 </style>

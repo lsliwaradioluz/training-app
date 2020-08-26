@@ -19,7 +19,6 @@
       </li>
     </ul>
     <ul class="links">
-      <div class="dupa"></div>
       <nuxt-link class="link flaticon-home" tag="li" to="/dashboard">
         <p class="link__text">Strona główna</p>
       </nuxt-link>
@@ -156,6 +155,7 @@ export default {
   justify-content: space-between;
   max-width: 450px;
   z-index: 1000;
+  padding: 0;
 }
 
 .link {
