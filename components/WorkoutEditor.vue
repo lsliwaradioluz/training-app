@@ -189,14 +189,14 @@
     <!-- POPRZEDNIE TRENINGI  -->
     <section v-if="previousWorkouts.length > 0">
       <header class="row j-between a-start pt1 pb05 t-faded">
-        <h4 v-if="!previousWorkouts[currentWorkout].user" class="mb0 t-faded">
-          {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
-          {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
+        <h4 v-if="!previousWorkout.user" class="mb0 t-faded">
+          {{ previousWorkout.scheduled | getDayName }}
+          {{ previousWorkout.scheduled | getDayAndMonth }}
         </h4>
         <h4 v-else class="mb0 t-faded">
-          {{ previousWorkouts[currentWorkout].scheduled | getDayName }}
-          {{ previousWorkouts[currentWorkout].scheduled | getDayAndMonth }}
-          ({{ previousWorkouts[currentWorkout].user.username }})
+          {{ previousWorkout.scheduled | getDayName }}
+          {{ previousWorkout.scheduled | getDayAndMonth }}
+          ({{ previousWorkout.user.username }})
         </h4>
         <div class="row ml05" v-if="previousWorkouts.length > 1">
           <button
@@ -212,15 +212,15 @@
         </div>
       </header>
       <div
-        v-if="previousWorkoutSections.length > 0"
+        v-if="previousWorkouts.length > 0"
         class="carousel-container b-secondary"
       >
         <Carousel
-          :key="previousWorkoutSections.length"
+          :key="previousWorkout.length"
           :navigation-config="carouselNavConfig"
         >
           <div
-            v-for="section in previousWorkoutSections"
+            v-for="section in previousWorkout.sections"
             :key="section.id"
             class="p11 column"
           >
@@ -306,7 +306,7 @@ export default {
       currentSection: 0,
       currentComplex: null,
       currentUnit: null,
-      currentWorkout: 0,
+      previousWorkoutIndex: 0,
       editedUnit: null,
       copiedUnit: null,
       nameEditorVisible: false,
@@ -314,32 +314,8 @@ export default {
     };
   },
   computed: {
-    filteredSections() {
-      const sectionsClone = JSON.parse(JSON.stringify(this.sections));
-      let filteredSections = sectionsClone.filter((section) => {
-        return section.complexes.length > 0;
-      });
-
-      filteredSections.forEach((section, sectionindex, sections) => {
-        sections[sectionindex] = _.omit(section, "__typename", "id");
-        section.complexes.forEach((complex, complexindex, complexes) => {
-          complexes[complexindex] = _.omit(complex, "__typename", "id");
-          complex.units.forEach((unit, unitindex, units) => {
-            units[unitindex] = _.omit(unit, "__typename", "id");
-            filteredSections[sectionindex].complexes[complexindex].units[
-              unitindex
-            ].exercise = unit.exercise.id;
-          });
-        });
-      });
-
-      return filteredSections;
-    },
     dateAndTime() {
       return new Date(this.selectedDate + " " + this.selectedTime);
-    },
-    workoutReady() {
-      return this.filteredSections.length > 0;
     },
     previousWorkouts() {
       let previousWorkouts;
@@ -358,13 +334,8 @@ export default {
       }
       return previousWorkouts;
     },
-    previousWorkoutSections() {
-      const previousWorkoutSections = this.previousWorkouts[
-        this.currentWorkout
-      ].sections.filter((section) => {
-        return section.complexes.length > 0;
-      });
-      return previousWorkoutSections;
+    previousWorkout() {
+      return this.previousWorkouts[this.previousWorkoutIndex]
     },
     carouselNavConfig() {
       return {
@@ -516,23 +487,41 @@ export default {
       this.nameEditorVisible = false;
     },
     showPreviousWorkout() {
-      this.currentWorkout == 0
-        ? (this.currentWorkout = 0)
-        : this.currentWorkout--;
+      this.previousWorkoutIndex == 0
+        ? (this.previousWorkoutIndex = 0)
+        : this.previousWorkoutIndex--;
     },
     showNextWorkout() {
-      this.currentWorkout == this.previousWorkouts.length - 1
-        ? (this.currentWorkout = this.previousWorkouts.length - 1)
-        : this.currentWorkout++;
+      this.previousWorkoutIndex == this.previousWorkouts.length - 1
+        ? (this.previousWorkoutIndex = this.previousWorkouts.length - 1)
+        : this.previousWorkoutIndex++;
     },
     async uploadWorkout() {
+      const sectionsClone = JSON.parse(JSON.stringify(this.sections));
+      let sections = sectionsClone.filter((section) => {
+        return section.complexes.length > 0;
+      });
+
+      sections.forEach((section, sectionindex, sections) => {
+        sections[sectionindex] = _.omit(section, "id");
+        section.complexes.forEach((complex, complexindex, complexes) => {
+          complexes[complexindex] = _.omit(complex, "id");
+          complex.units.forEach((unit, unitindex, units) => {
+            units[unitindex] = _.omit(unit, "id");
+            sections[sectionindex].complexes[complexindex].units[
+              unitindex
+            ].exercise = unit.exercise.id;
+          });
+        });
+      });
+
       let configObj;
       const input = {
         scheduled: this.dateAndTime,
         sticky: this.sticky,
         name: this.name,
-        ready: this.workoutReady,
-        sections: this.filteredSections,
+        ready: sections.length > 0,
+        sections,
       };
       if (this.edit) {
         input.id = this.id;
@@ -574,7 +563,6 @@ export default {
     createBackup() {
       if (
         this.$store.state.main.workoutEditor.isEditing &&
-        this.workoutReady &&
         !this.edit
       ) {
         const workoutEditorBackup = {
