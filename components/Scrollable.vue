@@ -3,7 +3,6 @@
     <section class="scrollable__container" @scroll="onScroll" ref="scrollContainer">
       <slot></slot>
     </section>
-    <!-- to poniżej trzeba ukryć, jak niepotrzebne  -->
     <div class="scrollable__track" ref="track" v-if="showTrack">
       <div class="scrollable__progress" ref="progressBar" />
       <div

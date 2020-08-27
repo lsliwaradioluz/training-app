@@ -325,7 +325,7 @@ export default {
         section.complexes.forEach((complex, complexindex, complexes) => {
           complexes[complexindex] = _.omit(complex, "__typename", "id");
           complex.units.forEach((unit, unitindex, units) => {
-            units[unitindex] = _.omit(unit, "__typename", "id", "feedback");
+            units[unitindex] = _.omit(unit, "__typename", "id");
             filteredSections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id;
@@ -404,10 +404,18 @@ export default {
         ...sectionClone.complexes
       );
       this.sections[this.currentSection].name = sectionClone.name;
+      for (let complex of this.sections[this.currentSection].complexes) {
+        for (let unit of complex.units) {
+          unit.feedback = ''
+        }
+      }
       this.$store.commit("main/setNotification", "Dodane!");
     },
     copyComplex(complex) {
       const complexClone = JSON.parse(JSON.stringify(complex));
+      for (let unit of complexClone.units) {
+        unit.feedback = ''
+      }
       this.sections[this.currentSection].complexes.push(complexClone);
       this.$store.commit("main/setNotification", "Dodane!");
     },
@@ -417,6 +425,7 @@ export default {
     },
     addUnit(unit) {
       const unitClone = JSON.parse(JSON.stringify(unit));
+      unitClone.feedback = ''
 
       if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
@@ -439,7 +448,8 @@ export default {
       this.$store.commit("main/setNotification", "Dodane!");
     },
     copyUnit(unit) {
-      this.copiedUnit = unit;
+      this.copiedUnit = JSON.parse(JSON.stringify(unit));
+      this.copiedUnit.feedback = ''
       this.$store.commit("main/setNotification", "Skopiowano do schowka!");
     },
     pasteUnit(complex) {

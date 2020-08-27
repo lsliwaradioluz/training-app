@@ -16,14 +16,27 @@
       z Cyfrowego Asystenta, który przeprowadzi Cię przez Twój trening krok po
       kroku. Dodawaj komentarze do ćwiczeń, aby trener wiedział, jak Ci poszło.
     </p>
-    <div class="buttons row j-between">
+    <div class="buttons">
       <button
         class="button-tertiary"
+        :class="{ 'sole-button': !user.admin }"
         type="button"
         @click="$emit('show-assistant')"
       >
         Asystent
       </button>
+      <nuxt-link
+        v-if="user.admin"
+        class="button-tertiary"
+        tag="button"
+        type="button"
+        :to="{
+          path: `/workouts/${workout.id}/edit`,
+          query: { user: workout.user.id },
+        }"
+      >
+        Edytuj
+      </nuxt-link>
     </div>
   </div>
 </template>
@@ -54,10 +67,14 @@ export default {
 }
 
 .buttons {
+  display: flex; 
+  justify-content: space-between;
   button {
-    flex-basis: 49%;
-    flex-shrink: 1;
-    flex-grow: 1;
+    flex-basis: 49.5%;
   }
+}
+
+.sole-button {
+  flex-grow: 1;
 }
 </style>
