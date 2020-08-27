@@ -337,6 +337,15 @@ export default {
     previousWorkout() {
       return this.previousWorkouts[this.previousWorkoutIndex]
     },
+    workoutReady() {
+      let workoutReady = false
+      for (let section of this.sections) {
+        if (section.complexes.length > 0) {
+          workoutReady = true
+        } 
+      }
+      return workoutReady
+    },
     carouselNavConfig() {
       return {
         height: "2px",
@@ -520,7 +529,7 @@ export default {
         scheduled: this.dateAndTime,
         sticky: this.sticky,
         name: this.name,
-        ready: sections.length > 0,
+        ready: this.workoutReady,
         sections,
       };
       if (this.edit) {
@@ -563,6 +572,7 @@ export default {
     createBackup() {
       if (
         this.$store.state.main.workoutEditor.isEditing &&
+        this.workoutReady &&
         !this.edit
       ) {
         const workoutEditorBackup = {
