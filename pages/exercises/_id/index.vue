@@ -2,10 +2,10 @@
   <div class="family" v-if="!$apollo.loading">
     <div class="family__main">
       <article class="family__exercise">
-        <Video :key="`image-${current}${family.exercises.length}`" :source="video" opacity="0.5" />
+        <Video :key="`image-${current}${family.exercises.length}`" :source="video" opacity="0.2" />
         <h3 class="family__exercise__name" v-if="currentExercise">
           <MovingText :key="current">
-            {{ currentExercise.name }}
+            {{ currentExercise.name }}{{ currentExerciseFormat }}
           </MovingText>
           <ContextMenu v-if="user.admin">
             <template v-slot:trigger>
@@ -142,6 +142,10 @@ export default {
     },
     currentExercise() {
       return this.family.exercises[this.current];
+    },
+    currentExerciseFormat() {
+      const format = this.currentExercise.image ? this.currentExercise.image.url.slice(-4) : '';
+      return format
     },
     video() {
       if (this.currentExercise && this.currentExercise.image) {
