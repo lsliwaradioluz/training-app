@@ -512,11 +512,11 @@ export default {
       });
 
       sections.forEach((section, sectionindex, sections) => {
-        sections[sectionindex] = _.omit(section, "id");
+        sections[sectionindex] = _.omit(section, "id", "__typename");
         section.complexes.forEach((complex, complexindex, complexes) => {
-          complexes[complexindex] = _.omit(complex, "id");
+          complexes[complexindex] = _.omit(complex, "id", "__typename");
           complex.units.forEach((unit, unitindex, units) => {
-            units[unitindex] = _.omit(unit, "id");
+            units[unitindex] = _.omit(unit, "id", "__typename");
             sections[sectionindex].complexes[complexindex].units[
               unitindex
             ].exercise = unit.exercise.id;
