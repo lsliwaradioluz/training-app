@@ -216,7 +216,7 @@ export default {
           : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
       }
 
-      return video.replace(".gif", ".mp4")
+      return video
     },
     units() {
       let units = []

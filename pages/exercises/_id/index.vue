@@ -5,7 +5,7 @@
         <Video :key="`image-${current}${family.exercises.length}`" :source="video" opacity="0.2" />
         <h3 class="family__exercise__name" v-if="currentExercise">
           <MovingText :key="current">
-            {{ currentExercise.name }}{{ currentExerciseFormat }}
+            {{ currentExercise.name }}
           </MovingText>
           <ContextMenu v-if="user.admin">
             <template v-slot:trigger>
@@ -67,11 +67,6 @@
               </button>
             </template>
           </ContextMenu>
-          <button
-            class="family__details__button flaticon-down-arrow"
-            @click="scrollToDescription"
-            v-if="!user.admin && family.description"
-          />
         </h3>
         <p class="family__details__caption">
           {{ familyCaption }}
@@ -143,14 +138,9 @@ export default {
     currentExercise() {
       return this.family.exercises[this.current];
     },
-    currentExerciseFormat() {
-      const format = this.currentExercise.image ? this.currentExercise.image.url.slice(-4) : '';
-      return format
-    },
     video() {
       if (this.currentExercise && this.currentExercise.image) {
-        const link = this.currentExercise.image.url.replace(".gif", ".mp4");
-        return link;
+        return this.currentExercise.image.url
       } else {
         return "https://res.cloudinary.com/drsgb4wld/image/upload/v1594649581/GIF-200713_160448_03e89fc155.mp4";
       }
@@ -171,9 +161,6 @@ export default {
     },
   },
   methods: {
-    scrollToDescription() {
-      this.$refs.description.scrollIntoView({ behavior: "smooth" });
-    },
     async deleteExercise() {
       if (await this.$root.$confirm("Na pewno chcesz usunąć to ćwiczenie?")) {
         const deletedExercise = await this.client.mutate({
@@ -339,10 +326,5 @@ export default {
   background-color: color(headers);
   border-color: color(headers);
   color: color(primary);
-}
-
-.family__description {
-  padding: 0 1rem 1rem 1rem;
-  margin: 0;
 }
 </style>
