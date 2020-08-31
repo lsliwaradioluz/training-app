@@ -25,24 +25,45 @@
       >
         Asystent
       </button>
-      <nuxt-link
-        v-if="user.admin"
-        class="button-tertiary"
-        tag="button"
-        type="button"
-        :to="{
-          path: `/workouts/${workout.id}/edit`,
-          query: { user: workout.user.id },
-        }"
-      >
-        Edytuj
-      </nuxt-link>
+      <template v-if="user.admin">
+        <nuxt-link
+          class="button-tertiary"
+          tag="button"
+          type="button"
+          :to="{
+            path: `/workouts/${workout.id}/edit`,
+            query: { user: workout.user.id },
+          }"
+        >
+          Edytuj
+        </nuxt-link>
+        <button
+          class="button-tertiary"
+          type="button"
+          @click="showStopwatch = true"
+        >
+          Stoper
+        </button>
+      </template>
     </div>
+    <Modal :show="showStopwatch">
+      <div class="workout-panel__stopwatch tab">
+        <h2>Stoper</h2>
+        <Stopwatch />
+        <button
+          class="workout-panel__stopwatch__button button-primary"
+          type="button"
+          @click="showStopwatch = false"
+        >
+          Zamknij
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import Date from "~/components/Date"
+import Date from "~/components/Date";
 
 export default {
   components: { Date },
@@ -52,12 +73,17 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showStopwatch: false,
+    };
+  },
   computed: {
     user() {
-      return this.$store.state.auth.user
+      return this.$store.state.auth.user;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -66,11 +92,20 @@ export default {
   margin-bottom: 1rem;
 }
 
+.workout-panel__stopwatch {
+  display: flex;
+  flex-direction: column;
+}
+
+.workout-panel__stopwatch__button {
+  margin-top: 2rem;
+}
+
 .buttons {
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   button {
-    flex-basis: 49.5%;
+    flex-basis: 32%;
   }
 }
 
