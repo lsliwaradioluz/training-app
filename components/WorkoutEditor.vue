@@ -3,7 +3,7 @@
     <p class="mb0">
       Przygotuj rozpiskę w tempie błyskawicy, wykorzystując innowacyjny edytor
       treningów. Kopiuj gotowe elementy z poprzednich sesji lub twórz całkowicie
-      nowe.
+      nowe. {{ workoutReady }}
     </p>
     <section>
       <header>
@@ -201,11 +201,13 @@
         <div class="row ml05" v-if="previousWorkouts.length > 1">
           <button
             class="flaticon-left-arrow"
+            :class="{ blind: previousWorkoutIndex === 0 }"
             type="button"
             @click="showPreviousWorkout"
           />
           <button
             class="flaticon-right-arrow"
+            :class="{ blind: previousWorkoutIndex === previousWorkouts.length - 1 }"
             type="button"
             @click="showNextWorkout"
           />
@@ -317,6 +319,26 @@ export default {
     dateAndTime() {
       return new Date(this.selectedDate + " " + this.selectedTime);
     },
+    filteredSections(){
+      const sectionsClone = JSON.parse(JSON.stringify(this.sections));
+      let sections = sectionsClone.filter((section) => {
+        return section.complexes.length > 0;
+      });
+
+      sections.forEach((section, sectionindex, sections) => {
+        sections[sectionindex] = _.omit(section, "id", "__typename");
+        section.complexes.forEach((complex, complexindex, complexes) => {
+          complexes[complexindex] = _.omit(complex, "id", "__typename");
+          complex.units.forEach((unit, unitindex, units) => {
+            units[unitindex] = _.omit(unit, "id", "__typename");
+            sections[sectionindex].complexes[complexindex].units[
+              unitindex
+            ].exercise = unit.exercise.id;
+          });
+        });
+      });
+      return sections
+    },
     previousWorkouts() {
       let previousWorkouts;
       if (this.edit) {
@@ -338,13 +360,7 @@ export default {
       return this.previousWorkouts[this.previousWorkoutIndex]
     },
     workoutReady() {
-      let workoutReady = false
-      for (let section of this.sections) {
-        if (section.complexes.length > 0) {
-          workoutReady = true
-        } 
-      }
-      return workoutReady
+      return this.filteredSections.length > 0
     },
     carouselNavConfig() {
       return {
@@ -506,31 +522,13 @@ export default {
         : this.previousWorkoutIndex++;
     },
     async uploadWorkout() {
-      const sectionsClone = JSON.parse(JSON.stringify(this.sections));
-      let sections = sectionsClone.filter((section) => {
-        return section.complexes.length > 0;
-      });
-
-      sections.forEach((section, sectionindex, sections) => {
-        sections[sectionindex] = _.omit(section, "id", "__typename");
-        section.complexes.forEach((complex, complexindex, complexes) => {
-          complexes[complexindex] = _.omit(complex, "id", "__typename");
-          complex.units.forEach((unit, unitindex, units) => {
-            units[unitindex] = _.omit(unit, "id", "__typename");
-            sections[sectionindex].complexes[complexindex].units[
-              unitindex
-            ].exercise = unit.exercise.id;
-          });
-        });
-      });
-
       let configObj;
       const input = {
         scheduled: this.dateAndTime,
         sticky: this.sticky,
         name: this.name,
         ready: this.workoutReady,
-        sections,
+        sections: this.filteredSections,
       };
       if (this.edit) {
         input.id = this.id;
