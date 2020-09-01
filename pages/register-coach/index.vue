@@ -3,11 +3,6 @@
     <h1 class="register-coach__header">
       Zarejestruj się
     </h1>
-    <p class="register-coach__caption">
-      Dołącz do trenerów korzystających z najbardziej przejrzystej aplikacji
-      treningowej na rynku. Twórz rozpiski w oka mgnieniu i zarządzaj
-      podopiecznymi jednym kliknięciem. Bez opłat. Bez zbędnych funkcji.
-    </p>
     <form class="column j-center mt1" @submit.prevent>
       <BaseInput
         v-model="user.fullname"
@@ -127,7 +122,6 @@ export default {
           });
         })
         .catch((err) => {
-          console.log(err);
           this.setNotification(
             "Nie udało się zarejestrować. Sprawdź połączenie z Internetem"
           );
@@ -142,15 +136,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.register-coach__header {
-  margin: 0;
-}
-
-.register-coach__caption {
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-}
-
 .register-coach__help-buttons {
   font-size: 12px;
 }

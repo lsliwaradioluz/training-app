@@ -25,9 +25,6 @@
       >
         Załóż konto
       </button>
-      <p class="register-trainee__error">
-        {{ error }}
-      </p>
     </form>
   </div>
 </template>
@@ -48,7 +45,6 @@ export default {
         repeatPassword: null,
         coach: this.$route.query.coach,
       },
-      error: "",
     }
   },
   methods: {
@@ -95,7 +91,6 @@ export default {
           })
         })
         .catch((err) => {
-          console.log(err)
           this.setNotification("Nie udało się zarejestrować. Sprawdź połączenie z Internetem")
         });
     },
@@ -113,14 +108,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.register-trainee__error {
-  position: absolute;
-  bottom: 1rem;
-  left: 0;
-  width: 100%;
-  margin-top: 1rem;
-  padding-top: 1rem;
-}
-</style>

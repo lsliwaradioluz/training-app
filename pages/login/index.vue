@@ -3,14 +3,6 @@
     <h1 class="login__header">
       Zaloguj się
     </h1>
-    <p class="login__caption">
-      Witamy w Piti - aplikacji #1 na rynku trenerów personalnych. Może jeszcze
-      nie teraz, ale w przyszłości na pewno. Zaloguj się, aby uzyskać dostęp do
-      swoich danych lub
-      <nuxt-link class="login__caption__register" to="register-coach"
-        >załóż konto</nuxt-link
-      >, jeśli jeszcze go nie masz!
-    </p>
     <form class="column j-center" @submit.prevent>
       <BaseInput
         id="login"
@@ -118,20 +110,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.login__header {
-  margin: 0;
-}
-
-.login__caption {
-  margin-top: 0.5rem;
-  margin-bottom: 2rem;
-}
-
-.login__caption__register {
-  color: color(faded);
-  text-decoration: underline;
 }
 
 .login__help-buttons {
