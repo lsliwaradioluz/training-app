@@ -177,6 +177,7 @@ export default {
           ...this.unit.exercise,
         },
         remarks: this.unit.remarks,
+        feedback: this.unit.feedback,
       };
 
       this.$emit("add-unit", newUnit);

@@ -46,7 +46,7 @@
         </button>
       </template>
     </div>
-    <Modal :show="showStopwatch">
+    <Modal :show="true" v-show="showStopwatch">
       <div class="workout-panel__stopwatch tab">
         <h2>Stoper</h2>
         <Stopwatch />

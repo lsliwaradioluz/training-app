@@ -245,7 +245,7 @@
                 <button
                   class="flaticon-plus"
                   type="button"
-                  @click="addUnit(unit)"
+                  @click="addUnit(unit, true)"
                 />
               </template>
             </Routine>
@@ -257,7 +257,7 @@
       <UnitEditor
         :families="families"
         :edited-unit="editedUnit"
-        @add-unit="addUnit($event)"
+        @add-unit="addUnit($event, false)"
         @cancel="closeUnitEditor"
       />
     </Modal>
@@ -419,9 +419,12 @@ export default {
       this.currentComplex = complexindex;
       this.openUnitEditor();
     },
-    addUnit(unit) {
+    addUnit(unit, clearFeedback) {
       const unitClone = JSON.parse(JSON.stringify(unit));
-      unitClone.feedback = ''
+
+      if (clearFeedback) {
+        unitClone.feedback = ''
+      }
 
       if (this.currentComplex == null && this.currentUnit == null) {
         const newComplex = {
@@ -482,6 +485,7 @@ export default {
           rest: (unit && unit.rest) || rest,
         },
         remarks: (unit && unit.remarks) || "",
+        feedback: (unit && unit.feedback) || "",
       };
 
       if (unit != undefined) {
