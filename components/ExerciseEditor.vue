@@ -193,9 +193,9 @@ export default {
       });
       this.uploadedImage = null;
     },
-    updateFamilyCache(operationType, cache, query, variables, editedExercise) {
+    updateFamilyCache(operationType, cache, variables, editedExercise) {
       const { family } = cache.readQuery({
-        query,
+        query: getSingleFamily,
         variables,
       });
 
@@ -210,9 +210,43 @@ export default {
       }
 
       this.client.writeQuery({
-        query,
+        query: getSingleFamily,
         data: family,
         variables,
+      });
+    },
+    updateFamiliesCache(cache, editedExercise, operation) {
+      const { families } = cache.readQuery({
+        query: getAllFamilies,
+        variables: { userId: this.user.id },
+      });
+
+      if (operation === "remove" || operation === "add/remove") {
+        const oldFamilyIndex = families.findIndex(
+          (family) => family.id === this.oldFamily
+        );
+
+        const exerciseIndex = families[
+          oldFamilyIndex
+        ].exercises.findIndex(
+          (exercise) => exercise.id == editedExercise.id
+        );
+
+        families[oldFamilyIndex].exercises.splice(exerciseIndex, 1);
+      }
+
+      if (operation === "add" || operation === "add/remove") {
+        const newFamilyIndex = families.findIndex(
+          (family) => family.id === this.input.family
+        );
+
+        families[newFamilyIndex].exercises.push(editedExercise);
+      }
+
+      cache.writeQuery({
+        query: getAllFamilies,
+        variables: { userId: this.user.id },
+        data: families,
       });
     },
     createExercise() {
@@ -224,20 +258,20 @@ export default {
           mutation: createExercise,
           variables: { input: this.input },
           update: (cache, { data: { createExercise } }) => {
-            if (
-              cache.data.data.ROOT_QUERY &&
-              cache.data.data.ROOT_QUERY[
-                `family({"id":"${this.input.family}"})`
-              ]
-            )
-              this.updateFamilyCache(
-                "add",
-                cache,
-                getSingleFamily,
-                { id: this.input.family },
-                createExercise
-              );
-          },
+            if (cache.data.data.ROOT_QUERY)
+              if (cache.data.data.ROOT_QUERY[`family({"id":"${this.input.family}"})`]) {
+                this.updateFamilyCache(
+                  "add",
+                  cache,
+                  { id: this.input.family },
+                  createExercise
+                );
+              }
+
+              if (cache.data.data.ROOT_QUERY[`families({"userId":"${this.user.id}"})`]) {
+                this.updateFamiliesCache(cache, createExercise, "add")
+              }
+          }
         })
         .then(() => {
           this.$router.go(-1);
@@ -267,33 +301,7 @@ export default {
                   `families({"userId":"${this.user.id}"})`
                 ]
               ) {
-                // update all families
-                const { families } = cache.readQuery({
-                  query: getAllFamilies,
-                  variables: { userId: this.user.id },
-                });
-
-                const oldFamilyIndex = families.findIndex(
-                  (family) => family.id === this.oldFamily
-                );
-                const newFamilyIndex = families.findIndex(
-                  (family) => family.id === this.input.family
-                );
-
-                const exerciseIndex = families[
-                  oldFamilyIndex
-                ].exercises.findIndex(
-                  (exercise) => exercise.id == updateExercise.id
-                );
-
-                families[oldFamilyIndex].exercises.splice(exerciseIndex, 1);
-                families[newFamilyIndex].exercises.push(updateExercise);
-
-                cache.writeQuery({
-                  query: getAllFamilies,
-                  variables: { userId: this.user.id },
-                  data: families,
-                });
+                this.updateFamiliesCache(cache, updateExercise, "add/remove")
               }
               // update two involved families
               if (
@@ -302,7 +310,6 @@ export default {
                 this.updateFamilyCache(
                   "delete",
                   cache,
-                  getSingleFamily,
                   { id: this.oldFamily },
                   updateExercise
                 );
@@ -316,7 +323,6 @@ export default {
                 this.updateFamilyCache(
                   "add",
                   cache,
-                  getSingleFamily,
                   { id: this.input.family },
                   updateExercise
                 );

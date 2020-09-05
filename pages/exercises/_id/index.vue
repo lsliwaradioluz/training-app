@@ -252,7 +252,7 @@ export default {
 <style lang="scss" scoped>
 
 .family {
-  height: 100%;
+  height: 100vh;
 }
 
 .family__main {
