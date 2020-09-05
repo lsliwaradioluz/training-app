@@ -1,11 +1,7 @@
 <template>
   <div class="exercise-editor">
-    <BaseHeader v-if="edit">
-      Edytuj ćwiczenie
-    </BaseHeader>
-    <BaseHeader v-else>
-      Nowe ćwiczenie
-    </BaseHeader>
+    <BaseHeader v-if="edit"> Edytuj ćwiczenie </BaseHeader>
+    <BaseHeader v-else> Nowe ćwiczenie </BaseHeader>
     <p v-if="!edit">
       Dodaj nazwę, kategorię oraz wideo poglądowe nowego ćwiczenia. Aplikacja
       Piti akceptuje tylko filmy w formacie mp4, w preferowanej rozdzielczości
@@ -29,8 +25,9 @@
             v-for="(family, index) in families"
             :key="index"
             :value="family"
-            >{{ family.name }}</option
           >
+            {{ family.name }}
+          </option>
         </select>
       </BaseSelect>
     </form>
@@ -58,7 +55,7 @@
       <span
         v-if="loadingImage"
         class="column j-center a-center"
-        style="opacity: 0.5;"
+        style="opacity: 0.5"
       >
         <i class="flaticon-counterclockwise fs-32 icon--spinning" />
         <p class="m00 mt05 fs-12">Wczytuję...</p>
@@ -102,6 +99,7 @@
 import createExercise from "~/apollo/mutations/createExercise.gql";
 import updateExercise from "~/apollo/mutations/updateExercise.gql";
 import getSingleFamily from "~/apollo/queries/getSingleFamily.gql";
+import getAllFamilies from "~/apollo/queries/getAllFamilies.gql";
 
 export default {
   props: {
@@ -133,6 +131,9 @@ export default {
     };
   },
   computed: {
+    user() {
+      return this.$store.state.auth.user;
+    },
     video() {
       if (this.uploadedImage) {
         const link = this.uploadedImage.url.replace(".gif", ".mp4");
@@ -192,6 +193,28 @@ export default {
       });
       this.uploadedImage = null;
     },
+    updateFamilyCache(operationType, cache, query, variables, editedExercise) {
+      const { family } = cache.readQuery({
+        query,
+        variables,
+      });
+
+      if (operationType === "add") {
+        family.exercises.push(editedExercise);
+      } else if (operationType === "delete") {
+        const exerciseIndex = family.exercises.findIndex(
+          (exercise) => exercise.id == editedExercise.id
+        );
+
+        family.exercises.splice(exerciseIndex, 1);
+      }
+
+      this.client.writeQuery({
+        query,
+        data: family,
+        variables,
+      });
+    },
     createExercise() {
       if (this.uploadedImage) this.input.image = this.uploadedImage._id;
       this.input.family = this.input.family.id;
@@ -201,19 +224,19 @@ export default {
           mutation: createExercise,
           variables: { input: this.input },
           update: (cache, { data: { createExercise } }) => {
-            // read data from cache for this query
-            const data = cache.readQuery({
-              query: getSingleFamily,
-              variables: { id: this.input.family },
-            });
-            // push new item to cache
-            data.family.exercises.push(createExercise);
-            // write data back to the cache
-            this.client.writeQuery({
-              query: getSingleFamily,
-              data,
-              variables: { id: this.input.family },
-            });
+            if (
+              cache.data.data.ROOT_QUERY &&
+              cache.data.data.ROOT_QUERY[
+                `family({"id":"${this.input.family}"})`
+              ]
+            )
+              this.updateFamilyCache(
+                "add",
+                cache,
+                getSingleFamily,
+                { id: this.input.family },
+                createExercise
+              );
           },
         })
         .then(() => {
@@ -235,36 +258,68 @@ export default {
           mutation: updateExercise,
           variables: { input: this.input },
           update: (cache, { data: { updateExercise } }) => {
-            if (this.oldFamily != this.input.family) {
-              const { family: oldFamily } = cache.readQuery({
-                query: getSingleFamily,
-                variables: { id: this.oldFamily },
-              });
-              const exerciseIndex = oldFamily.exercises.findIndex(
-                (exercise) => exercise.id == updateExercise.id
-              );
-              oldFamily.exercises.splice(exerciseIndex, 1);
-              cache.writeQuery({
-                query: getSingleFamily,
-                variables: { id: this.oldFamily },
-                data: oldFamily,
-              });
+            if (
+              this.oldFamily != this.input.family &&
+              cache.data.data.ROOT_QUERY
+            ) {
+              if (
+                cache.data.data.ROOT_QUERY[
+                  `families({"userId":"${this.user.id}"})`
+                ]
+              ) {
+                // update all families
+                const { families } = cache.readQuery({
+                  query: getAllFamilies,
+                  variables: { userId: this.user.id },
+                });
+
+                const oldFamilyIndex = families.findIndex(
+                  (family) => family.id === this.oldFamily
+                );
+                const newFamilyIndex = families.findIndex(
+                  (family) => family.id === this.input.family
+                );
+
+                const exerciseIndex = families[
+                  oldFamilyIndex
+                ].exercises.findIndex(
+                  (exercise) => exercise.id == updateExercise.id
+                );
+
+                families[oldFamilyIndex].exercises.splice(exerciseIndex, 1);
+                families[newFamilyIndex].exercises.push(updateExercise);
+
+                cache.writeQuery({
+                  query: getAllFamilies,
+                  variables: { userId: this.user.id },
+                  data: families,
+                });
+              }
+              // update two involved families
+              if (
+                cache.data.data.ROOT_QUERY[`family({"id":"${this.oldFamily}"})`]
+              ) {
+                this.updateFamilyCache(
+                  "delete",
+                  cache,
+                  getSingleFamily,
+                  { id: this.oldFamily },
+                  updateExercise
+                );
+              }
 
               if (
                 cache.data.data.ROOT_QUERY[
                   `family({"id":"${this.input.family}"})`
                 ]
               ) {
-                const { family: newFamily } = cache.readQuery({
-                  query: getSingleFamily,
-                  variables: { id: this.input.family },
-                });
-                newFamily.exercises.push(updateExercise);
-                cache.writeQuery({
-                  query: getSingleFamily,
-                  variables: { id: this.input.family },
-                  data: newFamily,
-                });
+                this.updateFamilyCache(
+                  "add",
+                  cache,
+                  getSingleFamily,
+                  { id: this.input.family },
+                  updateExercise
+                );
               }
             }
           },

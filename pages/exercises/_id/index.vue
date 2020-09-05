@@ -190,15 +190,16 @@ export default {
           },
         });
 
-        const file = deletedExercise.data.deleteExercise.image;
-
-        fetch(`${process.env.endpoint}/api/delete-file`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(file),
-        });
+        if (deletedExercise.data.deleteExercise.image) {
+          const file = deletedExercise.data.deleteExercise.image;
+          fetch(`${process.env.endpoint}/api/delete-file`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(file),
+          });
+        }
       }
     },
     async deleteFamily() {
