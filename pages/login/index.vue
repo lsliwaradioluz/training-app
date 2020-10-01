@@ -65,6 +65,11 @@ export default {
         .mutate({
           mutation: loginMutation,
           variables: { input },
+          context: {
+            headers: {
+              login: "true"
+            }
+          }
         })
         .then((res) => {
           const user = res.data.login.user;

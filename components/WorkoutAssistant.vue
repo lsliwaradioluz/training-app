@@ -5,11 +5,9 @@
         class="flaticon-left-arrow-2"
         @click="$store.commit('assistant/toggleWorkoutAssistant')"
       />
-      <p v-if="isLastSet" class="navigation__last-set">
-        ostatnia seria!
-      </p>
+      <p v-if="isLastSet" class="navigation__last-set">ostatnia seria!</p>
     </section>
-    <Video :source="video" :key="controls.unit" opacity="0.2" />  
+    <Video :source="video" :key="controls.unit" opacity="0.2" />
     <section class="controls row">
       <button class="control" @click="previousUnit" />
       <button class="control" @click="nextUnit" />
@@ -19,24 +17,26 @@
     </transition>
     <section class="exercise row a-end j-between">
       <div class="exercise__name">
-        <MovingText v-if="showWorkoutAssistant" :key="`name${current.exercise.name}`">
+        <MovingText
+          v-if="showWorkoutAssistant"
+          :key="`name${current.exercise.name}`"
+        >
           <h3 class="m00 t-white">
             {{ current.exercise.name }}
           </h3>
         </MovingText>
-        <MovingText v-if="current.remarks" :key="`reps${current.exercise.name}`">
+        <MovingText
+          v-if="current.remarks"
+          :key="`reps${current.exercise.name}`"
+        >
           <p class="fs-12 m00">
             {{ current.remarks }}
           </p>
         </MovingText>
-        <p v-else class="fs-12 m00">
-          Wykonaj teraz
-        </p>
+        <p v-else class="fs-12 m00">Wykonaj teraz</p>
       </div>
       <div class="exercise__numbers">
-        <p 
-          v-if="current.time && !current.reps" 
-          class="exercise__numbers__time"> 
+        <p v-if="current.time && !current.reps" class="exercise__numbers__time">
           {{ timeleft | showMinutes }}
         </p>
         <p v-else class="exercise__numbers__time">
@@ -74,10 +74,10 @@
           class="button flaticon-sound"
           @click="soundEnabled = false"
         />
-        <button 
-          v-else 
-          class="button flaticon-mute" 
-          @click="soundEnabled = true" 
+        <button
+          v-else
+          class="button flaticon-mute"
+          @click="soundEnabled = true"
         />
         <button
           class="button flaticon-login"
@@ -102,14 +102,14 @@
         :key="controls.unit"
         @countdown-over="nextUnit"
         @beep="playAudio($event)"
-        @update-time="timeleft = $event">
+        @update-time="timeleft = $event"
+      >
       </Timer>
     </section>
   </article>
 </template>
 
 <script>
-
 export default {
   props: {
     workout: {
@@ -137,56 +137,56 @@ export default {
       automaticModeOn: true,
       soundEnabled: true,
       timeleft: null,
-    }
+    };
   },
   watch: {
     currentUnit() {
-      this.$emit("set-current-section", this.controls.section)
+      this.$emit("set-current-section", this.controls.section);
       if (this.current.exercise.name == "Odpocznij") {
-        this.playAudio("luz.mp3")
+        this.playAudio("luz.mp3");
       } else if (
         this.current.reps ||
         this.current.time ||
         this.current.distance
       ) {
-        this.playAudio(this.isLastSet ? "ostatniaseria.mp3" : "dzialaj.mp3")
+        this.playAudio(this.isLastSet ? "ostatniaseria.mp3" : "dzialaj.mp3");
       }
     },
     soundEnabled(value) {
       if (!this.audio) {
-        this.audio = new Audio()
+        this.audio = new Audio();
       }
 
       if (value) {
-        this.audio.volume = 1
+        this.audio.volume = 1;
       } else if (!value) {
-        this.audio.volume = 0
+        this.audio.volume = 0;
       }
     },
     async showWorkoutAssistant(value) {
       if (value && this.controls.section != this.sectionIndex) {
         if (await this.$root.$confirm("Wznowić asystenta?")) {
-          this.$emit("set-current-section", this.controls.section)
+          this.$emit("set-current-section", this.controls.section);
         } else {
-          this.controls.section = this.sectionIndex
-          this.controls.complex = 0
-          this.controls.unit = 0
+          this.controls.section = this.sectionIndex;
+          this.controls.complex = 0;
+          this.controls.unit = 0;
         }
       }
     },
   },
   computed: {
     showWorkoutAssistant() {
-      return this.$store.state.assistant.showWorkoutAssistant
+      return this.$store.state.assistant.showWorkoutAssistant;
     },
     currentUnit() {
-      return this.controls.unit
+      return this.controls.unit;
     },
     current() {
-      return this.units[this.controls.unit]
+      return this.units[this.controls.unit];
     },
     repetitions() {
-      let repetitions = '';
+      let repetitions = "";
       if (this.current.reps) repetitions += `${this.current.reps}`;
       if (this.current.reps && this.current.time) repetitions += `x`;
       if (this.current.time) repetitions += `${this.current.time}s`;
@@ -194,86 +194,91 @@ export default {
       return repetitions;
     },
     isLastSet() {
-      const lastIndex = this.units.lastIndexOf(this.units[this.controls.unit])
+      const lastIndex = this.units.lastIndexOf(this.units[this.controls.unit]);
       return lastIndex == this.controls.unit &&
         this.units[this.controls.unit].sets > 1
         ? true
-        : false
+        : false;
     },
     next() {
-      return this.units[this.controls.unit + 1]
+      return this.units[this.controls.unit + 1];
     },
     video() {
-      let video
-      
-      if (this.current.exercise.name == "Odpocznij" || this.current.exercise.name == "Rozpoczynasz nowy blok") {
+      let video;
+
+      if (
+        this.current.exercise.name == "Odpocznij" ||
+        this.current.exercise.name == "Rozpoczynasz nowy blok"
+      ) {
         video = this.next.exercise.image
           ? this.next.exercise.image.url
-          : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
+          : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif";
       } else {
         video = this.current.exercise.image
           ? this.current.exercise.image.url
-          : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif"
+          : "https://media.giphy.com/media/fdlcvptCs4qsM/giphy.gif";
       }
 
-      return video
+      return video;
     },
     units() {
-      let units = []
+      let units = [];
 
       // Get array of arrays containing all sets of a given exercise
       // IE: 3x8 e1, 3x6 e2
       // => [[e1, e1, e1], [e2, e2, e2]]
-      this.sections[this.controls.section].complexes[this.controls.complex].units.forEach((unit) => {
-        const groupedUnits = []
+      this.sections[this.controls.section].complexes[
+        this.controls.complex
+      ].units.forEach((unit) => {
+        const groupedUnits = [];
         for (let x = 0; x < unit.sets; x++) {
-          groupedUnits.push(unit)
+          groupedUnits.push(unit);
         }
-        units.push(groupedUnits)
-      })
+        units.push(groupedUnits);
+      });
 
       // Sort arrays pushing the longest to the front
       // [[e1, e1, e1], [e2, e2, e2, e2]]
       // => [[e2, e2, e2, e2], [e1, e1, e1]]
       units = units.sort((a, b) => {
-        return b.length - a.length
-      })
+        return b.length - a.length;
+      });
 
       // Zip the exercises creating two arrays
       // [[e2, e2, e2, e2], [e1, e1, e1]]
       // => [[e2, e1], [e2, e1], [e2, e1], [e2, undefined]]
-      units = _.zip(...units)
+      units = _.zip(...units);
 
       // Flatten the main array, removing nested arrays
       // [[e2, e1], [e2, e1], [e2, e1], [e2, undefined]]
       // => [e2, e1, e2, e1, e2, e1, e2, undefined]
-      units = _.flattenDeep(units)
+      units = _.flattenDeep(units);
 
       // Filter the array to remove undefined if exists
       units = units.filter((unit) => {
-        return unit != undefined
-      })
+        return unit != undefined;
+      });
 
       // Add the rest intervals if there should be any
       for (let i = 0; i <= units.length - 1; i++) {
-        let time = units[i].rest
+        let time = units[i].rest;
         if (time > 0 && i < units.length - 1) {
-          let remarks = `Następnie: ${units[i + 1].exercise.name}`
-          if (units[i+1].remarks) { 
-            remarks += ` (${units[i+1].remarks})`
+          let remarks = `Następnie: ${units[i + 1].exercise.name}`;
+          if (units[i + 1].remarks) {
+            remarks += ` (${units[i + 1].remarks})`;
           }
           units.splice(i + 1, 0, {
             exercise: { name: "Odpocznij" },
             time,
             remarks,
-          })
+          });
         }
       }
 
       units.unshift({
         exercise: { name: "Rozpoczynasz nowy blok" },
         remarks: "Kolejne ćwiczenie widoczne jest na ekranie",
-      })
+      });
 
       if (
         this.controls.complex ==
@@ -283,82 +288,86 @@ export default {
         units.push({
           exercise: { name: "Ukończyłeś trening" },
           remarks: "Daj znać trenerowi, jak poszło!",
-        })
+        });
       }
 
-      return units
+      return units;
     },
   },
   methods: {
-    setNotification(message) {
-      this.$store.commit('main/setNotification', message)
-    },
     nextUnit() {
-      this.controls.unit++
+      this.controls.unit++;
       if (this.controls.unit > this.units.length - 1) {
-        this.nextComplex()
+        this.nextComplex();
       }
     },
     previousUnit() {
-      this.controls.unit--
+      this.controls.unit--;
       if (this.controls.unit < 0) {
-        this.previousComplex()
+        this.previousComplex();
       }
     },
     nextComplex() {
-      this.controls.complex++
-      if (this.controls.complex > this.sections[this.controls.section].complexes.length - 1) {
-        this.nextSection()
+      this.controls.complex++;
+      if (
+        this.controls.complex >
+        this.sections[this.controls.section].complexes.length - 1
+      ) {
+        this.nextSection();
       } else {
-        this.controls.unit = 0
+        this.controls.unit = 0;
       }
     },
     previousComplex() {
-      this.controls.complex--
+      this.controls.complex--;
       if (this.controls.complex < 0) {
-        this.previousSection()
+        this.previousSection();
       } else {
-        this.controls.unit = this.units.length - 1
+        this.controls.unit = this.units.length - 1;
       }
     },
     nextSection() {
-      this.controls.section++
+      this.controls.section++;
       if (this.controls.section > this.sections.length - 1) {
-        this.controls.section = this.sections.length - 1
-        this.controls.complex = this.sections[this.controls.section].complexes.length - 1
-        this.controls.unit = this.units.length - 1
+        this.controls.section = this.sections.length - 1;
+        this.controls.complex =
+          this.sections[this.controls.section].complexes.length - 1;
+        this.controls.unit = this.units.length - 1;
       } else {
-        this.controls.unit = 0
-        this.controls.complex = 0
+        this.controls.unit = 0;
+        this.controls.complex = 0;
       }
     },
     previousSection() {
-      this.controls.section--
+      this.controls.section--;
       if (this.controls.section < 0) {
-        this.controls.complex = 0
-        this.controls.unit = 0
-        this.controls.section = 0
+        this.controls.complex = 0;
+        this.controls.unit = 0;
+        this.controls.section = 0;
       } else {
         this.controls.complex =
-          this.sections[this.controls.section].complexes.length - 1
-        this.controls.unit = this.units.length - 1
+          this.sections[this.controls.section].complexes.length - 1;
+        this.controls.unit = this.units.length - 1;
       }
     },
+    setNotification(message) {
+      this.$store.commit("main/setNotification", message);
+    },
     toggleAutomaticMode() {
-      this.automaticModeOn = !this.automaticModeOn
+      this.automaticModeOn = !this.automaticModeOn;
       if (this.automaticModeOn) {
-        this.setNotification("Tryb automatyczny włączony")
+        this.setNotification("Tryb automatyczny włączony");
       } else {
-        this.setNotification("Tryb automatyczny wyłączony")
+        this.setNotification("Tryb automatyczny wyłączony");
       }
     },
     playAudio(audio) {
-      if (!this.audio) this.audio = new Audio()
-      this.audio.src = require(`@/assets/sounds/${audio}`)
-      this.audio.play()
+      if (!this.audio) this.audio = new Audio();
+      this.audio.src = require(`@/assets/sounds/${audio}`);
+      this.audio.play();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -445,7 +454,7 @@ export default {
 }
 
 .buttons {
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -457,7 +466,7 @@ export default {
 }
 
 .button {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
   font-size: 16px;
   &:disabled {
     color: color(faded);

@@ -58,7 +58,7 @@ export default {
       document.querySelector("html").style.overflow = "auto";
     },
     moveElement() {
-      const valueCopy = [...this.value]
+      const valueCopy = [...this.props.value]
       const element = valueCopy[this.movingElementIndex]
       const newElementIndex = this.movingElementIndex + this.moveCount
       valueCopy.splice(this.movingElementIndex, 1)
@@ -67,7 +67,7 @@ export default {
       this.resetState()
     },
     deleteElement() {
-      const valueCopy = [...this.value]
+      const valueCopy = [...this.props.value]
       valueCopy.splice(this.movingElementIndex, 1)
       this.animateElement(this.movingElement);
       this.movingElement.style.transform = `translateX(-500px)`
