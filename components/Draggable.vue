@@ -58,7 +58,7 @@ export default {
       document.querySelector("html").style.overflow = "auto";
     },
     moveElement() {
-      const valueCopy = [...this.props.value]
+      const valueCopy = [...this.value]
       const element = valueCopy[this.movingElementIndex]
       const newElementIndex = this.movingElementIndex + this.moveCount
       valueCopy.splice(this.movingElementIndex, 1)
@@ -67,7 +67,7 @@ export default {
       this.resetState()
     },
     deleteElement() {
-      const valueCopy = [...this.props.value]
+      const valueCopy = [...this.value]
       valueCopy.splice(this.movingElementIndex, 1)
       this.animateElement(this.movingElement);
       this.movingElement.style.transform = `translateX(-500px)`
@@ -100,14 +100,12 @@ export default {
       if (this.button && !event.target.classList.contains(this.button)) {
         return
       } 
-
       if (event.target == this.$refs.draggable) {
         return
       } else {
         this.movingElement = event.target.closest(".draggable > *")
         this.movingElement.classList.add('moving')
       }
-
       
       document.querySelector("html").style.overflow = "hidden";
       if (event.type == "touchstart") {
@@ -116,7 +114,6 @@ export default {
         this.touchStart = { vertical: event.screenY, horizontal: event.screenX }
         this.mousedown = true
       }
-
       this.movingElementSiblings = this.$refs.draggable.children;
       for (let i = 0; i < this.movingElementSiblings.length; i++) {
         if (this.movingElement == this.movingElementSiblings[i]) {
@@ -135,7 +132,6 @@ export default {
       const movingElementBottom =
         movingElementTop + this.movingElement.getBoundingClientRect().height;
       let nextSiblingBottom, previousSiblingTop;
-
       if (this.nextSibling) {
         nextSiblingBottom =
           this.nextSibling.getBoundingClientRect().top +
@@ -144,8 +140,6 @@ export default {
       if (this.previousSibling) {
         previousSiblingTop = this.previousSibling.getBoundingClientRect().top;
       }
-
-
       if (event.type == "touchmove") {
         this.moveLength.vertical = event.touches[0].screenY - this.touchStart.vertical;
         this.moveLength.horizontal = event.touches[0].screenX - this.touchStart.horizontal
@@ -153,7 +147,6 @@ export default {
         this.moveLength.vertical = event.screenY - this.touchStart.vertical
         this.moveLength.horizontal = event.screenX - this.touchStart.horizontal
       }
-
       this.movingElement.style.transform = `translate(${this.moveLength.horizontal < 0 ? this.moveLength.horizontal : 0}px, ${this.moveLength.vertical}px)`;
       
       if (this.nextSibling && movingElementBottom >= nextSiblingBottom) {
@@ -169,7 +162,6 @@ export default {
         this.moveCount++;
         this.setSiblings();
       }
-
       if (this.previousSibling && movingElementTop <= previousSiblingTop) {
         this.animateElement(this.previousSibling);
         const previousSiblingTransform = this.previousSibling.style.transform;
@@ -188,7 +180,6 @@ export default {
       if (!this.movingElement) {
         return
       }
-
       if (this.moveLength.horizontal < -100) {
         this.deleteElement()
       } else if (this.moveCount != 0) {
@@ -208,7 +199,6 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 .moving {
   transition: box-shadow .3s;
   box-shadow: 3px 3px 10px black;
