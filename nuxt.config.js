@@ -12,7 +12,7 @@ export default {
       {
         name: "viewport",
         content:
-          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes",
+          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes, viewport-fit=cover",
       },
       {
         hid: "description",
