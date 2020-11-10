@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import Date from "~/components/Date";
+import Date from "~/components/atoms/WorkoutDate";
 
 export default {
   components: { Date },

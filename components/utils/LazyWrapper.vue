@@ -1,5 +1,5 @@
 <script>
-import Placeholder from "./Placeholder"
+import Placeholder from "../atoms/Placeholder"
 
 export default {
   functional: true,

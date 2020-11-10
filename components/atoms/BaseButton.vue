@@ -1,4 +1,22 @@
-.button-primary, 
+<template>
+  <button type="button" :class="`button-${theme}`">
+    <slot />
+  </button>
+</template>
+
+<script>
+export default {
+  props: {
+    theme: {
+      type: String,
+      default: "primary",
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.button-primary,
 .button-secondary,
 .button-tertiary {
   cursor: pointer;
@@ -11,11 +29,11 @@
   justify-content: center;
   white-space: nowrap;
   font-weight: 400;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 14px;
   line-height: 1.5;
   text-align: center;
-  padding: .5rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   transition: all 0.3s;
   margin: 0;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.226);
@@ -28,7 +46,7 @@
   border-color: color(darkgreen);
 }
 
-.button--inactive, 
+.button--inactive,
 .button-primary:disabled {
   background-color: color(gray);
   border-color: color(gray);
@@ -54,18 +72,19 @@
   color: white;
 }
 
-.button-switch {
+.button-switch,
+.button-switch--active {
   border-bottom: 1px solid color(faded);
   color: color(faded);
   flex-basis: 100%;
   flex-shrink: 1;
-  padding-bottom: .4rem;
+  padding-bottom: 0.4rem;
   transition: all 0.3s;
   font-size: 14px;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
+  &--active {
+    color: color(headers) !important;
+    border-bottom: 1px solid color(headers) !important;
+  }
 }
-
-.button-switch--active {
-  color: color(headers) !important;
-  border-bottom: 1px solid color(headers) !important;
-}
+</style>

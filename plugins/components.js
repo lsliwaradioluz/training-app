@@ -1,13 +1,11 @@
 import Vue from "vue"
 
-import BaseHeader from "../components/BaseHeader"
-import BaseInput from "../components/BaseInput"
-import BaseSearch from "../components/BaseSearch"
-import BaseTextarea from "../components/BaseTextarea"
-import BaseCheckbox from "../components/BaseCheckbox"
-import BaseSelect from "../components/BaseSelect"
-import Workout from "../components/Workout"
-import UserTab from "../components/UserTab"
+import BaseHeader from "../components/atoms/BaseHeader"
+import BaseInput from "../components/atoms/BaseInput"
+import BaseSearch from "../components/atoms/BaseSearch"
+import BaseTextarea from "../components/atoms/BaseTextarea"
+import BaseCheckbox from "../components/atoms/BaseCheckbox"
+import BaseSelect from "../components/atoms/BaseSelect"
 import Carousel from "../components/Carousel"
 import ExerciseEditor from "../components/ExerciseEditor"
 import Routine from "../components/Routine"
@@ -16,22 +14,24 @@ import WorkoutAssistant from "../components/WorkoutAssistant"
 import WorkoutEditor from "../components/WorkoutEditor"
 import Timer from "../components/Timer"
 import Stopwatch from "../components/Stopwatch"
-import MovingText from "../components/MovingText"
-import Confirm from "../components/Confirm"
+import MovingText from "../components/atoms/MovingText"
+import Confirm from "../components/utils/Confirm"
 import ContextMenu from "../components/ContextMenu"
-import Placeholder from "../components/Placeholder"
-import Notification from "../components/Notification"
+import Notification from "../components/utils/Notification"
 import UnitEditor from "../components/UnitEditor"
-import Modal from "../components/Modal"
+import Modal from "../components/utils/Modal"
 import InviteUser from "../components/InviteUser"
 import TransferUser from "../components/TransferUser"
-import Avatar from "../components/Avatar"
-import LazyWrapper from "../components/LazyWrapper"
+import Avatar from "../components/atoms/Avatar"
+import LazyWrapper from "../components/utils/LazyWrapper"
 import FeedbackEditor from "../components/FeedbackEditor"
 import FamilyEditor from "../components/FamilyEditor"
-import FamilyTab from "../components/FamilyTab"
-import Video from "../components/Video"
+import FamilyTab from "../components/molecules/FamilyTab"
+import WorkoutTab from "../components/molecules/WorkoutTab"
+import UserTab from "../components/molecules/UserTab"
+import Video from "../components/atoms/Video"
 import Draggable from "../components/Draggable"
+import BaseButton from "../components/atoms/BaseButton"
 
 Vue.component("BaseHeader", BaseHeader)
 Vue.component("BaseInput", BaseInput)
@@ -39,7 +39,7 @@ Vue.component("BaseSearch", BaseSearch)
 Vue.component("BaseTextarea", BaseTextarea)
 Vue.component("BaseCheckbox", BaseCheckbox)
 Vue.component("BaseSelect", BaseSelect)
-Vue.component("Workout", Workout)
+Vue.component("WorkoutTab", WorkoutTab)
 Vue.component("UserTab", UserTab)
 Vue.component("Carousel", Carousel)
 Vue.component("ExerciseEditor", ExerciseEditor)
@@ -52,7 +52,6 @@ Vue.component("Stopwatch", Stopwatch)
 Vue.component("MovingText", MovingText)
 Vue.component("Confirm", Confirm)
 Vue.component("ContextMenu", ContextMenu)
-Vue.component("Placeholder", Placeholder)
 Vue.component("Notification", Notification)
 Vue.component("UnitEditor", UnitEditor)
 Vue.component("Modal", Modal)
@@ -65,3 +64,4 @@ Vue.component("FamilyEditor", FamilyEditor)
 Vue.component("FamilyTab", FamilyTab)
 Vue.component("Video", Video)
 Vue.component("Draggable", Draggable)
+Vue.component("BaseButton", BaseButton)

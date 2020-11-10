@@ -27,3 +27,23 @@ body {
 a {
   cursor: pointer;
 }
+
+button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  display: block;
+  color: inherit;
+  font-size: inherit;
+  position: relative;
+  white-space: nowrap;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+button:disabled {
+  color: color(inputgray);
+}

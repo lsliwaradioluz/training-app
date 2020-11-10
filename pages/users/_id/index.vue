@@ -35,7 +35,7 @@
           </button>
         </div>
         <transition-group name="animate-list">
-          <Workout
+          <WorkoutTab
             v-for="workout in filteredWorkouts"
             :key="workout.id"
             :workout="workout"

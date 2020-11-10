@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-up">
-    <p v-if="notification" class="notification m00" @click="unsetNotification">
+    <p v-if="notification" class="notification" @click="unsetNotification">
       {{ notification }}
     </p>
   </transition>
@@ -49,6 +49,7 @@ export default {
   max-width: 450px;
   background-color: color(headers);
   color: color(primary);
+  margin: 0;
 }
 
 .slide-up-enter-active {

@@ -14,22 +14,18 @@
         Przenieś go do archiwum.
       </p>
       <div class="row">
-        <button
-          class="button-switch"
-          :class="{ 'button-switch--active': showActiveUsers }"
-          type="button"
-          @click="showActiveUsers = true"
+        <BaseButton
+          :theme="showActiveUsers ? 'switch--active' : 'switch'"
+          @click.native="showActiveUsers = true"
         >
           Aktywni
-        </button>
-        <button
-          class="button-switch"
-          :class="{ 'button-switch--active': !showActiveUsers }"
-          type="button"
-          @click="showActiveUsers = false"
+        </BaseButton>
+        <BaseButton
+          :theme="!showActiveUsers ? 'switch--active' : 'switch'"
+          @click.native="showActiveUsers = false"
         >
           Archiwum
-        </button>
+        </BaseButton>
       </div>
       <BaseSearch v-model="filter" placeholder="Szukaj podopiecznego" />
       <transition-group v-if="filteredUsers.length > 0" name="animate-list">
@@ -41,9 +37,7 @@
           @transfer="userToTransfer = $event"
         />
       </transition-group>
-      <p v-else class="pt05 pb05">
-        Brak użytkowników
-      </p>
+      <p v-else class="pt05 pb05">Brak użytkowników</p>
       <Modal :show="inviteUserVisible">
         <InviteUser @close="inviteUserVisible = false" />
       </Modal>
@@ -55,7 +49,7 @@
 </template>
 
 <script>
-import getAllUsers from "~/apollo/queries/getAllUsers.gql"
+import getAllUsers from "~/apollo/queries/getAllUsers.gql";
 
 export default {
   apollo: {
@@ -64,7 +58,7 @@ export default {
       variables() {
         return {
           id: this.$store.getters["auth/user"].id,
-        }
+        };
       },
     },
   },
@@ -76,16 +70,16 @@ export default {
       inviteUserVisible: false,
       userToTransfer: null,
       showActiveUsers: true,
-    }
+    };
   },
   computed: {
     filteredUsers() {
-      let filter = this.filter.toLowerCase()
+      let filter = this.filter.toLowerCase();
 
       if (filter !== "") {
         return this.users.filter((user) => {
-          const username = user.username.toLowerCase()
-          const fullname = user.fullname.toLowerCase()
+          const username = user.username.toLowerCase();
+          const fullname = user.fullname.toLowerCase();
           const conditions =
             (username.includes(filter) &&
               user.active == this.showActiveUsers) ||
@@ -93,14 +87,14 @@ export default {
               user.active == this.showActiveUsers) ||
             (fullname.includes(filter) &&
               user.active == this.showActiveUsers) ||
-            (filter.includes(fullname) && user.active == this.showActiveUsers)
+            (filter.includes(fullname) && user.active == this.showActiveUsers);
 
-          return conditions
-        })
+          return conditions;
+        });
       } else {
-        return this.users.filter((user) => user.active == this.showActiveUsers)
+        return this.users.filter((user) => user.active == this.showActiveUsers);
       }
     },
   },
-}
+};
 </script>

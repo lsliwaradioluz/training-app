@@ -1,6 +1,7 @@
 <template>
   <div ref="default" class="default" :class="{ main: !isAssistant }">
-    <Navigation v-if="!isAssistant" />
+    <NavigationTop />
+    <NavigationBottom />
     <Confirm />
     <Notification />
     <nuxt />
@@ -8,11 +9,12 @@
 </template>
 
 <script>
-import Navigation from "~/components/Navigation"
+import NavigationTop from "~/components/molecules/NavigationTop"
+import NavigationBottom from "~/components/molecules/NavigationBottom"
 
 export default {
   middleware: "redirect",
-  components: { Navigation },
+  components: { NavigationTop, NavigationBottom },
   computed: {
     isAssistant() {
       return this.$store.state.assistant.showWorkoutAssistant
